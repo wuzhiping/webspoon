@@ -27,7 +27,7 @@
       <exclude name="jaxen" module="jaxen"/>
       <exclude name="dom4j" module="dom4j"/>
     </dependency>
-    <dependency org="${ivy.artifact.group}" name="kettle-ui-swt"        rev="${project.revision}" changing="true" force="true">
+    <dependency org="${ivy.artifact.group}" name="kettle-ui-swt"        rev="${dependency.webspoon.revision}" changing="true" force="true">
       <exclude name="org.eclipse.swt.gtk.linux.x86_64"/>
       <exclude name="jaxen" module="jaxen"/>
       <exclude name="dom4j" module="dom4j"/>
@@ -155,6 +155,8 @@
     <dependency org="org.springframework" name="spring-beans"   rev="${dependency.spring.framework.revision}" />
     <dependency org="org.springframework" name="spring-context" rev="${dependency.spring.framework.revision}" />
     <dependency org="org.springframework.security" name="spring-security-core" rev="${dependency.spring.security.revision}" />
+    <dependency org="org.springframework.security" name="spring-security-web" rev="${dependency.spring.security.revision}" />
+    <dependency org="org.springframework.security" name="spring-security-config" rev="${dependency.spring.security.revision}" />
     <dependency org="org.glassfish.metro" name="webservices-api" rev="2.1" transitive="false"/>
     <dependency org="org.glassfish.metro" name="webservices-rt" rev="2.1" transitive="false"/>
 
@@ -204,14 +206,15 @@
     <dependency org="pentaho" name="oss-licenses" rev="${dependency.oss-licenses.revision}" conf="oss-licenses->default">
       <artifact name="oss-licenses" type="zip" />
     </dependency>
-
-    <!-- The SWT OS-specific libraries -->
-    <dependency org="org.eclipse.swt" name="org.eclipse.swt.gtk.linux.x86"       rev="${dependency.swt-linux.revision}" conf="swtlibs->default" transitive="false"/>
-    <dependency org="org.eclipse.swt" name="org.eclipse.swt.gtk.linux.x86_64"    rev="${dependency.swt-linux.revision}" conf="swtlibs->default" transitive="false"/>
-    <dependency org="org.eclipse.swt" name="org.eclipse.swt.win32.win32.x86"     rev="${dependency.swt-win.revision}"   conf="swtlibs->default" transitive="false"/>
-    <dependency org="org.eclipse.swt" name="org.eclipse.swt.win32.win32.x86_64"  rev="${dependency.swt-win.revision}"   conf="swtlibs->default" transitive="false"/>
-    <dependency org="org.eclipse.swt" name="org.eclipse.swt.cocoa.macosx.x86_64" rev="${dependency.swt-osx.revision}"   conf="swtlibs->default" transitive="false"/>
-
+     
+    <!-- The RAP/RWT libraries -->
+    <dependency org="org.eclipse.rap"       name="org.eclipse.rap.rwt"        rev="${dependency.rap.revision}" changing="true" transitive="false"/>
+    <dependency org="org.eclipse.rap"       name="org.eclipse.rap.filedialog" rev="${dependency.rap.revision}" changing="true" transitive="false"/>
+    <dependency org="org.eclipse.rap"       name="org.eclipse.rap.jface"      rev="${dependency.rap.revision}" changing="true" transitive="false"/>
+    <dependency org="org.eclipse.rap"       name="org.eclipse.rap.fileupload" rev="${dependency.rap.revision}" changing="true" transitive="false"/>
+    <dependency org="commons-fileupload"    name="commons-fileupload" rev="1.3.1" transitive="false"/>
+    <dependency org="javax.servlet"         name="javax.servlet-api"   rev="3.1.0"/>
+      
 	    <!-- Karaf Dependencies -->
     <dependency org="org.apache.karaf" name="org.apache.karaf.main" rev="3.0.3"  transitive="false"/>
     <dependency org="org.apache.karaf" name="org.apache.karaf.util" rev="3.0.3"  transitive="false"/>
@@ -252,7 +255,17 @@
     <dependency org="org.jvnet.mimepull"  name="mimepull" rev="1.9.3" transitive="false"/>
     <dependency org="javax.ws.rs" name="jsr311-api" rev="1.1.1" transitive="false"/>
 
+    <!-- For welcome page -->
+    <dependency org="org.eclipse.jetty" name="jetty-jsp" rev="8.1.15.v20140411"/>
+
+    <!-- A reverse proxy for the repository plugin -->
+    <dependency org="org.mitre.dsmiley.httpproxy" name="smiley-http-proxy-servlet" rev="1.8"/>
+
     <exclude org="javax.servlet"/>
     <exclude org="org.osgi" module="org.osgi.core"/>
+    <exclude module="jface"/>
+    <exclude module="servlet-api"/>
+    <exclude module="jsp-api"/>
+    <exclude module="org.eclipse.swt.gtk.linux.x86_64"/>
   </dependencies>
 </ivy-module>

@@ -37,9 +37,11 @@ import java.util.Collections;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.reflect.FieldUtils;
+import org.eclipse.rap.rwt.testfixture.TestContext;
 import org.eclipse.swt.widgets.Shell;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
 import org.pentaho.di.core.BlockingRowSet;
 import org.pentaho.di.core.KettleEnvironment;
@@ -69,6 +71,9 @@ import org.pentaho.di.ui.core.widget.TableView;
 public class TextFileInputDialogTest {
 
   private static boolean changedPropsUi;
+
+  @Rule
+  public TestContext context = new TestContext();
 
   @BeforeClass
   public static void initKettle() throws Exception {

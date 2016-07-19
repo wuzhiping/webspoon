@@ -44,6 +44,7 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
@@ -76,7 +77,7 @@ import org.w3c.dom.Node;
  *
  */
 
-public class ConditionEditor extends Composite {
+public class ConditionEditor extends Canvas {
   private static Class<?> PKG = ConditionEditor.class; // for i18n purposes, needed by Translator2!!
 
   private static final int X_PADDING = 18;
@@ -96,7 +97,7 @@ public class ConditionEditor extends Composite {
   private static final int AREA_RIGHT_EXACT = 10;
   private static final int AREA_ICON_ADD = 11;
 
-  protected Composite widget;
+  protected Canvas widget;
   private Shell shell;
   private Display display;
   private Condition active_condition;
@@ -325,6 +326,7 @@ public class ConditionEditor extends Composite {
             case AREA_UP:
               // Go to the parent condition...
               goUp();
+              redraw();
               break;
             case AREA_FUNCTION:
               if ( active_condition.isAtomic() ) {
@@ -495,8 +497,6 @@ public class ConditionEditor extends Composite {
       int last = parents.size() - 1;
       active_condition = parents.get( last );
       parents.remove( last );
-
-      redraw();
     }
     if ( getLevel() > 0 ) {
       setMessageString( BaseMessages.getString( PKG, "ConditionEditor.GoUpOneLevel.Label", "" + getLevel() ) );
@@ -747,10 +747,7 @@ public class ConditionEditor extends Composite {
     }
   }
 
-  public void repaint( GC dgc, int width, int height ) {
-    Image im = new Image( display, width, height );
-    GC gc = new GC( im );
-
+  public void repaint( GC gc, int width, int height ) {
     // Initialize some information
     size_not = getNotSize( gc );
     size_widget = getWidgetSize( gc );
@@ -815,11 +812,6 @@ public class ConditionEditor extends Composite {
      * Set the scroll bars: show/don't show and set the size
      */
     setBars();
-
-    // Draw the result on the canvas, all in 1 go.
-    dgc.drawImage( im, 0, 0 );
-
-    im.dispose();
   }
 
   private Rectangle getNotSize( GC gc ) {

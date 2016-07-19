@@ -25,7 +25,6 @@ package org.pentaho.di.ui.core.widget;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.jface.window.ToolTip;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
@@ -43,6 +42,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.ToolTip;
 import org.pentaho.di.ui.core.gui.GUIResource;
 
 public class CheckBoxToolTip extends ToolTip {
@@ -59,18 +60,20 @@ public class CheckBoxToolTip extends ToolTip {
 
   private boolean showingScrollBars;
 
-  public CheckBoxToolTip( Control control ) {
-    super( control, ToolTip.RECREATE, true );
-    image = control.getDisplay().getSystemImage( SWT.ICON_INFORMATION );
+  public CheckBoxToolTip( Shell shell ) {
+//    super( control, ToolTip.RECREATE, true );
+    super( shell, SWT.ICON_INFORMATION );
+    this.message = "";
+    image = shell.getDisplay().getSystemImage( SWT.ICON_INFORMATION );
     listeners = new ArrayList<CheckBoxToolTipListener>();
     visible = false;
-    display = control.getDisplay();
+    display = shell.getDisplay();
 
-    super.setRespectMonitorBounds( true );
-    super.setRespectDisplayBounds( true );
-    super.setHideDelay( 50000 );
-    super.setPopupDelay( 0 );
-    super.setHideOnMouseDown( false );
+//    super.setRespectMonitorBounds( true );
+//    super.setRespectDisplayBounds( true );
+//    super.setHideDelay( 50000 );
+//    super.setPopupDelay( 0 );
+//    super.setHideOnMouseDown( false );
   }
 
   protected Composite createToolTipContentArea( Event event, Composite parent ) {
@@ -143,13 +146,13 @@ public class CheckBoxToolTip extends ToolTip {
       }
 
     } );
-    disable.addPaintListener( new PaintListener() {
-
-      public void paintControl( PaintEvent arg0 ) {
-        checkBoxBounds = disable.getBounds();
-      }
-
-    } );
+//    disable.addPaintListener( new PaintListener() {
+//
+//      public void paintControl( PaintEvent arg0 ) {
+//        checkBoxBounds = disable.getBounds();
+//      }
+//
+//    } );
 
     composite.layout();
     checkBoxBounds = disable.getBounds();
@@ -158,13 +161,14 @@ public class CheckBoxToolTip extends ToolTip {
   }
 
   public void show( Point location ) {
-    super.show( location );
+    super.setLocation( location );
+    super.setVisible( true );
     visible = true;
   }
 
   public void hide() {
     visible = false;
-    super.hide();
+    super.setVisible( false );
   }
 
   public void addCheckBoxToolTipListener( CheckBoxToolTipListener listener ) {
@@ -172,7 +176,7 @@ public class CheckBoxToolTip extends ToolTip {
   }
 
   protected void afterHideToolTip( Event event ) {
-    super.afterHideToolTip( event );
+    //super.afterHideToolTip( event );
     visible = false;
   }
 
@@ -189,6 +193,7 @@ public class CheckBoxToolTip extends ToolTip {
    */
   public void setMessage( String message ) {
     this.message = message;
+    super.setMessage("message");
   }
 
   /**
@@ -204,6 +209,7 @@ public class CheckBoxToolTip extends ToolTip {
    */
   public void setTitle( String title ) {
     this.title = title;
+    super.setText( title );
   }
 
   /**

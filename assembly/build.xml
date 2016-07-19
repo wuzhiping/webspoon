@@ -307,4 +307,22 @@
       </classpath>
     </sql>
   </target>
+
+  <target name="war">
+    <war destfile="${dist.dir}/spoon.war" webxml="WEB-INF/web.xml">
+      <webinf dir="WEB-INF">
+        <exclude name="web.xml"/>
+      </webinf>
+      <lib dir="${lib.dir}">
+        <exclude name="javax.servlet-api-*.jar"/>
+      </lib>
+      <classes dir="package-res/classes"/>
+      <classes dir="package-res">
+        <include name="ui/*"/>
+      </classes>
+      <fileset file="OSS_Licenses.html"/>
+      <zipfileset dir="package-res/docs" prefix="docs"/>
+      <fileset dir="src/jsp"/>
+    </war>
+  </target>
 </project>

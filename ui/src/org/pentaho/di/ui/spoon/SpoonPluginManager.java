@@ -22,6 +22,7 @@
 
 package org.pentaho.di.ui.spoon;
 
+import org.eclipse.rap.rwt.SingletonUtil;
 import org.pentaho.di.core.exception.KettlePluginException;
 import org.pentaho.di.core.plugins.PluginInterface;
 import org.pentaho.di.core.plugins.PluginRegistry;
@@ -121,7 +122,7 @@ public class SpoonPluginManager implements PluginTypeListener {
    * @return SpoonPerspectiveManager
    */
   public static SpoonPluginManager getInstance() {
-    return instance;
+    return SingletonUtil.getSessionInstance( SpoonPluginManager.class );
   }
 
   public void applyPluginsForContainer( final String category, final XulDomContainer container ) throws XulException {

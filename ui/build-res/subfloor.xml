@@ -218,6 +218,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             value="perTest"
             description="Defines whether JUnit forks a new JVM for each test. Use 'once' for faster test runs, and 'perTest' for complete tests."/>
   <property name="headless.unittest" value="true" description="Runs the unit tests in headless mode"/>
+  <property name="test.baseurl" value="http://localhost:8080/spoon/" description="Base URL of a running webSpoon"/>
 
   <!-- Integration Test properties -->
     <property name="inttestsrc.dir" value="${basedir}/test-src" description="Directory that hosts the test source files"/>
@@ -1799,6 +1800,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
            haltonerror="${junit.haltonerror}"
            printsummary="yes">
       <sysproperty key="java.awt.headless" value="${headless.unittest}"/>
+      <sysproperty key="test.baseurl" value="${test.baseurl}"/>
 
       <jvmarg line="${junit.jvmargs}"/>
 

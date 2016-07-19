@@ -37,7 +37,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.TableEditor;
-import org.eclipse.swt.dnd.Clipboard;
+//import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSource;
 import org.eclipse.swt.dnd.DragSourceEvent;
@@ -70,6 +70,7 @@ import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -153,13 +154,7 @@ public class TableView extends Composite {
   private Menu mRow;
 
   private ModifyListener lsMod, lsUndo, lsContent;
-  private Clipboard clipboard;
-
-  // The following Image and Graphics Context are used for font metrics. We only
-  // want them created once.
-  private static Image dummyImage;
-  private static GC dummyGC;
-  private Font gridFont;
+  //private Clipboard clipboard;
 
   // private int last_carret_position;
 
@@ -201,7 +196,7 @@ public class TableView extends Composite {
     this.rows = nrRows;
     this.props = pr;
     this.readonly = readOnly;
-    this.clipboard = null;
+    //this.clipboard = null;
     this.variables = space;
     this.addIndexColumn = addIndexColumn;
 
@@ -234,15 +229,6 @@ public class TableView extends Composite {
         fieldChanged = true;
       }
     };
-    if ( TableView.dummyGC == null ) {
-      Display disp = parent.getDisplay();
-      TableView.dummyImage = new Image( disp, 1, 1 );
-      TableView.dummyGC = new GC( TableView.dummyImage );
-
-      gridFont = new Font( disp, props.getGridFont() );
-      TableView.dummyGC.setFont( gridFont );
-
-    }
 
     FormLayout controlLayout = new FormLayout();
     controlLayout.marginLeft = 0;
@@ -716,13 +702,14 @@ public class TableView extends Composite {
         // CTRL-V --> Paste selected infomation...
         if ( e.keyCode == 'v' && ctrl ) {
           e.doit = false;
-          if ( clipboard != null ) {
-            clipboard.dispose();
-            clipboard = null;
-          }
-          clipboard = new Clipboard( getDisplay() );
+//          if ( clipboard != null ) {
+//            clipboard.dispose();
+//            clipboard = null;
+//          }
+//          clipboard = new Clipboard( getDisplay() );
           TextTransfer tran = TextTransfer.getInstance();
-          String text = (String) clipboard.getContents( tran );
+//          String text = (String) clipboard.getContents( tran );
+          String text = "";
           combo.setText( text );
           return;
         }
@@ -1169,18 +1156,18 @@ public class TableView extends Composite {
     // cursor.addTraverseListener(lsTraverse);
 
     // Clean up the clipboard
-    addDisposeListener( new DisposeListener() {
-      @Override
-      public void widgetDisposed( DisposeEvent e ) {
-        if ( clipboard != null ) {
-          clipboard.dispose();
-          clipboard = null;
-        }
-        if ( gridFont != null ) {
-          gridFont.dispose();
-        }
-      }
-    } );
+//    addDisposeListener( new DisposeListener() {
+//      @Override
+//      public void widgetDisposed( DisposeEvent e ) {
+//        if ( clipboard != null ) {
+//          clipboard.dispose();
+//          clipboard = null;
+//        }
+//        if ( gridFont != null ) {
+//          gridFont.dispose();
+//        }
+//      }
+//    } );
 
     // Drag & drop source!
 
@@ -1722,21 +1709,21 @@ public class TableView extends Composite {
   }
 
   private void clipSelected() {
-    if ( clipboard != null ) {
-      clipboard.dispose();
-      clipboard = null;
-    }
-
-    clipboard = new Clipboard( getDisplay() );
-    TextTransfer tran = TextTransfer.getInstance();
-
-    String clip = getSelectedText();
-
-    if ( clip == null ) {
-      return;
-    }
-
-    clipboard.setContents( new String[]{ clip }, new Transfer[]{ tran } );
+//    if ( clipboard != null ) {
+//      clipboard.dispose();
+//      clipboard = null;
+//    }
+//
+//    clipboard = new Clipboard( getDisplay() );
+//    TextTransfer tran = TextTransfer.getInstance();
+//
+//    String clip = getSelectedText();
+//
+//    if ( clip == null ) {
+//      return;
+//    }
+//
+//    clipboard.setContents( new String[]{ clip }, new Transfer[]{ tran } );
   }
 
   private String getSelectedText() {
@@ -1798,15 +1785,16 @@ public class TableView extends Composite {
   private void pasteSelected() {
     int rownr = getCurrentRownr();
 
-    if ( clipboard != null ) {
-      clipboard.dispose();
-      clipboard = null;
-    }
-
-    clipboard = new Clipboard( getDisplay() );
+//    if ( clipboard != null ) {
+//      clipboard.dispose();
+//      clipboard = null;
+//    }
+//
+//    clipboard = new Clipboard( getDisplay() );
     TextTransfer tran = TextTransfer.getInstance();
 
-    String text = (String) clipboard.getContents( tran );
+//    String text = (String) clipboard.getContents( tran );
+    String text = "";
 
     if ( text != null ) {
       String[] lines = text.split( Const.CR );
@@ -2189,7 +2177,17 @@ public class TableView extends Composite {
 
   private void setColumnWidthBasedOnTextField( final int colnr, final boolean useVariables ) {
     String str = getTextWidgetValue( colnr );
-    int strmax = TableView.dummyGC.textExtent( str, SWT.DRAW_TAB | SWT.DRAW_DELIMITER ).x + 20;
+
+    Canvas dummyCanvas = new Canvas( parent, SWT.NO_REDRAW_RESIZE );
+    GC dummyGC = new GC( dummyCanvas );
+    Font gridFont = new Font( parent.getDisplay(), props.getGridFont() );
+    dummyGC.setFont( gridFont );
+    int strmax = dummyGC.textExtent( str ).x + 20;
+
+    gridFont.dispose();
+    dummyGC.dispose();
+    dummyCanvas.dispose();
+
     int colmax = tablecolumn[colnr].getWidth();
     if ( strmax > colmax ) {
       if ( Const.isOSX() || Const.isLinux() ) {
@@ -2383,11 +2381,16 @@ public class TableView extends Composite {
   }
 
   public void optWidth( boolean header, int nrLines ) {
+    Canvas dummyCanvas = new Canvas( parent, SWT.NO_REDRAW_RESIZE );
+    GC dummyGC = new GC( dummyCanvas );
+    Font gridFont = new Font( parent.getDisplay(), props.getGridFont() );
+    dummyGC.setFont( gridFont );
+
     for ( int c = 0; c < table.getColumnCount(); c++ ) {
       TableColumn tc = table.getColumn( c );
       int max = 0;
       if ( header ) {
-        max = TableView.dummyGC.textExtent( tc.getText(), SWT.DRAW_TAB | SWT.DRAW_DELIMITER ).x;
+        max = dummyGC.textExtent( tc.getText() ).x;
 
         // Check if the column has a sorted mark set. In that case, we need the
         // header to be a bit wider...
@@ -2437,7 +2440,7 @@ public class TableView extends Composite {
       }
 
       for ( String str : columnStrings ) {
-        int len = TableView.dummyGC.textExtent( str == null ? "" : str, SWT.DRAW_TAB | SWT.DRAW_DELIMITER ).x;
+        int len = dummyGC.textExtent( str == null ? "" : str ).x;
         if ( len > max ) {
           max = len;
         }
@@ -2470,6 +2473,9 @@ public class TableView extends Composite {
       resizeEvent.setBounds( table.getBounds() );
       table.notifyListeners( SWT.Resize, resizeEvent );
     }
+    gridFont.dispose();
+    dummyGC.dispose();
+    dummyCanvas.dispose();
     unEdit();
   }
 

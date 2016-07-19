@@ -55,7 +55,7 @@ define(
          * @returns {Promise} - a promise to be resolve when the server returns
          */
         function checkDuplicate(repository) {
-          return helperService.httpPost([baseUrl, "duplicate"].join("/"), repository);
+          return helperService.async( bfCheckDuplicate( repository.displayName ) );
         }
       }
     });

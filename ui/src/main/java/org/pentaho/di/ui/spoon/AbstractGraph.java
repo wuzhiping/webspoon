@@ -25,13 +25,21 @@ package org.pentaho.di.ui.spoon;
 import java.util.List;
 
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.rap.json.JsonArray;
+import org.eclipse.rap.json.JsonObject;
+import org.eclipse.rap.rwt.service.ServerPushSession;
+import org.eclipse.rap.rwt.widgets.WidgetUtil;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.ScrollBar;
+import org.pentaho.di.base.AbstractMeta;
 import org.pentaho.di.core.exception.KettleException;
 import org.pentaho.di.core.gui.GUIPositionInterface;
 import org.pentaho.di.core.gui.Point;
+import org.pentaho.di.ui.core.PropsUI;
+import org.pentaho.di.ui.core.gui.GUIResource;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 
@@ -48,21 +56,25 @@ public abstract class AbstractGraph extends Composite {
 
   protected Canvas canvas;
 
+  protected ScrolledComposite scrolledcomposite;
+
   protected float magnification = 1.0f;
 
   protected Combo zoomLabel;
 
   protected XulDomContainer xulDomContainer;
+  protected final ServerPushSession pushSession = new ServerPushSession();
 
   public AbstractGraph( Composite parent, int style ) {
     super( parent, style );
   }
 
   protected abstract Point getOffset();
+  protected abstract Point getMaximum();
 
   protected Point getOffset( Point thumb, Point area ) {
     Point p = new Point( 0, 0 );
-    Point sel = new Point( hori.getSelection(), vert.getSelection() );
+    Point sel = new Point( Math.round( hori.getSelection() / hori.getMaximum() ), Math.round( vert.getSelection() / vert.getMaximum() ) );
 
     if ( thumb.x == 0 || thumb.y == 0 ) {
       return p;
@@ -133,21 +145,35 @@ public abstract class AbstractGraph extends Composite {
     }
 
     canvas.redraw();
+    Spoon.getInstance().copy();
+    Spoon.getInstance().getTabSet().toClipboard( GUIResource.getInstance().fromClipboard() );
     setZoomLabel();
+  }
+
+  protected void resize() {
+    canvas.setSize(
+      Math.max( Math.round( getMaximum().x * magnification ), // case 1
+        scrolledcomposite.getBounds().width ), // case 2
+      Math.max( Math.round( getMaximum().y * magnification ), // case 3
+        scrolledcomposite.getBounds().height ) // case 4
+    );
   }
 
   public void zoomIn() {
     magnification += .1f;
+    resize();
     redraw();
   }
 
   public void zoomOut() {
     magnification -= .1f;
+    resize();
     redraw();
   }
 
   public void zoom100Percent() {
     magnification = 1.0f;
+    resize();
     redraw();
   }
 
@@ -182,7 +208,7 @@ public abstract class AbstractGraph extends Composite {
    * @return ChangedWarningInterface The class that provides the dialog and return value
    */
   public ChangedWarningInterface getChangedWarning() {
-    return ChangedWarningDialog.getInstance();
+    return new ChangedWarningDialog();
   }
 
   /**
@@ -214,5 +240,30 @@ public abstract class AbstractGraph extends Composite {
     for ( XulComponent pop : pops ) {
       ( (MenuManager) pop.getManagedObject() ).dispose();
     }
+  }
+
+  protected void setData( AbstractMeta meta ) {
+    JsonObject jsonProps = new JsonObject();
+    jsonProps.add( "gridsize", PropsUI.getInstance().isShowCanvasGridEnabled() ? PropsUI.getInstance().getCanvasGridSize() : 1 );
+    jsonProps.add( "iconsize", PropsUI.getInstance().getIconSize() );
+    jsonProps.add( "magnification", magnification );
+    canvas.setData( "props", jsonProps );
+
+    JsonArray jsonNotes = new JsonArray();
+    meta.getNotes().forEach( note -> {
+      JsonObject jsonNote = new JsonObject();
+      jsonNote.add( "x", note.getLocation().x );
+      jsonNote.add( "y", note.getLocation().y );
+      jsonNote.add( "width", note.getWidth() );
+      jsonNote.add( "height", note.getHeight() );
+      jsonNote.add( "selected", note.isSelected() );
+      jsonNote.add( "note", note.getNote() );
+      jsonNotes.add( jsonNote );
+    } );
+    canvas.setData( "notes", jsonNotes );
+  }
+
+  public String getRwtId() {
+    return WidgetUtil.getId( canvas );
   }
 }

@@ -22,9 +22,11 @@
 
 package org.pentaho.di.ui.repo.controller;
 
+import org.eclipse.rap.rwt.testfixture.TestContext;
 import org.json.simple.JSONObject;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -66,6 +68,9 @@ import static org.mockito.Mockito.*;
  */
 @RunWith( MockitoJUnitRunner.class )
 public class RepositoryConnectControllerTest {
+
+  @Rule
+  public TestContext context = new TestContext();
 
   public static final String PLUGIN_NAME = "PLUGIN NAME";
   public static final String ID = "ID";
@@ -110,7 +115,8 @@ public class RepositoryConnectControllerTest {
 
   @Before
   public void setUp() {
-    controller = new RepositoryConnectController( pluginRegistry, () -> spoon, repositoriesMeta );
+    controller = spy( new RepositoryConnectController( pluginRegistry, () -> spoon ) );
+    when( controller.getRepositoriesMeta() ).thenReturn( repositoriesMeta );
 
     when( pluginInterface.getName() ).thenReturn( PLUGIN_NAME );
     when( pluginInterface.getIds() ).thenReturn( new String[] { ID } );

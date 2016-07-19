@@ -15,11 +15,16 @@
 
 package org.pentaho.repo.dialog;
 
+import java.util.List;
+
+import javax.ws.rs.core.Response;
+
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.BrowserFunction;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Shell;
+import org.json.simple.JSONObject;
 import org.pentaho.di.core.exception.KettleException;
 import org.pentaho.di.core.util.Utils;
 import org.pentaho.di.repository.Repository;
@@ -27,12 +32,20 @@ import org.pentaho.di.ui.core.dialog.ThinDialog;
 import org.pentaho.di.ui.core.gui.GUIResource;
 import org.pentaho.platform.settings.ServerPort;
 import org.pentaho.platform.settings.ServerPortRegistry;
-import org.pentaho.repo.controller.RepositoryBrowserController;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
 import java.util.Properties;
+
+import org.pentaho.repo.controller.RepositoryBrowserController;
+import org.pentaho.repo.model.RepositoryFile;
+import org.pentaho.repo.model.RepositoryTree;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.sun.jersey.api.client.ClientResponse.Status;
 
 /**
  * Created by bmorrise on 5/23/17.
@@ -42,7 +55,7 @@ public class RepositoryOpenSaveDialog extends ThinDialog {
   public static final String STATE_SAVE = "save";
   public static final String STATE_OPEN = "open";
   public static final String SELECT_FOLDER = "selectFolder";
-  private static final Image LOGO = GUIResource.getInstance().getImageLogoSmall();
+  private final Image LOGO = GUIResource.getInstance().getImageLogoSmall();
   private static final String OSGI_SERVICE_PORT = "OSGI_SERVICE_PORT";
   private static final int OPTIONS = SWT.APPLICATION_MODAL | SWT.DIALOG_TRIM | SWT.RESIZE | SWT.MAX;
   private static final String THIN_CLIENT_HOST = "THIN_CLIENT_HOST";
@@ -54,6 +67,8 @@ public class RepositoryOpenSaveDialog extends ThinDialog {
   private String objectDirectory;
   private String objectType;
   private Repository repository;
+
+  private RepositoryBrowserController repositoryBrowserController = new RepositoryBrowserController();
 
   public RepositoryOpenSaveDialog( Shell shell, int width, int height ) {
     super( shell, width, height );
@@ -89,9 +104,12 @@ public class RepositoryOpenSaveDialog extends ThinDialog {
 
     new BrowserFunction( browser, "close" ) {
       @Override public Object function( Object[] arguments ) {
-        browser.dispose();
-        dialog.close();
-        dialog.dispose();
+        Runnable execute = () -> {
+          browser.dispose();
+          dialog.close();
+          dialog.dispose();
+        };
+        display.asyncExec( execute );
         return true;
       }
     };
@@ -103,10 +121,72 @@ public class RepositoryOpenSaveDialog extends ThinDialog {
         objectDirectory = (String) arguments[ 2 ];
         objectType = (String) arguments[ 3 ];
 
-        browser.dispose();
-        dialog.close();
-        dialog.dispose();
+        Runnable execute = () -> {
+          browser.dispose();
+          dialog.close();
+          dialog.dispose();
+        };
+        display.asyncExec( execute );
         return true;
+      }
+    };
+
+    new BrowserFunction( browser, "bfCheckForSecurityOrDupeIssues" ) {
+      @Override public Object function( Object[] arguments ) {
+        String path = (String) arguments[ 0 ];
+        String name = (String) arguments[ 1 ];
+        String fileName = (String) arguments[ 2 ];
+        boolean overwrite = (boolean) arguments[ 3 ];
+        JSONObject jsonObject = new JSONObject();
+        if ( repositoryBrowserController.checkForSecurityOrDupeIssues( path, name, fileName, overwrite ) ) {
+          jsonObject.put( "status", Status.OK.getStatusCode() );
+          return jsonObject.toString();
+        }
+        jsonObject.put( "status", Status.NO_CONTENT.getStatusCode() );
+        return jsonObject.toString();
+      }
+    };
+
+    new BrowserFunction( browser, "bfGetRecentFiles" ) {
+      @Override public Object function( Object[] arguments ) {
+        List<RepositoryFile> files = repositoryBrowserController.getRecentFiles();
+        return "{ \"data\": " + javaToJson( files ) + "}";
+      }
+    };
+
+    new BrowserFunction( browser, "bfGetDirectoryTree" ) {
+      @Override public Object function( Object[] arguments ) {
+        RepositoryTree repositoryDirectories = repositoryBrowserController.loadDirectoryTree();
+        return "{ \"data\": " + javaToJson( repositoryDirectories ) + "}";
+      }
+    };
+
+    new BrowserFunction( browser, "bfOpenRecent" ) {
+      @Override public Object function( Object[] arguments ) {
+        String repo = (String) arguments[ 0 ];
+        String id = (String) arguments[ 1 ];
+        repositoryBrowserController.openRecentFile( repo, id );
+        return true;
+      }
+    };
+
+    new BrowserFunction( browser, "bfCurrentRepo" ) {
+      @Override public Object function( Object[] arguments ) {
+        return "{ \"data\": " + javaToJson( repositoryBrowserController.getCurrentRepo() ) + "}";
+      }
+    };
+
+    new BrowserFunction( browser, "bfGetFolders" ) {
+      @Override public Object function( Object[] arguments ) {
+        String path = (String) arguments[ 0 ];
+        return "{ \"data\": " + javaToJson( repositoryBrowserController.loadFolders( path ) ) + "}";
+      }
+    };
+
+    new BrowserFunction( browser, "bfLoadFilesAndFolders" ) {
+      @Override public Object function( Object[] arguments ) {
+        String path = (String) arguments[ 0 ];
+        return "{ \"data\": " + javaToJson( repositoryBrowserController.loadFilesAndFolders( path ) ) + "}";
       }
     };
 
@@ -129,6 +209,17 @@ public class RepositoryOpenSaveDialog extends ThinDialog {
     return properties.getProperty( "CLIENT_PATH" );
   }
 
+  private String javaToJson( Object obj ) {
+    ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+    String json = "";
+    try {
+      json = ow.writeValueAsString( obj );
+    } catch (JsonProcessingException e) {
+      e.printStackTrace();
+    }
+    return json;
+  }
+
   private static Integer getOsgiServicePort() {
     // if no service port is specified try getting it from
     ServerPort osgiServicePort = ServerPortRegistry.getPort( OSGI_SERVICE_PORT );
@@ -148,7 +239,7 @@ public class RepositoryOpenSaveDialog extends ThinDialog {
       host = LOCALHOST;
       port = getOsgiServicePort();
     }
-    return "http://" + host + ":" + port + path;
+    return System.getProperty( "KETTLE_CONTEXT_PATH" ) + "/osgi" + path;
   }
 
   private static String getKettleProperty( String propertyName ) throws KettleException {

@@ -58,7 +58,7 @@ define(
          * @returns {Promise}
          */
         function getDatabases(repository) {
-          return helperService.httpGet([baseUrl, "databases"].join("/"), repository);
+          return helperService.async( bfGetDatabases() );
         }
 
         /**
@@ -67,7 +67,7 @@ define(
          * @returns {Promise}
          */
         function createNewConnection() {
-          return helperService.httpGet([baseUrl, "connection", "create"].join("/"));
+          return helperService.async( bfCreateNewConnection() );
         }
 
         /**
@@ -77,7 +77,7 @@ define(
          * @returns {Promise}
          */
         function editConnection(database) {
-          return helperService.httpPost([baseUrl, "connection", "edit"].join("/"), database);
+          return helperService.async( bfEditConnection( database ) );
         }
 
         /**
@@ -87,7 +87,7 @@ define(
          * @returns {Promise}
          */
         function deleteConnection(database) {
-          return helperService.httpPost([baseUrl, "connection", "delete"].join("/"), database);
+          return helperService.async( bfDeleteConnection( database ) );
         }
       }
     });

@@ -50,11 +50,11 @@ define(
         };
 
         function addRepository(repository) {
-          return helperService.httpPost([baseUrl, "add"].join("/"), repository);
+          return helperService.async( bfAddRepository( JSON.stringify( repository ) ) );
         }
 
         function updateRepository(repository) {
-          return helperService.httpPost([baseUrl, "update"].join("/"), repository);
+          return helperService.async( bfUpdate( JSON.stringify( repository ) ) );
         }
       }
     });

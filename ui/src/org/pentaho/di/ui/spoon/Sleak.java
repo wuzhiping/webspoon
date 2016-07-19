@@ -60,35 +60,35 @@ public class Sleak {
   Error[] errors = new Error[0];
 
   public static void main( String[] args ) {
-    DeviceData data = new DeviceData();
-    data.tracking = true;
-    Display display = new Display( data );
-    Sleak sleak = new Sleak();
-    Shell shell = new Shell( display );
-    shell.setText( "S-Leak" );
-    Point size = shell.getSize();
-    shell.setSize( size.x / 2, size.y / 2 );
-    sleak.create( shell );
-    shell.open();
-
-    // Launch your application here
-    // e.g.
-    // Shell shell = new Shell(display);
-    // Button button1 = new Button(shell, SWT.PUSH);
-    // button1.setBounds(10, 10, 100, 50);
-    // button1.setText("Hello World");
-    // Image image = new Image(display, 20, 20);
-    // Button button2 = new Button(shell, SWT.PUSH);
-    // button2.setBounds(10, 70, 100, 50);
-    // button2.setImage(image);
-    // shell.open();
-
-    while ( !shell.isDisposed() ) {
-      if ( !display.readAndDispatch() ) {
-        display.sleep();
-      }
-    }
-    display.dispose();
+//    DeviceData data = new DeviceData();
+//    data.tracking = true;
+//    Display display = new Display( data );
+//    Sleak sleak = new Sleak();
+//    Shell shell = new Shell( display );
+//    shell.setText( "S-Leak" );
+//    Point size = shell.getSize();
+//    shell.setSize( size.x / 2, size.y / 2 );
+//    sleak.create( shell );
+//    shell.open();
+//
+//    // Launch your application here
+//    // e.g.
+//    // Shell shell = new Shell(display);
+//    // Button button1 = new Button(shell, SWT.PUSH);
+//    // button1.setBounds(10, 10, 100, 50);
+//    // button1.setText("Hello World");
+//    // Image image = new Image(display, 20, 20);
+//    // Button button2 = new Button(shell, SWT.PUSH);
+//    // button2.setBounds(10, 70, 100, 50);
+//    // button2.setImage(image);
+//    // shell.open();
+//
+//    while ( !shell.isDisposed() ) {
+//      if ( !display.readAndDispatch() ) {
+//        display.sleep();
+//      }
+//    }
+//    display.dispose();
   }
 
   public void create( Composite parent ) {
@@ -212,46 +212,46 @@ public class Sleak {
   }
 
   void refreshDifference() {
-    Display display = canvas.getDisplay();
-    DeviceData info = display.getDeviceData();
-    if ( !info.tracking ) {
-      Shell shell = canvas.getShell();
-      MessageBox dialog = new MessageBox( shell, SWT.ICON_WARNING | SWT.OK );
-      dialog.setText( shell.getText() );
-      dialog.setMessage( "Warning: Device is not tracking resource allocation" );
-      dialog.open();
-    }
-    Object[] newObjects = info.objects;
-    Error[] newErrors = info.errors;
-    Object[] diffObjects = new Object[newObjects.length];
-    Error[] diffErrors = new Error[newErrors.length];
-    int count = 0;
-    for ( int i = 0; i < newObjects.length; i++ ) {
-      int index = 0;
-      while ( index < oldObjects.length ) {
-        if ( newObjects[i] == oldObjects[index] ) {
-          break;
-        }
-        index++;
-      }
-      if ( index == oldObjects.length ) {
-        diffObjects[count] = newObjects[i];
-        diffErrors[count] = newErrors[i];
-        count++;
-      }
-    }
-    objects = new Object[count];
-    errors = new Error[count];
-    System.arraycopy( diffObjects, 0, objects, 0, count );
-    System.arraycopy( diffErrors, 0, errors, 0, count );
-    list.removeAll();
-    text.setText( "" );
-    canvas.redraw();
-    for ( int i = 0; i < objects.length; i++ ) {
-      list.add( objects[i].toString() );
-    }
-    refreshLabel();
-    layout();
+//    Display display = canvas.getDisplay();
+//    DeviceData info = display.getDeviceData();
+//    if ( !info.tracking ) {
+//      Shell shell = canvas.getShell();
+//      MessageBox dialog = new MessageBox( shell, SWT.ICON_WARNING | SWT.OK );
+//      dialog.setText( shell.getText() );
+//      dialog.setMessage( "Warning: Device is not tracking resource allocation" );
+//      dialog.open();
+//    }
+//    Object[] newObjects = info.objects;
+//    Error[] newErrors = info.errors;
+//    Object[] diffObjects = new Object[newObjects.length];
+//    Error[] diffErrors = new Error[newErrors.length];
+//    int count = 0;
+//    for ( int i = 0; i < newObjects.length; i++ ) {
+//      int index = 0;
+//      while ( index < oldObjects.length ) {
+//        if ( newObjects[i] == oldObjects[index] ) {
+//          break;
+//        }
+//        index++;
+//      }
+//      if ( index == oldObjects.length ) {
+//        diffObjects[count] = newObjects[i];
+//        diffErrors[count] = newErrors[i];
+//        count++;
+//      }
+//    }
+//    objects = new Object[count];
+//    errors = new Error[count];
+//    System.arraycopy( diffObjects, 0, objects, 0, count );
+//    System.arraycopy( diffErrors, 0, errors, 0, count );
+//    list.removeAll();
+//    text.setText( "" );
+//    canvas.redraw();
+//    for ( int i = 0; i < objects.length; i++ ) {
+//      list.add( objects[i].toString() );
+//    }
+//    refreshLabel();
+//    layout();
   }
 
   void toggleStackTrace() {
@@ -329,9 +329,9 @@ public class Sleak {
       if ( ( (Pattern) object ).isDisposed() ) {
         return;
       }
-      gc.setBackgroundPattern( (Pattern) object );
+//      gc.setBackgroundPattern( (Pattern) object );
       gc.fillRectangle( canvas.getClientArea() );
-      gc.setBackgroundPattern( null );
+//      gc.setBackgroundPattern( null );
       return;
     }
     if ( object instanceof Region ) {

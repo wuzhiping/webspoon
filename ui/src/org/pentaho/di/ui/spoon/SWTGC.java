@@ -88,9 +88,8 @@ public class SWTGC implements GCInterface {
   private Point area;
   private Transform transform;
 
-  public SWTGC( Device device, Point area, int iconsize ) {
-    this.image = new Image( device, area.x, area.y );
-    this.gc = new GC( image );
+  public SWTGC( GC gc, Point area, int iconsize ) {
+    this.gc = gc;
     this.images = GUIResource.getInstance().getImagesSteps();
     this.iconsize = iconsize;
     this.area = area;
@@ -117,7 +116,6 @@ public class SWTGC implements GCInterface {
   }
 
   public void dispose() {
-    gc.dispose();
     if ( transform != null && transform.isDisposed() == false ) {
       transform.dispose();
     }
@@ -353,26 +351,6 @@ public class SWTGC implements GCInterface {
   }
 
   public void setLineStyle( ELineStyle lineStyle ) {
-    switch ( lineStyle ) {
-      case DASHDOT:
-        gc.setLineStyle( SWT.LINE_DASHDOT );
-        break;
-      case SOLID:
-        gc.setLineStyle( SWT.LINE_SOLID );
-        break;
-      case DOT:
-        gc.setLineStyle( SWT.LINE_DOT );
-        break;
-      case DASH:
-        gc.setLineStyle( SWT.LINE_DASH );
-        break;
-      case PARALLEL:
-        gc.setLineAttributes( new LineAttributes(
-          gc.getLineWidth(), SWT.CAP_FLAT, SWT.JOIN_MITER, SWT.LINE_CUSTOM, new float[] { 5, 3, }, 0, 10 ) );
-        break;
-      default:
-        break;
-    }
   }
 
   public void setLineWidth( int width ) {

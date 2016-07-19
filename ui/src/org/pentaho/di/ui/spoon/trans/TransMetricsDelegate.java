@@ -189,7 +189,7 @@ public class TransMetricsDelegate extends SpoonDelegate {
 
       public void paintControl( final PaintEvent event ) {
         if ( transGraph.trans != null && transGraph.trans.isFinished() ) {
-          refreshImage( event.gc );
+          //refreshImage( event.gc );
 
           if ( image != null && !image.isDisposed() ) {
             event.gc.drawImage( image, 0, 0 );
@@ -348,14 +348,14 @@ public class TransMetricsDelegate extends SpoonDelegate {
     //
     bounds.height = Math.max( durations.size() * height, bounds.height );
     canvas.setSize( bounds.width, bounds.height );
-
+/*
     SWTGC gc =
       new SWTGC( Display.getCurrent(), new Point( bounds.width, bounds.height ), PropsUI
         .getInstance().getIconSize() );
     MetricsPainter painter = new MetricsPainter( gc, height );
     drawAreas = painter.paint( durations );
     image = (Image) gc.getImage();
-
+*/
     // refresh the scrolled composite
     //
     sMetricsComposite.setMinHeight( bounds.height );
@@ -368,7 +368,7 @@ public class TransMetricsDelegate extends SpoonDelegate {
 
     // close shop on the SWT GC side.
     //
-    gc.dispose();
+//    gc.dispose();
   }
 
   /**

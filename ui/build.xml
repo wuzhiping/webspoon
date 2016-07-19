@@ -49,6 +49,12 @@
     <copy todir="${classes.dir}/ui">
         <fileset dir="${ui}" includes="laf.properties"/>
     </copy>
+    <copy todir="./ui">
+        <fileset dir="${ui}" includes="**/*"/>
+    </copy>
+    <copy todir="./docs">
+        <fileset dir="../assembly/package-res/docs" includes="**/*"/>
+    </copy>
 
     <if>
       <not>

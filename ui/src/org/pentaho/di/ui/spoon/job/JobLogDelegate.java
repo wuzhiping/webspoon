@@ -27,7 +27,7 @@ import java.util.ResourceBundle;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabItem;
-import org.eclipse.swt.custom.StyledText;
+//import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.layout.FormAttachment;
@@ -67,7 +67,7 @@ public class JobLogDelegate extends SpoonDelegate implements XulEventHandler {
 
   private CTabItem jobLogTab;
 
-  public StyledText jobLogText;
+  //public StyledText jobLogText;
 
   /**
    * The number of lines in the log tab
@@ -123,7 +123,7 @@ public class JobLogDelegate extends SpoonDelegate implements XulEventHandler {
     toolbarControl.setLayoutData( fd );
 
     toolbarControl.setParent( jobLogComposite );
-
+    /*
     jobLogText = new StyledText( jobLogComposite, SWT.READ_ONLY | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL );
     spoon.props.setLook( jobLogText );
     FormData fdText = new FormData();
@@ -135,7 +135,7 @@ public class JobLogDelegate extends SpoonDelegate implements XulEventHandler {
 
     logBrowser = new LogBrowser( jobLogText, jobGraph );
     logBrowser.installLogSniffer();
-
+    */
     // If the job is closed, we should dispose of all the logging information in the buffer and registry for it
     //
     jobGraph.addDisposeListener( new DisposeListener() {
@@ -174,9 +174,9 @@ public class JobLogDelegate extends SpoonDelegate implements XulEventHandler {
   }
 
   public void clearLog() {
-    if ( jobLogText != null && !jobLogText.isDisposed() ) {
-      jobLogText.setText( "" );
-    }
+    //if ( jobLogText != null && !jobLogText.isDisposed() ) {
+    //  jobLogText.setText( "" );
+    //}
   }
 
   public void showLogSettings() {
@@ -184,6 +184,7 @@ public class JobLogDelegate extends SpoonDelegate implements XulEventHandler {
   }
 
   public void showErrors() {
+	/*
     String all = jobLogText.getText();
     ArrayList<String> err = new ArrayList<String>();
 
@@ -235,6 +236,7 @@ public class JobLogDelegate extends SpoonDelegate implements XulEventHandler {
         // System.out.println("Error line selected: "+line);
       }
     }
+    */
   }
 
   /**

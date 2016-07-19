@@ -61,10 +61,11 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.MessageDialogWithToggle;
 import org.eclipse.jface.window.ApplicationWindow;
-import org.eclipse.jface.window.DefaultToolTip;
-import org.eclipse.jface.window.ToolTip;
+//import org.eclipse.jface.window.DefaultToolTip;
+//import org.eclipse.jface.window.ToolTip;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.rap.rwt.application.AbstractEntryPoint;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.browser.LocationEvent;
@@ -72,8 +73,8 @@ import org.eclipse.swt.browser.LocationListener;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.SashForm;
-import org.eclipse.swt.custom.StyledText;
-import org.eclipse.swt.dnd.Clipboard;
+//import org.eclipse.swt.custom.StyledText;
+//import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTarget;
 import org.eclipse.swt.dnd.DropTargetEvent;
@@ -95,7 +96,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.TreeAdapter;
 import org.eclipse.swt.events.TreeEvent;
 import org.eclipse.swt.graphics.Cursor;
-import org.eclipse.swt.graphics.DeviceData;
+//import org.eclipse.swt.graphics.DeviceData;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
@@ -103,8 +104,9 @@ import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.printing.Printer;
-import org.eclipse.swt.program.Program;
+import org.eclipse.swt.layout.GridLayout;
+//import org.eclipse.swt.printing.Printer;
+//import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -336,7 +338,7 @@ import org.pentaho.ui.xul.components.XulWaitBox;
 import org.pentaho.ui.xul.containers.XulMenupopup;
 import org.pentaho.ui.xul.containers.XulToolbar;
 import org.pentaho.ui.xul.impl.XulEventHandler;
-import org.pentaho.ui.xul.jface.tags.ApplicationWindowLocal;
+//import org.pentaho.ui.xul.jface.tags.ApplicationWindowLocal;
 import org.pentaho.ui.xul.jface.tags.JfaceMenuitem;
 import org.pentaho.ui.xul.jface.tags.JfaceMenupopup;
 import org.pentaho.ui.xul.swt.tags.SwtDeck;
@@ -355,7 +357,7 @@ import com.google.common.annotations.VisibleForTesting;
  * @author Matt
  * @since 16-may-2003, i18n at 07-Feb-2006, redesign 01-Dec-2006
  */
-public class Spoon extends ApplicationWindow implements AddUndoPositionInterface, TabListener, SpoonInterface,
+public class Spoon extends AbstractEntryPoint implements AddUndoPositionInterface, TabListener, SpoonInterface,
   OverwritePrompter, PDIObserver, LifeEventHandler, XulEventSource, XulEventHandler, PartitionSchemasProvider {
 
   private static Class<?> PKG = Spoon.class;
@@ -542,7 +544,7 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
 
   private Map<String, String> coreJobToolTipMap;
 
-  private DefaultToolTip toolTip;
+  //private DefaultToolTip toolTip;
 
   public Map<String, SharedObjects> sharedObjectsFileMap;
 
@@ -605,6 +607,7 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
       OsHelper.setAppName();
       // Bootstrap Kettle
       //
+      /*
       Display display;
       if ( System.getProperties().containsKey( "SLEAK" ) ) {
         DeviceData data = new DeviceData();
@@ -620,6 +623,8 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
       } else {
         display = new Display();
       }
+      */
+      Display display = new Display();
 
       // Note: this needs to be done before the look and feel is set
       OsHelper.initOsHandlers( display );
@@ -710,8 +715,8 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
   }
 
   public Spoon( Repository rep ) {
-    super( null );
-    this.addMenuBar();
+    //super( null );
+    //this.addMenuBar();
     log = new LogChannel( APP_NAME );
     SpoonFactory.setSpoonInstance( this );
 
@@ -732,7 +737,8 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
 
     setRepository( rep );
 
-    props = PropsUI.getInstance();
+    // Comment out to avoid an error "Could not create entrypoint instance: org.pentaho.di.ui.spoon.Spoon"
+    // props = PropsUI.getInstance();
     sharedObjectsFileMap = new Hashtable<String, SharedObjects>();
     Thread uiThread = Thread.currentThread();
 
@@ -819,7 +825,7 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
       xulLoader.setOuterContext( shell );
       xulLoader.setSettingsManager( XulSpoonSettingsManager.getInstance() );
 
-      ApplicationWindowLocal.setApplicationWindow( this );
+      //ApplicationWindowLocal.setApplicationWindow( this );
 
       mainSpoonContainer = xulLoader.loadXul( XUL_FILE_MAIN, new XulSpoonResourceBundle() );
 
@@ -874,6 +880,7 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
     data.grabExcessVerticalSpace = true;
     data.verticalAlignment = SWT.FILL;
     data.horizontalAlignment = SWT.FILL;
+    data.verticalSpan = 400;
     sashComposite.setLayoutData( data );
 
     sashComposite.setLayout( layout );
@@ -1456,9 +1463,9 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
     boolean jobActive = jobMeta != null;
     Control focusControl = getDisplay().getFocusControl();
 
-    if ( focusControl instanceof StyledText ) {
-      copyLogSelectedText( (StyledText) focusControl );
-    } else {
+//    if ( focusControl instanceof StyledText ) {
+//      copyLogSelectedText( (StyledText) focusControl );
+//    } else {
       if ( transActive ) {
         if ( transMeta.getSelectedSteps().size() > 0 ) {
           copySteps();
@@ -1472,7 +1479,7 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
           copyJob();
         }
       }
-    }
+//    }
   }
 
   public void copyFile() {
@@ -1635,9 +1642,9 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
     return ( transGraph != null ) && ( transGraph.isExecutionResultsPaneVisible() );
   }
 
-  public void copyLogSelectedText( StyledText text ) {
-    toClipboard( text.getSelectionText() );
-  }
+//  public void copyLogSelectedText( StyledText text ) {
+//    toClipboard( text.getSelectionText() );
+//  }
 
   public void copyTransformation() {
     copyTransformation( getActiveTransformation() );
@@ -1674,7 +1681,7 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
       LocationListener listener = new LocationListener() {
         public void changing( LocationEvent event ) {
           if ( event.location.endsWith( ".pdf" ) ) {
-            Program.launch( event.location );
+            //Program.launch( event.location );
             event.doit = false;
           } else if ( event.location.contains( "samples/transformations" )
             || event.location.contains( "samples/jobs" ) || event.location.contains( "samples/mapping" ) ) {
@@ -1723,7 +1730,7 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
       LocationListener listener = new LocationListener() {
         public void changing( LocationEvent event ) {
           if ( event.location.endsWith( ".pdf" ) ) {
-            Program.launch( event.location );
+            //Program.launch( event.location );
             event.doit = false;
           }
         }
@@ -2178,7 +2185,7 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
         }
       }
     } );
-
+/*
     coreObjectsTree.addMouseMoveListener( new MouseMoveListener() {
 
       public void mouseMove( MouseEvent move ) {
@@ -2226,7 +2233,7 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
         }
       }
     } );
-
+*/
     addDragSourceToTree( coreObjectsTree );
     addDefaultKeyListeners( coreObjectsTree );
     coreObjectsTree.addMouseListener( new MouseAdapter() {
@@ -2237,12 +2244,14 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
       }
     } );
 
+    /*
     toolTip = new DefaultToolTip( variableComposite, ToolTip.RECREATE, true );
     toolTip.setRespectMonitorBounds( true );
     toolTip.setRespectDisplayBounds( true );
     toolTip.setPopupDelay( 350 );
     toolTip.setHideDelay( 5000 );
     toolTip.setShift( new org.eclipse.swt.graphics.Point( ConstUI.TOOLTIP_OFFSET, ConstUI.TOOLTIP_OFFSET ) );
+    */
   }
 
   protected TreeItem searchMouseOverTreeItem( TreeItem[] treeItems, int x, int y ) {
@@ -2527,9 +2536,9 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
   }
 
   public void hideToolTips() {
-    if ( toolTip != null ) {
-      toolTip.hide();
-    }
+//    if ( toolTip != null ) {
+//      toolTip.hide();
+//    }
   }
 
   /**
@@ -4958,7 +4967,7 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
         this.selectionLabel.forceFocus();
       }
 
-      close();
+      //close();
     }
 
     return exit;
@@ -6869,10 +6878,10 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
         // Tools
         disableMenuItem( doc, "repository-connect", isRepositoryRunning );
         disableMenuItem( doc, "repository-disconnect", !isRepositoryRunning );
-        disableMenuItem( doc, "repository-explore", !isRepositoryRunning );
+        disableMenuItem( doc, "repository-explore", true );
         disableMenuItem( doc, "tools-dabase-explore", !isRepositoryRunning && disableDatabaseExplore );
         disableMenuItem( doc, "repository-clear-shared-object-cache", !isRepositoryRunning );
-        disableMenuItem( doc, "toolbar-expore-repository", !isRepositoryRunning );
+        disableMenuItem( doc, "toolbar-expore-repository", true );
         disableMenuItem( doc, "repository-export-all", !isRepositoryRunning );
         disableMenuItem( doc, "repository-import-directory", !isRepositoryRunning );
         disableMenuItem( doc, "trans-last-preview", !isRepositoryRunning || disableTransMenu );
@@ -6886,8 +6895,8 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
 
         SpoonPluginManager.getInstance().notifyLifecycleListeners( SpoonLifeCycleEvent.MENUS_REFRESHED );
 
-        MenuManager menuManager = getMenuBarManager();
-        menuManager.updateAll( true );
+        //MenuManager menuManager = getMenuBarManager();
+        //menuManager.updateAll( true );
 
         // What steps & plugins to show?
         refreshCoreObjects();
@@ -7018,43 +7027,43 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
   }
 
   private void printTransFile( TransMeta transMeta ) {
-    TransGraph transGraph = getActiveTransGraph();
-    if ( transGraph == null ) {
-      return;
-    }
-
-    PrintSpool ps = new PrintSpool();
-    Printer printer = ps.getPrinter( shell );
-
-    // Create an image of the screen
-    Point max = transMeta.getMaximum();
-
-    Image img = transGraph.getTransformationImage( printer, max.x, max.y, 1.0f );
-
-    ps.printImage( shell, img );
-
-    img.dispose();
-    ps.dispose();
+//    TransGraph transGraph = getActiveTransGraph();
+//    if ( transGraph == null ) {
+//      return;
+//    }
+//
+//    PrintSpool ps = new PrintSpool();
+//    Printer printer = ps.getPrinter( shell );
+//
+//    // Create an image of the screen
+//    Point max = transMeta.getMaximum();
+//
+//    Image img = transGraph.getTransformationImage( printer, max.x, max.y, 1.0f );
+//
+//    ps.printImage( shell, img );
+//
+//    img.dispose();
+//    ps.dispose();
   }
 
   private void printJobFile( JobMeta jobMeta ) {
-    JobGraph jobGraph = getActiveJobGraph();
-    if ( jobGraph == null ) {
-      return;
-    }
-
-    PrintSpool ps = new PrintSpool();
-    Printer printer = ps.getPrinter( shell );
-
-    // Create an image of the screen
-    Point max = jobMeta.getMaximum();
-
-    Image img = jobGraph.getJobImage( printer, max.x, max.y, 1.0f );
-
-    ps.printImage( shell, img );
-
-    img.dispose();
-    ps.dispose();
+//    JobGraph jobGraph = getActiveJobGraph();
+//    if ( jobGraph == null ) {
+//      return;
+//    }
+//
+//    PrintSpool ps = new PrintSpool();
+//    Printer printer = ps.getPrinter( shell );
+//
+//    // Create an image of the screen
+//    Point max = jobMeta.getMaximum();
+//
+//    Image img = jobGraph.getJobImage( printer, max.x, max.y, 1.0f );
+//
+//    ps.printImage( shell, img );
+//
+//    img.dispose();
+//    ps.dispose();
   }
 
   public TransGraph getActiveTransGraph() {
@@ -7625,17 +7634,17 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
   }
 
   public void copyTransformationImage( TransMeta transMeta ) {
-    TransGraph transGraph = delegates.trans.findTransGraphOfTransformation( transMeta );
-    if ( transGraph == null ) {
-      return;
-    }
-
-    Clipboard clipboard = GUIResource.getInstance().getNewClipboard();
-
-    Point area = transMeta.getMaximum();
-    Image image = transGraph.getTransformationImage( Display.getCurrent(), area.x, area.y, 1.0f );
-    clipboard.setContents(
-      new Object[] { image.getImageData() }, new Transfer[] { ImageTransfer.getInstance() } );
+//    TransGraph transGraph = delegates.trans.findTransGraphOfTransformation( transMeta );
+//    if ( transGraph == null ) {
+//      return;
+//    }
+//
+//    Clipboard clipboard = GUIResource.getInstance().getNewClipboard();
+//
+//    Point area = transMeta.getMaximum();
+//    Image image = transGraph.getTransformationImage( Display.getCurrent(), area.x, area.y, 1.0f );
+//    clipboard.setContents(
+//      new Object[] { image.getImageData() }, new Transfer[] { ImageTransfer.getInstance() } );
   }
 
   /**
@@ -9232,17 +9241,31 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
     mainSpoonContainer.getDocumentRoot().getElementById( "tools" ).setVisible( visible );
     mainSpoonContainer.getDocumentRoot().getElementById( "help" ).setVisible( visible );
 
-    MenuManager menuManager = getMenuBarManager();
-    menuManager.getMenu().setVisible( visible );
-    menuManager.updateAll( true );
+    //MenuManager menuManager = getMenuBarManager();
+    //menuManager.getMenu().setVisible( visible );
+    //menuManager.updateAll( true );
   }
 
   @Override
-  protected Control createContents( Composite parent ) {
+  protected void createContents( Composite parent ) {
+    // from main
+    display = Display.getCurrent();
+    List<String> args = new ArrayList<String>( Arrays.asList( "" ) );
+    CommandLineOption[] commandLineOptions = getCommandLineArgs( args );
+    PropsUI.init( display, Props.TYPE_PROPERTIES_SPOON );
+    KettleLogStore
+      .init( PropsUI.getInstance().getMaxNrLinesInLog(), PropsUI.getInstance().getMaxLogLineTimeoutMinutes() );
+    try {
+      initLogging( commandLineOptions );
+    } catch ( Throwable t ) { }
+    log = new LogChannel( APP_NAME );
+    props = PropsUI.getInstance();
 
+	// original in createContents
     shell = getShell();
 
     init( null );
+    loadLastUsedFiles(); // has to be after init.
 
     openSpoon();
 
@@ -9264,16 +9287,21 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
       box.setMessage( e.getMessage() );
       box.open();
     }
-    getMenuBarManager().updateAll( true );
+    //getMenuBarManager().updateAll( true );
 
-    return parent;
+    //return parent;
+  }
+
+  @Override
+  public Shell getShell() {
+	  return super.getShell();
   }
 
   public void start() {
     // We store the UI thread for the getDisplay() method
-    setBlockOnOpen( false );
+    //setBlockOnOpen( false );
     try {
-      open();
+      //open();
       // Load the last loaded files
       loadLastUsedFiles();
       waitForDispose();
@@ -9308,7 +9336,7 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
         .getString( PKG, "Spoon.Dialog.LoginFailed.Message", t ), t );
     }
   }
-
+/*
   @Override
   protected void handleShellCloseEvent() {
     try {
@@ -9320,7 +9348,7 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
       LogChannel.GENERAL.logError( "Error closing Spoon", e );
     }
   }
-
+*/
   public void showAuthenticationOptions() {
     AuthProviderDialog authProviderDialog = new AuthProviderDialog( shell );
     authProviderDialog.show();

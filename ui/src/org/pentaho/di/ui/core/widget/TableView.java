@@ -37,7 +37,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.TableEditor;
-import org.eclipse.swt.dnd.Clipboard;
+//import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSource;
 import org.eclipse.swt.dnd.DragSourceEvent;
@@ -152,7 +152,7 @@ public class TableView extends Composite {
   private Menu mRow;
 
   private ModifyListener lsMod, lsUndo, lsContent;
-  private Clipboard clipboard;
+  //private Clipboard clipboard;
 
   // The following Image and Graphics Context are used for font metrics. We only
   // want them created once.
@@ -200,7 +200,7 @@ public class TableView extends Composite {
     this.rows = nrRows;
     this.props = pr;
     this.readonly = readOnly;
-    this.clipboard = null;
+    //this.clipboard = null;
     this.variables = space;
     this.addIndexColumn = addIndexColumn;
 
@@ -233,13 +233,14 @@ public class TableView extends Composite {
       }
     };
     if ( TableView.dummyGC == null ) {
+      /*
       Display disp = parent.getDisplay();
       TableView.dummyImage = new Image( disp, 1, 1 );
       TableView.dummyGC = new GC( TableView.dummyImage );
 
       gridFont = new Font( disp, props.getGridFont() );
       TableView.dummyGC.setFont( gridFont );
-
+      */
     }
 
     FormLayout controlLayout = new FormLayout();
@@ -688,13 +689,14 @@ public class TableView extends Composite {
         // CTRL-V --> Paste selected infomation...
         if ( e.keyCode == 'v' && ctrl ) {
           e.doit = false;
-          if ( clipboard != null ) {
-            clipboard.dispose();
-            clipboard = null;
-          }
-          clipboard = new Clipboard( getDisplay() );
+//          if ( clipboard != null ) {
+//            clipboard.dispose();
+//            clipboard = null;
+//          }
+//          clipboard = new Clipboard( getDisplay() );
           TextTransfer tran = TextTransfer.getInstance();
-          String text = (String) clipboard.getContents( tran );
+//          String text = (String) clipboard.getContents( tran );
+          String text = "";
           combo.setText( text );
           return;
         }
@@ -1139,10 +1141,10 @@ public class TableView extends Composite {
     // Clean up the clipboard
     addDisposeListener( new DisposeListener() {
       public void widgetDisposed( DisposeEvent e ) {
-        if ( clipboard != null ) {
-          clipboard.dispose();
-          clipboard = null;
-        }
+//        if ( clipboard != null ) {
+//          clipboard.dispose();
+//          clipboard = null;
+//        }
         if ( gridFont != null ) {
           gridFont.dispose();
         }
@@ -1685,21 +1687,21 @@ public class TableView extends Composite {
   }
 
   private void clipSelected() {
-    if ( clipboard != null ) {
-      clipboard.dispose();
-      clipboard = null;
-    }
-
-    clipboard = new Clipboard( getDisplay() );
-    TextTransfer tran = TextTransfer.getInstance();
-
-    String clip = getSelectedText();
-
-    if ( clip == null ) {
-      return;
-    }
-
-    clipboard.setContents( new String[]{ clip }, new Transfer[]{ tran } );
+//    if ( clipboard != null ) {
+//      clipboard.dispose();
+//      clipboard = null;
+//    }
+//
+//    clipboard = new Clipboard( getDisplay() );
+//    TextTransfer tran = TextTransfer.getInstance();
+//
+//    String clip = getSelectedText();
+//
+//    if ( clip == null ) {
+//      return;
+//    }
+//
+//    clipboard.setContents( new String[]{ clip }, new Transfer[]{ tran } );
   }
 
   private String getSelectedText() {
@@ -1761,15 +1763,16 @@ public class TableView extends Composite {
   private void pasteSelected() {
     int rownr = getCurrentRownr();
 
-    if ( clipboard != null ) {
-      clipboard.dispose();
-      clipboard = null;
-    }
-
-    clipboard = new Clipboard( getDisplay() );
+//    if ( clipboard != null ) {
+//      clipboard.dispose();
+//      clipboard = null;
+//    }
+//
+//    clipboard = new Clipboard( getDisplay() );
     TextTransfer tran = TextTransfer.getInstance();
 
-    String text = (String) clipboard.getContents( tran );
+//    String text = (String) clipboard.getContents( tran );
+    String text = "";
 
     if ( text != null ) {
       String[] lines = text.split( Const.CR );
@@ -2145,7 +2148,8 @@ public class TableView extends Composite {
 
   private void setColumnWidthBasedOnTextField( final int colnr, final boolean useVariables ) {
     String str = getTextWidgetValue( colnr );
-    int strmax = TableView.dummyGC.textExtent( str, SWT.DRAW_TAB | SWT.DRAW_DELIMITER ).x + 20;
+    //int strmax = TableView.dummyGC.textExtent( str, SWT.DRAW_TAB | SWT.DRAW_DELIMITER ).x + 20;
+    int strmax = str.length() + 20;
     int colmax = tablecolumn[colnr].getWidth();
     if ( strmax > colmax ) {
       if ( Const.isOSX() || Const.isLinux() ) {
@@ -2169,9 +2173,9 @@ public class TableView extends Composite {
         Text widget = (Text) text;
         int idx = widget.getCaretPosition();
         widget.selectAll();
-        widget.showSelection();
+        //widget.showSelection();
         widget.setSelection( 0 );
-        widget.showSelection();
+        //widget.showSelection();
         widget.setSelection( idx );
       }
     }
@@ -2342,7 +2346,8 @@ public class TableView extends Composite {
       TableColumn tc = table.getColumn( c );
       int max = 0;
       if ( header ) {
-        max = TableView.dummyGC.textExtent( tc.getText(), SWT.DRAW_TAB | SWT.DRAW_DELIMITER ).x;
+        //max = TableView.dummyGC.textExtent( tc.getText(), SWT.DRAW_TAB | SWT.DRAW_DELIMITER ).x;
+        max = tc.getText().length() * 8 + 20;
 
         // Check if the column has a sorted mark set. In that case, we need the
         // header to be a bit wider...
@@ -2392,7 +2397,8 @@ public class TableView extends Composite {
       }
 
       for ( String str : columnStrings ) {
-        int len = TableView.dummyGC.textExtent( str == null ? "" : str, SWT.DRAW_TAB | SWT.DRAW_DELIMITER ).x;
+        //int len = TableView.dummyGC.textExtent( str == null ? "" : str, SWT.DRAW_TAB | SWT.DRAW_DELIMITER ).x;
+        int len = str.length() * 8;
         if ( len > max ) {
           max = len;
         }

@@ -28,7 +28,7 @@ import java.util.ResourceBundle;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabItem;
-import org.eclipse.swt.custom.StyledText;
+//import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.layout.FormAttachment;
@@ -67,7 +67,7 @@ public class TransLogDelegate extends SpoonDelegate implements XulEventHandler {
 
   private CTabItem transLogTab;
 
-  private StyledText transLogText;
+  //private StyledText transLogText;
 
   private XulToolbar toolbar;
 
@@ -119,17 +119,17 @@ public class TransLogDelegate extends SpoonDelegate implements XulEventHandler {
 
     toolbarControl.setParent( transLogComposite );
 
-    transLogText = new StyledText( transLogComposite, SWT.READ_ONLY | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL );
-    spoon.props.setLook( transLogText );
+    //transLogText = new StyledText( transLogComposite, SWT.READ_ONLY | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL );
+    //spoon.props.setLook( transLogText );
     FormData fdText = new FormData();
     fdText.left = new FormAttachment( 0, 0 );
     fdText.right = new FormAttachment( 100, 0 );
     fdText.top = new FormAttachment( (Control) toolbar.getManagedObject(), 0 );
     fdText.bottom = new FormAttachment( 100, 0 );
-    transLogText.setLayoutData( fdText );
+    //transLogText.setLayoutData( fdText );
 
-    logBrowser = new LogBrowser( transLogText, transGraph );
-    logBrowser.installLogSniffer();
+    //logBrowser = new LogBrowser( transLogText, transGraph );
+    //logBrowser.installLogSniffer();
 
     // If the transformation is closed, we should dispose of all the logging information in the buffer and registry for
     // this transformation
@@ -192,9 +192,9 @@ public class TransLogDelegate extends SpoonDelegate implements XulEventHandler {
   }
 
   public void clearLog() {
-    if ( transLogText != null && !transLogText.isDisposed() ) {
-      transLogText.setText( "" );
-    }
+    //if ( transLogText != null && !transLogText.isDisposed() ) {
+    //  transLogText.setText( "" );
+    //}
     Map<StepMeta, String> stepLogMap = transGraph.getStepLogMap();
     if ( stepLogMap != null ) {
       stepLogMap.clear();
@@ -207,13 +207,14 @@ public class TransLogDelegate extends SpoonDelegate implements XulEventHandler {
   }
 
   public void showErrors() {
-    String all = transLogText.getText();
+    //String all = transLogText.getText();
     ArrayList<String> err = new ArrayList<String>();
 
     int i = 0;
     int startpos = 0;
     int crlen = Const.CR.length();
 
+    /*
     while ( i < all.length() - crlen ) {
       if ( all.substring( i, i + crlen ).equalsIgnoreCase( Const.CR ) ) {
         String line = all.substring( startpos, i );
@@ -232,6 +233,7 @@ public class TransLogDelegate extends SpoonDelegate implements XulEventHandler {
       i++;
     }
     String line = all.substring( startpos );
+
     String uLine = line.toUpperCase();
     if ( uLine.indexOf( BaseMessages.getString( PKG, "TransLog.System.ERROR2" ) ) >= 0
       || uLine.indexOf( BaseMessages.getString( PKG, "TransLog.System.EXCEPTION2" ) ) >= 0
@@ -262,6 +264,7 @@ public class TransLogDelegate extends SpoonDelegate implements XulEventHandler {
         // System.out.println("Error line selected: "+line);
       }
     }
+    */
   }
 
   /**
@@ -272,12 +275,14 @@ public class TransLogDelegate extends SpoonDelegate implements XulEventHandler {
   }
 
   public String getLoggingText() {
+	/*
     if ( transLogText != null && !transLogText.isDisposed() ) {
       return transLogText.getText();
     } else {
       return null;
     }
-
+    */
+	return null;
   }
 
   public void pauseLog() {

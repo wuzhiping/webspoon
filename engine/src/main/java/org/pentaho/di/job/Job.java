@@ -44,6 +44,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.vfs2.FileName;
 import org.apache.commons.vfs2.FileObject;
+import org.eclipse.rap.rwt.RWT;
+import org.eclipse.rap.rwt.service.UISession;
+import org.eclipse.swt.widgets.Display;
 import org.pentaho.di.cluster.SlaveServer;
 import org.pentaho.di.core.Const;
 import org.pentaho.di.core.util.Utils;
@@ -139,6 +142,8 @@ public class Job extends Thread implements VariableSpace, NamedParams, HasLogCha
   private AtomicInteger errors;
 
   private VariableSpace variables = new Variables();
+
+  private Display display;
 
   /**
    * The job that's launching this (sub-) job. This gives us access to the whole chain, including the parent variables,
@@ -400,7 +405,14 @@ public class Job extends Thread implements VariableSpace, NamedParams, HasLogCha
         shutdownHeartbeat( heartbeat );
 
         ExtensionPointHandler.callExtensionPoint( log, KettleExtensionPoint.JobFinish.id, this );
-        jobMeta.disposeEmbeddedMetastoreProvider();
+        if ( display == null ) {
+          jobMeta.disposeEmbeddedMetastoreProvider();
+        } else {
+          UISession uiSession = RWT.getUISession( display );
+          uiSession.exec( () -> {
+            jobMeta.disposeEmbeddedMetastoreProvider();
+          } );
+        }
 
         fireJobFinishListeners();
 
@@ -619,10 +631,21 @@ public class Job extends Thread implements VariableSpace, NamedParams, HasLogCha
     JobExecutionExtension extension = new JobExecutionExtension( this, prevResult, jobEntryCopy, true );
     ExtensionPointHandler.callExtensionPoint( log, KettleExtensionPoint.JobBeforeJobEntryExecution.id, extension );
 
-    jobMeta.disposeEmbeddedMetastoreProvider();
-    if ( jobMeta.getMetastoreLocatorOsgi() != null ) {
-      jobMeta.setEmbeddedMetastoreProviderKey( jobMeta.getMetastoreLocatorOsgi().setEmbeddedMetastore( jobMeta
-          .getEmbeddedMetaStore() ) );
+    if ( display == null ) {
+      jobMeta.disposeEmbeddedMetastoreProvider();
+      if ( jobMeta.getMetastoreLocatorOsgi() != null ) {
+        jobMeta.setEmbeddedMetastoreProviderKey(
+          jobMeta.getMetastoreLocatorOsgi().setEmbeddedMetastore( jobMeta.getEmbeddedMetaStore() ) );
+      }
+    } else {
+      UISession uiSession = RWT.getUISession( display );
+      uiSession.exec( () -> {
+        jobMeta.disposeEmbeddedMetastoreProvider();
+        if ( jobMeta.getMetastoreLocatorOsgi() != null ) {
+          jobMeta.setEmbeddedMetastoreProviderKey(
+            jobMeta.getMetastoreLocatorOsgi().setEmbeddedMetastore( jobMeta.getEmbeddedMetaStore() ) );
+        }
+      } );
     }
 
     if ( extension.result != null ) {
@@ -1375,6 +1398,7 @@ public class Job extends Thread implements VariableSpace, NamedParams, HasLogCha
     this.log.setLogLevel( logLevel );
     this.containerObjectId = log.getContainerObjectId();
     this.parentJob = parentJob;
+    this.display = parentJob.getDisplay();
   }
 
   public Result getResult() {
@@ -2315,5 +2339,13 @@ public class Job extends Thread implements VariableSpace, NamedParams, HasLogCha
     }
 
     return Const.HEARTBEAT_PERIODIC_INTERVAL_IN_SECS;
+  }
+
+  public Display getDisplay() {
+    return display;
+  }
+
+  public void setDisplay( Display display ) {
+    this.display = display;
   }
 }

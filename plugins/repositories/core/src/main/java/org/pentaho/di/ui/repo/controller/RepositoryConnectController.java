@@ -26,6 +26,7 @@ import com.google.common.annotations.VisibleForTesting;
 import org.apache.commons.lang.ClassUtils;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.rap.rwt.SingletonUtil;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.pentaho.di.core.Const;
@@ -49,8 +50,11 @@ import org.pentaho.di.ui.core.database.dialog.DatabaseDialog;
 import org.pentaho.di.ui.repo.IConnectedRepositoryInstance;
 import org.pentaho.di.ui.repo.model.RepositoryModel;
 import org.pentaho.di.ui.repo.timeout.RepositorySessionTimeoutHandler;
+import org.pentaho.di.ui.repo.model.UserRepositoriesMeta;
 import org.pentaho.di.ui.spoon.Spoon;
 import org.pentaho.di.ui.util.HelpUtils;
+
+import com.google.common.annotations.VisibleForTesting;
 
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
@@ -79,6 +83,8 @@ public class RepositoryConnectController implements IConnectedRepositoryInstance
   public static final String ORIGINAL_NAME = "originalName";
 
   public static final String DEFAULT_URL = "defaultUrl";
+  public static final String ERROR_MESSAGE = "errorMessage";
+  public static final String SUCCESS = "success";
   public static final String ERROR_401 = "401";
 
   private static Class<?> PKG = RepositoryConnectController.class;
@@ -96,20 +102,13 @@ public class RepositoryConnectController implements IConnectedRepositoryInstance
   private List<RepositoryContollerListener> listeners = new ArrayList<>();
   private boolean relogin = false;
 
-  public RepositoryConnectController( PluginRegistry pluginRegistry, Supplier<Spoon> spoonSupplier,
-                                      RepositoriesMeta repositoriesMeta ) {
+  public RepositoryConnectController( PluginRegistry pluginRegistry, Supplier<Spoon> spoonSupplier ) {
     this.pluginRegistry = pluginRegistry;
     this.spoonSupplier = spoonSupplier;
-    this.repositoriesMeta = repositoriesMeta;
-    try {
-      repositoriesMeta.readData();
-    } catch ( KettleException ke ) {
-      log.logError( "Unable to load repositories", ke );
-    }
   }
 
   public RepositoryConnectController() {
-    this( PluginRegistry.getInstance(), Spoon::getInstance, new RepositoriesMeta() );
+    this( PluginRegistry.getInstance(), Spoon::getInstance );
   }
 
   public boolean help() {
@@ -258,7 +257,7 @@ public class RepositoryConnectController implements IConnectedRepositoryInstance
         repository.init( repositoryMeta );
         repositoriesMeta.addRepository( repositoryMeta );
         repositoriesMeta.writeData();
-        currentRepository = repositoryMeta;
+        setCurrentRepository( repositoryMeta );
         if ( !testRepository( repository ) ) {
           return null;
         }
@@ -296,19 +295,22 @@ public class RepositoryConnectController implements IConnectedRepositoryInstance
   }
 
   public String getRepository( String name ) {
+    RepositoriesMeta repositoriesMeta = getRepositoriesMeta();
     RepositoryMeta repositoryMeta = repositoriesMeta.findRepository( name );
     if ( repositoryMeta != null ) {
-      currentRepository = repositoryMeta;
+      setCurrentRepository( repositoryMeta );
       return repositoryMeta.toJSONObject().toString();
     }
     return "";
   }
 
   public DatabaseMeta getDatabase( String name ) {
+    RepositoriesMeta repositoriesMeta = getRepositoriesMeta();
     return repositoriesMeta.searchDatabase( name );
   }
 
   public void removeDatabase( String name ) {
+    RepositoriesMeta repositoriesMeta = getRepositoriesMeta();
     int index = repositoriesMeta.indexOfDatabase( repositoriesMeta.searchDatabase( name ) );
     if ( index != -1 ) {
       repositoriesMeta.removeDatabase( index );
@@ -318,6 +320,7 @@ public class RepositoryConnectController implements IConnectedRepositoryInstance
 
   @SuppressWarnings( "unchecked" )
   public String getDatabases() {
+    RepositoriesMeta repositoriesMeta = getRepositoriesMeta();
     JSONArray list = new JSONArray();
     for ( int i = 0; i < repositoriesMeta.nrDatabases(); i++ ) {
       JSONObject databaseJSON = new JSONObject();
@@ -328,7 +331,7 @@ public class RepositoryConnectController implements IConnectedRepositoryInstance
   }
 
   public void connectToRepository() throws KettleException {
-    connectToRepository( currentRepository );
+    connectToRepository( getCurrentRepository() );
   }
 
   public void connectToRepository( RepositoryMeta repositoryMeta ) throws KettleException {
@@ -447,6 +450,7 @@ public class RepositoryConnectController implements IConnectedRepositoryInstance
   }
 
   public boolean deleteRepository( String name ) {
+    RepositoriesMeta repositoriesMeta = getRepositoriesMeta();
     RepositoryMeta repositoryMeta = repositoriesMeta.findRepository( name );
     int index = repositoriesMeta.indexOfRepository( repositoryMeta );
     if ( index != -1 ) {
@@ -470,6 +474,7 @@ public class RepositoryConnectController implements IConnectedRepositoryInstance
   }
 
   public void addDatabase( DatabaseMeta databaseMeta ) {
+    RepositoriesMeta repositoriesMeta = getRepositoriesMeta();
     if ( databaseMeta != null ) {
       repositoriesMeta.addDatabase( databaseMeta );
       save();
@@ -504,22 +509,27 @@ public class RepositoryConnectController implements IConnectedRepositoryInstance
   }
 
   public void setCurrentRepository( RepositoryMeta repositoryMeta ) {
-    this.currentRepository = repositoryMeta;
+    UserRepositoriesMeta repos = SingletonUtil.getSessionInstance( UserRepositoriesMeta.class );
+    repos.setCurrentRepository( repositoryMeta );
   }
 
   public RepositoryMeta getCurrentRepository() {
-    return this.currentRepository;
+    UserRepositoriesMeta repos = SingletonUtil.getSessionInstance( UserRepositoriesMeta.class );
+    return repos.getCurrentRepository();
   }
 
   public RepositoryMeta getConnectedRepository() {
-    return connectedRepository;
+    UserRepositoriesMeta repos = SingletonUtil.getSessionInstance( UserRepositoriesMeta.class );
+    return repos.getConnectedRepository();
   }
 
   public void setConnectedRepository( RepositoryMeta connectedRepository ) {
-    this.connectedRepository = connectedRepository;
+    UserRepositoriesMeta repos = SingletonUtil.getSessionInstance( UserRepositoriesMeta.class );
+    repos.setConnectedRepository( connectedRepository );
   }
 
   public RepositoryMeta getDefaultRepositoryMeta() {
+    RepositoriesMeta repositoriesMeta = getRepositoriesMeta();
     for ( int i = 0; i < repositoriesMeta.nrRepositories(); i++ ) {
       RepositoryMeta repositoryMeta = repositoriesMeta.getRepository( i );
       if ( repositoryMeta.isDefault() ) {
@@ -530,6 +540,7 @@ public class RepositoryConnectController implements IConnectedRepositoryInstance
   }
 
   public RepositoryMeta getRepositoryMetaByName( String name ) {
+    RepositoriesMeta repositoriesMeta = getRepositoriesMeta();
     return repositoriesMeta.findRepository( name );
   }
 
@@ -549,6 +560,7 @@ public class RepositoryConnectController implements IConnectedRepositoryInstance
   }
 
   public void save() {
+    RepositoriesMeta repositoriesMeta = getRepositoriesMeta();
     try {
       repositoriesMeta.writeData();
     } catch ( KettleException ke ) {
@@ -574,6 +586,10 @@ public class RepositoryConnectController implements IConnectedRepositoryInstance
 
   public void addListener( RepositoryContollerListener listener ) {
     listeners.add( listener );
+  }
+
+  public void removeListener( RepositoryContollerListener listener ) {
+    listeners.remove( listener );
   }
 
   public void fireListeners() {
@@ -611,6 +627,7 @@ public class RepositoryConnectController implements IConnectedRepositoryInstance
 
   @VisibleForTesting
   boolean isDatabaseWithNameExist( DatabaseMeta databaseMeta, boolean isNew ) {
+    RepositoriesMeta repositoriesMeta = getRepositoriesMeta();
     for ( int i = 0; i < repositoriesMeta.nrDatabases(); i++ ) {
       final DatabaseMeta iterDatabase = repositoriesMeta.getDatabase( i );
       if ( iterDatabase.getName().trim().equalsIgnoreCase( databaseMeta.getName().trim() ) ) {
@@ -620,5 +637,11 @@ public class RepositoryConnectController implements IConnectedRepositoryInstance
       }
     }
     return false;
+  }
+
+  @VisibleForTesting
+  RepositoriesMeta getRepositoriesMeta() {
+    UserRepositoriesMeta repos = SingletonUtil.getSessionInstance( UserRepositoriesMeta.class );
+    return repos.getRepositoriesMeta();
   }
 }

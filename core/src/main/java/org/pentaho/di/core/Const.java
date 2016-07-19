@@ -26,6 +26,7 @@ package org.pentaho.di.core;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.text.StrBuilder;
+import org.eclipse.rap.rwt.RWT;
 import org.pentaho.di.core.exception.KettleException;
 import org.pentaho.di.core.row.ValueMetaInterface;
 import org.pentaho.di.core.util.EnvUtil;
@@ -1931,6 +1932,13 @@ public class Const {
     }
   }
 
+  public static String getUser() {
+    try {
+      return RWT.getRequest().getRemoteUser();
+    } catch ( Exception e ) { // when accessed from background threads (e.g., when the webSpoon server is starting)
+      return null;
+    }
+  }
   /**
    * Looks up the user's home directory (or KETTLE_HOME) for every invocation. This is no longer a static property so
    * the value may be set after this class is loaded.
@@ -1949,6 +1957,31 @@ public class Const {
    */
   public static String getKettleDirectory() {
     return getUserHomeDirectory() + FILE_SEPARATOR + getUserBaseDir();
+  }
+
+  /**
+   * Determines the Kettle absolute directory in the user's home directory.
+   * This is per user-basis.
+   *
+   * @return The Kettle absolute directory.
+   */
+  public static String getKettleUserDirectory() {
+    String path = getKettleDirectory();
+    String user = getUser();
+    if ( user != null ) {
+      path += FILE_SEPARATOR + "users" + FILE_SEPARATOR + user;
+    }
+    return path;
+  }
+
+  /**
+   * Determines the Kettle user data directory in the user's home directory.
+   * This is per user-basis.
+   *
+   * @return The Kettle user data directory.
+   */
+  public static String getKettleUserDataDirectory() {
+    return getKettleUserDirectory() + Const.FILE_SEPARATOR + "data";
   }
 
   /**
@@ -1973,7 +2006,7 @@ public class Const {
    * @return the name of the shared objects file
    */
   public static String getSharedObjectsFile() {
-    return getKettleDirectory() + FILE_SEPARATOR + SHARED_DATA_FILE;
+    return getKettleUserDirectory() + FILE_SEPARATOR + SHARED_DATA_FILE;
   }
 
   /**
@@ -1991,7 +2024,7 @@ public class Const {
    * @return The Kettle repositories file.
    */
   public static String getKettleUserRepositoriesFile() {
-    return getKettleDirectory() + FILE_SEPARATOR + getKettleLocalRepositoriesFile();
+    return getKettleUserDirectory() + FILE_SEPARATOR + getKettleLocalRepositoriesFile();
   }
 
   /**

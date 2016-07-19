@@ -43,9 +43,9 @@ define(
        * @return {Object} The dataService api
        */
       function factory($http, $q) {
-        var baseUrl = "/cxf/browser";
+        var baseUrl = "../../cxf/browser";
         var httpRequestCancellers = [];
-          return {
+        return {
           getDirectoryTree: getDirectoryTree,
           getFiles: getFiles,
           getFolders: getFolders,
@@ -73,7 +73,13 @@ define(
          * @return {Promise} - a promise resolved once data is returned
          */
         function getDirectoryTree(filter) {
-          return _httpGet([baseUrl, "loadDirectoryTree", filter].join("/"));
+          var deferred = $q.defer();
+          var json = _loadDirectoryTree();
+          var obj = {};
+          obj.data = {};
+          obj.data = JSON.parse( json );
+          deferred.resolve( obj );
+          return deferred.promise;
         }
 
         /**
@@ -180,7 +186,13 @@ define(
          * @return {Promise} - a promise resolved once data is returned
          */
         function getRecentFiles() {
-          return _httpGet([baseUrl, "recentFiles"].join("/"));
+          var deferred = $q.defer();
+          var json = _getRecentFiles();
+          var obj = {};
+          obj.data = {};
+          obj.data = JSON.parse( json );
+          deferred.resolve( obj );
+          return deferred.promise;
         }
 
         /**
@@ -272,7 +284,13 @@ define(
          * @return {Promise} - a promise resolved once data is returned
          */
         function openRecent(repo, id) {
-          return _httpGet([baseUrl, "loadRecent", repo, id].join("/"));
+          var deferred = $q.defer();
+          var json = _loadRecent( repo, id );
+          var obj = {};
+          obj.data = {};
+          obj.data = JSON.parse( json );
+          deferred.resolve( obj );
+          return deferred.promise;
         }
 
         /**

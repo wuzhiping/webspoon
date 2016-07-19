@@ -22,6 +22,7 @@
 
 package org.pentaho.di.ui.spoon;
 
+import org.eclipse.rap.rwt.SingletonUtil;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -174,7 +175,7 @@ public class SpoonPerspectiveManager {
    * @return SpoonPerspectiveManager instance.
    */
   public static SpoonPerspectiveManager getInstance() {
-    return instance;
+    return SingletonUtil.getSessionInstance( SpoonPerspectiveManager.class );
   }
 
   /**

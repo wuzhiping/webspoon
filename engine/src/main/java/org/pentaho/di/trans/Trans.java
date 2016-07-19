@@ -55,6 +55,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.vfs2.FileName;
 import org.apache.commons.vfs2.FileObject;
+import org.eclipse.rap.rwt.RWT;
+import org.eclipse.rap.rwt.service.UISession;
+import org.eclipse.swt.widgets.Display;
 import org.pentaho.di.cluster.SlaveServer;
 import org.pentaho.di.core.BlockingBatchingRowSet;
 import org.pentaho.di.core.BlockingRowSet;
@@ -425,6 +428,8 @@ public class Trans implements VariableSpace, NamedParams, HasLogChannelInterface
 
   private ExecutorService heartbeat = null; // this transformations's heartbeat scheduled executor
 
+  private Display display;
+
   /**
    * Instantiates a new transformation.
    */
@@ -647,10 +652,21 @@ public class Trans implements VariableSpace, NamedParams, HasLogChannelInterface
 
     ExtensionPointHandler.callExtensionPoint( log, KettleExtensionPoint.TransformationPrepareExecution.id, this );
 
-    transMeta.disposeEmbeddedMetastoreProvider();
-    if ( transMeta.getMetastoreLocatorOsgi() != null ) {
-      transMeta.setEmbeddedMetastoreProviderKey(
-        transMeta.getMetastoreLocatorOsgi().setEmbeddedMetastore( transMeta.getEmbeddedMetaStore() ) );
+    if ( display == null ) {
+      transMeta.disposeEmbeddedMetastoreProvider();
+      if ( transMeta.getMetastoreLocatorOsgi() != null ) {
+        transMeta.setEmbeddedMetastoreProviderKey(
+          transMeta.getMetastoreLocatorOsgi().setEmbeddedMetastore( transMeta.getEmbeddedMetaStore() ) );
+      }
+    } else {
+      UISession uiSession = RWT.getUISession( display );
+      uiSession.exec( () -> {
+        transMeta.disposeEmbeddedMetastoreProvider();
+        if ( transMeta.getMetastoreLocatorOsgi() != null ) {
+          transMeta.setEmbeddedMetastoreProviderKey(
+            transMeta.getMetastoreLocatorOsgi().setEmbeddedMetastore( transMeta.getEmbeddedMetaStore() ) );
+        }
+      } );
     }
 
     checkCompatibility();
@@ -1323,7 +1339,14 @@ public class Trans implements VariableSpace, NamedParams, HasLogChannelInterface
           stepPerformanceSnapShotTimer.cancel();
         }
 
-        transMeta.disposeEmbeddedMetastoreProvider();
+        if ( display == null ) {
+          transMeta.disposeEmbeddedMetastoreProvider();
+        } else {
+          UISession uiSession = RWT.getUISession( display );
+          uiSession.exec( () -> {
+            transMeta.disposeEmbeddedMetastoreProvider();
+          } );
+        }
 
         setFinished( true );
         setRunning( false ); // no longer running
@@ -3346,6 +3369,7 @@ public class Trans implements VariableSpace, NamedParams, HasLogChannelInterface
     this.logLevel = parentJob.getLogLevel();
     this.log.setLogLevel( logLevel );
     this.parentJob = parentJob;
+    this.display = parentJob.getDisplay();
 
     transactionId = calculateTransactionId();
   }
@@ -5748,5 +5772,13 @@ public class Trans implements VariableSpace, NamedParams, HasLogChannelInterface
     }
 
     return Const.HEARTBEAT_PERIODIC_INTERVAL_IN_SECS;
+  }
+
+  public Display getDisplay() {
+    return display;
+  }
+
+  public void setDisplay( Display display ) {
+    this.display = display;
   }
 }

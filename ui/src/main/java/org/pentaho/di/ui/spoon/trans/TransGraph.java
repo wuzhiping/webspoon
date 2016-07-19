@@ -28,12 +28,17 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.MessageDialogWithToggle;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.rap.json.JsonArray;
+import org.eclipse.rap.json.JsonObject;
+import org.eclipse.rap.rwt.RWT;
 import org.eclipse.jface.window.DefaultToolTip;
 import org.eclipse.jface.window.ToolTip;
+import org.eclipse.rap.rwt.scripting.ClientListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTarget;
 import org.eclipse.swt.dnd.DropTargetEvent;
@@ -49,12 +54,13 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.MouseTrackListener;
-import org.eclipse.swt.events.MouseWheelListener;
+//import org.eclipse.swt.events.MouseWheelListener;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Device;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.FormAttachment;
@@ -66,7 +72,9 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.MessageBox;
@@ -74,6 +82,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.Widget;
+import org.pentaho.di.base.AbstractMeta;
 import org.pentaho.di.core.CheckResultInterface;
 import org.pentaho.di.core.Const;
 import org.pentaho.di.core.EngineMetaInterface;
@@ -169,6 +178,7 @@ import org.pentaho.di.ui.spoon.SpoonUiExtenderPluginInterface;
 import org.pentaho.di.ui.spoon.SpoonUiExtenderPluginType;
 import org.pentaho.di.ui.spoon.SwtScrollBar;
 import org.pentaho.di.ui.spoon.TabItemInterface;
+import org.pentaho.di.ui.spoon.WebSpoonClientListener;
 import org.pentaho.di.ui.spoon.XulSpoonResourceBundle;
 import org.pentaho.di.ui.spoon.XulSpoonSettingsManager;
 import org.pentaho.di.ui.spoon.dialog.EnterPreviewRowsDialog;
@@ -188,6 +198,8 @@ import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.impl.XulEventHandler;
 import org.pentaho.ui.xul.jface.tags.JfaceMenuitem;
 import org.pentaho.ui.xul.jface.tags.JfaceMenupopup;
+
+import com.google.common.annotations.VisibleForTesting;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -212,7 +224,7 @@ import java.util.concurrent.Callable;
  * @since 17-mei-2003
  */
 public class TransGraph extends AbstractGraph implements XulEventHandler, Redrawable, TabItemInterface,
-  LogParentProvidedInterface, MouseListener, MouseMoveListener, MouseTrackListener, MouseWheelListener, KeyListener {
+  LogParentProvidedInterface, MouseListener, MouseMoveListener, MouseTrackListener, KeyListener {
   private static Class<?> PKG = Spoon.class; // for i18n purposes, needed by Translator2!!
 
   private LogChannelInterface log;
@@ -370,7 +382,7 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
 
   private StreamType candidateHopType;
 
-  private Map<StepMeta, DelayTimer> delayTimers;
+//  private Map<StepMeta, DelayTimer> delayTimers;
 
   private StepMeta showTargetStreamsStep;
 
@@ -420,7 +432,7 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
     spoon.selectionFilter.setText( "" );
 
     this.mouseOverSteps = new ArrayList<>();
-    this.delayTimers = new HashMap<>();
+//    this.delayTimers = new HashMap<>();
 
     transLogDelegate = new TransLogDelegate( spoon, this );
     transGridDelegate = new TransGridDelegate( spoon, this );
@@ -486,7 +498,19 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
 
     // Add a canvas below it, use up all space initially
     //
-    canvas = new Canvas( sashForm, SWT.V_SCROLL | SWT.H_SCROLL | SWT.NO_BACKGROUND | SWT.BORDER );
+    scrolledcomposite = new ScrolledComposite( sashForm, SWT.V_SCROLL | SWT.H_SCROLL );
+    canvas = new Canvas( scrolledcomposite, SWT.NO_BACKGROUND | SWT.BORDER );
+    ClientListener listener = WebSpoonClientListener.getInstance();
+    canvas.addListener( SWT.MouseDown, listener );
+    canvas.addListener( SWT.MouseMove, listener );
+    canvas.addListener( SWT.MouseUp, listener );
+    canvas.addListener( SWT.Paint, listener );
+    scrolledcomposite.setContent( canvas );
+    scrolledcomposite.addListener( SWT.Resize, new Listener() {
+      public void handleEvent( Event event ) {
+        resize();
+      }
+    } );
 
     sashForm.setWeights( new int[] { 100, } );
 
@@ -528,8 +552,8 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
     impact = new ArrayList<>();
     impactFinished = false;
 
-    hori = canvas.getHorizontalBar();
-    vert = canvas.getVerticalBar();
+    hori = scrolledcomposite.getHorizontalBar();
+    vert = scrolledcomposite.getVerticalBar();
 
     hori.addSelectionListener( new SelectionAdapter() {
       @Override
@@ -572,8 +596,8 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
 
     canvas.addMouseListener( this );
     canvas.addMouseMoveListener( this );
-    canvas.addMouseTrackListener( this );
-    canvas.addMouseWheelListener( this );
+//    canvas.addMouseTrackListener( this );
+//    canvas.addMouseWheelListener( this );
     canvas.addKeyListener( this );
 
     // Drag & Drop for steps
@@ -619,6 +643,7 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
 
         // What's the real drop position?
         Point p = getRealPosition( canvas, event.x, event.y );
+        lastMove = p;
 
         //
         // We expect a Drag and Drop container... (encased in XML)
@@ -737,30 +762,39 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
 
     // Add a timer to set correct the state of the run/stop buttons every 2 seconds...
     //
-    final Timer timer = new Timer( "TransGraph.setControlStates Timer: " + getMeta().getName() );
-    TimerTask timerTask = new TimerTask() {
-
-      @Override
-      public void run() {
-        try {
-          setControlStates();
-        } catch ( KettleRepositoryLostException krle ) {
-          if ( log.isBasic() ) {
-            log.logBasic( krle.getLocalizedMessage() );
-          }
-        }
-      }
-    };
-    timer.schedule( timerTask, 2000, 1000 );
+//    final Timer timer = new Timer( "TransGraph.setControlStates Timer: " + getMeta().getName() );
+//    TimerTask timerTask = new TimerTask() {
+//
+//      @Override
+//      public void run() {
+//        try {
+//          setControlStates();
+//        } catch ( KettleRepositoryLostException krle ) {
+//          if ( log.isBasic() ) {
+//            log.logBasic( krle.getLocalizedMessage() );
+//          }
+//        }
+//      }
+//    };
+//    timer.schedule( timerTask, 2000, 1000 );
 
     // Make sure the timer stops when we close the tab...
     //
-    addDisposeListener( new DisposeListener() {
-      @Override
-      public void widgetDisposed( DisposeEvent arg0 ) {
-        timer.cancel();
-      }
-    } );
+//    addDisposeListener( new DisposeListener() {
+//      @Override
+//      public void widgetDisposed( DisposeEvent arg0 ) {
+//        timer.cancel();
+//      }
+//    } );
+
+    // Make sure the timer stops when we close the browser tab/window
+    //
+//    getDisplay().disposeExec( new Runnable() {
+//      @Override
+//      public void run() {
+//        timer.cancel();
+//      }
+//    } );
   }
 
   @Override
@@ -824,6 +858,7 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
   @Override
   public void mouseDown( MouseEvent e ) {
 
+    mouseHover( e );
     boolean alt = ( e.stateMask & SWT.ALT ) != 0;
     boolean control = ( e.stateMask & SWT.MOD1 ) != 0;
     boolean shift = ( e.stateMask & SWT.SHIFT ) != 0;
@@ -916,6 +951,32 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
               listener.onUpdateSelection( currentStep );
             }
 
+            if ( ( startHopStep != null && endHopStep == null ) || ( endHopStep != null && startHopStep == null ) ) {
+              if ( stepMeta != null
+                && ( ( startHopStep != null && !startHopStep.equals( stepMeta ) ) || ( endHopStep != null && !endHopStep
+                .equals( stepMeta ) ) ) ) {
+                StepIOMetaInterface ioMeta = stepMeta.getStepMetaInterface().getStepIOMeta();
+                if ( candidate == null ) {
+                  // See if the step accepts input. If not, we can't create a new hop...
+                  //
+                  if ( startHopStep != null ) {
+                    if ( ioMeta.isInputAcceptor() ) {
+                      candidate = new TransHopMeta( startHopStep, stepMeta );
+                      endHopLocation = null;
+                    } else {
+                      noInputStep = stepMeta;
+                    }
+                  } else if ( endHopStep != null ) {
+                    if ( ioMeta.isOutputProducer() ) {
+                      candidate = new TransHopMeta( stepMeta, endHopStep );
+                      endHopLocation = null;
+                    } else {
+                      noInputStep = stepMeta;
+                    }
+                  }
+                }
+              }
+            }
             if ( candidate != null ) {
               addCandidateAsHop( e.x, e.y );
             } else {
@@ -939,8 +1000,10 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
             } else if ( e.button == 2 || ( e.button == 1 && shift ) ) {
               // SHIFT CLICK is start of drag to create a new hop
               //
+              canvas.setData( "mode", "hop" );
               startHopStep = stepMeta;
             } else {
+              canvas.setData( "mode", "drag" );
               selectedSteps = transMeta.getSelectedSteps();
               selectedStep = stepMeta;
               //
@@ -957,6 +1020,7 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
             break;
 
           case NOTE:
+            canvas.setData( "mode", "drag" );
             ni = (NotePadMeta) areaOwner.getOwner();
             selectedNotes = transMeta.getSelectedNotes();
             selectedNote = ni;
@@ -1001,6 +1065,7 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
         } else {
           // No area-owner & no hop means : background click:
           //
+          canvas.setData( "mode", "select" );
           startHopStep = null;
           if ( !control ) {
             selectionRegion = new org.pentaho.di.core.gui.Rectangle( real.x, real.y, 0, 0 );
@@ -1009,10 +1074,13 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
         }
       }
     }
+    mouseMove( e );
   }
 
   @Override
   public void mouseUp( MouseEvent e ) {
+    // canvas.setData( "mode", null ); does not work.
+    canvas.setData( "mode", "null" );
     try {
       TransGraphExtension ext = new TransGraphExtension( null, e, getArea() );
       ExtensionPointHandler.callExtensionPoint( LogChannel.GENERAL, KettleExtensionPoint.TransGraphMouseUp.id, ext );
@@ -1025,6 +1093,7 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
       LogChannel.GENERAL.logError( "Error calling TransGraphMouseUp extension point", ex );
     }
 
+    mouseMove( e );
     boolean control = ( e.stateMask & SWT.MOD1 ) != 0;
     TransHopMeta selectedHop = findHop( e.x, e.y );
     updateErrorMetaForHop( selectedHop );
@@ -1048,6 +1117,31 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
       LogChannel.GENERAL.logError( "Error calling TransGraphMouseUp extension point", ex );
     }
 
+    StepMeta stepMeta = transMeta.getStep( real.x, real.y, iconsize );
+    if ( stepMeta != null
+        && ( ( startHopStep != null && !startHopStep.equals( stepMeta ) ) || ( endHopStep != null && !endHopStep
+        .equals( stepMeta ) ) ) ) {
+      StepIOMetaInterface ioMeta = stepMeta.getStepMetaInterface().getStepIOMeta();
+      if ( candidate == null ) {
+          // See if the step accepts input. If not, we can't create a new hop...
+          //
+        if ( startHopStep != null ) {
+          if ( ioMeta.isInputAcceptor() ) {
+            candidate = new TransHopMeta( startHopStep, stepMeta );
+            endHopLocation = null;
+          } else {
+            noInputStep = stepMeta;
+          }
+        } else if ( endHopStep != null ) {
+          if ( ioMeta.isOutputProducer() ) {
+            candidate = new TransHopMeta( stepMeta, endHopStep );
+            endHopLocation = null;
+          } else {
+            noInputStep = stepMeta;
+          }
+        }
+      }
+    }
     // Quick new hop option? (drag from one step to another)
     //
     if ( candidate != null && areaOwner != null && areaOwner.getAreaType() != null ) {
@@ -1379,18 +1473,21 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
       selectedSteps = transMeta.getSelectedSteps();
 
       // Adjust location of selected steps...
-      if ( selectedSteps != null ) {
-        for ( int i = 0; i < selectedSteps.size(); i++ ) {
-          StepMeta stepMeta = selectedSteps.get( i );
-          PropsUI.setLocation( stepMeta, stepMeta.getLocation().x + dx, stepMeta.getLocation().y + dy );
-          stopStepMouseOverDelayTimer( stepMeta );
+      // only if the mouse cursor moved
+      if ( dx != 0 || dy != 0 ) {
+        if ( selectedSteps != null ) {
+          for ( int i = 0; i < selectedSteps.size(); i++ ) {
+            StepMeta stepMeta = selectedSteps.get( i );
+            PropsUI.setLocation( stepMeta, stepMeta.getLocation().x + dx, stepMeta.getLocation().y + dy );
+            stopStepMouseOverDelayTimer( stepMeta );
+          }
         }
-      }
-      // Adjust location of selected hops...
-      if ( selectedNotes != null ) {
-        for ( int i = 0; i < selectedNotes.size(); i++ ) {
-          NotePadMeta ni = selectedNotes.get( i );
-          PropsUI.setLocation( ni, ni.getLocation().x + dx, ni.getLocation().y + dy );
+        // Adjust location of selected hops...
+        if ( selectedNotes != null ) {
+          for ( int i = 0; i < selectedNotes.size(); i++ ) {
+            NotePadMeta ni = selectedNotes.get( i );
+            PropsUI.setLocation( ni, ni.getLocation().x + dx, ni.getLocation().y + dy );
+          }
         }
       }
 
@@ -1509,12 +1606,12 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
     }
   }
 
-  @Override
-  public void mouseScrolled( MouseEvent e ) {
-    /*
-     * if (e.count == 3) { // scroll up zoomIn(); } else if (e.count == -3) { // scroll down zoomOut(); } }
-     */
-  }
+//  @Override
+//  public void mouseScrolled( MouseEvent e ) {
+//    /*
+//     * if (e.count == 3) { // scroll up zoomIn(); } else if (e.count == -3) { // scroll down zoomOut(); } }
+//     */
+//  }
 
   private void addCandidateAsHop( int mouseX, int mouseY ) {
 
@@ -1622,6 +1719,10 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
   }
 
   protected void addHop( StreamInterface stream ) {
+    if ( candidate == null ) {
+      clearSettings();
+      return;
+    }
     switch ( stream.getStreamType() ) {
       case ERROR:
         addErrorHop();
@@ -1675,10 +1776,10 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
   }
 
   private void resetDelayTimer( StepMeta stepMeta ) {
-    DelayTimer delayTimer = delayTimers.get( stepMeta );
-    if ( delayTimer != null ) {
-      delayTimer.reset();
-    }
+//    DelayTimer delayTimer = delayTimers.get( stepMeta );
+//    if ( delayTimer != null ) {
+//      delayTimer.reset();
+//    }
   }
 
   /*
@@ -1713,57 +1814,66 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
 
     mouseOverSteps.add( stepMeta );
 
-    DelayTimer delayTimer = new DelayTimer( 500, new DelayListener() {
-      @Override
-      public void expired() {
-        mouseOverSteps.remove( stepMeta );
-        delayTimers.remove( stepMeta );
-        showTargetStreamsStep = null;
-        asyncRedraw();
-      }
-    }, new Callable<Boolean>() {
-
-      @Override
-      public Boolean call() throws Exception {
-        Point cursor = getLastMove();
-        if ( cursor != null ) {
-          AreaOwner areaOwner = getVisibleAreaOwner( cursor.x, cursor.y );
-          if ( areaOwner != null ) {
-            AreaType areaType = areaOwner.getAreaType();
-            if ( areaType == AreaType.STEP_ICON ) {
-              StepMeta selectedStepMeta = (StepMeta) areaOwner.getOwner();
-              return selectedStepMeta == stepMeta;
-            } else if ( areaType != null && areaType.belongsToTransContextMenu() ) {
-              StepMeta selectedStepMeta = (StepMeta) areaOwner.getParent();
-              return selectedStepMeta == stepMeta;
-            } else if ( areaOwner.getExtensionAreaType() != null ) {
-              return true;
-            }
-          }
-        }
-        return false;
-      }
-    } );
-
-    new Thread( delayTimer ).start();
-
-    delayTimers.put( stepMeta, delayTimer );
+//    DelayTimer delayTimer = new DelayTimer( 500, new DelayListener() {
+//      @Override
+//      public void expired() {
+//        mouseOverSteps.remove( stepMeta );
+//        delayTimers.remove( stepMeta );
+//        showTargetStreamsStep = null;
+//        asyncRedraw();
+//      }
+//    }, new Callable<Boolean>() {
+//
+//      @Override
+//      public Boolean call() throws Exception {
+//        Point cursor = getLastMove();
+//        if ( cursor != null ) {
+//          AreaOwner areaOwner = getVisibleAreaOwner( cursor.x, cursor.y );
+//          if ( areaOwner != null ) {
+//            AreaType areaType = areaOwner.getAreaType();
+//            if ( areaType == AreaType.STEP_ICON ) {
+//              StepMeta selectedStepMeta = (StepMeta) areaOwner.getOwner();
+//              return selectedStepMeta == stepMeta;
+//            } else if ( areaType != null && areaType.belongsToTransContextMenu() ) {
+//              StepMeta selectedStepMeta = (StepMeta) areaOwner.getParent();
+//              return selectedStepMeta == stepMeta;
+//            } else if ( areaOwner.getExtensionAreaType() != null ) {
+//              return true;
+//            }
+//          }
+//        }
+//        return false;
+//      }
+//    } );
+//
+//    new Thread( delayTimer ).start();
+//
+//    delayTimers.put( stepMeta, delayTimer );
   }
 
   private void stopStepMouseOverDelayTimer( final StepMeta stepMeta ) {
-    DelayTimer delayTimer = delayTimers.get( stepMeta );
-    if ( delayTimer != null ) {
-      delayTimer.stop();
-    }
+//    DelayTimer delayTimer = delayTimers.get( stepMeta );
+//    if ( delayTimer != null ) {
+//      delayTimer.stop();
+//    }
+    mouseOverSteps.remove( stepMeta );
+    showTargetStreamsStep = null;
+    asyncRedraw();
   }
 
   private void stopStepMouseOverDelayTimers() {
-    for ( DelayTimer timer : delayTimers.values() ) {
-      timer.stop();
-    }
+//    for ( DelayTimer timer : delayTimers.values() ) {
+//      timer.stop();
+//    }
+    mouseOverSteps.clear();
+    showTargetStreamsStep = null;
+    asyncRedraw();
   }
 
   protected void asyncRedraw() {
+    if ( spoon.getDisplay().isDisposed() ) {
+      return;
+    }
     spoon.getDisplay().asyncExec( new Runnable() {
       @Override
       public void run() {
@@ -1915,6 +2025,7 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
       mb.setText( BaseMessages.getString( PKG, "TransGraph.Dialog.InvalidZoomMeasurement.Title" ) );
       mb.open();
     }
+    resize();
     redraw();
   }
 
@@ -2599,9 +2710,7 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
   }
 
   public void paste() {
-    final String clipcontent = spoon.fromClipboard();
-    Point loc = new Point( currentMouseX, currentMouseY );
-    spoon.pasteXML( transMeta, clipcontent, loc );
+    spoon.instructShortcuts();
   }
 
   public void settings() {
@@ -2729,7 +2838,7 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
           StepMetaInterface stepMetaInterface = stepMeta.getStepMetaInterface();
           String activeReferencedObjectDescription = stepMetaInterface.getActiveReferencedObjectDescription();
           if ( getActiveSubtransformation( this, stepMeta ) != null && activeReferencedObjectDescription != null ) {
-            action = new Action( activeReferencedObjectDescription, Action.AS_DROP_DOWN_MENU ) {
+            action = new Action( activeReferencedObjectDescription, Action.AS_PUSH_BUTTON ) {
               @Override
               public void run() {
                 openMapping( stepMeta, -1 ); // negative by convention
@@ -2746,7 +2855,7 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
             for ( int i = 0; i < referencedObjects.length; i++ ) {
               final int index = i;
               String referencedObject = referencedObjects[ i ];
-              action = new Action( referencedObject, Action.AS_DROP_DOWN_MENU ) {
+              action = new Action( referencedObject, Action.AS_PUSH_BUTTON ) {
                 @Override
                 public void run() {
                   openMapping( stepMeta, index );
@@ -3228,10 +3337,7 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
       return; // nothing to do!
     }
 
-    Display disp = shell.getDisplay();
-
-    Image img = getTransformationImage( disp, area.x, area.y, magnification );
-    e.gc.drawImage( img, 0, 0 );
+    getTransformationImage( e.gc, area.x, area.y, magnification );
     if ( transMeta.nrSteps() == 0 ) {
       e.gc.setForeground( GUIResource.getInstance().getColorCrystalTextPentaho() );
       e.gc.setFont( GUIResource.getInstance().getFontMedium() );
@@ -3241,14 +3347,13 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
       int topPosition = ( area.y - pentahoImage.getBounds().height ) / 2;
       e.gc.drawImage( pentahoImage, leftPosition, topPosition );
     }
-    img.dispose();
 
     // spoon.setShellText();
   }
 
-  public Image getTransformationImage( Device device, int x, int y, float magnificationFactor ) {
+  public void getTransformationImage( GC gc2, int x, int y, float magnificationFactor ) {
 
-    GCInterface gc = new SWTGC( device, new Point( x, y ), iconsize );
+    GCInterface gc = new SWTGC( gc2, new Point( x, y ), iconsize );
 
     int gridSize =
       PropsUI.getInstance().isShowCanvasGridEnabled() ? PropsUI.getInstance().getCanvasGridSize() : 1;
@@ -3273,10 +3378,43 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
 
     transPainter.buildTransformationImage();
 
-    Image img = (Image) gc.getImage();
+    setData( transMeta );
 
-    gc.dispose();
-    return img;
+    return;
+  }
+
+  @Override
+  protected void setData( AbstractMeta meta ) {
+    super.setData( meta );
+
+    TransMeta transMeta = (TransMeta) meta;
+    JsonObject jsonNodes = new JsonObject();
+    transMeta.getSteps().forEach( step -> {
+      JsonObject jsonNode = new JsonObject();
+      jsonNode.add( "x", step.getLocation().x );
+      jsonNode.add( "y", step.getLocation().y );
+      jsonNode.add( "selected", step.isSelected() );
+      Image im = null;
+      if ( step.isMissing() ) {
+        im = GUIResource.getInstance().getImageMissing();
+      } else {
+        im = GUIResource.getInstance().getImagesSteps().get( step.getStepID() )
+        .getAsBitmapForSize( getDisplay(), Math.round( iconsize * magnification ), Math.round( iconsize * magnification ) );
+      }
+      jsonNode.add( "img",  im.internalImage.getResourceName() );
+      jsonNodes.add( step.getName(), jsonNode );
+    } );
+    canvas.setData( "nodes", jsonNodes );
+
+    JsonArray jsonHops = new JsonArray();
+    for ( int i = 0; i < transMeta.nrTransHops(); i++ ) {
+      JsonObject jsonHop = new JsonObject();
+      TransHopMeta hop = transMeta.getTransHop( i );
+      jsonHop.add( "from", hop.getFromStep().getName() );
+      jsonHop.add( "to", hop.getToStep().getName() );
+      jsonHops.add( jsonHop );
+    }
+    canvas.setData( "hops", jsonHops );
   }
 
   @Override
@@ -3285,6 +3423,10 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
     Point max = transMeta.getMaximum();
     Point thumb = getThumb( area, max );
     return getOffset( thumb, area );
+  }
+
+  protected Point getMaximum() {
+    return transMeta.getMaximum();
   }
 
   private void editStep( StepMeta stepMeta ) {
@@ -3882,7 +4024,7 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
           trans.setMetaStore( spoon.getMetaStore() );
 
           String spoonLogObjectId = UUID.randomUUID().toString();
-          SimpleLoggingObject spoonLoggingObject = new SimpleLoggingObject( "SPOON", LoggingObjectType.SPOON, null );
+          SimpleLoggingObject spoonLoggingObject = new SimpleLoggingObject( RWT.getUISession().getId(), LoggingObjectType.SPOON, null );
           spoonLoggingObject.setContainerObjectId( spoonLogObjectId );
           spoonLoggingObject.setLogLevel( executionConfiguration.getLogLevel() );
           trans.setParent( spoonLoggingObject );
@@ -4286,6 +4428,8 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
   }
 
   private synchronized void prepareTrans( final Thread parentThread, final String[] args ) {
+    pushSession.start();
+    trans.setDisplay( Display.getCurrent() );
     Runnable runnable = new Runnable() {
       @Override
       public void run() {
@@ -4346,7 +4490,7 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
       startRedrawTimer();
 
       setControlStates();
-    } catch ( KettleException e ) {
+    } catch ( Exception e ) {
       log.logError( "Error starting step threads", e );
       checkErrorVisuals();
       stopRedrawTimer();
@@ -4391,6 +4535,8 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
   }
 
   protected void stopRedrawTimer() {
+    pushSession.stop();
+    setControlStates();
     if ( redrawTimer != null ) {
       redrawTimer.cancel();
       redrawTimer.purge();
@@ -5110,5 +5256,10 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
   private void setHopEnabled( TransHopMeta hop, boolean enabled ) {
     hop.setEnabled( enabled );
     transMeta.clearCaches();
+  }
+
+  @VisibleForTesting
+  void setCanvas( Canvas canvas ) {
+    this.canvas = canvas;
   }
 }

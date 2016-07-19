@@ -29,12 +29,14 @@ import static junit.framework.Assert.*;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import org.eclipse.rap.rwt.testfixture.TestContext;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
@@ -87,16 +89,21 @@ public class SpoonTest {
 
   private final Spoon spoon = mock( Spoon.class );
   private final LogChannelInterface log = mock( LogChannelInterface.class );
-  private static SpoonPerspective mockSpoonPerspective = mock( SpoonPerspective.class );
-  private static SpoonPerspectiveManager perspective = SpoonPerspectiveManager.getInstance();
+  private SpoonPerspective mockSpoonPerspective = mock( SpoonPerspective.class );
+  private SpoonPerspectiveManager perspective;
 
   @BeforeClass
   public static void setUpClass() {
     perspective.addPerspective( mockSpoonPerspective );
   }
 
+  @Rule
+  public TestContext context = new TestContext();
+
   @Before
   public void setUp() throws KettleException {
+    perspective = SpoonPerspectiveManager.getInstance();
+    perspective.addPerspective( mockSpoonPerspective );
     doCallRealMethod().when( spoon ).copySelected( any( TransMeta.class ), anyListOf( StepMeta.class ),
         anyListOf( NotePadMeta.class ) );
     doCallRealMethod().when( spoon ).pasteXML( any( TransMeta.class ), anyString(), any( Point.class ) );
@@ -566,6 +573,7 @@ public class SpoonTest {
         true, "Invalid TYPE", null, true, true );
 
     doCallRealMethod().when( spoon ).saveFileAs( mockJobMeta );
+    doReturn( true ).when( spoon ).saveXMLFileToVfs( mockJobMeta );
     assertTrue( spoon.saveFileAs( mockJobMeta ) );
     verify( mockJobMeta ).setRepository( spoon.rep );
     verify( mockJobMeta ).setMetaStore( spoon.metaStore );
@@ -638,6 +646,7 @@ public class SpoonTest {
         true, "Invalid TYPE", null, true, true );
 
     doCallRealMethod().when( spoon ).saveFileAs( mockTransMeta );
+    doReturn( true ).when( spoon ).saveXMLFileToVfs( mockTransMeta );
     assertTrue( spoon.saveFileAs( mockTransMeta ) );
     verify( mockTransMeta ).setRepository( spoon.rep );
     verify( mockTransMeta ).setMetaStore( spoon.metaStore );

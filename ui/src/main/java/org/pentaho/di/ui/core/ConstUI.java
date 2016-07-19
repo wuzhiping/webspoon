@@ -276,6 +276,7 @@ public class ConstUI {
     // Unfortunately, I do *not* understand why this works. I ran it by
     // mcasters and he didn't know for sure either.
     // control.setMenu(menu);
+    menu.setLocation( control.getDisplay().getCursorLocation() );
     menu.setVisible( true );
   }
 

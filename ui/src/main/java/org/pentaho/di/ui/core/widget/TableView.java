@@ -33,6 +33,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.jface.fieldassist.ControlDecoration;
+import org.eclipse.rap.rwt.internal.textsize.TextSizeUtil;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.custom.CCombo;
@@ -165,12 +167,6 @@ public class TableView extends Composite {
   private ModifyListener lsMod, lsUndo, lsContent;
   private Clipboard clipboard;
 
-  // The following Image and Graphics Context are used for font metrics. We only
-  // want them created once.
-  private static Image dummyImage;
-  private static GC dummyGC;
-  private Font gridFont;
-
   // private int last_carret_position;
 
   private ArrayList<TransAction> undo;
@@ -272,15 +268,6 @@ public class TableView extends Composite {
         fieldChanged = true;
       }
     };
-    if ( TableView.dummyGC == null ) {
-      Display disp = parent.getDisplay();
-      TableView.dummyImage = new Image( disp, 1, 1 );
-      TableView.dummyGC = new GC( TableView.dummyImage );
-
-      gridFont = new Font( disp, props.getGridFont() );
-      TableView.dummyGC.setFont( gridFont );
-
-    }
 
     FormLayout controlLayout = new FormLayout();
     controlLayout.marginLeft = 0;
@@ -1239,9 +1226,6 @@ public class TableView extends Composite {
         if ( clipboard != null ) {
           clipboard.dispose();
           clipboard = null;
-        }
-        if ( gridFont != null ) {
-          gridFont.dispose();
         }
       }
     } );
@@ -2267,12 +2251,9 @@ public class TableView extends Composite {
     }
     String str = getTextWidgetValue( colnr );
 
-    int strmax = TableView.dummyGC.textExtent( str, SWT.DRAW_TAB | SWT.DRAW_DELIMITER ).x + 20;
+    int strmax = TextSizeUtil.textExtent( getFont(), str, 0 ).x + 20;
     int colmax = tablecolumn[colnr].getWidth();
     if ( strmax > colmax ) {
-      if ( Const.isOSX() || Const.isLinux() ) {
-        strmax *= 1.4;
-      }
       tablecolumn[colnr].setWidth( strmax + 30 );
 
       // On linux, this causes the text to select everything...
@@ -2516,7 +2497,7 @@ public class TableView extends Composite {
       TableColumn tc = table.getColumn( c );
       int max = 0;
       if ( header ) {
-        max = TableView.dummyGC.textExtent( tc.getText(), SWT.DRAW_TAB | SWT.DRAW_DELIMITER ).x;
+        max = TextSizeUtil.textExtent( getFont(), tc.getText(), 0 ).x;
 
         // Check if the column has a sorted mark set. In that case, we need the
         // header to be a bit wider...
@@ -2566,7 +2547,7 @@ public class TableView extends Composite {
       }
 
       for ( String str : columnStrings ) {
-        int len = TableView.dummyGC.textExtent( str == null ? "" : str, SWT.DRAW_TAB | SWT.DRAW_DELIMITER ).x;
+        int len = TextSizeUtil.textExtent( getFont(), str == null ? "" : str, 0 ).x;
         if ( len > max ) {
           max = len;
         }

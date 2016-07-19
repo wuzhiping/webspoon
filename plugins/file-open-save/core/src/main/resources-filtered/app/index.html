@@ -9,6 +9,7 @@
   <script type="text/javascript" src="../webcontext.js?requireJsOnly=true"></script>
   <link rel="stylesheet" type="text/css" href="css/fonts/opensans/style.css">
   <link rel="stylesheet" type="text/css" href="css/index.css">
+  <script src="../../requirejs-manager/js/require-init.js?useFullyQualifiedUrl=false"></script>
   <script>
     (function () {
       "use strict";
@@ -16,10 +17,10 @@
       // overrides just for this app
       require.config({
         paths: {
-          "angular-i18n": "/angular-i18n/${angular-i18n.version}",
-          "css": "/require-css/${require-css.version}/css",
-          "text": "/requirejs-text/${requirejs-text.version}/text",
-          "dojo": "/dojo/${dojo.version}"
+          "angular-i18n": "../../angular-i18n/${angular-i18n.version}",
+          "css": "../../require-css/${require-css.version}/css",
+          "text": "../../requirejs-text/${requirejs-text.version}/text",
+          "dojo": "../../dojo/${dojo.version}"
         }
       });
 

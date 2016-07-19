@@ -940,6 +940,7 @@ public class EnterOptionsDialog extends Dialog {
     wlDefaultLocale.setLayoutData( fdlDefaultLocale );
     wDefaultLocale = new Combo( wLookComp, SWT.SINGLE | SWT.READ_ONLY | SWT.LEFT | SWT.BORDER );
     wDefaultLocale.setItems( GlobalMessages.localeDescr );
+    wDefaultLocale.setEnabled( false );
     props.setLook( wDefaultLocale );
     FormData fdDefaultLocale = new FormData();
     fdDefaultLocale.left = new FormAttachment( middle, 0 );
@@ -965,6 +966,7 @@ public class EnterOptionsDialog extends Dialog {
     wlFailoverLocale.setLayoutData( fdlFailoverLocale );
     wFailoverLocale = new Combo( wLookComp, SWT.SINGLE | SWT.READ_ONLY | SWT.LEFT | SWT.BORDER );
     wFailoverLocale.setItems( GlobalMessages.localeDescr );
+    wFailoverLocale.setEnabled( false );
     props.setLook( wFailoverLocale );
     FormData fdFailoverLocale = new FormData();
     fdFailoverLocale.left = new FormAttachment( middle, 0 );

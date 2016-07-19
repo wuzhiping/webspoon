@@ -123,6 +123,7 @@ public class SpoonBrowser implements TabItemInterface, XulEventHandler {
     } else {
       fdBrowser.top = new FormAttachment( 0, 2 );
     }
+    fdBrowser.top = new FormAttachment( 0, 2 );
     fdBrowser.bottom = new FormAttachment( 100, 0 );
     browser.setLayoutData( fdBrowser );
 
@@ -130,8 +131,8 @@ public class SpoonBrowser implements TabItemInterface, XulEventHandler {
       public void changed( LocationEvent event ) {
         Browser browser = (Browser) event.widget;
         if ( back != null ) {
-          back.setDisabled( !browser.isBackEnabled() );
-          forward.setDisabled( !browser.isForwardEnabled() );
+          //back.setDisabled( !browser.isBackEnabled() );
+          //forward.setDisabled( !browser.isForwardEnabled() );
           location.setValue( browser.getUrl() );
         }
       }
@@ -200,11 +201,11 @@ public class SpoonBrowser implements TabItemInterface, XulEventHandler {
   }
 
   public void browseBack() {
-    browser.back();
+    //browser.back();
   }
 
   public void browseForward() {
-    browser.forward();
+    //browser.forward();
   }
 
   /**

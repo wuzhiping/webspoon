@@ -80,17 +80,15 @@ define(
         }
         loadingAnimationModel.displayName = this.model.displayName;
         $timeout(function(){
-          repositoriesService.add( $scope.model ).
-          then(function(response) {
+          if (createRepository("PentahoEnterpriseRepository", JSON.stringify($scope.model))) {
             $location.path("/pentaho-repository-creation-success");
-            if($scope.model.isDefault) {
-              setDefaultRepository($scope.model.displayName);
-            }
-            $rootScope.next();
-          }, function (response) {
+          } else {
             $location.path("/pentaho-repository-creation-failure");
-            $rootScope.next();
-          });
+          }
+          if($scope.model.isDefault) {
+            setDefaultRepository($scope.model.displayName);
+          }
+          $rootScope.next();
         },1000);
         $location.path("/loading-animation");
         $rootScope.next();
@@ -135,7 +133,7 @@ define(
       var connectedRepositoryName = getConnectedRepositoryName();
       $rootScope.connectNowVisible = !($rootScope.fromEdit && connectedRepositoryName === kettleFileRepositoryModel.model.displayName);
       $scope.selectLocation = function() {
-        this.model.location = selectLocation();
+        selectLocation();
       }
       $scope.canFinish = function() {
         if (this.model.displayName == "" || this.model.location == "") {
@@ -168,17 +166,14 @@ define(
             return;
           }
         }
-        repositoriesService.add( $scope.model ).
-        then(function(response) {
+        if (createRepository("KettleFileRepository", JSON.stringify(this.model))) {
           $location.path("/kettle-file-repository-creation-success");
-          if($scope.model.isDefault) {
-            setDefaultRepository($scope.model.displayName);
-          }
-          $rootScope.next();
-        }, function (response) {
+        } else {
           $location.path("/kettle-file-repository-creation-failure");
-          $rootScope.next();
-        });
+        }
+        if($scope.model.isDefault) {
+          setDefaultRepository($scope.model.displayName);
+        }
       }
       $scope.createNewConnection = function() {
         $location.path("/repository-manager");
@@ -262,17 +257,15 @@ define(
         }
         loadingAnimationModel.displayName = this.model.displayName;
         $timeout(function(){
-          repositoriesService.add( $scope.model ).
-          then(function(response) {
+          if (createRepository("KettleDatabaseRepository", JSON.stringify($scope.model))) {
             $location.path("/kettle-database-repository-creation-success");
-            if($scope.model.isDefault) {
-              setDefaultRepository($scope.model.displayName);
-            }
-            $rootScope.next();
-          }, function (response) {
+          } else {
             $location.path("/kettle-database-repository-creation-failure");
-            $rootScope.next();
-          });
+          }
+          if($scope.model.isDefault) {
+            setDefaultRepository($scope.model.displayName);
+          }
+          $rootScope.next();
         },1000);
         $location.path("/loading-animation");
         $rootScope.next();
@@ -479,18 +472,17 @@ define(
         }
         loadingAnimationModel.displayName = this.model.currentRepositoryName;
         $timeout(function(){
-          repositoriesService.login( $scope.model.username, $scope.model.password ).
-          then(function(response) {
-            console.log(response);
-            close();
-          }, function (response) {
-            console.log(response);
+          var response = JSON.parse(loginToRepository($scope.model.username, $scope.model.password));
+          console.log(response);
+          if( response.success == false){
             $timeout(function(){
-              $rootScope.triggerError(response.data.message);
+              $rootScope.triggerError(response.errorMessage);
             },600);
             $location.path("/repository-connect");
             $rootScope.backFade();
-          });
+          } else {
+            close();
+          }
         },1000);
         $location.path("/loading-animation");
         $rootScope.nextFade();

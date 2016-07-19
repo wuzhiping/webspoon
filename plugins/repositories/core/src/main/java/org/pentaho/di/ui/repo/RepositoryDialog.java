@@ -22,6 +22,8 @@
 
 package org.pentaho.di.ui.repo;
 
+import java.util.HashMap;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.BrowserFunction;
 import org.eclipse.swt.graphics.Image;
@@ -40,6 +42,8 @@ import org.pentaho.di.ui.core.gui.GUIResource;
 import org.pentaho.di.ui.util.HelpUtils;
 import org.pentaho.platform.settings.ServerPort;
 import org.pentaho.platform.settings.ServerPortRegistry;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class RepositoryDialog extends ThinDialog {
 
@@ -61,7 +65,7 @@ public class RepositoryDialog extends ThinDialog {
   private static final String LOGIN_TITLE = BaseMessages.getString( PKG, "RepositoryDialog.Dialog.Login.Title" );
   private static final String LOGIN_WEB_CLIENT_PATH = "/repositories/web/index.html#repository-connect";
   private static final String OSGI_SERVICE_PORT = "OSGI_SERVICE_PORT";
-  private static final Image LOGO = GUIResource.getInstance().getImageLogoSmall();
+  private Image LOGO;
 
 
   private RepositoryConnectController controller;
@@ -72,6 +76,7 @@ public class RepositoryDialog extends ThinDialog {
     super( shell, WIDTH, HEIGHT );
     this.controller = controller;
     this.shell = shell;
+    this.LOGO = GUIResource.getInstance().getImageLogoSmall();
   }
 
   private boolean open() {
@@ -86,9 +91,12 @@ public class RepositoryDialog extends ThinDialog {
 
     new BrowserFunction( browser, "close" ) {
       @Override public Object function( Object[] arguments ) {
-        browser.dispose();
-        dialog.close();
-        dialog.dispose();
+        Runnable execute = () -> {
+          browser.dispose();
+          dialog.close();
+          dialog.dispose();
+        };
+        display.asyncExec( execute );
         return true;
       }
     };
@@ -135,7 +143,26 @@ public class RepositoryDialog extends ThinDialog {
     new BrowserFunction( browser, "selectLocation" ) {
       @Override public Object function( Object[] objects ) {
         DirectoryDialog directoryDialog = new DirectoryDialog( shell );
-        return directoryDialog.open();
+        String location = directoryDialog.open();
+        browser.evaluate(
+          "var location = document.getElementById(\"location\");"
+          + "var scope = angular.element( location ).scope();"
+          + String.format( "scope.$apply(function(){ scope.model.location = \"%s\";});", location)
+        );
+        return location;
+      }
+    };
+
+    new BrowserFunction( browser, "createRepository" ) {
+      @SuppressWarnings( "unchecked" )
+      @Override public Object function( Object[] objects ) {
+        try {
+          return controller.createRepository( (String) objects[ 0 ],
+            new ObjectMapper().readValue( (String) objects[ 1 ], HashMap.class ) );
+        } catch ( Exception e ) {
+          log.logError( "Unable to load repository json object", e );
+        }
+        return false;
       }
     };
 
@@ -143,7 +170,10 @@ public class RepositoryDialog extends ThinDialog {
       @Override public Object function( Object[] objects ) {
         try {
           controller.connectToRepository();
-          dialog.dispose();
+          Runnable execute = () -> {
+            dialog.dispose();
+          };
+          display.asyncExec( execute );
         } catch ( KettleException e ) {
           return false;
         }
@@ -154,6 +184,18 @@ public class RepositoryDialog extends ThinDialog {
     new BrowserFunction( browser, "setDefaultRepository" ) {
       @Override public Object function( Object[] objects ) {
         return controller.setDefaultRepository( (String) objects[ 0 ] );
+      }
+    };
+
+    new BrowserFunction( browser, "loginToRepository" ) {
+      @Override public Object function( Object[] objects ) {
+        String username = (String) objects[0];
+        String password = (String) objects[1];
+        if ( relogin ) {
+          return controller.reconnectToRepository( username, password );
+        } else {
+          return controller.connectToRepository( username, password );
+        }
       }
     };
 
@@ -289,6 +331,6 @@ public class RepositoryDialog extends ThinDialog {
   }
 
   private static String getRepoURL( String path ) {
-    return "http://localhost:" + getOsgiServicePort() + path;
+    return System.getProperty( "KETTLE_CONTEXT_PATH", "" ) + "/osgi" + path;
   }
 }

@@ -25,6 +25,8 @@ package org.pentaho.di.ui.spoon;
 import java.util.List;
 
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.rap.rwt.service.ServerPushSession;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -48,21 +50,25 @@ public abstract class AbstractGraph extends Composite {
 
   protected Canvas canvas;
 
+  protected ScrolledComposite scrolledcomposite;
+
   protected float magnification = 1.0f;
 
   protected Combo zoomLabel;
 
   protected XulDomContainer xulDomContainer;
+  protected final ServerPushSession pushSession = new ServerPushSession();
 
   public AbstractGraph( Composite parent, int style ) {
     super( parent, style );
   }
 
   protected abstract Point getOffset();
+  protected abstract Point getMaximum();
 
   protected Point getOffset( Point thumb, Point area ) {
     Point p = new Point( 0, 0 );
-    Point sel = new Point( hori.getSelection(), vert.getSelection() );
+    Point sel = new Point( Math.round( hori.getSelection() / hori.getMaximum() ), Math.round( vert.getSelection() / vert.getMaximum() ) );
 
     if ( thumb.x == 0 || thumb.y == 0 ) {
       return p;
@@ -132,22 +138,39 @@ public abstract class AbstractGraph extends Composite {
       return;
     }
 
-    canvas.redraw();
+    canvas.redraw( 0, 0,
+      Math.max( canvas.getBounds().width, // case 1
+        Math.round( scrolledcomposite.getBounds().width / magnification ) ), //case 2
+      Math.max( canvas.getBounds().height, // case 3
+        Math.round( scrolledcomposite.getBounds().height / magnification ) ), // case 4
+      false );
     setZoomLabel();
+  }
+
+  protected void resize() {
+    canvas.setSize(
+      Math.max( Math.round( getMaximum().x * magnification ), // case 1
+        scrolledcomposite.getBounds().width ), // case 2
+      Math.max( Math.round( getMaximum().y * magnification ), // case 3
+        scrolledcomposite.getBounds().height ) // case 4
+    );
   }
 
   public void zoomIn() {
     magnification += .1f;
+    resize();
     redraw();
   }
 
   public void zoomOut() {
     magnification -= .1f;
+    resize();
     redraw();
   }
 
   public void zoom100Percent() {
     magnification = 1.0f;
+    resize();
     redraw();
   }
 
@@ -182,7 +205,7 @@ public abstract class AbstractGraph extends Composite {
    * @return ChangedWarningInterface The class that provides the dialog and return value
    */
   public ChangedWarningInterface getChangedWarning() {
-    return ChangedWarningDialog.getInstance();
+    return new ChangedWarningDialog();
   }
 
   /**

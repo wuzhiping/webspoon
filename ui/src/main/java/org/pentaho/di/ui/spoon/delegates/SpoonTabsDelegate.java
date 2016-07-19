@@ -28,8 +28,8 @@ import java.util.List;
 import org.apache.commons.vfs2.FileObject;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.LocationListener;
-import org.eclipse.swt.browser.OpenWindowListener;
-import org.eclipse.swt.browser.WindowEvent;
+//import org.eclipse.swt.browser.OpenWindowListener;
+//import org.eclipse.swt.browser.WindowEvent;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.widgets.Composite;
 import org.pentaho.di.base.AbstractMeta;
@@ -270,7 +270,7 @@ public class SpoonTabsDelegate extends SpoonDelegate {
       if ( tabMapEntry == null ) {
         CTabFolder cTabFolder = tabfolder.getSwtTabset();
         final SpoonBrowser browser = new SpoonBrowser( cTabFolder, spoon, urlString, isURL, showControls, listener );
-
+/*
         browser.getBrowser().addOpenWindowListener( new OpenWindowListener() {
 
           @Override
@@ -280,6 +280,7 @@ public class SpoonTabsDelegate extends SpoonDelegate {
             }
           }
         } );
+*/
         PropsUI props = PropsUI.getInstance();
         TabItem tabItem = new TabItem( tabfolder, name, name, props.getSashWeights() );
         tabItem.setImage( GUIResource.getInstance().getImageLogoSmall() );

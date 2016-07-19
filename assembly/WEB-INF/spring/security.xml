@@ -1,0 +1,26 @@
+<b:beans xmlns="http://www.springframework.org/schema/security"
+     xmlns:b="http://www.springframework.org/schema/beans"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+
+  <http pattern="/kettle/**" security="none"/>
+  <http>
+    <intercept-url pattern="/favicon.ico" access="permitAll"/>
+    <intercept-url pattern="/rwt-resources/**" access="permitAll"/>
+    <intercept-url pattern="/**" access="hasRole('USER')" />
+    <form-login default-target-url="/spoon"/>
+    <logout />
+    <!-- Spring Security's CSRF protection is disabled because RAP/RWT does not handle the CSRF token issued by Spring Security.
+         RAP/RWT has its own CSRF protection. See https://bugs.eclipse.org/bugs/show_bug.cgi?id=413668 for more details -->
+    <csrf disabled="true"/>
+    <headers>
+      <frame-options policy="SAMEORIGIN"/>
+    </headers>
+  </http>
+
+  <user-service>
+    <user name="user" password="password" authorities="ROLE_USER" />
+  </user-service>
+
+</b:beans>

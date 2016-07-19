@@ -240,8 +240,10 @@ public class TransPreviewDelegate extends SpoonDelegate implements XulEventHandl
    */
   public synchronized void refreshView() {
     if ( transGraph != null && transGraph.extraViewTabFolder != null ) {
-      if ( transGraph.extraViewTabFolder.getSelection() != transPreviewTab ) {
-        return;
+      if ( !transGraph.extraViewTabFolder.isDisposed() ) {
+        if ( transGraph.extraViewTabFolder.getSelection() != transPreviewTab ) {
+          return;
+        }
       }
     }
 
@@ -496,7 +498,7 @@ public class TransPreviewDelegate extends SpoonDelegate implements XulEventHandl
 
                 @Override
                 public void rowWrittenEvent( RowMetaInterface rowMeta, Object[] row ) throws KettleStepException {
-                  if ( rowsData.size() < PropsUI.getInstance().getDefaultPreviewSize() ) {
+                  if ( rowsData.size() < 1000 ) {
                     try {
                       rowsData.add( rowMeta.cloneRow( row ) );
                     } catch ( Exception e ) {

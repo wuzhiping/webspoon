@@ -24,6 +24,7 @@ package org.pentaho.di.ui.repo;
 
 import com.google.common.annotations.VisibleForTesting;
 import org.apache.commons.lang.ClassUtils;
+import org.eclipse.rap.rwt.SingletonUtil;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.pentaho.di.core.database.DatabaseMeta;
@@ -34,6 +35,7 @@ import org.pentaho.di.core.plugins.PluginInterface;
 import org.pentaho.di.core.plugins.PluginRegistry;
 import org.pentaho.di.core.plugins.RepositoryPluginType;
 import org.pentaho.di.core.util.ExecutorUtil;
+import org.pentaho.di.i18n.BaseMessages;
 import org.pentaho.di.repository.AbstractRepository;
 import org.pentaho.di.repository.ReconnectableRepository;
 import org.pentaho.di.repository.RepositoriesMeta;
@@ -42,7 +44,10 @@ import org.pentaho.di.repository.RepositoryMeta;
 import org.pentaho.di.trans.Trans;
 import org.pentaho.di.ui.core.PropsUI;
 import org.pentaho.di.ui.repo.model.RepositoryModel;
+import org.pentaho.di.ui.repo.model.UserRepositoriesMeta;
 import org.pentaho.di.ui.spoon.Spoon;
+
+import com.google.common.annotations.VisibleForTesting;
 
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
@@ -71,34 +76,26 @@ public class RepositoryConnectController {
   public static final String DO_NOT_MODIFY = "doNotModify";
 
   public static final String DEFAULT_URL = "defaultUrl";
+  public static final String ERROR_MESSAGE = "errorMessage";
+  public static final String SUCCESS = "success";
   public static final String ERROR_401 = "401";
 
   private static Class<?> PKG = RepositoryConnectController.class;
   private static LogChannelInterface log =
     KettleLogStore.getLogChannelInterfaceFactory().create( RepositoryConnectController.class );
 
-  private RepositoryMeta currentRepository;
-  private RepositoryMeta connectedRepository;
-  private RepositoriesMeta repositoriesMeta;
   private PluginRegistry pluginRegistry;
   private Supplier<Spoon> spoonSupplier;
   private List<RepositoryContollerListener> listeners = new ArrayList<>();
   private boolean relogin = false;
 
-  public RepositoryConnectController( PluginRegistry pluginRegistry, Supplier<Spoon> spoonSupplier,
-                                      RepositoriesMeta repositoriesMeta ) {
+  public RepositoryConnectController( PluginRegistry pluginRegistry, Supplier<Spoon> spoonSupplier ) {
     this.pluginRegistry = pluginRegistry;
     this.spoonSupplier = spoonSupplier;
-    this.repositoriesMeta = repositoriesMeta;
-    try {
-      repositoriesMeta.readData();
-    } catch ( KettleException ke ) {
-      log.logError( "Unable to load repositories", ke );
-    }
   }
 
   public RepositoryConnectController() {
-    this( PluginRegistry.getInstance(), Spoon::getInstance, new RepositoriesMeta() );
+    this( PluginRegistry.getInstance(), Spoon::getInstance );
   }
 
   @SuppressWarnings( "unchecked" )
@@ -120,6 +117,7 @@ public class RepositoryConnectController {
   public boolean createRepository( String id, Map<String, Object> items ) {
     try {
       RepositoryMeta repositoryMeta = pluginRegistry.loadClass( RepositoryPluginType.class, id, RepositoryMeta.class );
+      RepositoriesMeta repositoriesMeta = getRepositoriesMeta();
       repositoryMeta.populate( items, repositoriesMeta );
 
       if ( repositoryMeta.getName() != null ) {
@@ -127,15 +125,15 @@ public class RepositoryConnectController {
           pluginRegistry.loadClass( RepositoryPluginType.class, repositoryMeta.getId(), Repository.class );
         repository.init( repositoryMeta );
 
-        if ( currentRepository != null ) {
+        if ( getCurrentRepository() != null ) {
           if ( isCompatibleRepositoryEdit( repositoryMeta ) ) {
             setConnectedRepository( repositoryMeta );
           }
-          repositoriesMeta.removeRepository( repositoriesMeta.indexOfRepository( currentRepository ) );
+          repositoriesMeta.removeRepository( repositoriesMeta.indexOfRepository( getCurrentRepository() ) );
         }
         repositoriesMeta.addRepository( repositoryMeta );
         repositoriesMeta.writeData();
-        currentRepository = repositoryMeta;
+        setCurrentRepository( repositoryMeta );
         if ( !testRepository( repository ) ) {
           return false;
         }
@@ -149,7 +147,9 @@ public class RepositoryConnectController {
   }
 
   private boolean isCompatibleRepositoryEdit( RepositoryMeta repositoryMeta ) {
-    if ( repositoriesMeta.indexOfRepository( currentRepository ) >= 0
+    RepositoryMeta connectedRepository = getConnectedRepository();
+    RepositoryMeta currentRepository = getCurrentRepository();
+    if ( getRepositoriesMeta().indexOfRepository( currentRepository ) >= 0
         && connectedRepository != null
         && repositoryEquals( connectedRepository, currentRepository ) ) {
       // only name / description / default changed ?
@@ -168,6 +168,7 @@ public class RepositoryConnectController {
 
   @SuppressWarnings( "unchecked" )
   public String getRepositories() {
+    RepositoriesMeta repositoriesMeta = getRepositoriesMeta();
     JSONArray list = new JSONArray();
     if ( repositoriesMeta != null ) {
       for ( int i = 0; i < repositoriesMeta.nrRepositories(); i++ ) {
@@ -178,19 +179,22 @@ public class RepositoryConnectController {
   }
 
   public String getRepository( String name ) {
+    RepositoriesMeta repositoriesMeta = getRepositoriesMeta();
     RepositoryMeta repositoryMeta = repositoriesMeta.findRepository( name );
     if ( repositoryMeta != null ) {
-      currentRepository = repositoryMeta;
+      setCurrentRepository( repositoryMeta );
       return repositoryMeta.toJSONObject().toString();
     }
     return "";
   }
 
   public DatabaseMeta getDatabase( String name ) {
+    RepositoriesMeta repositoriesMeta = getRepositoriesMeta();
     return repositoriesMeta.searchDatabase( name );
   }
 
   public void removeDatabase( String name ) {
+    RepositoriesMeta repositoriesMeta = getRepositoriesMeta();
     int index = repositoriesMeta.indexOfDatabase( repositoriesMeta.searchDatabase( name ) );
     if ( index != -1 ) {
       repositoriesMeta.removeDatabase( index );
@@ -200,6 +204,7 @@ public class RepositoryConnectController {
 
   @SuppressWarnings( "unchecked" )
   public String getDatabases() {
+    RepositoriesMeta repositoriesMeta = getRepositoriesMeta();
     JSONArray list = new JSONArray();
     for ( int i = 0; i < repositoriesMeta.nrDatabases(); i++ ) {
       JSONObject databaseJSON = new JSONObject();
@@ -210,40 +215,53 @@ public class RepositoryConnectController {
   }
 
   public void connectToRepository() throws KettleException {
-    connectToRepository( currentRepository );
+    connectToRepository( getCurrentRepository() );
   }
 
-  public void connectToRepository( String username, String password ) throws KettleException {
-    connectToRepository( currentRepository, username, password );
+  public String connectToRepository( String username, String password ) {
+    return connectToRepository( getCurrentRepository(), username, password );
   }
 
   public void connectToRepository( RepositoryMeta repositoryMeta ) throws KettleException {
     connectToRepository( repositoryMeta, null, null );
   }
 
-  public void connectToRepository( RepositoryMeta repositoryMeta, String username, String password ) throws KettleException {
-    final Repository repository = loadRepositoryObject( repositoryMeta.getId() );
-    repository.init( repositoryMeta );
-    repositoryConnect( repository, username, password );
-    if ( username != null ) {
-      getPropsUI().setLastRepositoryLogin( username );
-    }
-    Spoon spoon = spoonSupplier.get();
-    Runnable execute = () -> {
-      if ( spoon.getRepository() != null ) {
-        spoon.closeRepository();
-      } else {
-        spoon.closeAllJobsAndTransformations( true );
+  public String connectToRepository( RepositoryMeta repositoryMeta, String username, String password ) {
+    JSONObject jsonObject = new JSONObject();
+    try {
+      final Repository repository = loadRepositoryObject( repositoryMeta.getId() );
+      repository.init( repositoryMeta );
+      repositoryConnect( repository, username, password );
+      if ( username != null ) {
+        getPropsUI().setLastRepositoryLogin( username );
       }
-      spoon.setRepository( repository );
-      setConnectedRepository( repositoryMeta );
-      fireListeners();
-    };
-    if ( spoon.getShell() != null ) {
-      spoon.getShell().getDisplay().asyncExec( execute );
-    } else {
-      execute.run();
+      Spoon spoon = spoonSupplier.get();
+      Runnable execute = () -> {
+        if ( spoon.getRepository() != null ) {
+          spoon.closeRepository();
+        } else {
+          spoon.closeAllJobsAndTransformations( true );
+        }
+        spoon.setRepository( repository );
+        setConnectedRepository( repositoryMeta );
+        fireListeners();
+      };
+      if ( spoon.getShell() != null ) {
+        spoon.getShell().getDisplay().asyncExec( execute );
+      } else {
+        execute.run();
+      }
+      jsonObject.put( SUCCESS, true );
+    } catch ( KettleException ke ) {
+      if ( ke.getMessage().contains( ERROR_401 ) ) {
+        jsonObject.put( ERROR_MESSAGE, BaseMessages.getString( PKG, "RepositoryConnection.Error.InvalidCredentials" ) );
+      } else {
+        jsonObject.put( ERROR_MESSAGE, BaseMessages.getString( PKG, "RepositoryConnection.Error.InvalidServer" ) );
+      }
+      jsonObject.put( SUCCESS, false );
+      log.logError( "Unable to connect to repository", ke );
     }
+    return jsonObject.toString();
   }
 
   private Repository loadRepositoryObject( String id ) throws KettleException {
@@ -256,21 +274,34 @@ public class RepositoryConnectController {
     return repository;
   }
 
-  public void reconnectToRepository( String username, String password ) throws KettleException {
+  public String reconnectToRepository( String username, String password ) {
     Repository currentRepositoryInstance = getConnectedRepositoryInstance();
-    reconnectToRepository( currentRepository, (ReconnectableRepository) currentRepositoryInstance, username, password );
+    return reconnectToRepository( getCurrentRepository(), (ReconnectableRepository) currentRepositoryInstance, username, password );
   }
 
-  private void reconnectToRepository( RepositoryMeta repositoryMeta, ReconnectableRepository repository,
-                                      String username, String password ) throws KettleException {
-    if ( username != null ) {
-      getPropsUI().setLastRepositoryLogin( username );
+  private String reconnectToRepository( RepositoryMeta repositoryMeta, ReconnectableRepository repository,
+                                      String username, String password ) {
+    JSONObject jsonObject = new JSONObject();
+    try {
+      if ( username != null ) {
+        getPropsUI().setLastRepositoryLogin( username );
+      }
+      if ( repository.isConnected() ) {
+        repository.disconnect();
+      }
+      repository.init( repositoryMeta );
+      repositoryConnect( repository, username, password );
+      jsonObject.put( "success", true );
+    } catch ( KettleException ke ) {
+      if ( ke.getMessage().contains( ERROR_401 ) ) {
+        jsonObject.put( ERROR_MESSAGE, BaseMessages.getString( PKG, "RepositoryConnection.Error.InvalidCredentials" ) );
+      } else {
+        jsonObject.put( ERROR_MESSAGE, BaseMessages.getString( PKG, "RepositoryConnection.Error.InvalidServer" ) );
+      }
+      jsonObject.put( "success", false );
+      log.logError( "Unable to connect to repository", ke );
     }
-    if ( repository.isConnected() ) {
-      repository.disconnect();
-    }
-    repository.init( repositoryMeta );
-    repositoryConnect( repository, username, password );
+    return jsonObject.toString();
   }
 
   private void repositoryConnect( Repository repository, String username, String password ) throws KettleException {
@@ -318,6 +349,7 @@ public class RepositoryConnectController {
   }
 
   public boolean deleteRepository( String name ) {
+    RepositoriesMeta repositoriesMeta = getRepositoriesMeta();
     RepositoryMeta repositoryMeta = repositoriesMeta.findRepository( name );
     int index = repositoriesMeta.indexOfRepository( repositoryMeta );
     if ( index != -1 ) {
@@ -333,6 +365,7 @@ public class RepositoryConnectController {
   }
 
   public void addDatabase( DatabaseMeta databaseMeta ) {
+    RepositoriesMeta repositoriesMeta = getRepositoriesMeta();
     if ( databaseMeta != null ) {
       repositoriesMeta.addDatabase( databaseMeta );
       save();
@@ -340,6 +373,7 @@ public class RepositoryConnectController {
   }
 
   public boolean setDefaultRepository( String name ) {
+    RepositoriesMeta repositoriesMeta = getRepositoriesMeta();
     RepositoryMeta repositoryMeta = repositoriesMeta.findRepository( name );
     for ( int i = 0; i < repositoriesMeta.nrRepositories(); i++ ) {
       repositoriesMeta.getRepository( i ).setDefault( false );
@@ -365,22 +399,27 @@ public class RepositoryConnectController {
   }
 
   public void setCurrentRepository( RepositoryMeta repositoryMeta ) {
-    this.currentRepository = repositoryMeta;
+    UserRepositoriesMeta repos = SingletonUtil.getSessionInstance( UserRepositoriesMeta.class );
+    repos.setCurrentRepository( repositoryMeta );
   }
 
   public RepositoryMeta getCurrentRepository() {
-    return this.currentRepository;
+    UserRepositoriesMeta repos = SingletonUtil.getSessionInstance( UserRepositoriesMeta.class );
+    return repos.getCurrentRepository();
   }
 
   public RepositoryMeta getConnectedRepository() {
-    return connectedRepository;
+    UserRepositoriesMeta repos = SingletonUtil.getSessionInstance( UserRepositoriesMeta.class );
+    return repos.getConnectedRepository();
   }
 
   public void setConnectedRepository( RepositoryMeta connectedRepository ) {
-    this.connectedRepository = connectedRepository;
+    UserRepositoriesMeta repos = SingletonUtil.getSessionInstance( UserRepositoriesMeta.class );
+    repos.setConnectedRepository( connectedRepository );
   }
 
   public RepositoryMeta getDefaultRepositoryMeta() {
+    RepositoriesMeta repositoriesMeta = getRepositoriesMeta();
     for ( int i = 0; i < repositoriesMeta.nrRepositories(); i++ ) {
       RepositoryMeta repositoryMeta = repositoriesMeta.getRepository( i );
       if ( repositoryMeta.isDefault() ) {
@@ -391,6 +430,7 @@ public class RepositoryConnectController {
   }
 
   public RepositoryMeta getRepositoryMetaByName( String name ) {
+    RepositoriesMeta repositoriesMeta = getRepositoriesMeta();
     return repositoriesMeta.findRepository( name );
   }
 
@@ -410,6 +450,7 @@ public class RepositoryConnectController {
   }
 
   public void save() {
+    RepositoriesMeta repositoriesMeta = getRepositoriesMeta();
     try {
       repositoriesMeta.writeData();
     } catch ( KettleException ke ) {
@@ -431,6 +472,10 @@ public class RepositoryConnectController {
 
   public void addListener( RepositoryContollerListener listener ) {
     listeners.add( listener );
+  }
+
+  public void removeListener( RepositoryContollerListener listener ) {
+    listeners.remove( listener );
   }
 
   public void fireListeners() {
@@ -476,5 +521,11 @@ public class RepositoryConnectController {
       }
     }
     return false;
+  }
+
+  @VisibleForTesting
+  RepositoriesMeta getRepositoriesMeta() {
+    UserRepositoriesMeta repos = SingletonUtil.getSessionInstance( UserRepositoriesMeta.class );
+    return repos.getRepositoriesMeta();
   }
 }

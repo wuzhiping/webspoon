@@ -22,6 +22,15 @@
 
 package org.pentaho.di.ui.spoon.trans;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import org.eclipse.rap.rwt.service.ServerPushSession;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
@@ -93,10 +102,11 @@ public class LogBrowser {
 
     // Refresh the log every second or so
     //
+    final ServerPushSession pushSession = new ServerPushSession();
     final Timer logRefreshTimer = new Timer( "log sniffer Timer" );
     TimerTask timerTask = new TimerTask() {
       public void run() {
-        if ( text.isDisposed() ) {
+        if ( text.isDisposed() || text.getDisplay().isDisposed() ) {
           return;
         }
 
@@ -123,7 +133,7 @@ public class LogBrowser {
               int lastNr = KettleLogStore.getLastBufferLineNr();
               if ( lastNr > lastLogId.get() ) {
                 List<KettleLoggingEvent> logLines =
-                  KettleLogStore.getLogBufferFromTo( childIds, true, lastLogId.get(), lastNr );
+                  KettleLogStore.getLogBufferFromTo( childIds, false, lastLogId.get(), lastNr );
 
                 // The maximum size of the log buffer
                 //
@@ -183,12 +193,15 @@ public class LogBrowser {
               }
 
               busy.set( false );
+              pushSession.stop();
+              pushSession.start();
             }
           }
         } );
       }
     };
 
+    pushSession.start();
     // Refresh every often enough
     //
     logRefreshTimer
@@ -215,6 +228,16 @@ public class LogBrowser {
     text.addDisposeListener( new DisposeListener() {
       public void widgetDisposed( DisposeEvent event ) {
         logRefreshTimer.cancel();
+        pushSession.stop();
+      }
+    } );
+
+    // Make sure the timer goes down when the Display is disposed
+    text.getDisplay().disposeExec( new Runnable() {
+      @Override
+      public void run() {
+        logRefreshTimer.cancel();
+        pushSession.stop();
       }
     } );
 

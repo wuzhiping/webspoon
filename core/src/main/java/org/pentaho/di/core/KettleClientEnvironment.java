@@ -149,6 +149,27 @@ public class KettleClientEnvironment {
     }
   }
 
+  /**
+   * Creates the kettle home area, which is a directory containing a default kettle.properties file
+   */
+  public static void createKettleUserHome() {
+
+    // Try to create the directory...
+    //
+    String directory = Const.getKettleUserDirectory();
+    File dir = new File( directory );
+    try {
+      dir.mkdirs();
+
+      // Create a data directory for this user
+      dir = new File( Const.getKettleUserDataDirectory() );
+      dir.mkdirs();
+    } catch ( Exception e ) {
+      // ignore - should likely propagate the error
+
+    }
+  }
+
   private static void initLogginPlugins( List<PluginInterface> logginPlugins ) throws KettlePluginException {
     for ( PluginInterface plugin : logginPlugins ) {
       LoggingPluginInterface loggingPlugin = (LoggingPluginInterface) PluginRegistry.getInstance().loadClass( plugin );

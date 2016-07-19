@@ -90,7 +90,7 @@ public class LogBrowser {
     final Timer logRefreshTimer = new Timer( "log sniffer Timer" );
     TimerTask timerTask = new TimerTask() {
       public void run() {
-        if ( text.isDisposed() ) {
+        if ( text.isDisposed() || text.getDisplay().isDisposed() ) {
           return;
         }
 
@@ -186,6 +186,14 @@ public class LogBrowser {
     //
     text.addDisposeListener( new DisposeListener() {
       public void widgetDisposed( DisposeEvent event ) {
+        logRefreshTimer.cancel();
+      }
+    } );
+
+    // Make sure the timer goes down when the Display is disposed
+    text.getDisplay().disposeExec( new Runnable() {
+      @Override
+      public void run() {
         logRefreshTimer.cancel();
       }
     } );

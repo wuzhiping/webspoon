@@ -46,8 +46,17 @@
     <copy todir="${classes.dir}">
         <fileset dir="package-res" />
     </copy>
+    <copy todir="${classes.dir}">
+        <fileset dir="../assembly/package-res/classes" includes="*.xml"/>
+    </copy>
     <copy todir="${classes.dir}/ui">
         <fileset dir="${ui}" includes="laf.properties"/>
+    </copy>
+    <copy todir="${classes.dir}/ui">
+        <fileset dir="${ui}" includes="*.xul"/>
+    </copy>
+    <copy todir="./docs">
+        <fileset dir="../assembly/package-res/docs" includes="**/*"/>
     </copy>
 
     <if>
@@ -60,6 +69,17 @@
         </copy>
       </then>
     </if>
+  </target>
+
+  <target name="war" depends="clean,resolve,compile">
+    <war destfile="${dist.dir}/spoon.war" webxml="WEB-INF/web.xml">
+      <lib dir="${lib.dir}">
+        <exclude name="javax.servlet-api-*.jar"/>
+      </lib>
+      <classes dir="${classes.dir}"/>
+      <fileset file="OSS_Licenses.html"/>
+      <zipfileset dir="docs" prefix="docs"/>
+    </war>
   </target>
 
 </project>

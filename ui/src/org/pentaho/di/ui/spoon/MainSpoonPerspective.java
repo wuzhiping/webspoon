@@ -46,14 +46,16 @@ public class MainSpoonPerspective implements SpoonPerspectiveImageProvider {
 
   public static final String ID = "001-spoon-jobs";
 
+  private Spoon spoon;
   private Composite ui;
   private List<SpoonPerspectiveListener> listeners = new ArrayList<SpoonPerspectiveListener>();
   private TabSet tabfolder;
   private static final Class<?> PKG = Spoon.class;
 
-  public MainSpoonPerspective( Composite ui, TabSet tabfolder ) {
+  public MainSpoonPerspective( Composite ui, TabSet tabfolder, Spoon spoon ) {
     this.ui = ui;
     this.tabfolder = tabfolder;
+    this.spoon = spoon;
   }
 
   // Default perspective to support Jobs and Transformations
@@ -126,7 +128,7 @@ public class MainSpoonPerspective implements SpoonPerspectiveImageProvider {
     // What transformation is in the active tab?
     // TransLog, TransGraph & TransHist contain the same transformation
     //
-    TabMapEntry mapEntry = ( (Spoon) SpoonFactory.getInstance() ).delegates.tabs.getTab( tabfolder.getSelected() );
+    TabMapEntry mapEntry = this.spoon.delegates.tabs.getTab( tabfolder.getSelected() );
     EngineMetaInterface meta = null;
     if ( mapEntry != null ) {
       if ( mapEntry.getObject() instanceof TransGraph ) {
@@ -144,5 +146,4 @@ public class MainSpoonPerspective implements SpoonPerspectiveImageProvider {
   void setTabset( TabSet tabs ) {
     this.tabfolder = tabs;
   }
-
 }

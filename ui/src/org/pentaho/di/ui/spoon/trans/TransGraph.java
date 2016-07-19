@@ -42,12 +42,14 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.MessageDialogWithToggle;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
-import org.eclipse.jface.window.DefaultToolTip;
-import org.eclipse.jface.window.ToolTip;
+import org.eclipse.rap.rwt.service.ServerPushSession;
+//import org.eclipse.jface.window.DefaultToolTip;
+//import org.eclipse.jface.window.ToolTip;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTarget;
 import org.eclipse.swt.dnd.DropTargetEvent;
@@ -63,12 +65,13 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.MouseTrackListener;
-import org.eclipse.swt.events.MouseWheelListener;
+//import org.eclipse.swt.events.MouseWheelListener;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Device;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.FormAttachment;
@@ -80,7 +83,9 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.MessageBox;
@@ -211,7 +216,7 @@ import org.pentaho.ui.xul.jface.tags.JfaceMenupopup;
  * @since 17-mei-2003
  */
 public class TransGraph extends AbstractGraph implements XulEventHandler, Redrawable, TabItemInterface,
-  LogParentProvidedInterface, MouseListener, MouseMoveListener, MouseTrackListener, MouseWheelListener, KeyListener {
+  LogParentProvidedInterface, MouseListener, MouseMoveListener, MouseTrackListener, KeyListener {
   private static Class<?> PKG = Spoon.class; // for i18n purposes, needed by Translator2!!
 
   private LogChannelInterface log;
@@ -240,7 +245,7 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
 
   private Composite mainComposite;
 
-  private DefaultToolTip toolTip;
+  private CheckBoxToolTip toolTip;
 
   private CheckBoxToolTip helpTip;
 
@@ -477,7 +482,14 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
 
     // Add a canvas below it, use up all space initially
     //
-    canvas = new Canvas( sashForm, SWT.V_SCROLL | SWT.H_SCROLL | SWT.NO_BACKGROUND | SWT.BORDER );
+    scrolledcomposite = new ScrolledComposite( sashForm, SWT.V_SCROLL | SWT.H_SCROLL );
+    canvas = new Canvas( scrolledcomposite, SWT.NO_BACKGROUND | SWT.BORDER );
+    scrolledcomposite.setContent( canvas );
+    scrolledcomposite.addListener( SWT.Resize, new Listener() {
+      public void handleEvent( Event event ) {
+        resize();
+      }
+    } );
 
     sashForm.setWeights( new int[]{ 100, } );
 
@@ -495,14 +507,14 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
       log.logError( "Error parsing XUL XML", t );
     }
 
-    toolTip = new DefaultToolTip( canvas, ToolTip.NO_RECREATE, true );
-    toolTip.setRespectMonitorBounds( true );
-    toolTip.setRespectDisplayBounds( true );
-    toolTip.setPopupDelay( 350 );
-    toolTip.setHideDelay( 5000 );
-    toolTip.setShift( new org.eclipse.swt.graphics.Point( ConstUI.TOOLTIP_OFFSET, ConstUI.TOOLTIP_OFFSET ) );
+    toolTip = new CheckBoxToolTip( shell );
+//    toolTip.setRespectMonitorBounds( true );
+//    toolTip.setRespectDisplayBounds( true );
+//    toolTip.setPopupDelay( 350 );
+//    toolTip.setHideDelay( 5000 );
+//    toolTip.setShift( new org.eclipse.swt.graphics.Point( ConstUI.TOOLTIP_OFFSET, ConstUI.TOOLTIP_OFFSET ) );
 
-    helpTip = new CheckBoxToolTip( canvas );
+    helpTip = new CheckBoxToolTip( shell );
     helpTip.addCheckBoxToolTipListener( new CheckBoxToolTipListener() {
 
       @Override
@@ -519,8 +531,8 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
     impact = new ArrayList<DatabaseImpact>();
     impactFinished = false;
 
-    hori = canvas.getHorizontalBar();
-    vert = canvas.getVerticalBar();
+    hori = scrolledcomposite.getHorizontalBar();
+    vert = scrolledcomposite.getVerticalBar();
 
     hori.addSelectionListener( new SelectionAdapter() {
       @Override
@@ -563,8 +575,8 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
 
     canvas.addMouseListener( this );
     canvas.addMouseMoveListener( this );
-    canvas.addMouseTrackListener( this );
-    canvas.addMouseWheelListener( this );
+//    canvas.addMouseTrackListener( this );
+//    canvas.addMouseWheelListener( this );
     canvas.addKeyListener( this );
 
     // Drag & Drop for steps
@@ -751,6 +763,15 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
         timer.cancel();
       }
     } );
+
+    // Make sure the timer stops when we close the browser tab/window
+    //
+    getDisplay().disposeExec( new Runnable() {
+      @Override
+      public void run() {
+        timer.cancel();
+      }
+    } );
   }
 
   @Override
@@ -814,6 +835,7 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
   @Override
   public void mouseDown( MouseEvent e ) {
 
+    mouseHover( e );
     boolean alt = ( e.stateMask & SWT.ALT ) != 0;
     boolean control = ( e.stateMask & SWT.MOD1 ) != 0;
     boolean shift = ( e.stateMask & SWT.SHIFT ) != 0;
@@ -906,6 +928,32 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
               listener.onUpdateSelection( currentStep );
             }
 
+            if ( ( startHopStep != null && endHopStep == null ) || ( endHopStep != null && startHopStep == null ) ) {
+              if ( stepMeta != null
+                && ( ( startHopStep != null && !startHopStep.equals( stepMeta ) ) || ( endHopStep != null && !endHopStep
+                .equals( stepMeta ) ) ) ) {
+                StepIOMetaInterface ioMeta = stepMeta.getStepMetaInterface().getStepIOMeta();
+                if ( candidate == null ) {
+                  // See if the step accepts input. If not, we can't create a new hop...
+                  //
+                  if ( startHopStep != null ) {
+                    if ( ioMeta.isInputAcceptor() ) {
+                      candidate = new TransHopMeta( startHopStep, stepMeta );
+                      endHopLocation = null;
+                    } else {
+                      noInputStep = stepMeta;
+                    }
+                  } else if ( endHopStep != null ) {
+                    if ( ioMeta.isOutputProducer() ) {
+                      candidate = new TransHopMeta( stepMeta, endHopStep );
+                      endHopLocation = null;
+                    } else {
+                      noInputStep = stepMeta;
+                    }
+                  }
+                }
+              }
+            }
             if ( candidate != null ) {
               addCandidateAsHop( e.x, e.y );
             } else {
@@ -1008,6 +1056,7 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
       LogChannel.GENERAL.logError( "Error calling TransGraphMouseUp extension point", ex );
     }
 
+    mouseMove( e );
     boolean control = ( e.stateMask & SWT.MOD1 ) != 0;
 
     if ( iconoffset == null ) {
@@ -1024,6 +1073,31 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
       LogChannel.GENERAL.logError( "Error calling TransGraphMouseUp extension point", ex );
     }
 
+    StepMeta stepMeta = transMeta.getStep( real.x, real.y, iconsize );
+    if ( stepMeta != null
+        && ( ( startHopStep != null && !startHopStep.equals( stepMeta ) ) || ( endHopStep != null && !endHopStep
+        .equals( stepMeta ) ) ) ) {
+      StepIOMetaInterface ioMeta = stepMeta.getStepMetaInterface().getStepIOMeta();
+      if ( candidate == null ) {
+          // See if the step accepts input. If not, we can't create a new hop...
+          //
+        if ( startHopStep != null ) {
+          if ( ioMeta.isInputAcceptor() ) {
+            candidate = new TransHopMeta( startHopStep, stepMeta );
+            endHopLocation = null;
+          } else {
+            noInputStep = stepMeta;
+          }
+        } else if ( endHopStep != null ) {
+          if ( ioMeta.isOutputProducer() ) {
+            candidate = new TransHopMeta( stepMeta, endHopStep );
+            endHopLocation = null;
+          } else {
+            noInputStep = stepMeta;
+          }
+        }
+      }
+    }
     // Quick new hop option? (drag from one step to another)
     //
     if ( candidate != null && areaOwner != null && areaOwner.getAreaType() != null ) {
@@ -1598,6 +1672,10 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
   }
 
   protected void addHop( StreamInterface stream ) {
+    if ( candidate == null ) {
+      clearSettings();
+      return;
+    }
     switch ( stream.getStreamType() ) {
       case ERROR:
         addErrorHop();
@@ -1739,6 +1817,9 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
   }
 
   protected void asyncRedraw() {
+    if ( spoon.getDisplay().isDisposed() ) {
+      return;
+    }
     spoon.getDisplay().asyncExec( new Runnable() {
       @Override
       public void run() {
@@ -1854,6 +1935,7 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
       mb.setText( BaseMessages.getString( PKG, "TransGraph.Dialog.InvalidZoomMeasurement.Title" ) );
       mb.open();
     }
+    resize();
     redraw();
   }
 
@@ -2636,7 +2718,7 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
           StepMetaInterface stepMetaInterface = stepMeta.getStepMetaInterface();
           String activeReferencedObjectDescription = stepMetaInterface.getActiveReferencedObjectDescription();
           if ( getActiveSubtransformation( this, stepMeta ) != null && activeReferencedObjectDescription != null ) {
-            action = new Action( activeReferencedObjectDescription, Action.AS_DROP_DOWN_MENU ) {
+            action = new Action( activeReferencedObjectDescription, Action.AS_PUSH_BUTTON ) {
               @Override
               public void run() {
                 openMapping( stepMeta, -1 ); // negative by convention
@@ -2653,7 +2735,7 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
             for ( int i = 0; i < referencedObjects.length; i++ ) {
               final int index = i;
               String referencedObject = referencedObjects[i];
-              action = new Action( referencedObject, Action.AS_DROP_DOWN_MENU ) {
+              action = new Action( referencedObject, Action.AS_PUSH_BUTTON ) {
                 @Override
                 public void run() {
                   openMapping( stepMeta, index );
@@ -3117,10 +3199,7 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
       return; // nothing to do!
     }
 
-    Display disp = shell.getDisplay();
-
-    Image img = getTransformationImage( disp, area.x, area.y, magnification );
-    e.gc.drawImage( img, 0, 0 );
+    getTransformationImage( e.gc, area.x, area.y, magnification );
     if ( transMeta.nrSteps() == 0 ) {
       e.gc.setForeground( GUIResource.getInstance().getColorCrystalTextPentaho() );
       e.gc.setFont( GUIResource.getInstance().getFontMedium() );
@@ -3130,14 +3209,13 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
       int topPosition = ( area.y - pentahoImage.getBounds().height ) / 2;
       e.gc.drawImage( pentahoImage, leftPosition, topPosition );
     }
-    img.dispose();
 
     // spoon.setShellText();
   }
 
-  public Image getTransformationImage( Device device, int x, int y, float magnificationFactor ) {
+  public void getTransformationImage( GC gc2, int x, int y, float magnificationFactor ) {
 
-    GCInterface gc = new SWTGC( device, new Point( x, y ), iconsize );
+    GCInterface gc = new SWTGC( gc2, new Point( x, y ), iconsize );
 
     int gridSize =
       PropsUI.getInstance().isShowCanvasGridEnabled() ? PropsUI.getInstance().getCanvasGridSize() : 1;
@@ -3160,11 +3238,7 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
     transPainter.setShowTargetStreamsStep( showTargetStreamsStep );
 
     transPainter.buildTransformationImage();
-
-    Image img = (Image) gc.getImage();
-
-    gc.dispose();
-    return img;
+    return;
   }
 
   @Override
@@ -3173,6 +3247,10 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
     Point max = transMeta.getMaximum();
     Point thumb = getThumb( area, max );
     return getOffset( thumb, area );
+  }
+
+  protected Point getMaximum() {
+    return transMeta.getMaximum();
   }
 
   private void editStep( StepMeta stepMeta ) {
@@ -4149,6 +4227,8 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
   }
 
   private synchronized void prepareTrans( final Thread parentThread, final String[] args ) {
+    final ServerPushSession pushSession = new ServerPushSession();
+    pushSession.start();
     Runnable runnable = new Runnable() {
       @Override
       public void run() {
@@ -4174,6 +4254,7 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
           running = false;
           checkErrorVisuals();
         }
+        pushSession.stop();
       }
     };
     Thread thread = new Thread( runnable );
@@ -4678,7 +4759,10 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
 
   @Override
   public int showChangedWarning() throws KettleException {
-    return showChangedWarning( transMeta.getName() );
+    MessageBox mb = new MessageBox( shell, SWT.YES | SWT.NO | SWT.CANCEL | SWT.ICON_WARNING );
+    mb.setMessage( BaseMessages.getString( PKG, "Spoon.Dialog.PromptSave.Message", transMeta.getName() ) );
+    mb.setText( BaseMessages.getString( PKG, "Spoon.Dialog.PromptSave.Title" ) );
+    return mb.open();
   }
 
   private class StepVelocity {

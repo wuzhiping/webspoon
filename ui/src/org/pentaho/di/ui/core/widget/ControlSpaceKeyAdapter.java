@@ -22,11 +22,11 @@
 
 package org.pentaho.di.ui.core.widget;
 
-import org.eclipse.jface.window.DefaultToolTip;
-import org.eclipse.jface.window.ToolTip;
+//import org.eclipse.jface.window.DefaultToolTip;
+//import org.eclipse.jface.window.ToolTip;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
-import org.eclipse.swt.custom.StyledText;
+//import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.KeyAdapter;
@@ -135,12 +135,12 @@ public class ControlSpaceKeyAdapter extends KeyAdapter {
       final List list = new List( shell, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL );
       props.setLook( list );
       list.setItems( getVariableNames( variables ) );
-      final DefaultToolTip toolTip = new DefaultToolTip( list, ToolTip.RECREATE, true );
-      toolTip.setImage( GUIResource.getInstance().getImageVariable() );
-      toolTip.setHideOnMouseDown( true );
-      toolTip.setRespectMonitorBounds( true );
-      toolTip.setRespectDisplayBounds( true );
-      toolTip.setPopupDelay( 350 );
+//      final DefaultToolTip toolTip = new DefaultToolTip( list, ToolTip.RECREATE, true );
+//      toolTip.setImage( GUIResource.getInstance().getImageVariable() );
+//      toolTip.setHideOnMouseDown( true );
+//      toolTip.setRespectMonitorBounds( true );
+//      toolTip.setRespectDisplayBounds( true );
+//      toolTip.setPopupDelay( 350 );
 
       list.addSelectionListener( new SelectionAdapter() {
         // Enter or double-click: picks the variable
@@ -162,9 +162,9 @@ public class ControlSpaceKeyAdapter extends KeyAdapter {
           if ( name.startsWith( Const.INTERNAL_VARIABLE_PREFIX ) ) {
             message += BaseMessages.getString( PKG, "TextVar.InternalVariable.Message" );
           }
-          toolTip.setText( message );
-          toolTip.hide();
-          toolTip.show( new Point( shellBounds.width, 0 ) );
+//          toolTip.setText( message );
+//          toolTip.hide();
+//          toolTip.show( new Point( shellBounds.width, 0 ) );
         }
       } );
 
@@ -211,9 +211,10 @@ public class ControlSpaceKeyAdapter extends KeyAdapter {
         combo.setText( extra ); // We can't know the location of the cursor yet. All we can do is overwrite.
       } else if ( control instanceof StyledTextComp ) {
         ( (StyledTextComp) control ).insert( extra );
-      } else if ( control instanceof StyledText ) {
-        ( (StyledText) control ).insert( extra );
       }
+//       else if ( control instanceof StyledText ) {
+//        ( (StyledText) control ).insert( extra );
+//      }
     }
     if ( !shell.isDisposed() ) {
       shell.dispose();

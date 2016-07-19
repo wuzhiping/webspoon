@@ -31,8 +31,9 @@ import java.util.Map;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.MessageDialogWithToggle;
+import org.eclipse.rap.rwt.SingletonUtil;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.dnd.Clipboard;
+//import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.graphics.Color;
@@ -392,9 +393,17 @@ public class GUIResource {
    * GUIResource also contains the clipboard as it has to be allocated only once! I don't want to put it in a separate
    * singleton just for this one member.
    */
-  private static Clipboard clipboard;
+  //private static Clipboard clipboard;
 
-  private GUIResource( Display display ) {
+  private GUIResource() {
+    initialize( PropsUI.getDisplay() );
+  }
+
+//  private GUIResource( Display display ) {
+//    initialize( display );
+//  }
+
+  public void initialize( Display display ) {
     this.display = display;
 
     getResources();
@@ -405,7 +414,7 @@ public class GUIResource {
       }
     } );
 
-    clipboard = null;
+    //clipboard = null;
 
     // Reload images as required by changes in the plugins
     PluginRegistry.getInstance().addPluginListener( StepPluginType.class, new PluginTypeListener() {
@@ -444,10 +453,11 @@ public class GUIResource {
 
   public static final GUIResource getInstance() {
     if ( guiResource != null ) {
-      return guiResource;
+      return SingletonUtil.getSessionInstance( GUIResource.class );
     }
-    guiResource = new GUIResource( PropsUI.getDisplay() );
-    return guiResource;
+    guiResource = new GUIResource( );
+    //guiResource.initialize( PropsUI.getDisplay() );
+    return SingletonUtil.getSessionInstance( GUIResource.class );
   }
 
   /**
@@ -1720,31 +1730,32 @@ public class GUIResource {
   /**
    * @return Returns the clipboard.
    */
-  public Clipboard getNewClipboard() {
-    if ( clipboard != null ) {
-      clipboard.dispose();
-      clipboard = null;
-    }
-    clipboard = new Clipboard( display );
-
-    return clipboard;
-  }
+//  public Clipboard getNewClipboard() {
+//    if ( clipboard != null ) {
+//      clipboard.dispose();
+//      clipboard = null;
+//    }
+//    clipboard = new Clipboard( display );
+//
+//    return clipboard;
+//  }
 
   public void toClipboard( String cliptext ) {
-    if ( cliptext == null ) {
-      return;
-    }
-
-    getNewClipboard();
-    TextTransfer tran = TextTransfer.getInstance();
-    clipboard.setContents( new String[] { cliptext }, new Transfer[] { tran } );
+//    if ( cliptext == null ) {
+//      return;
+//    }
+//
+//    getNewClipboard();
+//    TextTransfer tran = TextTransfer.getInstance();
+//    clipboard.setContents( new String[] { cliptext }, new Transfer[] { tran } );
   }
 
   public String fromClipboard() {
-    getNewClipboard();
-    TextTransfer tran = TextTransfer.getInstance();
-
-    return (String) clipboard.getContents( tran );
+//    getNewClipboard();
+//    TextTransfer tran = TextTransfer.getInstance();
+//
+//    return (String) clipboard.getContents( tran );
+    return "";
   }
 
   public Font getFontBold() {

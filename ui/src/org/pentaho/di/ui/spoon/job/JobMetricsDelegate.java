@@ -351,14 +351,14 @@ public class JobMetricsDelegate extends SpoonDelegate {
     //
     bounds.height = Math.max( durations.size() * barHeight, bounds.height );
     canvas.setSize( bounds.width, bounds.height );
-
+/*
     SWTGC gc =
         new SWTGC( Display.getCurrent(), new Point( bounds.width, bounds.height ), PropsUI.getInstance().getIconSize() );
     MetricsPainter painter = new MetricsPainter( gc, barHeight );
     // checking according to method's contract
     drawAreas = painter.paint( durations );
     image = (Image) gc.getImage();
-
+*/
     // refresh the scrolled composite
     //
     // sMetricsComposite.setMinHeight(bounds.height);
@@ -367,7 +367,7 @@ public class JobMetricsDelegate extends SpoonDelegate {
 
     // close shop on the SWT GC side.
     //
-    gc.dispose();
+//    gc.dispose();
 
     // Draw the image on the canvas...
     //

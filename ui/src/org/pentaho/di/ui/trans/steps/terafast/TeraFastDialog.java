@@ -41,7 +41,7 @@ import org.eclipse.swt.events.ShellEvent;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
-import org.eclipse.swt.program.Program;
+//import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -393,11 +393,11 @@ public class TeraFastDialog extends BaseStepDialog implements StepDialogInterfac
       }
     } );
 
-    this.wAscLink.addListener( SWT.Selection, new Listener() {
-      public void handleEvent( final Event event ) {
-        Program.launch( event.text );
-      }
-    } );
+//    this.wAscLink.addListener( SWT.Selection, new Listener() {
+//      public void handleEvent( final Event event ) {
+//        Program.launch( event.text );
+//      }
+//    } );
 
     // Detect X or ALT-F4 or something that kills this window...
     this.shell.addShellListener( new ShellAdapter() {

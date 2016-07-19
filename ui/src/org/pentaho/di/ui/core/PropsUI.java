@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
+import org.eclipse.rap.rwt.SingletonUtil;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.events.PaintEvent;
@@ -113,15 +114,11 @@ public class PropsUI extends Props {
    *          The type of properties file.
    */
   public static void init( Display d, int t ) {
-    if ( props == null ) {
-      display = d;
-      props = new PropsUI( t );
+    display = d;
+    props = new PropsUI( t );
 
-      // Also init the colors and fonts to use...
-      GUIResource.getInstance();
-    } else {
-      throw new RuntimeException( "The Properties systems settings are already initialised!" );
-    }
+    // Also init the colors and fonts to use...
+    GUIResource.getInstance();
   }
 
   /**
@@ -154,11 +151,11 @@ public class PropsUI extends Props {
   }
 
   public static PropsUI getInstance() {
-    if ( props != null ) {
-      return (PropsUI) props;
-    }
+    return SingletonUtil.getSessionInstance( PropsUI.class );
+  }
 
-    throw new RuntimeException( "Properties, Kettle systems settings, not initialised!" );
+  private PropsUI() {
+    super( Props.TYPE_PROPERTIES_SPOON );
   }
 
   private PropsUI( int t ) {
@@ -726,7 +723,7 @@ public class PropsUI extends Props {
   }
 
   public FontData getDefaultFontData() {
-    return display.getSystemFont().getFontData()[0];
+    return Display.getCurrent().getSystemFont().getFontData()[0];
   }
 
   public void setMaxUndo( int max ) {
@@ -884,6 +881,7 @@ public class PropsUI extends Props {
     switch ( style ) {
       case WIDGET_STYLE_DEFAULT:
         background = gui.getColorBackground();
+        /*
         if ( control instanceof Group && OS.indexOf( "mac" ) > -1 ) {
           control.addPaintListener( new PaintListener() {
             @Override
@@ -893,6 +891,7 @@ public class PropsUI extends Props {
             }
           } );
         }
+        */
         font = null; // GUIResource.getInstance().getFontDefault();
         break;
       case WIDGET_STYLE_FIXED:
@@ -919,7 +918,7 @@ public class PropsUI extends Props {
       case WIDGET_STYLE_TAB:
         background = GUIResource.getInstance().getColorWhite();
         CTabFolder tabFolder = (CTabFolder) control;
-        tabFolder.setSimple( false );
+        //tabFolder.setSimple( false );
         tabFolder.setBorderVisible( true );
         // need to make a copy of the tab selection background color to get around PDI-13940
         Color c = GUIResource.getInstance().getColorTab();

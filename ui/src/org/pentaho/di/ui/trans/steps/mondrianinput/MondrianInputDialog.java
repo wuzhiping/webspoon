@@ -299,7 +299,7 @@ public class MondrianInputDialog extends BaseStepDialog implements StepDialogInt
     } );
 
     // Text Higlighting
-    wSQL.addLineStyleListener( new MDXValuesHighlight() );
+    //wSQL.addLineStyleListener( new MDXValuesHighlight() );
 
     // Add listeners
     lsCancel = new Listener() {

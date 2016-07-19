@@ -28,7 +28,7 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.program.Program;
+//import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
@@ -129,10 +129,10 @@ public class OlapInputAboutDialog {
     grdData.verticalIndent = DEFAULT_INDENT;
     this.ascLink.setLayoutData( grdData );
 
-    this.ascLink.addListener( SWT.Selection, new Listener() {
-      public void handleEvent( final Event event ) {
-        Program.launch( event.text );
-      }
-    } );
+//    this.ascLink.addListener( SWT.Selection, new Listener() {
+//      public void handleEvent( final Event event ) {
+//        Program.launch( event.text );
+//      }
+//    } );
   }
 }

@@ -714,7 +714,7 @@ public class ScriptDialog extends BaseStepDialog implements StepDialogInterface 
     wScript.addModifyListener( lsMod );
 
     // Text Higlighting
-    wScript.addLineStyleListener( new ScriptHighlight( ScriptAddedFunctions.jsFunctionList ) );
+    //wScript.addLineStyleListener( new ScriptHighlight( ScriptAddedFunctions.jsFunctionList ) );
     item.setControl( wScript );
 
     // Adding new Item to Tree

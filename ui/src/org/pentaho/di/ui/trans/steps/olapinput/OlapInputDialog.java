@@ -38,7 +38,7 @@ import org.eclipse.swt.events.ShellEvent;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
-import org.eclipse.swt.program.Program;
+//import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
@@ -91,8 +91,6 @@ public class OlapInputDialog extends BaseStepDialog implements StepDialogInterfa
   private FormData fdlMDX, fdMDX;
 
   private OlapInputMeta input;
-
-  private MDXValuesHighlight lineStyler = new MDXValuesHighlight();
 
   private Label wlPosition;
   private FormData fdlPosition;
@@ -313,11 +311,11 @@ public class OlapInputDialog extends BaseStepDialog implements StepDialogInterfa
       }
     };
     this.wAbout.addListener( SWT.Selection, lsAbout );
-    this.wAscLink.addListener( SWT.Selection, new Listener() {
-      public void handleEvent( final Event event ) {
-        Program.launch( event.text );
-      }
-    } );
+//    this.wAscLink.addListener( SWT.Selection, new Listener() {
+//      public void handleEvent( final Event event ) {
+//        Program.launch( event.text );
+//      }
+//    } );
 
     wMDX.addModifyListener( new ModifyListener() {
       public void modifyText( ModifyEvent arg0 ) {
@@ -359,8 +357,8 @@ public class OlapInputDialog extends BaseStepDialog implements StepDialogInterfa
     } );
 
     // Text Higlighting
-    lineStyler = new MDXValuesHighlight();
-    wMDX.addLineStyleListener( lineStyler );
+    //lineStyler = new MDXValuesHighlight();
+    //wMDX.addLineStyleListener( lineStyler );
 
     // Add listeners
     lsCancel = new Listener() {

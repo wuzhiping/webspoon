@@ -476,7 +476,7 @@ public class TransPreviewDelegate extends SpoonDelegate implements XulEventHandl
 
                 @Override
                 public void rowWrittenEvent( RowMetaInterface rowMeta, Object[] row ) throws KettleStepException {
-                  if ( rowsData.size() < PropsUI.getInstance().getDefaultPreviewSize() ) {
+                  if ( rowsData.size() < 1000 ) {
                     try {
                       rowsData.add( rowMeta.cloneRow( row ) );
                     } catch ( Exception e ) {

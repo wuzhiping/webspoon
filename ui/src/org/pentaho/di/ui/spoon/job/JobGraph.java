@@ -38,8 +38,8 @@ import java.util.concurrent.Callable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.MessageDialogWithToggle;
-import org.eclipse.jface.window.DefaultToolTip;
-import org.eclipse.jface.window.ToolTip;
+//import org.eclipse.jface.window.DefaultToolTip;
+//import org.eclipse.jface.window.ToolTip;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -59,7 +59,7 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.MouseTrackListener;
-import org.eclipse.swt.events.MouseWheelListener;
+//import org.eclipse.swt.events.MouseWheelListener;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -94,6 +94,7 @@ import org.pentaho.di.core.Props;
 import org.pentaho.di.core.Result;
 import org.pentaho.di.core.ResultFile;
 import org.pentaho.di.core.RowMetaAndData;
+import org.pentaho.di.core.SwtUniversalImage;
 import org.pentaho.di.core.dnd.DragAndDropContainer;
 import org.pentaho.di.core.dnd.XMLTransfer;
 import org.pentaho.di.core.exception.KettleException;
@@ -141,8 +142,8 @@ import org.pentaho.di.ui.core.PropsUI;
 import org.pentaho.di.ui.core.dialog.EnterTextDialog;
 import org.pentaho.di.ui.core.dialog.ErrorDialog;
 import org.pentaho.di.ui.core.gui.GUIResource;
-import org.pentaho.di.ui.core.widget.CheckBoxToolTip;
-import org.pentaho.di.ui.core.widget.CheckBoxToolTipListener;
+//import org.pentaho.di.ui.core.widget.CheckBoxToolTip;
+//import org.pentaho.di.ui.core.widget.CheckBoxToolTipListener;
 import org.pentaho.di.ui.job.dialog.JobDialog;
 import org.pentaho.di.ui.repository.RepositorySecurityUI;
 import org.pentaho.di.ui.repository.dialog.RepositoryExplorerDialog;
@@ -181,7 +182,7 @@ import org.pentaho.ui.xul.jface.tags.JfaceMenupopup;
  *
  */
 public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawable, TabItemInterface,
-  LogParentProvidedInterface, MouseListener, MouseMoveListener, MouseTrackListener, MouseWheelListener,
+  LogParentProvidedInterface, MouseListener, MouseMoveListener, MouseTrackListener,
   KeyListener {
 
   private static Class<?> PKG = JobGraph.class; // for i18n purposes, needed by Translator2!!
@@ -282,7 +283,7 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
 
   private Label minMaxButton;
 
-  private CheckBoxToolTip helpTip;
+//  private CheckBoxToolTip helpTip;
 
   private List<AreaOwner> areaOwners;
 
@@ -298,7 +299,7 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
 
   private JobEntryCopy endHopEntry;
   private JobEntryCopy noInputEntry;
-  private DefaultToolTip toolTip;
+  //private DefaultToolTip toolTip;
   private Point[] previous_step_locations;
   private Point[] previous_note_locations;
   private JobEntryCopy currentEntry;
@@ -392,7 +393,7 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
           .getString( PKG, "JobGraph.Exception.ErrorReadingXULFile.Message", Spoon.XUL_FILE_MENUS ),
         new Exception( t ) );
     }
-
+    /*
     toolTip = new DefaultToolTip( canvas, ToolTip.NO_RECREATE, true );
     toolTip.setRespectMonitorBounds( true );
     toolTip.setRespectDisplayBounds( true );
@@ -406,7 +407,7 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
         spoon.props.setShowingHelpToolTips( enabled );
       }
     } );
-
+    */
     newProps();
 
     selectionRegion = null;
@@ -447,9 +448,9 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
     lastclick = null;
 
     canvas.addMouseListener( this );
-    canvas.addMouseMoveListener( this );
-    canvas.addMouseTrackListener( this );
-    canvas.addMouseWheelListener( this );
+    //canvas.addMouseMoveListener( this );
+    //canvas.addMouseTrackListener( this );
+    //canvas.addMouseWheelListener( this );
 
     // Drag & Drop for steps
     Transfer[] ttypes = new Transfer[] { XMLTransfer.getInstance() };
@@ -499,9 +500,9 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
                 //
                 if ( jobMeta.nrJobEntries() > 1
                   && jobMeta.nrJobEntries() < 5 && spoon.props.isShowingHelpToolTips() ) {
-                  showHelpTip(
-                    p.x, p.y, BaseMessages.getString( PKG, "JobGraph.HelpToolTip.CreatingHops.Title" ),
-                    BaseMessages.getString( PKG, "JobGraph.HelpToolTip.CreatingHops.Message" ) );
+//                  showHelpTip(
+//                    p.x, p.y, BaseMessages.getString( PKG, "JobGraph.HelpToolTip.CreatingHops.Title" ),
+//                    BaseMessages.getString( PKG, "JobGraph.HelpToolTip.CreatingHops.Message" ) );
                 }
               }
               break;
@@ -611,8 +612,8 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
   }
 
   protected void hideToolTips() {
-    toolTip.hide();
-    helpTip.hide();
+    //toolTip.hide();
+    //helpTip.hide();
   }
 
   public void mouseDoubleClick( MouseEvent e ) {
@@ -722,6 +723,26 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
             jobEntryCopy = (JobEntryCopy) areaOwner.getOwner();
             currentEntry = jobEntryCopy;
 
+            if ( jobEntryCopy != null
+                    && ( ( startHopEntry != null && !startHopEntry.equals( jobEntryCopy ) ) || ( endHopEntry != null && !endHopEntry
+                      .equals( jobEntryCopy ) ) ) ) {
+              if ( hop_candidate == null ) {
+                // See if the step accepts input. If not, we can't create a new hop...
+                //
+                if ( startHopEntry != null ) {
+                  if ( !jobEntryCopy.isStart() ) {
+                    hop_candidate = new JobHopMeta( startHopEntry, jobEntryCopy );
+                    endHopLocation = null;
+                  } else {
+                    noInputEntry = jobEntryCopy;
+                  }
+                } else if ( endHopEntry != null ) {
+                  hop_candidate = new JobHopMeta( jobEntryCopy, endHopEntry );
+                  endHopLocation = null;
+                }
+              }
+            }
+
             if ( hop_candidate != null ) {
               addCandidateAsHop();
 
@@ -808,6 +829,7 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
   }
 
   public void mouseUp( MouseEvent e ) {
+    mouseMove( e );
     boolean control = ( e.stateMask & SWT.MOD1 ) != 0;
 
     if ( iconoffset == null ) {
@@ -815,6 +837,27 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
     }
     Point real = screen2real( e.x, e.y );
     Point icon = new Point( real.x - iconoffset.x, real.y - iconoffset.y );
+
+    JobEntryCopy jobEntryCopy = jobMeta.getJobEntryCopy( real.x, real.y, iconsize );
+    if ( jobEntryCopy != null
+          && ( ( startHopEntry != null && !startHopEntry.equals( jobEntryCopy ) ) || ( endHopEntry != null && !endHopEntry
+            .equals( jobEntryCopy ) ) ) ) {
+      if ( hop_candidate == null ) {
+        // See if the step accepts input. If not, we can't create a new hop...
+        //
+        if ( startHopEntry != null ) {
+          if ( !jobEntryCopy.isStart() ) {
+            hop_candidate = new JobHopMeta( startHopEntry, jobEntryCopy );
+            endHopLocation = null;
+          } else {
+            noInputEntry = jobEntryCopy;
+          }
+        } else if ( endHopEntry != null ) {
+          hop_candidate = new JobHopMeta( jobEntryCopy, endHopEntry );
+          endHopLocation = null;
+        }
+      }
+    }
 
     // Quick new hop option? (drag from one step to another)
     //
@@ -1014,7 +1057,7 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
 
     // disable the tooltip
     //
-    toolTip.hide();
+    //toolTip.hide();
 
     Point real = screen2real( e.x, e.y );
     // Remember the last position of the mouse for paste with keyboard
@@ -1144,9 +1187,9 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
               endHopLocation = null;
             } else {
               noInputEntry = jobEntryCopy;
-              toolTip.setImage( null );
-              toolTip.setText( "The start entry can only be used at the start of a Job" );
-              toolTip.show( new org.eclipse.swt.graphics.Point( real.x, real.y ) );
+              //toolTip.setImage( null );
+              //toolTip.setText( "The start entry can only be used at the start of a Job" );
+              //toolTip.show( new org.eclipse.swt.graphics.Point( real.x, real.y ) );
             }
           } else if ( endHopEntry != null ) {
             hop_candidate = new JobHopMeta( jobEntryCopy, endHopEntry );
@@ -1222,13 +1265,13 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
       }
     }
 
-    if ( tip ) {
-      // Show a tool tip upon mouse-over of an object on the canvas
-      //
-      if ( !helpTip.isVisible() ) {
-        setToolTip( real.x, real.y, e.x, e.y );
-      }
-    }
+//    if ( tip ) {
+//      // Show a tool tip upon mouse-over of an object on the canvas
+//      //
+//      if ( !helpTip.isVisible() ) {
+//        setToolTip( real.x, real.y, e.x, e.y );
+//      }
+//    }
   }
 
   public void mouseEnter( MouseEvent event ) {
@@ -1713,15 +1756,15 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
 
   private void showHelpTip( int x, int y, String tipTitle, String tipMessage ) {
 
-    helpTip.setTitle( tipTitle );
-    helpTip.setMessage( tipMessage );
-    helpTip.setCheckBoxMessage( BaseMessages.getString(
-      PKG, "JobGraph.HelpToolTip.DoNotShowAnyMoreCheckBox.Message" ) );
-    // helpTip.hide();
-    // int iconSize = spoon.props.getIconSize();
-    org.eclipse.swt.graphics.Point location = new org.eclipse.swt.graphics.Point( x - 5, y - 5 );
-
-    helpTip.show( location );
+//    helpTip.setTitle( tipTitle );
+//    helpTip.setMessage( tipMessage );
+//    helpTip.setCheckBoxMessage( BaseMessages.getString(
+//      PKG, "JobGraph.HelpToolTip.DoNotShowAnyMoreCheckBox.Message" ) );
+//    // helpTip.hide();
+//    // int iconSize = spoon.props.getIconSize();
+//    org.eclipse.swt.graphics.Point location = new org.eclipse.swt.graphics.Point( x - 5, y - 5 );
+//
+//    helpTip.show( location );
   }
 
   public void setJobEntry( JobEntryCopy jobEntry ) {
@@ -2439,7 +2482,7 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
         }
       }
     }
-
+    /*
     if ( tip == null || tip.length() == 0 ) {
       toolTip.hide();
     } else {
@@ -2454,6 +2497,7 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
         toolTip.show( new org.eclipse.swt.graphics.Point( screenX, screenY ) );
       }
     }
+    */
   }
 
   public void launchStuff( JobEntryCopy jobEntryCopy ) {
@@ -2810,10 +2854,7 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
       return; // nothing to do!
     }
 
-    Display disp = shell.getDisplay();
-
-    Image img = getJobImage( disp, area.x, area.y, magnification );
-    e.gc.drawImage( img, 0, 0 );
+    getJobImage( e.gc, area.x, area.y, magnification );
     if ( jobMeta.nrJobEntries() == 0 ) {
       e.gc.setForeground( GUIResource.getInstance().getColorCrystalTextPentaho() );
       e.gc.setBackground( GUIResource.getInstance().getColorBackground() );
@@ -2825,12 +2866,10 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
       e.gc.drawImage( pentahoImage, leftPosition, topPosition );
 
     }
-    img.dispose();
-
   }
 
-  public Image getJobImage( Device device, int x, int y, float magnificationFactor ) {
-    GCInterface gc = new SWTGC( device, new Point( x, y ), iconsize );
+  public void getJobImage( GC gc2, int x, int y, float magnificationFactor ) {
+    GCInterface gc = new SWTGC( gc2, new Point( x, y ), iconsize );
 
     int gridSize =
         PropsUI.getInstance().isShowCanvasGridEnabled() ? PropsUI.getInstance().getCanvasGridSize() : 1;
@@ -2868,7 +2907,7 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
 
     jobPainter.drawJob();
 
-    return (Image) gc.getImage();
+    return;
   }
 
   protected Point getOffset() {
@@ -3734,7 +3773,10 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
 
   @Override
   public int showChangedWarning() throws KettleException {
-    return showChangedWarning( jobMeta.getName() );
+    MessageBox mb = new MessageBox( shell, SWT.YES | SWT.NO | SWT.CANCEL | SWT.ICON_WARNING );
+    mb.setMessage( BaseMessages.getString( PKG, "JobGraph.Dialog.PromptSave.Message", jobMeta.getName() ) );
+    mb.setText( BaseMessages.getString( PKG, "JobGraph.Dialog.PromptSave.Title" ) );
+    return mb.open();
   }
 
   public void replayJob() {

@@ -61,7 +61,7 @@ import org.pentaho.di.trans.steps.dynamicsqlrow.DynamicSQLRowMeta;
 import org.pentaho.di.ui.core.dialog.ErrorDialog;
 import org.pentaho.di.ui.core.widget.StyledTextComp;
 import org.pentaho.di.ui.trans.step.BaseStepDialog;
-import org.pentaho.di.ui.trans.steps.tableinput.SQLValuesHighlight;
+//import org.pentaho.di.ui.trans.steps.tableinput.SQLValuesHighlight;
 
 public class DynamicSQLRowDialog extends BaseStepDialog implements StepDialogInterface {
   private static Class<?> PKG = DynamicSQLRowMeta.class; // for i18n purposes, needed by Translator2!!
@@ -342,7 +342,7 @@ public class DynamicSQLRowDialog extends BaseStepDialog implements StepDialogInt
     wSQL.addModifyListener( lsMod );
 
     // Text Higlighting
-    wSQL.addLineStyleListener( new SQLValuesHighlight() );
+//    wSQL.addLineStyleListener( new SQLValuesHighlight() );
 
     wlPosition = new Label( shell, SWT.NONE );
     // wlPosition.setText(BaseMessages.getString(PKG, "DynamicSQLRowDialog.Position.Label"));

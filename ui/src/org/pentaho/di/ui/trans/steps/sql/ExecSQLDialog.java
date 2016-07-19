@@ -71,7 +71,7 @@ import org.pentaho.di.ui.core.widget.StyledTextComp;
 import org.pentaho.di.ui.core.widget.TableView;
 import org.pentaho.di.ui.spoon.job.JobGraph;
 import org.pentaho.di.ui.trans.step.BaseStepDialog;
-import org.pentaho.di.ui.trans.steps.tableinput.SQLValuesHighlight;
+//import org.pentaho.di.ui.trans.steps.tableinput.SQLValuesHighlight;
 
 public class ExecSQLDialog extends BaseStepDialog implements StepDialogInterface {
   private static Class<?> PKG = ExecSQLMeta.class; // for i18n purposes, needed by Translator2!!
@@ -261,7 +261,7 @@ public class ExecSQLDialog extends BaseStepDialog implements StepDialogInterface
     } );
 
     // Text Higlighting
-    wSQL.addLineStyleListener( new SQLValuesHighlight() );
+//    wSQL.addLineStyleListener( new SQLValuesHighlight() );
 
     // Some buttons
     //

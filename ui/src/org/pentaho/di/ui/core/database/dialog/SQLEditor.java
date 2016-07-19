@@ -69,7 +69,7 @@ import org.pentaho.di.ui.core.gui.GUIResource;
 import org.pentaho.di.ui.core.gui.WindowProperty;
 import org.pentaho.di.ui.core.widget.StyledTextComp;
 import org.pentaho.di.ui.trans.step.BaseStepDialog;
-import org.pentaho.di.ui.trans.steps.tableinput.SQLValuesHighlight;
+//import org.pentaho.di.ui.trans.steps.tableinput.SQLValuesHighlight;
 
 /**
  * Dialog that allows the user to launch SQL statements towards the database.
@@ -109,7 +109,7 @@ public class SQLEditor {
 
   private List<SqlScriptStatement> statements;
 
-  private SQLValuesHighlight highlight;
+//  private SQLValuesHighlight highlight;
 
   public SQLEditor( Shell parent, int style, DatabaseMeta ci, DBCache dbc, String sql ) {
     this( null, parent, style, ci, dbc, sql );
@@ -201,9 +201,9 @@ public class SQLEditor {
     } );
 
     // SQL Higlighting
-    highlight = new SQLValuesHighlight();
-    highlight.addKeyWords( connection.getReservedWords() );
-    wScript.addLineStyleListener( highlight );
+//    highlight = new SQLValuesHighlight();
+//    highlight.addKeyWords( connection.getReservedWords() );
+//    wScript.addLineStyleListener( highlight );
 
     wlPosition = new Label( shell, SWT.NONE );
     wlPosition.setText( BaseMessages.getString( PKG, "SQLEditor.LineNr.Label", "0" ) );
@@ -457,7 +457,7 @@ public class SQLEditor {
    * During or after an execution we will mark regions of the SQL editor dialog in green or red.
    */
   protected void refreshExecutionResults() {
-    highlight.setScriptStatements( statements );
+//    highlight.setScriptStatements( statements );
     wScript.redraw();
   }
 }

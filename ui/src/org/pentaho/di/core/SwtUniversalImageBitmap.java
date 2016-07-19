@@ -52,9 +52,9 @@ public class SwtUniversalImageBitmap extends SwtUniversalImage {
     int xsize = bitmap.getBounds().width;
     int ysize = bitmap.getBounds().height;
     Image result = new Image( device, width, height );
-    GC gc = new GC( result );
-    gc.drawImage( bitmap, 0, 0, xsize, ysize, 0, 0, width, height );
-    gc.dispose();
+    //GC gc = new GC( result );
+    //gc.drawImage( bitmap, 0, 0, xsize, ysize, 0, 0, width, height );
+    //gc.dispose();
     return result;
   }
 

@@ -40,7 +40,7 @@ import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
-import org.eclipse.swt.program.Program;
+//import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -395,11 +395,11 @@ public class SapInputDialog extends BaseStepDialog implements StepDialogInterfac
     wCancel.addListener( SWT.Selection, lsCancel );
     this.wAbout.addListener( SWT.Selection, lsAbout );
 
-    this.wAscLink.addListener( SWT.Selection, new Listener() {
-      public void handleEvent( final Event event ) {
-        Program.launch( event.text );
-      }
-    } );
+//    this.wAscLink.addListener( SWT.Selection, new Listener() {
+//      public void handleEvent( final Event event ) {
+//        Program.launch( event.text );
+//      }
+//    } );
 
     lsDef = new SelectionAdapter() {
       public void widgetDefaultSelected( SelectionEvent e ) {

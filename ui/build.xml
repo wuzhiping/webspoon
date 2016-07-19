@@ -49,6 +49,15 @@
     <copy todir="${classes.dir}/ui">
         <fileset dir="${ui}" includes="laf.properties"/>
     </copy>
+    <copy todir="${classes.dir}/ui">
+        <fileset dir="${ui}" includes="*.xul"/>
+    </copy>
+    <copy todir="./docs">
+        <fileset dir="../assembly/package-res/docs" includes="**/*"/>
+    </copy>
+    <copy todir="./plugins">
+        <fileset file="./lib/pdi-pur-plugin-*.jar"/>
+    </copy>
 
     <if>
       <not>
@@ -60,6 +69,14 @@
         </copy>
       </then>
     </if>
+  </target>
+
+  <target name="war" depends="resolve,compile">
+    <war destfile="${dist.dir}/spoon.war" webxml="WEB-INF/web.xml">
+      <lib dir="${lib.dir}"/>
+      <classes dir="${classes.dir}"/>
+      <zipfileset dir="plugins" prefix="plugins"/>
+    </war>
   </target>
 
 </project>

@@ -27,7 +27,7 @@ import java.util.ResourceBundle;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabItem;
-import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.layout.FormAttachment;
@@ -67,7 +67,7 @@ public class JobLogDelegate extends SpoonDelegate implements XulEventHandler {
 
   private CTabItem jobLogTab;
 
-  public StyledText jobLogText;
+  public Text jobLogText;
 
   /**
    * The number of lines in the log tab
@@ -124,7 +124,7 @@ public class JobLogDelegate extends SpoonDelegate implements XulEventHandler {
 
     toolbarControl.setParent( jobLogComposite );
 
-    jobLogText = new StyledText( jobLogComposite, SWT.READ_ONLY | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL );
+    jobLogText = new Text( jobLogComposite, SWT.READ_ONLY | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL );
     spoon.props.setLook( jobLogText );
     FormData fdText = new FormData();
     fdText.left = new FormAttachment( 0, 0 );

@@ -179,25 +179,25 @@ public class TableDraw extends Canvas {
       }
     } );
 
-    addMouseMoveListener( new MouseMoveListener() {
-      public void mouseMove( MouseEvent e ) {
-        int posx = (int) Math.round( (double) ( e.x - LEFT - MARGIN - offset.x ) / ( (double) fontwidth ) );
-
-        // Clicked and mouse is down: move marker to a new location...
-        if ( potential_click >= 0 ) {
-          if ( posx > 0 ) {
-            potential_click = posx;
-            redraw();
-          }
-        }
-
-        TextFileInputFieldInterface field = getFieldOnPosition( posx );
-        if ( field != null && !field.getName().equalsIgnoreCase( prevfieldname ) ) {
-          setToolTipText( field.getName() + " : length=" + field.getLength() );
-          prevfieldname = field.getName();
-        }
-      }
-    } );
+//    addMouseMoveListener( new MouseMoveListener() {
+//      public void mouseMove( MouseEvent e ) {
+//        int posx = (int) Math.round( (double) ( e.x - LEFT - MARGIN - offset.x ) / ( (double) fontwidth ) );
+//
+//        // Clicked and mouse is down: move marker to a new location...
+//        if ( potential_click >= 0 ) {
+//          if ( posx > 0 ) {
+//            potential_click = posx;
+//            redraw();
+//          }
+//        }
+//
+//        TextFileInputFieldInterface field = getFieldOnPosition( posx );
+//        if ( field != null && !field.getName().equalsIgnoreCase( prevfieldname ) ) {
+//          setToolTipText( field.getName() + " : length=" + field.getLength() );
+//          prevfieldname = field.getName();
+//        }
+//      }
+//    } );
   }
 
   private TextFileInputFieldInterface getFieldOnPosition( int x ) {

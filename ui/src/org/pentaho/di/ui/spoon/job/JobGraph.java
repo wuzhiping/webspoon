@@ -813,7 +813,7 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
   }
 
   public void mouseUp( MouseEvent e ) {
-    mouseMove(e);
+    mouseMove( e );
     boolean control = ( e.stateMask & SWT.MOD1 ) != 0;
 
     if ( iconoffset == null ) {

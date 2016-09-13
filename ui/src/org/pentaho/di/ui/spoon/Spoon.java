@@ -9261,7 +9261,7 @@ public class Spoon extends AbstractEntryPoint implements AddUndoPositionInterfac
     log = new LogChannel( APP_NAME );
     props = PropsUI.getInstance();
 
-	// original in createContents
+    // original in createContents
     shell = getShell();
 
     init( null );
@@ -9294,7 +9294,7 @@ public class Spoon extends AbstractEntryPoint implements AddUndoPositionInterfac
 
   @Override
   public Shell getShell() {
-	  return super.getShell();
+    return super.getShell();
   }
 
   public void start() {

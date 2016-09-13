@@ -1018,7 +1018,7 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
 
   @Override
   public void mouseUp( MouseEvent e ) {
-    mouseMove(e);
+    mouseMove( e );
     boolean control = ( e.stateMask & SWT.MOD1 ) != 0;
 
     if ( iconoffset == null ) {
@@ -1029,33 +1029,33 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
     AreaOwner areaOwner = getVisibleAreaOwner( real.x, real.y );
 
     if ( areaOwner != null ) {
-	    StepMeta stepMeta = (StepMeta) areaOwner.getOwner();
-	    if ( ( startHopStep != null && endHopStep == null ) || ( endHopStep != null && startHopStep == null ) ) {
-	      if ( stepMeta != null
-	        && ( ( startHopStep != null && !startHopStep.equals( stepMeta ) ) || ( endHopStep != null && !endHopStep
-	        .equals( stepMeta ) ) ) ) {
-	        StepIOMetaInterface ioMeta = stepMeta.getStepMetaInterface().getStepIOMeta();
-	        if ( candidate == null ) {
-	          // See if the step accepts input. If not, we can't create a new hop...
-	          //
-	          if ( startHopStep != null ) {
-	            if ( ioMeta.isInputAcceptor() ) {
-	              candidate = new TransHopMeta( startHopStep, stepMeta );
-	              endHopLocation = null;
-	            } else {
-	              noInputStep = stepMeta;
-	            }
-	          } else if ( endHopStep != null ) {
-	            if ( ioMeta.isOutputProducer() ) {
-	              candidate = new TransHopMeta( stepMeta, endHopStep );
-	              endHopLocation = null;
-	            } else {
-	              noInputStep = stepMeta;
-	            }
-	          }
-	        }
-	      }
-	    }
+      StepMeta stepMeta = (StepMeta) areaOwner.getOwner();
+      if ( ( startHopStep != null && endHopStep == null ) || ( endHopStep != null && startHopStep == null ) ) {
+        if ( stepMeta != null
+            && ( ( startHopStep != null && !startHopStep.equals( stepMeta ) ) || ( endHopStep != null && !endHopStep
+            .equals( stepMeta ) ) ) ) {
+          StepIOMetaInterface ioMeta = stepMeta.getStepMetaInterface().getStepIOMeta();
+          if ( candidate == null ) {
+              // See if the step accepts input. If not, we can't create a new hop...
+              //
+            if ( startHopStep != null ) {
+              if ( ioMeta.isInputAcceptor() ) {
+                candidate = new TransHopMeta( startHopStep, stepMeta );
+                endHopLocation = null;
+              } else {
+                noInputStep = stepMeta;
+              }
+            } else if ( endHopStep != null ) {
+              if ( ioMeta.isOutputProducer() ) {
+                candidate = new TransHopMeta( stepMeta, endHopStep );
+                endHopLocation = null;
+              } else {
+                noInputStep = stepMeta;
+              }
+            }
+          }
+        }
+      }
     }
     // Quick new hop option? (drag from one step to another)
     //

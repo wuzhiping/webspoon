@@ -1,11 +1,8 @@
 package org.pentaho.di.ui.spoon;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -13,8 +10,6 @@ import java.util.concurrent.Future;
 import org.eclipse.rap.rwt.application.Application;
 import org.eclipse.rap.rwt.application.ApplicationConfiguration;
 import org.eclipse.rap.rwt.client.WebClient;
-import org.eclipse.rap.rwt.service.ResourceLoader;
-import org.pentaho.di.core.Const;
 import org.pentaho.di.core.KettleClientEnvironment;
 import org.pentaho.di.core.KettleEnvironment;
 import org.pentaho.di.core.exception.KettleException;
@@ -30,56 +25,56 @@ import org.pentaho.di.ui.trans.dialog.TransDialogPluginType;
 
 public class BasicApplication implements ApplicationConfiguration {
 
-    public void configure(Application application) {
-        ExecutorService executor = Executors.newCachedThreadPool();
-        Future<KettleException> pluginRegistryFuture = executor.submit( new Callable<KettleException>() {
+  public void configure( Application application ) {
+    ExecutorService executor = Executors.newCachedThreadPool();
+    Future<KettleException> pluginRegistryFuture = executor.submit( new Callable<KettleException>() {
 
-          @Override
-          public KettleException call() throws Exception {
-            registerUIPluginObjectTypes();
+      @Override
+      public KettleException call() throws Exception {
+        registerUIPluginObjectTypes();
 
-            KettleClientEnvironment.getInstance().setClient( KettleClientEnvironment.ClientType.SPOON );
-            try {
-              KettleEnvironment.init( false );
-            } catch ( KettleException e ) {
-              return e;
-            }
+        KettleClientEnvironment.getInstance().setClient( KettleClientEnvironment.ClientType.SPOON );
+        try {
+          KettleEnvironment.init( false );
+        } catch ( KettleException e ) {
+          return e;
+        }
 
-            return null;
-          }
-        } );
-        KettleException registryException;
-		try {
-			registryException = pluginRegistryFuture.get();
-	        if ( registryException != null ) {
-	            throw registryException;
-	          }
-		} catch ( Throwable t ) {
-		      // avoid calls to Messages i18n method getString() in this block
-		      // We do this to (hopefully) also catch Out of Memory Exceptions
-		      //
-		      t.printStackTrace();
-		}
-
-        Map<String, String> properties = new HashMap<String, String>();
-        properties.put(WebClient.PAGE_TITLE, "Spoon");
-        application.addEntryPoint("/spoon", Spoon.class, properties);
-        application.setOperationMode(Application.OperationMode.SWT_COMPATIBILITY);
+        return null;
+      }
+    } );
+    KettleException registryException;
+    try {
+      registryException = pluginRegistryFuture.get();
+      if ( registryException != null ) {
+        throw registryException;
+      }
+    } catch ( Throwable t ) {
+      // avoid calls to Messages i18n method getString() in this block
+      // We do this to (hopefully) also catch Out of Memory Exceptions
+      //
+      t.printStackTrace();
     }
 
-    private static void registerUIPluginObjectTypes() {
-        RepositoryPluginType.getInstance()
-                            .addObjectType( RepositoryRevisionBrowserDialogInterface.class, "version-browser-classname" );
-        RepositoryPluginType.getInstance().addObjectType( RepositoryDialogInterface.class, "dialog-classname" );
+    Map<String, String> properties = new HashMap<String, String>();
+    properties.put( WebClient.PAGE_TITLE, "Spoon" );
+    application.addEntryPoint( "/spoon", Spoon.class, properties );
+    application.setOperationMode( Application.OperationMode.SWT_COMPATIBILITY );
+  }
 
-        PluginRegistry.addPluginType( SpoonPluginType.getInstance() );
+  private static void registerUIPluginObjectTypes() {
+    RepositoryPluginType.getInstance()
+                        .addObjectType( RepositoryRevisionBrowserDialogInterface.class, "version-browser-classname" );
+    RepositoryPluginType.getInstance().addObjectType( RepositoryDialogInterface.class, "dialog-classname" );
 
-        SpoonPluginType.getInstance().getPluginFolders().add( new PluginFolder( "plugins/repositories", false, true ) );
+    PluginRegistry.addPluginType( SpoonPluginType.getInstance() );
 
-        LifecyclePluginType.getInstance().getPluginFolders().add( new PluginFolder( "plugins/spoon", false, true ) );
-        LifecyclePluginType.getInstance().getPluginFolders().add( new PluginFolder( "plugins/repositories", false, true ) );
+    SpoonPluginType.getInstance().getPluginFolders().add( new PluginFolder( "plugins/repositories", false, true ) );
 
-        PluginRegistry.addPluginType( JobDialogPluginType.getInstance() );
-        PluginRegistry.addPluginType( TransDialogPluginType.getInstance() );
-      }
+    LifecyclePluginType.getInstance().getPluginFolders().add( new PluginFolder( "plugins/spoon", false, true ) );
+    LifecyclePluginType.getInstance().getPluginFolders().add( new PluginFolder( "plugins/repositories", false, true ) );
+
+    PluginRegistry.addPluginType( JobDialogPluginType.getInstance() );
+    PluginRegistry.addPluginType( TransDialogPluginType.getInstance() );
+  }
 }

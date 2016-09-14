@@ -6878,10 +6878,10 @@ public class Spoon extends AbstractEntryPoint implements AddUndoPositionInterfac
         // Tools
         disableMenuItem( doc, "repository-connect", isRepositoryRunning );
         disableMenuItem( doc, "repository-disconnect", !isRepositoryRunning );
-        disableMenuItem( doc, "repository-explore", true );
+        disableMenuItem( doc, "repository-explore", !isRepositoryRunning );
         disableMenuItem( doc, "tools-dabase-explore", !isRepositoryRunning && disableDatabaseExplore );
         disableMenuItem( doc, "repository-clear-shared-object-cache", !isRepositoryRunning );
-        disableMenuItem( doc, "toolbar-expore-repository", true );
+        disableMenuItem( doc, "toolbar-expore-repository", !isRepositoryRunning );
         disableMenuItem( doc, "repository-export-all", !isRepositoryRunning );
         disableMenuItem( doc, "repository-import-directory", !isRepositoryRunning );
         disableMenuItem( doc, "trans-last-preview", !isRepositoryRunning || disableTransMenu );

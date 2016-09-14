@@ -31,6 +31,7 @@ import java.util.Map;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.MessageDialogWithToggle;
+import org.eclipse.rap.rwt.SingletonUtil;
 import org.eclipse.swt.SWT;
 //import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.TextTransfer;
@@ -394,7 +395,15 @@ public class GUIResource {
    */
   //private static Clipboard clipboard;
 
-  private GUIResource( Display display ) {
+  private GUIResource() {
+    initialize( PropsUI.getDisplay() );
+  }
+
+//  private GUIResource( Display display ) {
+//    initialize( display );
+//  }
+
+  public void initialize( Display display ) {
     this.display = display;
 
     getResources();
@@ -444,10 +453,11 @@ public class GUIResource {
 
   public static final GUIResource getInstance() {
     if ( guiResource != null ) {
-      return guiResource;
+      return SingletonUtil.getSessionInstance( GUIResource.class );
     }
-    guiResource = new GUIResource( PropsUI.getDisplay() );
-    return guiResource;
+    guiResource = new GUIResource( );
+    //guiResource.initialize( PropsUI.getDisplay() );
+    return SingletonUtil.getSessionInstance( GUIResource.class );
   }
 
   /**

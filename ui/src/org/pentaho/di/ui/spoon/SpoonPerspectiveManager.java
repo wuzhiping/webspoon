@@ -37,6 +37,7 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import org.apache.commons.io.IOUtils;
+import org.eclipse.rap.rwt.SingletonUtil;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.KeyAdapter;
@@ -210,7 +211,7 @@ public class SpoonPerspectiveManager {
    * @return SpoonPerspectiveManager instance.
    */
   public static SpoonPerspectiveManager getInstance() {
-    return instance;
+	return SingletonUtil.getSessionInstance( SpoonPerspectiveManager.class );
   }
 
   /**

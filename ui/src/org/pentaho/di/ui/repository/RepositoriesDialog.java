@@ -30,6 +30,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.pentaho.di.core.Const;
 import org.pentaho.di.core.gui.SpoonFactory;
+import org.pentaho.di.i18n.BaseMessages;
 import org.pentaho.di.ui.repository.controllers.RepositoriesController;
 import org.pentaho.di.ui.spoon.XulSpoonResourceBundle;
 import org.pentaho.di.ui.spoon.XulSpoonSettingsManager;
@@ -77,7 +78,7 @@ public class RepositoriesDialog {
         log.error( resourceBundle.getString( "RepositoryLoginDialog.ErrorStartingXulApplication" ), e );
       }
     } catch ( XulException e ) {
-      log.error( resourceBundle.getString( "RepositoryLoginDialog.ErrorLoadingXulApplication" ), e );
+      log.error( BaseMessages.getString( CLZ, "RepositoryLoginDialog.ErrorLoadingXulApplication" ), e );
     }
   }
 

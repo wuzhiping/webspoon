@@ -58,7 +58,7 @@ public class BasicApplication implements ApplicationConfiguration {
 
     Map<String, String> properties = new HashMap<String, String>();
     properties.put( WebClient.PAGE_TITLE, "Spoon" );
-    application.addEntryPoint( "/spoon", Spoon.class, properties );
+    application.addEntryPoint( "/", Spoon.class, properties );
     application.setOperationMode( Application.OperationMode.SWT_COMPATIBILITY );
   }
 

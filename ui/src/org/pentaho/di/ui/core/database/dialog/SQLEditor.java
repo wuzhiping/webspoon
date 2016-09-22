@@ -203,7 +203,7 @@ public class SQLEditor {
     // SQL Higlighting
     highlight = new SQLValuesHighlight();
     highlight.addKeyWords( connection.getReservedWords() );
-    wScript.addLineStyleListener( highlight );
+//    wScript.addLineStyleListener( highlight );
 
     wlPosition = new Label( shell, SWT.NONE );
     wlPosition.setText( BaseMessages.getString( PKG, "SQLEditor.LineNr.Label", "0" ) );

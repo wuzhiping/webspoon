@@ -36,8 +36,7 @@ import java.util.Vector;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.custom.SashForm;
-import org.eclipse.swt.custom.StyleRange;
-import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.KeyEvent;
@@ -85,7 +84,7 @@ public class LibFormulaEditor extends Dialog implements KeyListener {
   private Tree tree;
   // private TreeEditor treeEditor;
   private SashForm sashForm;
-  private StyledText expressionEditor;
+  private Text expressionEditor;
   private String formula;
   private Browser message;
 
@@ -215,13 +214,8 @@ public class LibFormulaEditor extends Dialog implements KeyListener {
 
     // An expression editor on the right
     //
-    expressionEditor = new StyledText( rightSash, SWT.NONE );
+    expressionEditor = new Text( rightSash, SWT.NONE );
     expressionEditor.setText( this.formula );
-    expressionEditor.addModifyListener( new ModifyListener() {
-      public void modifyText( ModifyEvent event ) {
-        setStyles();
-      }
-    } );
     expressionEditor.addKeyListener( this );
 
     // Some information concerning the validity of the formula expression
@@ -244,8 +238,6 @@ public class LibFormulaEditor extends Dialog implements KeyListener {
     white = new Color( shell.getDisplay(), 255, 255, 255 );
     gray = new Color( shell.getDisplay(), 150, 150, 150 );
     black = new Color( shell.getDisplay(), 0, 0, 0 );
-
-    setStyles();
 
     shell.addDisposeListener( new DisposeListener() {
       public void widgetDisposed( DisposeEvent arg0 ) {
@@ -296,75 +288,6 @@ public class LibFormulaEditor extends Dialog implements KeyListener {
     categories = functionLib.getFunctionCategories();
   }
 
-  public void setStyles() {
-
-    String expression = expressionEditor.getText();
-    int expressionLength = expression.length();
-    Map<String, FormulaMessage> messages = evaluator.evaluateFormula( expression );
-
-    // We need to provide an array of styles for this event.
-    //
-    Vector<StyleRange> styles = new Vector<StyleRange>();
-    StringBuffer report = new StringBuffer();
-
-    for ( FormulaMessage message : messages.values() ) {
-      ParsePosition position = message.getPosition();
-
-      PositionAndLength positionAndLength = PositionAndLength.calculatePositionAndLength( expression, position );
-
-      int pos = positionAndLength.getPosition();
-      int length = positionAndLength.getLength();
-
-      if ( pos < expressionLength ) {
-        switch ( message.getType() ) {
-          case FormulaMessage.TYPE_ERROR:
-            report.append( message.toString() ).append( Const.CR );
-
-            StyleRange styleRangeRed = new StyleRange( pos, length, red, null, SWT.BOLD );
-            styleRangeRed.underline = true;
-            styles.add( styleRangeRed );
-
-            break;
-
-          case FormulaMessage.TYPE_FUNCTION:
-            styles.add( new StyleRange( pos, length, black, null, SWT.BOLD ) );
-            break;
-
-          case FormulaMessage.TYPE_FIELD:
-            // styles.add(new StyleRange(pos, length, green, null, SWT.BOLD )); // TODO : Not working for some reason.
-            break;
-
-          case FormulaMessage.TYPE_STATIC_NUMBER:
-          case FormulaMessage.TYPE_STATIC_STRING:
-          case FormulaMessage.TYPE_STATIC_DATE:
-          case FormulaMessage.TYPE_STATIC_LOGICAL:
-            styles.add( new StyleRange( pos, length, blue, gray, SWT.BOLD | SWT.ITALIC ) );
-            break;
-          default:
-            break;
-        }
-      }
-    }
-
-    message.setText( report.toString() );
-
-    // Now set the styled ranges...
-    //
-    // Sort the styles first...
-    //
-    Collections.sort( styles, new Comparator<StyleRange>() {
-      public int compare( StyleRange o1, StyleRange o2 ) {
-        return o1.start - o2.start;
-      }
-    } );
-
-    StyleRange[] styleRanges = new StyleRange[styles.size()];
-    styles.copyInto( styleRanges );
-
-    // expressionEditor.getStyledText().replaceStyleRanges(0, expression.length(), new StyleRange[] { styles.get(0), });
-    expressionEditor.setStyleRanges( styleRanges );
-  }
-
   public static void main( String[] args ) throws Exception {
     Display display = new Display();
     String[] inputFields = { "firstname", "name", };
@@ -387,7 +310,7 @@ public class LibFormulaEditor extends Dialog implements KeyListener {
       //
       StringBuffer beforeBuffer = new StringBuffer();
       String editor = expressionEditor.getText();
-      int pos = expressionEditor.getCaretOffset() - 1;
+      int pos = expressionEditor.getCaretPosition() - 1;
       while ( pos >= 0 && pos < editor.length() ) {
         char c = editor.charAt( pos );
         if ( Character.isWhitespace( c ) ) {
@@ -444,9 +367,9 @@ public class LibFormulaEditor extends Dialog implements KeyListener {
         }
       }
       // final int offset = expressionEditor.getCaretOffset();
-      final int offset = expressionEditor.getCaretOffset();
-      Point p = expressionEditor.getLocationAtOffset( offset );
-      int h = expressionEditor.getLineHeight( offset );
+      final int offset = expressionEditor.getCaretPosition();
+      Point p = expressionEditor.getLocation( );
+      int h = expressionEditor.getLineHeight( );
       Point l = GUIResource.calculateControlPosition( expressionEditor );
 
       MenuItem first = null;

@@ -417,7 +417,7 @@ public class JobEntrySQLDialog extends JobEntryDialog implements JobEntryDialogI
     wSQL.addModifyListener( lsMod );
 
     // Text Higlighting
-    wSQL.addLineStyleListener( new SQLValuesHighlight() );
+//    wSQL.addLineStyleListener( new SQLValuesHighlight() );
 
     getData();
     activeSQLFromFile();

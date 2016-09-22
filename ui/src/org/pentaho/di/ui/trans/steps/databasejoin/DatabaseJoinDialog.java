@@ -226,7 +226,7 @@ public class DatabaseJoinDialog extends BaseStepDialog implements StepDialogInte
     } );
 
     // SQL Higlighting
-    wSQL.addLineStyleListener( new SQLValuesHighlight() );
+    //wSQL.addLineStyleListener( new SQLValuesHighlight() );
 
     wlPosition = new Label( shell, SWT.NONE );
     props.setLook( wlPosition );

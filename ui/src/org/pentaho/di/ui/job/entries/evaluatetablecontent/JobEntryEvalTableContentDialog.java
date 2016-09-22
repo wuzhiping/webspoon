@@ -542,7 +542,7 @@ public class JobEntryEvalTableContentDialog extends JobEntryDialog implements Jo
     wSQL.addModifyListener( lsMod );
 
     // Text Higlighting
-    wSQL.addLineStyleListener( new SQLValuesHighlight() );
+//    wSQL.addLineStyleListener( new SQLValuesHighlight() );
 
     fdCustomGroup = new FormData();
     fdCustomGroup.left = new FormAttachment( 0, margin );

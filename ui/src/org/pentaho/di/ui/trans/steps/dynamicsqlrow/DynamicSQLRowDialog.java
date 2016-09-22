@@ -342,7 +342,7 @@ public class DynamicSQLRowDialog extends BaseStepDialog implements StepDialogInt
     wSQL.addModifyListener( lsMod );
 
     // Text Higlighting
-    wSQL.addLineStyleListener( new SQLValuesHighlight() );
+//    wSQL.addLineStyleListener( new SQLValuesHighlight() );
 
     wlPosition = new Label( shell, SWT.NONE );
     // wlPosition.setText(BaseMessages.getString(PKG, "DynamicSQLRowDialog.Position.Label"));

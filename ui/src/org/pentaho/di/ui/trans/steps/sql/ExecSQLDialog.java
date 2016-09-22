@@ -261,7 +261,7 @@ public class ExecSQLDialog extends BaseStepDialog implements StepDialogInterface
     } );
 
     // Text Higlighting
-    wSQL.addLineStyleListener( new SQLValuesHighlight() );
+//    wSQL.addLineStyleListener( new SQLValuesHighlight() );
 
     // Some buttons
     //

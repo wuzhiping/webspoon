@@ -773,7 +773,7 @@ public class ScriptValuesModDialog extends BaseStepDialog implements StepDialogI
 
     // Text Higlighting
     lineStyler = new ScriptValuesHighlight( ScriptValuesAddedFunctions.jsFunctionList );
-    wScript.addLineStyleListener( lineStyler );
+    //wScript.addLineStyleListener( lineStyler );
     item.setControl( wScript );
 
     // Adding new Item to Tree

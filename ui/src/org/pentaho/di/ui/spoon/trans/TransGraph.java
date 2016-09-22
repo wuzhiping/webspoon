@@ -171,8 +171,8 @@ import org.pentaho.di.ui.core.dialog.ErrorDialog;
 import org.pentaho.di.ui.core.dialog.PreviewRowsDialog;
 import org.pentaho.di.ui.core.dialog.StepFieldsDialog;
 import org.pentaho.di.ui.core.gui.GUIResource;
-import org.pentaho.di.ui.core.widget.CheckBoxToolTip;
-import org.pentaho.di.ui.core.widget.CheckBoxToolTipListener;
+//import org.pentaho.di.ui.core.widget.CheckBoxToolTip;
+//import org.pentaho.di.ui.core.widget.CheckBoxToolTipListener;
 import org.pentaho.di.ui.repository.RepositorySecurityUI;
 import org.pentaho.di.ui.repository.dialog.RepositoryExplorerDialog;
 import org.pentaho.di.ui.repository.dialog.RepositoryRevisionBrowserDialogInterface;
@@ -243,7 +243,7 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
 
   //private DefaultToolTip toolTip;
 
-  private CheckBoxToolTip helpTip;
+//  private CheckBoxToolTip helpTip;
 
   private XulToolbar toolbar;
 
@@ -1499,13 +1499,13 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
       }
     }
 
-    if ( tip ) {
-      // Show a tool tip upon mouse-over of an object on the canvas
-      //
-      if ( !helpTip.isVisible() ) {
-        setToolTip( real.x, real.y, e.x, e.y );
-      }
-    }
+//    if ( tip ) {
+//      // Show a tool tip upon mouse-over of an object on the canvas
+//      //
+//      if ( !helpTip.isVisible() ) {
+//        setToolTip( real.x, real.y, e.x, e.y );
+//      }
+//    }
   }
 
 //  @Override

@@ -142,8 +142,8 @@ import org.pentaho.di.ui.core.PropsUI;
 import org.pentaho.di.ui.core.dialog.EnterTextDialog;
 import org.pentaho.di.ui.core.dialog.ErrorDialog;
 import org.pentaho.di.ui.core.gui.GUIResource;
-import org.pentaho.di.ui.core.widget.CheckBoxToolTip;
-import org.pentaho.di.ui.core.widget.CheckBoxToolTipListener;
+//import org.pentaho.di.ui.core.widget.CheckBoxToolTip;
+//import org.pentaho.di.ui.core.widget.CheckBoxToolTipListener;
 import org.pentaho.di.ui.job.dialog.JobDialog;
 import org.pentaho.di.ui.repository.RepositorySecurityUI;
 import org.pentaho.di.ui.repository.dialog.RepositoryExplorerDialog;
@@ -283,7 +283,7 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
 
   private Label minMaxButton;
 
-  private CheckBoxToolTip helpTip;
+//  private CheckBoxToolTip helpTip;
 
   private List<AreaOwner> areaOwners;
 
@@ -1228,13 +1228,13 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
       }
     }
 
-    if ( tip ) {
-      // Show a tool tip upon mouse-over of an object on the canvas
-      //
-      if ( !helpTip.isVisible() ) {
-        setToolTip( real.x, real.y, e.x, e.y );
-      }
-    }
+//    if ( tip ) {
+//      // Show a tool tip upon mouse-over of an object on the canvas
+//      //
+//      if ( !helpTip.isVisible() ) {
+//        setToolTip( real.x, real.y, e.x, e.y );
+//      }
+//    }
   }
 
   public void mouseEnter( MouseEvent event ) {
@@ -1719,15 +1719,15 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
 
   private void showHelpTip( int x, int y, String tipTitle, String tipMessage ) {
 
-    helpTip.setTitle( tipTitle );
-    helpTip.setMessage( tipMessage );
-    helpTip.setCheckBoxMessage( BaseMessages.getString(
-      PKG, "JobGraph.HelpToolTip.DoNotShowAnyMoreCheckBox.Message" ) );
-    // helpTip.hide();
-    // int iconSize = spoon.props.getIconSize();
-    org.eclipse.swt.graphics.Point location = new org.eclipse.swt.graphics.Point( x - 5, y - 5 );
-
-    helpTip.show( location );
+//    helpTip.setTitle( tipTitle );
+//    helpTip.setMessage( tipMessage );
+//    helpTip.setCheckBoxMessage( BaseMessages.getString(
+//      PKG, "JobGraph.HelpToolTip.DoNotShowAnyMoreCheckBox.Message" ) );
+//    // helpTip.hide();
+//    // int iconSize = spoon.props.getIconSize();
+//    org.eclipse.swt.graphics.Point location = new org.eclipse.swt.graphics.Point( x - 5, y - 5 );
+//
+//    helpTip.show( location );
   }
 
   public void setJobEntry( JobEntryCopy jobEntry ) {

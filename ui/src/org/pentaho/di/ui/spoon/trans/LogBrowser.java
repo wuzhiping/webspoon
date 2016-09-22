@@ -31,8 +31,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.StyleRange;
-import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.MouseAdapter;
@@ -48,7 +47,6 @@ import org.pentaho.di.core.logging.KettleLogLayout;
 import org.pentaho.di.core.logging.KettleLogStore;
 import org.pentaho.di.core.logging.KettleLoggingEvent;
 import org.pentaho.di.core.logging.LogChannelInterface;
-import org.pentaho.di.core.logging.LogLevel;
 import org.pentaho.di.core.logging.LogParentProvidedInterface;
 import org.pentaho.di.core.logging.LoggingRegistry;
 import org.pentaho.di.i18n.BaseMessages;
@@ -59,13 +57,13 @@ import org.pentaho.di.ui.spoon.Spoon;
 public class LogBrowser {
   private static Class<?> PKG = Spoon.class; // for i18n purposes, needed by Translator2!!
 
-  private StyledText text;
+  private Text text;
   private LogParentProvidedInterface logProvider;
   private List<String> childIds = new ArrayList<String>();
   private Date lastLogRegistryChange;
   private AtomicBoolean paused;
 
-  public LogBrowser( final StyledText text, final LogParentProvidedInterface logProvider ) {
+  public LogBrowser( final Text text, final LogParentProvidedInterface logProvider ) {
     this.text = text;
     this.logProvider = logProvider;
     this.paused = new AtomicBoolean( false );
@@ -78,11 +76,6 @@ public class LogBrowser {
     final AtomicInteger lastLogId = new AtomicInteger( -1 );
     final AtomicBoolean busy = new AtomicBoolean( false );
     final KettleLogLayout logLayout = new KettleLogLayout( true );
-
-    final StyleRange normalLogLineStyle = new StyleRange();
-    normalLogLineStyle.foreground = GUIResource.getInstance().getColorBlue();
-    final StyleRange errorLogLineStyle = new StyleRange();
-    errorLogLineStyle.foreground = GUIResource.getInstance().getColorRed();
 
     // Refresh the log every second or so
     //
@@ -137,20 +130,6 @@ public class LogBrowser {
                     if ( length > 0 ) {
                       text.append( line );
                       text.append( Const.CR );
-
-                      if ( event.getLevel() == LogLevel.ERROR ) {
-                        StyleRange styleRange = new StyleRange();
-                        styleRange.foreground = GUIResource.getInstance().getColorRed();
-                        styleRange.start = start;
-                        styleRange.length = length;
-                        text.setStyleRange( styleRange );
-                      } else {
-                        StyleRange styleRange = new StyleRange();
-                        styleRange.foreground = GUIResource.getInstance().getColorBlue();
-                        styleRange.start = start;
-                        styleRange.length = Math.min( 20, length );
-                        text.setStyleRange( styleRange );
-                      }
                     }
                   }
                 }
@@ -162,7 +141,7 @@ public class LogBrowser {
                 if ( maxSize > 0 && size > maxSize ) {
 
                   int dropIndex = ( text.getText().indexOf( Const.CR, size - maxSize ) ) + Const.CR.length();
-                  text.replaceTextRange( 0, dropIndex, "" );
+                  text.setText( text.getText().substring( dropIndex ) );
                 }
 
                 text.setSelection( text.getText().length() );
@@ -214,7 +193,7 @@ public class LogBrowser {
   /**
    * @return the text
    */
-  public StyledText getText() {
+  public Text getText() {
     return text;
   }
 

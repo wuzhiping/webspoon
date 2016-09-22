@@ -68,8 +68,8 @@
     </if>
   </target>
 
-  <target name="war" depends="compile.res_copy">
-    <war destfile="spoon.war" webxml="WEB-INF/web.xml">
+  <target name="war" depends="compile,compile.res_copy">
+    <war destfile="${dist.dir}/spoon.war" webxml="WEB-INF/web.xml">
       <lib dir="${lib.dir}"/>
       <classes dir="${classes.dir}"/>
     </war>

@@ -45,3 +45,26 @@ You will get a WAR file, which can be deployed onto Tomcat, in dist/ folder.
 ```bash
 $ ant war
 ```
+
+# Import the project into Eclipse
+
+Resolve dependencies and create a classpath file.
+
+```bash
+$ ant create-dot-classpath
+```
+
+Copy resources.
+
+```bash
+$ ant compile.res_copy
+```
+
+Change output directory from "bin" to "bin/classes" to align with the Ant compile task.
+
+
+```bash
+$ sed -i "" "s/bin/bin\/classes/" .classpath
+```
+
+Finally import the project (pentaho-kettle/ui) into Eclipse.

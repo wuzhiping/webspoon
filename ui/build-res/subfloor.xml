@@ -147,6 +147,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <property name="devlib.dir"
             value="${basedir}/dev-lib"
             description="Directory for developer to place development Jar files (not affected by clean targets)"/>
+  <property name="plugins.dir"
+            value="${basedir}/plugins"
+            description="Directory that hosts Jar files required to build a war file. (ant compile.res_copy will populate this directory with required jars)"/>
 
   <!-- Compiler properties (passed directly to javac ant target) -->
   <property name="javac.debug"
@@ -1455,6 +1458,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <target name="clean-jars">
     <delete dir="${lib.dir}"/>
     <delete dir="${testlib.dir}"/>
+    <delete dir="${plugins.dir}"/>
   </target>
 
 

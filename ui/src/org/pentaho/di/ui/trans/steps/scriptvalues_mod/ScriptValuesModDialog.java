@@ -212,7 +212,6 @@ public class ScriptValuesModDialog extends BaseStepDialog implements StepDialogI
 
   private ScriptValuesMetaMod input;
   private ScriptValuesHelp scVHelp;
-  private ScriptValuesHighlight lineStyler = new ScriptValuesHighlight();
   private Button wCompatible;
   private TextVar wOptimizationLevel;
 
@@ -772,7 +771,7 @@ public class ScriptValuesModDialog extends BaseStepDialog implements StepDialogI
     wScript.addModifyListener( lsMod );
 
     // Text Higlighting
-    lineStyler = new ScriptValuesHighlight( ScriptValuesAddedFunctions.jsFunctionList );
+    //lineStyler = new ScriptValuesHighlight( ScriptValuesAddedFunctions.jsFunctionList );
     //wScript.addLineStyleListener( lineStyler );
     item.setControl( wScript );
 

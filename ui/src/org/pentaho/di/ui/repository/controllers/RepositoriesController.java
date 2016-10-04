@@ -217,7 +217,12 @@ public class RepositoriesController extends AbstractXulEventHandler {
           try {
             helper.loginToRepository();
 
-            waitBox.stop();
+            display.asyncExec( new Runnable() {
+              public void run() {
+                waitBox.stop();
+              }
+            } );
+
             display.syncExec( new Runnable() {
               public void run() {
                 loginDialog.hide();
@@ -236,7 +241,11 @@ public class RepositoriesController extends AbstractXulEventHandler {
 
           } catch ( final Throwable th ) {
 
-            waitBox.stop();
+            display.asyncExec( new Runnable() {
+              public void run() {
+                waitBox.stop();
+              }
+            } );
 
             try {
               display.syncExec( new Runnable() {

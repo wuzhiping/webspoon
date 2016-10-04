@@ -30,12 +30,14 @@ $ cd pentaho-kettle/ui/
 ## Resolve dependencies
 
 After downloading depended libraries, some jar files for RAP/RWT should be replaced with the modified version.
+Since SWT-related pentaho libraries were modified, please replace these with the modified ones.
 
 ```bash
 $ ant resolve
 $ cp ${path_to_lib}/org.eclipse.rap.filedialog-3.1.0.jar lib/
 $ cp ${path_to_lib}/org.eclipse.rap.jface-3.1.0.jar lib/
 $ cp ${path_to_lib}/org.eclipse.rap.rwt-3.1.0.jar lib/
+$ cp ${path_to_lib}/pentaho-xul-swt-6.1.0.5-231.jar lib/
 ```
 
 ##  Build
@@ -68,3 +70,21 @@ $ sed -i "" "s/bin/bin\/classes/" .classpath
 ```
 
 Finally import the project (pentaho-kettle/ui) into Eclipse.
+
+# How to use
+
+## Repository
+
+The steps to connect to the Pentaho Repository is described [here](https://help.pentaho.com/Documentation/6.1/0J0/0C0/015).
+However, webSpoon currently doesn't have the menubar, hence the repository dialog cannot be opened from the menu.
+Luckily there is another way to open the dialog: enabling the "Show this dialog at startup" in the .spoonrc as follows:
+
+```
+ShowRepositoriesAtStartup=Y
+```
+
+A progress bar will appear when clicking a OK button after selecting a connection, typing username and password.
+Please remember to move the progress bar, otherwise it will not close.
+
+One can also automatically login to a repository by setting environment variables.
+The details are described [here](http://wiki.pentaho.com/display/EAI/.01+Introduction+to+Spoon#.01IntroductiontoSpoon-Repository).

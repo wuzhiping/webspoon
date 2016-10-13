@@ -36,10 +36,10 @@
   </toolbar>
 
   <menupopup id="trans-graph-entry">
-    <menuitem id="trans-graph-entry-newhop" label="${TransGraph.PopupMenu.NewHop}" command="transgraph.newHopChoice()" />
-    <menuitem id="trans-graph-entry-edit" label="${TransGraph.PopupMenu.EditStep}" command="transgraph.editStep()" />
+    <menuitem id="trans-graph-entry-newhop" label="${TransGraph.PopupMenu.NewHop}" type="checkbox" command="transgraph.newHopChoice()" />
+    <menuitem id="trans-graph-entry-edit" label="${TransGraph.PopupMenu.EditStep}" type="checkbox" command="transgraph.editStep()" />
     <menuitem id="trans-graph-entry-edit-description" label="${TransGraph.PopupMenu.EditStepDescription}"
-      command="transgraph.editDescription()" />
+      command="transgraph.editDescription()" type="checkbox" />
     <menu id="trans-graph-entry-launch" label="${TransGraph.PopupMenu.OpenReferencedObject}">
       <menupopup id="trans-graph-entry-launch-popup">
         <menuitem id="trans-graph-entry-launch-popup-nothing" label="${TransGraph.PopupMenu.Launch.Nothing}" command="transgraph.openMapping()" />
@@ -64,16 +64,16 @@
     </menu>
     
     
-    <menuitem id="trans-graph-entry-copies" label="${TransGraph.PopupMenu.NumberOfCopies}" command="transgraph.copies()" />
+    <menuitem id="trans-graph-entry-copies" label="${TransGraph.PopupMenu.NumberOfCopies}" command="transgraph.copies()" type="checkbox" />
     <menuseparator />
-    <menuitem id="trans-graph-entry-copy" acceltext="CTRL-C" accesskey="ctrl-c" label="${TransGraph.PopupMenu.CopyToClipboard}" command="transgraph.copyStep()" />
-    <menuitem id="trans-graph-entry-duplicate" label="${TransGraph.PopupMenu.DuplicateStep}" command="transgraph.dupeStep()" />
-    <menuitem id="trans-graph-entry-delete" acceltext="DEL" accesskey="del" label="${TransGraph.PopupMenu.DeleteStep}" command="transgraph.delSelected()" />
-    <menuitem id="trans-graph-entry-hide" label="${TransGraph.PopupMenu.HideStep}" command="transgraph.hideStep()" />
-    <menuitem id="trans-graph-entry-detach" label="${TransGraph.PopupMenu.DetachStep}" command="transgraph.detachStep()" />
+    <menuitem id="trans-graph-entry-copy" acceltext="CTRL-C" accesskey="ctrl-c" label="${TransGraph.PopupMenu.CopyToClipboard}" command="transgraph.copyStep()" type="checkbox" />
+    <menuitem id="trans-graph-entry-duplicate" label="${TransGraph.PopupMenu.DuplicateStep}" command="transgraph.dupeStep()" type="checkbox" />
+    <menuitem id="trans-graph-entry-delete" acceltext="DEL" accesskey="del" label="${TransGraph.PopupMenu.DeleteStep}" command="transgraph.delSelected()" type="checkbox" />
+    <menuitem id="trans-graph-entry-hide" label="${TransGraph.PopupMenu.HideStep}" command="transgraph.hideStep()" type="checkbox" />
+    <menuitem id="trans-graph-entry-detach" label="${TransGraph.PopupMenu.DetachStep}" command="transgraph.detachStep()" type="checkbox" />
     <menuseparator />
-    <menuitem id="trans-graph-entry-inputs" label="${TransGraph.PopupMenu.ShowInputFields}" command="transgraph.fieldsBefore()" />
-    <menuitem id="trans-graph-entry-outputs" label="${TransGraph.PopupMenu.ShowOutputFields}" command="transgraph.fieldsAfter()" />
+    <menuitem id="trans-graph-entry-inputs" label="${TransGraph.PopupMenu.ShowInputFields}" command="transgraph.fieldsBefore()" type="checkbox" />
+    <menuitem id="trans-graph-entry-outputs" label="${TransGraph.PopupMenu.ShowOutputFields}" command="transgraph.fieldsAfter()" type="checkbox" />
     <!--
       - <menuitem id="trans-graph-entry-lineage" label="${TransGraph.PopupMenu.ShowDataLineage}"
       command="transgraph.fieldsLineage()" />
@@ -87,71 +87,71 @@
     </menu>
 
     <menuseparator />
-    <menuitem id="trans-graph-entry-verify" label="${TransGraph.PopupMenu.CheckSelectedSteps}" command="transgraph.checkSelectedSteps()" />
+    <menuitem id="trans-graph-entry-verify" label="${TransGraph.PopupMenu.CheckSelectedSteps}" command="transgraph.checkSelectedSteps()" type="checkbox" />
 
     <menuseparator />
-    <menuitem id="trans-graph-entry-errors" label="${TransGraph.PopupMenu.Error}" command="transgraph.errorHandling()" />
-    <menuitem id="trans-graph-entry-preview" label="${TransGraph.PopupMenu.Preview}" command="transgraph.preview()" />
+    <menuitem id="trans-graph-entry-errors" label="${TransGraph.PopupMenu.Error}" command="transgraph.errorHandling()" type="checkbox" />
+    <menuitem id="trans-graph-entry-preview" label="${TransGraph.PopupMenu.Preview}" command="transgraph.preview()" type="checkbox" />
 
     <menuseparator />
     <menu id="trans-graph-entry-align" label="${TransGraph.PopupMenu.AllignDistribute}">
       <menupopup id="trans-graph-entry-align-popup">
         <menuitem id="trans-graph-entry-align-left" label="${TransGraph.PopupMenu.AllignLeft}"
-          command="transgraph.allignleft()" />
+          command="transgraph.allignleft()" type="checkbox" />
         <menuitem id="trans-graph-entry-align-right" label="${TransGraph.PopupMenu.AllignRight}"
-          command="transgraph.allignright()" />
+          command="transgraph.allignright()" type="checkbox" />
         <menuitem id="trans-graph-entry-align-top" label="${TransGraph.PopupMenu.AllignTop}"
-          command="transgraph.alligntop()" />
+          command="transgraph.alligntop()" type="checkbox" />
         <menuitem id="trans-graph-entry-align-bottom" label="${TransGraph.PopupMenu.AllignBottom}"
-          command="transgraph.allignbottom()" />
+          command="transgraph.allignbottom()" type="checkbox" />
         <menuseparator />
         <menuitem id="trans-graph-entry-align-horz" label="${TransGraph.PopupMenu.DistributeHorizontally}"
-          acceltext="ALT-RIGHT" accesskey="alt-right" command="transgraph.distributehorizontal()" />
+          acceltext="ALT-RIGHT" accesskey="alt-right" command="transgraph.distributehorizontal()" type="checkbox" />
         <menuitem id="trans-graph-entry-align-vert" label="${TransGraph.PopupMenu.DistributeVertically}"
-          acceltext="ALT-UP" accesskey="alt-up" command="transgraph.distributevertical()" />
+          acceltext="ALT-UP" accesskey="alt-up" command="transgraph.distributevertical()" type="checkbox" />
         <menuseparator />
         <menuitem id="trans-graph-entry-align-snap" label="${TransGraph.PopupMenu.SnapToGrid}" acceltext="ALT-HOME" accesskey="alt-home"
-          command="transgraph.snaptogrid()" />
+          command="transgraph.snaptogrid()" type="checkbox" />
       </menupopup>
     </menu>
     <menuseparator />
-    <menuitem id="trans-graph-entry-mapping" label="${TransGraph.PopupMenu.GenerateMappingToThisStep}" command="transgraph.generateMappingToThisStep()" />
-    <menuitem id="trans-graph-entry-partitioning" label="${TransGraph.PopupMenu.Partitioning}" command="transgraph.partitioning()" />
-    <menuitem id="trans-graph-entry-clustering" label="${TransGraph.PopupMenu.Clustering}" command="transgraph.clustering()" />
+    <menuitem id="trans-graph-entry-mapping" label="${TransGraph.PopupMenu.GenerateMappingToThisStep}" command="transgraph.generateMappingToThisStep()" type="checkbox" />
+    <menuitem id="trans-graph-entry-partitioning" label="${TransGraph.PopupMenu.Partitioning}" command="transgraph.partitioning()" type="checkbox" />
+    <menuitem id="trans-graph-entry-clustering" label="${TransGraph.PopupMenu.Clustering}" command="transgraph.clustering()" type="checkbox" />
   </menupopup>
 
   <menupopup id="trans-graph-hop">
-    <menuitem id="trans-graph-hop-edit" label="${TransGraph.PopupMenu.EditHop}" command="transgraph.editHop()" />
-    <menuitem id="trans-graph-hop-enabled" label="${TransGraph.PopupMenu.DisableHop}" command="transgraph.enableHop() " />
-    <menuitem id="trans-graph-hop-delete" label="${TransGraph.PopupMenu.DeleteHop}" command="transgraph.deleteHop()" />
-    <menuitem id="trans-graph-hop-flip" label="${TransGraph.PopupMenu.FlipDirection}" command="transgraph.flipHopDirection()" />
+    <menuitem id="trans-graph-hop-edit" label="${TransGraph.PopupMenu.EditHop}" command="transgraph.editHop()" type="checkbox" />
+    <menuitem id="trans-graph-hop-enabled" label="${TransGraph.PopupMenu.DisableHop}" command="transgraph.enableHop() " type="checkbox" />
+    <menuitem id="trans-graph-hop-delete" label="${TransGraph.PopupMenu.DeleteHop}" command="transgraph.deleteHop()" type="checkbox" />
+    <menuitem id="trans-graph-hop-flip" label="${TransGraph.PopupMenu.FlipDirection}" command="transgraph.flipHopDirection()" type="checkbox" />
     <menu id="trans-graph-graph-hop-bulk" label="${TransGraph.PopupMenu.BulkHop}">
       <menupopup id="trans-graph-entry-hop-bulk">
-        <menuitem id="trans-graph-entry-hop-enable-selected" label="${TransGraph.PopupMenu.HopEnableSelected}" command="transgraph.enableHopsBetweenSelectedSteps()" />
-        <menuitem id="trans-graph-entry-hop-disable-selected" label="${TransGraph.PopupMenu.HopDisableSelected}" command="transgraph.disableHopsBetweenSelectedSteps()" />
-        <menuitem id="trans-graph-entry-hop-enable-downstream" label="${TransGraph.PopupMenu.HopEnableDownstream}" command="transgraph.enableHopsDownstream()" />
-        <menuitem id="trans-graph-entry-hop-disable-downstream" label="${TransGraph.PopupMenu.HopDisableDownstream}" command="transgraph.disableHopsDownstream()" />
+        <menuitem id="trans-graph-entry-hop-enable-selected" label="${TransGraph.PopupMenu.HopEnableSelected}" command="transgraph.enableHopsBetweenSelectedSteps()" type="checkbox" />
+        <menuitem id="trans-graph-entry-hop-disable-selected" label="${TransGraph.PopupMenu.HopDisableSelected}" command="transgraph.disableHopsBetweenSelectedSteps()" type="checkbox" />
+        <menuitem id="trans-graph-entry-hop-enable-downstream" label="${TransGraph.PopupMenu.HopEnableDownstream}" command="transgraph.enableHopsDownstream()" type="checkbox" />
+        <menuitem id="trans-graph-entry-hop-disable-downstream" label="${TransGraph.PopupMenu.HopDisableDownstream}" command="transgraph.disableHopsDownstream()" type="checkbox" />
       </menupopup>
     </menu>
   </menupopup>
 
   <menupopup id="trans-graph-note">
-    <menuitem id="trans-graph-note-edit" label="${TransGraph.PopupMenu.EditNote}" command="transgraph.editNote()" />
-    <menuitem id="trans-graph-note-delete" label="${TransGraph.PopupMenu.DeleteNote}" command="transgraph.deleteNote()" />
-    <menuitem id="trans-graph-note-raise" label="${TransGraph.PopupMenu.RaiseNote}" command="transgraph.raiseNote()" />
-    <menuitem id="trans-graph-note-lower" label="${TransGraph.PopupMenu.LowerNote}" command="transgraph.lowerNote()" />
+    <menuitem id="trans-graph-note-edit" label="${TransGraph.PopupMenu.EditNote}" command="transgraph.editNote()" type="checkbox" />
+    <menuitem id="trans-graph-note-delete" label="${TransGraph.PopupMenu.DeleteNote}" command="transgraph.deleteNote()" type="checkbox" />
+    <menuitem id="trans-graph-note-raise" label="${TransGraph.PopupMenu.RaiseNote}" command="transgraph.raiseNote()" type="checkbox" />
+    <menuitem id="trans-graph-note-lower" label="${TransGraph.PopupMenu.LowerNote}" command="transgraph.lowerNote()" type="checkbox" />
   </menupopup>
 
   <menupopup id="trans-graph-background">
-    <menuitem id="trans-graph-background-new-note" label="${TransGraph.PopupMenu.NewNote}" command="transgraph.newNote()" />
+    <menuitem id="trans-graph-background-new-note" label="${TransGraph.PopupMenu.NewNote}" command="transgraph.newNote()" type="checkbox" />
 
-    <menuitem id="trans-graph-background-paste" acceltext="CTRL-V" accesskey="ctrl-v" label="${TransGraph.PopupMenu.PasteStepFromClipboard}" command="transgraph.paste()" />
+    <menuitem id="trans-graph-background-paste" acceltext="CTRL-V" accesskey="ctrl-v" label="${TransGraph.PopupMenu.PasteStepFromClipboard}" command="transgraph.paste()" type="checkbox" />
     <menuseparator />
-    <menuitem id="trans-graph-background-select-all" acceltext="CTRL-A" accesskey="ctrl-a" label="${TransGraph.PopupMenu.SelectAll}" command="transgraph.selectAll()" />
+    <menuitem id="trans-graph-background-select-all" acceltext="CTRL-A" accesskey="ctrl-a" label="${TransGraph.PopupMenu.SelectAll}" command="transgraph.selectAll()" type="checkbox" />
     <menuitem id="trans-graph-background-clear-selection" label="${TransGraph.PopupMenu.ClearSelection}"
-      command="transgraph.clearSelection()" />
+      command="transgraph.clearSelection()" type="checkbox" />
     <menuseparator />
-    <menuitem id="trans-graph-background-settings" acceltext="CTRL-T" accesskey="ctrl-t" label="${TransGraph.PopupMenu.Settings}" command="transgraph.settings()" />
+    <menuitem id="trans-graph-background-settings" acceltext="CTRL-T" accesskey="ctrl-t" label="${TransGraph.PopupMenu.Settings}" command="transgraph.settings()" type="checkbox" />
 
   </menupopup>
 

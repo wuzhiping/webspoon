@@ -88,3 +88,16 @@ Please remember to move the progress bar, otherwise it will not close.
 
 One can also automatically login to a repository by setting environment variables.
 The details are described [here](http://wiki.pentaho.com/display/EAI/.01+Introduction+to+Spoon#.01IntroductiontoSpoon-Repository).
+
+## Known issues
+
+- MenuBar is missing.
+- Welcome page does not show anything.
+- Icons in Job are not drawn in Canvas.
+- "Run" button does not function when a new user starts using webSpoon (not really multi-user friendly).
+- Dialog does not show up even when Run button is pushed until Canvas is clicked.
+- App area is not always aligned with the browser window.
+- Repository can be registered, but not be saved.
+- Moving a note causes an error sometimes.
+- "Please Wait" dialog after the "Repository Connection" dialog won't close until it is manually moved or closed.
+- "Run Options" dialog after the "Run" button won't popup until the canvas area is clicked.

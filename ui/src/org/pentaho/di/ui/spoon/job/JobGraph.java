@@ -723,6 +723,26 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
             jobEntryCopy = (JobEntryCopy) areaOwner.getOwner();
             currentEntry = jobEntryCopy;
 
+            if ( jobEntryCopy != null
+                    && ( ( startHopEntry != null && !startHopEntry.equals( jobEntryCopy ) ) || ( endHopEntry != null && !endHopEntry
+                      .equals( jobEntryCopy ) ) ) ) {
+              if ( hop_candidate == null ) {
+                // See if the step accepts input. If not, we can't create a new hop...
+                //
+                if ( startHopEntry != null ) {
+                  if ( !jobEntryCopy.isStart() ) {
+                    hop_candidate = new JobHopMeta( startHopEntry, jobEntryCopy );
+                    endHopLocation = null;
+                  } else {
+                    noInputEntry = jobEntryCopy;
+                  }
+                } else if ( endHopEntry != null ) {
+                  hop_candidate = new JobHopMeta( jobEntryCopy, endHopEntry );
+                  endHopLocation = null;
+                }
+              }
+            }
+
             if ( hop_candidate != null ) {
               addCandidateAsHop();
 
@@ -817,6 +837,27 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
     }
     Point real = screen2real( e.x, e.y );
     Point icon = new Point( real.x - iconoffset.x, real.y - iconoffset.y );
+
+    JobEntryCopy jobEntryCopy = jobMeta.getJobEntryCopy( real.x, real.y, iconsize );
+    if ( jobEntryCopy != null
+          && ( ( startHopEntry != null && !startHopEntry.equals( jobEntryCopy ) ) || ( endHopEntry != null && !endHopEntry
+            .equals( jobEntryCopy ) ) ) ) {
+      if ( hop_candidate == null ) {
+        // See if the step accepts input. If not, we can't create a new hop...
+        //
+        if ( startHopEntry != null ) {
+          if ( !jobEntryCopy.isStart() ) {
+            hop_candidate = new JobHopMeta( startHopEntry, jobEntryCopy );
+            endHopLocation = null;
+          } else {
+            noInputEntry = jobEntryCopy;
+          }
+        } else if ( endHopEntry != null ) {
+          hop_candidate = new JobHopMeta( jobEntryCopy, endHopEntry );
+          endHopLocation = null;
+        }
+      }
+    }
 
     // Quick new hop option? (drag from one step to another)
     //

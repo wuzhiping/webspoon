@@ -64,7 +64,6 @@ The detailed compatibility is described [here](http://www.eclipse.org/rap/notewo
 - Welcome page does not show anything.
 - Icons in Job are not drawn in Canvas.
 - "Run" button does not function once another person starts using webSpoon (not really multi-user friendly).
-- App area is not always aligned with the browser window size.
 - Moving a note causes an error sometimes.
 - "Please Wait" dialog after the "Repository Connection" dialog won't close until it is manually moved or closed.
 - "Run Options" dialog after the "Run" button won't popup until the canvas area is clicked.

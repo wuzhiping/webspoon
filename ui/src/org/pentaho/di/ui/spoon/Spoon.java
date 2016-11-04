@@ -9290,6 +9290,7 @@ public class Spoon extends AbstractEntryPoint implements AddUndoPositionInterfac
     //getMenuBarManager().updateAll( true );
 
     //return parent;
+    shell.setMaximized( true );
   }
 
   @Override

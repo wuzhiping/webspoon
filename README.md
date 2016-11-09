@@ -25,6 +25,21 @@ You can create and run Kettle transformation/job files from your favorite web br
 
 # How to deploy & config (admin perspective)
 
+## Compatibiliy
+
+Here is a list of versions of Java and OS that were verified to be compatible with webSpoon.
+webSpoon does not work with Oracle Java SE 7.
+
+### Java
+
+- Oracle Java SE 8
+
+### Operating systems
+
+- Ubuntu 14.04
+- Mac OS X El Capitan
+- Windows 7 Professional
+
 ## Deploy
 
 The following procedures assume that Pentaho BI server (CE or EE) has already been installed and webSpoon is deployed to the Apache Tomcat shipped with them, but webSpoon can also be deployed to other Java Application server (e.g., Jetty).
@@ -62,11 +77,10 @@ The detailed compatibility is described [here](http://www.eclipse.org/rap/notewo
 
 - MenuBar is missing.
 - Welcome page does not show anything.
-- Icons in Job are not drawn in Canvas.
-- "Run" button does not function once another person starts using webSpoon (not really multi-user friendly).
 - Moving a note causes an error sometimes.
 - "Please Wait" dialog after the "Repository Connection" dialog won't close until it is manually moved or closed.
 - "Run Options" dialog after the "Run" button won't popup until the canvas area is clicked.
+- Not fully multi-session enabled (e.g., logging is shared across sessions).
 
 # How to develop (developer perspective)
 
@@ -84,6 +98,7 @@ These are the major changes so far:
 - Add org.pentaho.di.ui.spoon.BasicApplication, which configures web app.
 - Modify ui/ivy.xml in order to add RWT-related dependencies and remove SWT.
 - Many comment-outs/deletions to avoid compile errors due to RWT/SWT difference.
+- Make singleton objects (e.g., `PropsUI`, `GUIResource`) "session aware" (see [here](http://www.eclipse.org/rap/developers-guide/devguide.php?topic=singletons.html) for the details).
 
 ## Build in the command line
 
@@ -120,7 +135,11 @@ Build and you will get a WAR file in `dist` folder, which can be deployed to the
 $ ant war
 ```
 
-## Develop in Eclipse
+## Develop in Eclipse IDE
+
+It is recommened to install the RAP Tools to your Eclipse IDE.
+Please refer to the [developer's guide for RAP](http://www.eclipse.org/rap/developers-guide/) for how to install.
+Once installed, follow these instructions.
 
 Resolve dependencies, create a classpath file, and copy resources
 
@@ -135,4 +154,14 @@ Change output directory from `bin` to `bin/classes` to align with the Ant compil
 $ sed -i "" "s/bin/bin\/classes/" .classpath
 ```
 
-Finally import the project (pentaho-kettle/ui) into Eclipse.
+Finally import the project (pentaho-kettle/ui) into Eclipse IDE.
+
+# Notices
+
+- Pentaho is a registered trademark of Pentaho, Inc.
+- Oracle and Java are registered trademarks of Oracle and/or its affiliates.
+- Ubuntu is a registered trademark of Canonical Ltd.
+- Mac and OS X are trademarks of Apple Inc., registered in the U.S. and other countries.
+- Windows is a registered trademark of Microsoft Corporation in the U.S. and other countries.
+- Eclipse is a registered trademark of the Eclipse Foundation, Inc. in the US and/or other countries.
+- Other company and product names mentioned in this document may be the trademarks of their respective owners.

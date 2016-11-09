@@ -844,7 +844,7 @@ public class Spoon extends AbstractEntryPoint implements AddUndoPositionInterfac
       final Composite tempSashComposite = new Composite( shell, SWT.None );
       sashComposite = tempSashComposite;
 
-      mainPerspective = new MainSpoonPerspective( tempSashComposite, tabfolder );
+      mainPerspective = new MainSpoonPerspective( tempSashComposite, tabfolder, this );
       if ( startupPerspective == null ) {
         startupPerspective = mainPerspective.getId();
       }

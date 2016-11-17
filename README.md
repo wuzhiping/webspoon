@@ -28,17 +28,19 @@ You can create and run Kettle transformation/job files from your favorite web br
 ## Compatibiliy
 
 Here is a list of versions of Java and OS that were verified to be compatible with webSpoon.
-webSpoon does not work with Oracle Java SE 7.
+webSpoon does not work with Java 7 since the dependent library (Eclipse RAP/RWT) is not compatible with Java 7 (see [here](http://www.eclipse.org/rap/noteworthy/3.1/) for the details).
 
 ### Java
 
 - Oracle Java SE 8
+- OpenJDK 8
 
 ### Operating systems
 
 - Ubuntu 14.04
 - Mac OS X El Capitan
 - Windows 7 Professional
+- Windows 10 Professional
 
 ## Deploy
 
@@ -66,6 +68,17 @@ Please remember to move the progress bar, otherwise it will not close.
 
 One can also automatically login to a repository by setting environment variables.
 The details are described [here](http://wiki.pentaho.com/display/EAI/.01+Introduction+to+Spoon#.01IntroductiontoSpoon-Repository).
+
+## Plugins
+
+Place plugins into either one of the following two folders:
+
+1. `biserver-ce/pentaho-solutions/system/kettle/plugins` for CE or `Pentaho/server/biserver-ee/pentaho-solutions/system/kettle/plugins` for EE.
+2. `$HOME/.kettle/plugins`
+
+## JDBC drivers
+
+Place jar files into `webapps/spoon/WEB-INF/lib`.
 
 # How to use (end-user perspective)
 

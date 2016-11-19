@@ -1024,31 +1024,27 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
     Point icon = new Point( real.x - iconoffset.x, real.y - iconoffset.y );
     AreaOwner areaOwner = getVisibleAreaOwner( real.x, real.y );
 
-    if ( areaOwner != null ) {
-      StepMeta stepMeta = (StepMeta) areaOwner.getOwner();
-      if ( ( startHopStep != null && endHopStep == null ) || ( endHopStep != null && startHopStep == null ) ) {
-        if ( stepMeta != null
-            && ( ( startHopStep != null && !startHopStep.equals( stepMeta ) ) || ( endHopStep != null && !endHopStep
-            .equals( stepMeta ) ) ) ) {
-          StepIOMetaInterface ioMeta = stepMeta.getStepMetaInterface().getStepIOMeta();
-          if ( candidate == null ) {
-              // See if the step accepts input. If not, we can't create a new hop...
-              //
-            if ( startHopStep != null ) {
-              if ( ioMeta.isInputAcceptor() ) {
-                candidate = new TransHopMeta( startHopStep, stepMeta );
-                endHopLocation = null;
-              } else {
-                noInputStep = stepMeta;
-              }
-            } else if ( endHopStep != null ) {
-              if ( ioMeta.isOutputProducer() ) {
-                candidate = new TransHopMeta( stepMeta, endHopStep );
-                endHopLocation = null;
-              } else {
-                noInputStep = stepMeta;
-              }
-            }
+    StepMeta stepMeta = transMeta.getStep( real.x, real.y, iconsize );
+    if ( stepMeta != null
+        && ( ( startHopStep != null && !startHopStep.equals( stepMeta ) ) || ( endHopStep != null && !endHopStep
+        .equals( stepMeta ) ) ) ) {
+      StepIOMetaInterface ioMeta = stepMeta.getStepMetaInterface().getStepIOMeta();
+      if ( candidate == null ) {
+          // See if the step accepts input. If not, we can't create a new hop...
+          //
+        if ( startHopStep != null ) {
+          if ( ioMeta.isInputAcceptor() ) {
+            candidate = new TransHopMeta( startHopStep, stepMeta );
+            endHopLocation = null;
+          } else {
+            noInputStep = stepMeta;
+          }
+        } else if ( endHopStep != null ) {
+          if ( ioMeta.isOutputProducer() ) {
+            candidate = new TransHopMeta( stepMeta, endHopStep );
+            endHopLocation = null;
+          } else {
+            noInputStep = stepMeta;
           }
         }
       }

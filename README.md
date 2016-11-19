@@ -90,7 +90,6 @@ The detailed compatibility is described [here](http://www.eclipse.org/rap/notewo
 
 - MenuBar is missing.
 - Welcome page does not show anything.
-- Moving a note causes an error sometimes.
 - "Please Wait" dialog after the "Repository Connection" dialog won't close until it is manually moved or closed.
 - "Run Options" dialog after the "Run" button won't popup until the canvas area is clicked.
 - Not fully multi-session enabled (e.g., logging is shared across sessions).

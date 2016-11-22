@@ -47,7 +47,7 @@ webSpoon does not work with Java 7 since the dependent library (Eclipse RAP/RWT)
 The following procedures assume that Pentaho BI server (CE or EE) has already been installed and webSpoon is deployed to the Apache Tomcat shipped with them, but webSpoon can also be deployed to other Java Application server (e.g., Jetty).
 
 1. Download the latest `spoon.war` from [here](https://github.com/HiromuHota/pentaho-kettle/releases).
-2. Copy the downloaded `spoon.war` to the `webapps` folder, e.g., `biserver-ce/tomcat/webapps` for CE, `Pentaho/server/biserver-ee/tomcat/webapps/` for EE.
+2. Copy the downloaded `spoon.war` to the `webapps` folder, e.g., `biserver-ce/tomcat/webapps` for CE, `Pentaho/server/biserver-ee/tomcat/webapps` for EE.
 3. (Re)start the BI server.
 
 WebSpoon will sit next to the Pentaho User Console (i.e., `http://address:8080/spoon` when PUC is `http://address:8080/pentaho`).
@@ -56,12 +56,6 @@ WebSpoon will sit next to the Pentaho User Console (i.e., `http://address:8080/s
 
 It is strongly recommended to use webSpoon with a Repository (can be Pentaho Repository, Kettle Database Repository, or Kettle File Repository), otherwise opening/saving files does not function as you would expect.
 The steps to connect to a Repository is described [here](https://help.pentaho.com/Documentation/6.1/0J0/0C0/015) and [here](https://help.pentaho.com/Documentation/6.1/0L0/0Y0/040).
-Since webSpoon currently doesn't have the menubar, the repository dialog cannot be opened from the menu.
-Luckily there is another way to open the dialog: enabling the "Show this dialog at startup" in the `$HOME/.kettle/.spoonrc` (if `user` runs the Java Application server, `$HOME` is `/home/user`) as follows:
-
-```
-ShowRepositoriesAtStartup=Y
-```
 
 A progress bar will appear when clicking a OK button after selecting a connection, typing username and password.
 Please remember to move the progress bar, otherwise it will not close.
@@ -78,7 +72,10 @@ Place plugins into either one of the following two folders:
 
 ## JDBC drivers
 
-Place jar files into `webapps/spoon/WEB-INF/lib`.
+Place jar files into either one of the following folders:
+
+1. `biserver-ce/tomcat/lib` for CE or `Pentaho/server/biserver-ee/tomcat/lib` for EE.
+2. `webapps/spoon/WEB-INF/lib`, but not recommended because this folder is overwritten when upgrading `spoon.war`.
 
 # How to use (end-user perspective)
 
@@ -88,7 +85,6 @@ The detailed compatibility is described [here](http://www.eclipse.org/rap/notewo
 
 ## Known issues
 
-- MenuBar is missing.
 - Welcome page does not show anything.
 - "Please Wait" dialog after the "Repository Connection" dialog won't close until it is manually moved or closed.
 - "Run Options" dialog after the "Run" button won't popup until the canvas area is clicked.

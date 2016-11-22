@@ -870,6 +870,7 @@ public class Spoon extends AbstractEntryPoint implements AddUndoPositionInterfac
       shell.pack();
       shell.setMaximized( true ); // Default = maximized!
     }
+    shell.setMaximized( true );
 
     layout = new FormLayout();
     layout.marginWidth = 0;
@@ -880,7 +881,6 @@ public class Spoon extends AbstractEntryPoint implements AddUndoPositionInterfac
     data.grabExcessVerticalSpace = true;
     data.verticalAlignment = SWT.FILL;
     data.horizontalAlignment = SWT.FILL;
-    data.verticalSpan = 400;
     sashComposite.setLayoutData( data );
 
     sashComposite.setLayout( layout );
@@ -1463,9 +1463,9 @@ public class Spoon extends AbstractEntryPoint implements AddUndoPositionInterfac
     boolean jobActive = jobMeta != null;
     Control focusControl = getDisplay().getFocusControl();
 
-//    if ( focusControl instanceof StyledText ) {
-//      copyLogSelectedText( (StyledText) focusControl );
-//    } else {
+    if ( focusControl instanceof Text ) {
+      copyLogSelectedText( (Text) focusControl );
+    } else {
       if ( transActive ) {
         if ( transMeta.getSelectedSteps().size() > 0 ) {
           copySteps();
@@ -1479,7 +1479,7 @@ public class Spoon extends AbstractEntryPoint implements AddUndoPositionInterfac
           copyJob();
         }
       }
-//    }
+    }
   }
 
   public void copyFile() {
@@ -1642,9 +1642,9 @@ public class Spoon extends AbstractEntryPoint implements AddUndoPositionInterfac
     return ( transGraph != null ) && ( transGraph.isExecutionResultsPaneVisible() );
   }
 
-//  public void copyLogSelectedText( StyledText text ) {
-//    toClipboard( text.getSelectionText() );
-//  }
+  public void copyLogSelectedText( Text text ) {
+    toClipboard( text.getSelectionText() );
+  }
 
   public void copyTransformation() {
     copyTransformation( getActiveTransformation() );
@@ -9253,7 +9253,6 @@ public class Spoon extends AbstractEntryPoint implements AddUndoPositionInterfac
     shell = getShell();
 
     init( null );
-    loadLastUsedFiles(); // has to be after init.
 
     openSpoon();
 
@@ -9278,7 +9277,6 @@ public class Spoon extends AbstractEntryPoint implements AddUndoPositionInterfac
     //getMenuBarManager().updateAll( true );
 
     //return parent;
-    shell.setMaximized( true );
   }
 
   @Override

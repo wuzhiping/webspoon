@@ -1790,7 +1790,7 @@ public class Spoon extends AbstractEntryPoint implements AddUndoPositionInterfac
 
       final String lastFileId = Integer.toString( i );
 
-      Action action = new Action( "open-last-file-" + ( i + 1 ), Action.AS_DROP_DOWN_MENU ) {
+      Action action = new Action( "open-last-file-" + ( i + 1 ), Action.AS_PUSH_BUTTON ) {
         public void run() {
           lastFileSelect( lastFileId );
         }

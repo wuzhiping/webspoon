@@ -22,9 +22,13 @@
 
 package org.pentaho.di.ui.spoon;
 
+import org.eclipse.rap.rwt.testfixture.TestContext;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.pentaho.di.core.EngineMetaInterface;
 import org.pentaho.di.core.exception.KettleException;
@@ -51,6 +55,9 @@ public class SpoonPerspectiveManagerTest {
   private Map<SpoonPerspective, SpoonPerspectiveManager.PerspectiveManager> perspectiveManagerMap;
   private static SpoonPerspectiveManager spoonPerspectiveManager;
   private SpoonPerspective perspective;
+
+  @Rule
+  public TestContext context = new TestContext();
 
   @Before
   public void setUp() throws Exception {

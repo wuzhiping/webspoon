@@ -142,6 +142,15 @@ Build and you will get a WAR file in `dist` folder, which can be deployed to the
 ```bash
 $ ant war
 ```
+## Testing
+
+`TestContext` has been added to some test cases to simulate the environment that RAP UI code normally runs. `TestContext` is in the bundle org.eclipse.rap.rwt.testfixture, which is not hosted by the Maven Repository. So please download it from [here](https://github.com/HiromuHota/rap/releases/download/webspoon%2F0.0.0.1/org.eclipse.rap.rwt.testfixture-3.1.1-SNAPSHOT.jar) and copy it to the `test-lib` directory.
+
+```
+$ ant resolve
+$ cp ${path_to_lib}/org.eclipse.rap.rwt.testfixture-3.1.1-SNAPSHOT.jar test-lib/
+$ ant test
+```
 
 ## Develop in Eclipse IDE
 

@@ -21,7 +21,9 @@
  ******************************************************************************/
 package org.pentaho.di.ui.spoon;
 
+import org.eclipse.rap.rwt.testfixture.TestContext;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -72,6 +74,9 @@ public class SpoonPluginManagerTest {
 
   private Map<SpoonPluginInterface, Integer> applies = new HashMap<>();
   private AtomicInteger notifications = new AtomicInteger();
+
+  @Rule
+  public TestContext context = new TestContext();
 
   @Before
   public void setUp() throws KettlePluginException {

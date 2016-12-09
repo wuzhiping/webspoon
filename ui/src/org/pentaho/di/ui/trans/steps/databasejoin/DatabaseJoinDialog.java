@@ -70,7 +70,6 @@ import org.pentaho.di.ui.core.widget.ColumnInfo;
 import org.pentaho.di.ui.core.widget.StyledTextComp;
 import org.pentaho.di.ui.core.widget.TableView;
 import org.pentaho.di.ui.trans.step.BaseStepDialog;
-import org.pentaho.di.ui.trans.steps.tableinput.SQLValuesHighlight;
 
 public class DatabaseJoinDialog extends BaseStepDialog implements StepDialogInterface {
   private static Class<?> PKG = DatabaseJoinMeta.class; // for i18n purposes, needed by Translator2!!

@@ -23,6 +23,10 @@ You can create and run Kettle transformation/job files from your favorite web br
 - Edit Kettle queries in CDE
 - Edit Kettle endpoints in App Builder (aka Sparkl)
 
+# How to use (end-user perspective)
+
+Please refer to the [wiki](https://github.com/HiromuHota/pentaho-kettle/wiki) and [issues](https://github.com/HiromuHota/pentaho-kettle/issues).
+
 # How to deploy & config (admin perspective)
 
 ## Compatibiliy
@@ -77,19 +81,6 @@ Place jar files into either one of the following folders:
 1. `biserver-ce/tomcat/lib` for CE or `Pentaho/server/biserver-ee/tomcat/lib` for EE.
 2. `webapps/spoon/WEB-INF/lib`, but not recommended because this folder is overwritten when upgrading `spoon.war`.
 
-# How to use (end-user perspective)
-
-The RAP (the underlying technology for webSpoon) supports most of the latest web browsers.
-webSpoon can also be used from smartphone/tablet.
-The detailed compatibility is described [here](http://www.eclipse.org/rap/noteworthy/3.0/).
-
-## Known issues
-
-- Welcome page does not show anything.
-- "Please Wait" dialog after the "Repository Connection" dialog won't close until it is manually moved or closed.
-- "Run Options" dialog after the "Run" button won't popup until the canvas area is clicked.
-- Not fully multi-session enabled (e.g., logging is shared across sessions).
-
 # How to develop (developer perspective)
 
 Spoon relies on SWT for UI widgets, which is great for being OS agnostic, but it only runs as a desktop app.
@@ -107,6 +98,21 @@ These are the major changes so far:
 - Modify ui/ivy.xml in order to add RWT-related dependencies and remove SWT.
 - Many comment-outs/deletions to avoid compile errors due to RWT/SWT difference.
 - Make singleton objects (e.g., `PropsUI`, `GUIResource`) "session aware" (see [here](http://www.eclipse.org/rap/developers-guide/devguide.php?topic=singletons.html) for the details).
+
+## Branches and Versioning
+
+I started this project in the webspoon branch, branched off from the branch 6.1 of between 6.1.0.5-R and 6.1.0.6-R.
+Soon I realized that I should have branched off from one of released versions.
+So I decided to make two branches: webspoon-6.1 and webspoon-7.0, each of which was rebased onto 6.1.0.1-R and 7.0.0.0-R, respectively.
+I made the branch webspoon-6.1 as the default one for this git repository as the branch webspoon-7.0 currently cannot use the marketplace plugin.
+
+webSpoon uses 4 digits versioning with the following rules:
+
+- The 1st digit is always 0 (never be released as a separate software).
+- The 2nd and 3rd digits represent the base Kettle version, e.g., 6.1, 7.0.
+- The last digit represents the minor revisions within webSpoon.
+
+As a result, the next (pre-)release version will be 0.6.1.4, meaning it is from the branch webspoon-6.1 and the 4th minor revision.
 
 ## Build in the command line
 

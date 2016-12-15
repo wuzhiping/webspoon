@@ -90,10 +90,12 @@ The details are described [here](http://wiki.pentaho.com/display/EAI/.01+Introdu
 
 ## Plugins
 
-Place plugins into either one of the following two folders:
+A comma separated list of plugin folders can be defined by `KETTLE_PLUGIN_BASE_FOLDERS`.
+If not defined, the following folders are used:
 
-1. `biserver-ce/pentaho-solutions/system/kettle/plugins` for CE or `Pentaho/server/biserver-ee/pentaho-solutions/system/kettle/plugins` for EE.
+1. `$DI_HOME/plugins` (`$DI_HOME` is defined in `start-pentaho.{sh|bat}` and `pentaho-solutions/system/kettle` is the default)
 2. `$HOME/.kettle/plugins`
+3. `$CUR_DIR/plugins ` (the current folder: `$CUR_DIR` depends on how and where webSpoon is running, e.g., `biserver-ce/tomcat/bin` for CE and `Pentaho` for EE)
 
 ## JDBC drivers
 

@@ -158,10 +158,10 @@ Replace some of the dependent libraries with patched one.
 The source code of patched libraries can be downloaded from [rap](https://github.com/HiromuHota/rap) and [pentaho-commons-xul](https://github.com/HiromuHota/pentaho-commons-xul).
 
 ```bash
-$ cp ${path_to_lib}/org.eclipse.rap.filedialog-3.1.0.jar lib/
-$ cp ${path_to_lib}/org.eclipse.rap.jface-3.1.0.jar lib/
-$ cp ${path_to_lib}/org.eclipse.rap.rwt-3.1.0.jar lib/
-$ cp ${path_to_lib}/pentaho-xul-swt-6.1.0.5-231.jar lib/
+$ cp ${path_to_lib}/org.eclipse.rap.filedialog-3.1.1-SNAPSHOT.jar lib/org.eclipse.rap.filedialog-3.1.1.jar
+$ cp ${path_to_lib}/org.eclipse.rap.jface-3.1.1-SNAPSHOT.jar lib/org.eclipse.rap.jface-3.1.1.jar
+$ cp ${path_to_lib}/org.eclipse.rap.rwt-3.1.1-SNAPSHOT.jar lib/org.eclipse.rap.rwt-3.1.1.jar
+$ cp ${path_to_lib}/pentaho-xul-swt-6.1-SNAPSHOT.jar lib/pentaho-xul-swt-6.1.0.1-196.jar
 ```
 
 Build and you will get a WAR file in `dist` folder, which can be deployed to the Java Application server of your choice.

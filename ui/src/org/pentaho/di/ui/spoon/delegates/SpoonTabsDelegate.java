@@ -252,7 +252,7 @@ public class SpoonTabsDelegate extends SpoonDelegate {
       int idx = tabfolder.indexOf( tabMapEntry.getTabItem() );
 
       // keep the focus on the graph
-      //tabfolder.setSelected( idx );
+      tabfolder.setSelected( idx );
       return true;
     } catch ( Throwable e ) {
       boolean ok = false;

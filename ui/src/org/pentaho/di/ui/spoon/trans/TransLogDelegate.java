@@ -232,7 +232,6 @@ public class TransLogDelegate extends SpoonDelegate implements XulEventHandler {
       i++;
     }
     String line = all.substring( startpos );
-
     String uLine = line.toUpperCase();
     if ( uLine.indexOf( BaseMessages.getString( PKG, "TransLog.System.ERROR2" ) ) >= 0
       || uLine.indexOf( BaseMessages.getString( PKG, "TransLog.System.EXCEPTION2" ) ) >= 0

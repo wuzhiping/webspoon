@@ -146,7 +146,7 @@ public class RipDatabaseWizardPage3 extends WizardPage {
           DirectoryDialog directoryDialog = new DirectoryDialog( shell, SWT.NONE );
           directoryDialog.setFilterPath( wDirectory.getText() );
           directoryDialog.setText( "Select a target directory" );
-//          directoryDialog.setMessage( "Select the target directory of the job and transformations:" );
+          directoryDialog.setMessage( "Select the target directory of the job and transformations:" );
           String target = directoryDialog.open();
           if ( target != null ) {
             wDirectory.setText( target );

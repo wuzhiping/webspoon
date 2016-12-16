@@ -881,7 +881,6 @@ public class PropsUI extends Props {
     switch ( style ) {
       case WIDGET_STYLE_DEFAULT:
         background = gui.getColorBackground();
-        /*
         if ( control instanceof Group && OS.indexOf( "mac" ) > -1 ) {
           control.addPaintListener( new PaintListener() {
             @Override
@@ -891,7 +890,6 @@ public class PropsUI extends Props {
             }
           } );
         }
-        */
         font = null; // GUIResource.getInstance().getFontDefault();
         break;
       case WIDGET_STYLE_FIXED:
@@ -918,7 +916,7 @@ public class PropsUI extends Props {
       case WIDGET_STYLE_TAB:
         background = GUIResource.getInstance().getColorWhite();
         CTabFolder tabFolder = (CTabFolder) control;
-        //tabFolder.setSimple( false );
+        tabFolder.setSimple( false );
         tabFolder.setBorderVisible( true );
         // need to make a copy of the tab selection background color to get around PDI-13940
         Color c = GUIResource.getInstance().getColorTab();

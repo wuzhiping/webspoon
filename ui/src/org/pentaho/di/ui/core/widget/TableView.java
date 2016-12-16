@@ -2173,9 +2173,9 @@ public class TableView extends Composite {
         Text widget = (Text) text;
         int idx = widget.getCaretPosition();
         widget.selectAll();
-        //widget.showSelection();
+        widget.showSelection();
         widget.setSelection( 0 );
-        //widget.showSelection();
+        widget.showSelection();
         widget.setSelection( idx );
       }
     }

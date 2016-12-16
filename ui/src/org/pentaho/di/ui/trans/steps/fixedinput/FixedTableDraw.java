@@ -180,30 +180,30 @@ public class FixedTableDraw extends Canvas {
       }
     } );
 
-//    addMouseMoveListener( new MouseMoveListener() {
-//      public void mouseMove( MouseEvent e ) {
-//        if ( e == null || offset == null || fontwidth == 0 ) {
-//          return;
-//        }
-//
-//        int posx = (int) Math.round( (double) ( e.x - LEFT - MARGIN - offset.x ) / ( (double) fontwidth ) );
-//
-//        // Clicked and mouse is down: move marker to a new location...
-//        if ( potential_click >= 0 ) {
-//          if ( posx > 0 ) {
-//            potential_click = posx;
-//            redraw();
-//          }
-//        }
-//
-//        FixedFileInputField field = getFieldOnPosition( posx );
-//        if ( field != null && !field.getName().equalsIgnoreCase( prevfieldname ) ) {
-//          setToolTipText( field.getName()
-//            + " is a " + ValueMeta.getTypeDesc( field.getType() ) + ".  The width is " + field.getWidth() );
-//          prevfieldname = field.getName();
-//        }
-//      }
-//    } );
+    addMouseMoveListener( new MouseMoveListener() {
+      public void mouseMove( MouseEvent e ) {
+        if ( e == null || offset == null || fontwidth == 0 ) {
+          return;
+        }
+
+        int posx = (int) Math.round( (double) ( e.x - LEFT - MARGIN - offset.x ) / ( (double) fontwidth ) );
+
+        // Clicked and mouse is down: move marker to a new location...
+        if ( potential_click >= 0 ) {
+          if ( posx > 0 ) {
+            potential_click = posx;
+            redraw();
+          }
+        }
+
+        FixedFileInputField field = getFieldOnPosition( posx );
+        if ( field != null && !field.getName().equalsIgnoreCase( prevfieldname ) ) {
+          setToolTipText( field.getName()
+            + " is a " + ValueMeta.getTypeDesc( field.getType() ) + ".  The width is " + field.getWidth() );
+          prevfieldname = field.getName();
+        }
+      }
+    } );
   }
 
   private FixedFileInputField getFieldOnPosition( int x ) {

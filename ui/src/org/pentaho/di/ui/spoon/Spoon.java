@@ -105,7 +105,7 @@ import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 //import org.eclipse.swt.printing.Printer;
-//import org.eclipse.swt.program.Program;
+import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -1672,7 +1672,7 @@ public class Spoon extends AbstractEntryPoint implements AddUndoPositionInterfac
       LocationListener listener = new LocationListener() {
         public void changing( LocationEvent event ) {
           if ( event.location.endsWith( ".pdf" ) ) {
-            //Program.launch( event.location );
+            Program.launch( event.location );
             event.doit = false;
           } else if ( event.location.contains( "samples/transformations" )
             || event.location.contains( "samples/jobs" ) || event.location.contains( "samples/mapping" ) ) {
@@ -1721,7 +1721,7 @@ public class Spoon extends AbstractEntryPoint implements AddUndoPositionInterfac
       LocationListener listener = new LocationListener() {
         public void changing( LocationEvent event ) {
           if ( event.location.endsWith( ".pdf" ) ) {
-            //Program.launch( event.location );
+            Program.launch( event.location );
             event.doit = false;
           }
         }
@@ -2164,7 +2164,7 @@ public class Spoon extends AbstractEntryPoint implements AddUndoPositionInterfac
         }
       }
     } );
-/*
+
     coreObjectsTree.addMouseMoveListener( new MouseMoveListener() {
 
       public void mouseMove( MouseEvent move ) {
@@ -2189,8 +2189,8 @@ public class Spoon extends AbstractEntryPoint implements AddUndoPositionInterfac
               }
               toolTip.setImage( image );
               toolTip.setText( name + Const.CR + Const.CR + tip );
-              toolTip.setBackgroundColor( GUIResource.getInstance().getColor( 255, 254, 225 ) );
-              toolTip.setForegroundColor( GUIResource.getInstance().getColor( 0, 0, 0 ) );
+//              toolTip.setBackgroundColor( GUIResource.getInstance().getColor( 255, 254, 225 ) );
+//              toolTip.setForegroundColor( GUIResource.getInstance().getColor( 0, 0, 0 ) );
               toolTip.show( new org.eclipse.swt.graphics.Point( move.x + 10, move.y + 10 ) );
             }
           }
@@ -2204,15 +2204,15 @@ public class Spoon extends AbstractEntryPoint implements AddUndoPositionInterfac
                       display, ConstUI.ICON_SIZE, ConstUI.ICON_SIZE );
               toolTip.setImage( image );
               toolTip.setText( name + Const.CR + Const.CR + tip );
-              toolTip.setBackgroundColor( GUIResource.getInstance().getColor( 255, 254, 225 ) );
-              toolTip.setForegroundColor( GUIResource.getInstance().getColor( 0, 0, 0 ) );
+//              toolTip.setBackgroundColor( GUIResource.getInstance().getColor( 255, 254, 225 ) );
+//              toolTip.setForegroundColor( GUIResource.getInstance().getColor( 0, 0, 0 ) );
               toolTip.show( new org.eclipse.swt.graphics.Point( move.x + 10, move.y + 10 ) );
             }
           }
         }
       }
     } );
-*/
+
     addDragSourceToTree( coreObjectsTree );
     addDefaultKeyListeners( coreObjectsTree );
     coreObjectsTree.addMouseListener( new MouseAdapter() {

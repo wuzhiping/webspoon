@@ -190,95 +190,95 @@ public class ConditionEditor extends Composite {
     blue = GUIResource.getInstance().getColorBlue();
     gray = GUIResource.getInstance().getColorDarkGray();
 
-//    widget.addPaintListener( new PaintListener() {
-//      public void paintControl( PaintEvent pe ) {
-//        Rectangle r = widget.getBounds();
-//        if ( r.width > 0 && r.height > 0 ) {
-//          repaint( pe.gc, r.width, r.height );
-//        }
-//      }
-//    } );
-//
-//    widget.addMouseMoveListener( new MouseMoveListener() {
-//      public void mouseMove( MouseEvent e ) {
-//        Point screen = new Point( e.x, e.y );
-//        int area = getAreaCode( screen );
-//
-//        int nr = 0;
-//        boolean need_redraw = false;
-//
-//        hover_condition = -1;
-//        hover_operator = -1;
-//        hover_not = false;
-//        hover_up = false;
-//        hover_left = false;
-//        hover_fn = false;
-//        hover_rightval = false;
-//        hover_rightex = false;
-//
-//        if ( area != AREA_ICON_ADD ) {
-//          setToolTipText( null );
-//        } else {
-//          setToolTipText( BaseMessages.getString( PKG, "ConditionEditor.AddCondition.Label" ) );
-//        }
-//
-//        switch ( area ) {
-//          case AREA_NOT:
-//            hover_not = true;
-//            nr = 1;
-//            break;
-//          case AREA_UP:
-//            hover_up = getLevel() > 0;
-//            nr = 1;
-//            break;
-//          case AREA_BACKGROUND:
-//            break;
-//          case AREA_SUBCONDITION:
-//            hover_condition = getNrSubcondition( screen );
-//            nr = hover_condition;
-//            break;
-//          case AREA_OPERATOR:
-//            hover_operator = getNrOperator( screen );
-//            nr = hover_operator;
-//            break;
-//          case AREA_LEFT:
-//            hover_left = true;
-//            nr = 1;
-//            break;
-//          case AREA_FUNCTION:
-//            hover_fn = true;
-//            nr = 1;
-//            break;
-//          case AREA_RIGHT_VALUE:
-//            hover_rightval = true;
-//            nr = 1;
-//            break;
-//          case AREA_RIGHT_EXACT:
-//            hover_rightex = true;
-//            nr = 1;
-//            break;
-//          case AREA_CONDITION:
-//            break;
-//          case AREA_NONE:
-//            break;
-//          default:
-//            break;
-//        }
-//
-//        if ( area != previous_area || nr != previous_area_nr ) {
-//          need_redraw = true;
-//        }
-//
-//        if ( need_redraw ) {
-//          offsetx = -sbHorizontal.getSelection();
-//          offsety = -sbVertical.getSelection();
-//          widget.redraw();
-//        }
-//
-//        previous_area = area;
-//        previous_area_nr = nr;
-//      }
-//    } );
+    widget.addPaintListener( new PaintListener() {
+      public void paintControl( PaintEvent pe ) {
+        Rectangle r = widget.getBounds();
+        if ( r.width > 0 && r.height > 0 ) {
+          repaint( pe.gc, r.width, r.height );
+        }
+      }
+    } );
+
+    widget.addMouseMoveListener( new MouseMoveListener() {
+      public void mouseMove( MouseEvent e ) {
+        Point screen = new Point( e.x, e.y );
+        int area = getAreaCode( screen );
+
+        int nr = 0;
+        boolean need_redraw = false;
+
+        hover_condition = -1;
+        hover_operator = -1;
+        hover_not = false;
+        hover_up = false;
+        hover_left = false;
+        hover_fn = false;
+        hover_rightval = false;
+        hover_rightex = false;
+
+        if ( area != AREA_ICON_ADD ) {
+          setToolTipText( null );
+        } else {
+          setToolTipText( BaseMessages.getString( PKG, "ConditionEditor.AddCondition.Label" ) );
+        }
+
+        switch ( area ) {
+          case AREA_NOT:
+            hover_not = true;
+            nr = 1;
+            break;
+          case AREA_UP:
+            hover_up = getLevel() > 0;
+            nr = 1;
+            break;
+          case AREA_BACKGROUND:
+            break;
+          case AREA_SUBCONDITION:
+            hover_condition = getNrSubcondition( screen );
+            nr = hover_condition;
+            break;
+          case AREA_OPERATOR:
+            hover_operator = getNrOperator( screen );
+            nr = hover_operator;
+            break;
+          case AREA_LEFT:
+            hover_left = true;
+            nr = 1;
+            break;
+          case AREA_FUNCTION:
+            hover_fn = true;
+            nr = 1;
+            break;
+          case AREA_RIGHT_VALUE:
+            hover_rightval = true;
+            nr = 1;
+            break;
+          case AREA_RIGHT_EXACT:
+            hover_rightex = true;
+            nr = 1;
+            break;
+          case AREA_CONDITION:
+            break;
+          case AREA_NONE:
+            break;
+          default:
+            break;
+        }
+
+        if ( area != previous_area || nr != previous_area_nr ) {
+          need_redraw = true;
+        }
+
+        if ( need_redraw ) {
+          offsetx = -sbHorizontal.getSelection();
+          offsety = -sbVertical.getSelection();
+          widget.redraw();
+        }
+
+        previous_area = area;
+        previous_area_nr = nr;
+      }
+    } );
 
     widget.addMouseListener( new MouseAdapter() {
       public void mouseDown( MouseEvent e ) {
@@ -1301,8 +1301,8 @@ public class ConditionEditor extends Composite {
       // Set the bar's parameters...
       sbHorizontal.setMaximum( maxdrawn.width );
       sbHorizontal.setMinimum( 0 );
-//      sbHorizontal.setPageIncrement( size_widget.width );
-//      sbHorizontal.setIncrement( 10 );
+      sbHorizontal.setPageIncrement( size_widget.width );
+      sbHorizontal.setIncrement( 10 );
     }
 
     // Vertical scrollbar behavior
@@ -1317,8 +1317,8 @@ public class ConditionEditor extends Composite {
       // Set the bar's parameters...
       sbVertical.setMaximum( maxdrawn.height );
       sbVertical.setMinimum( 0 );
-//      sbVertical.setPageIncrement( size_widget.height );
-//      sbVertical.setIncrement( 10 );
+      sbVertical.setPageIncrement( size_widget.height );
+      sbVertical.setIncrement( 10 );
     }
   }
 

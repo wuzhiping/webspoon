@@ -50,7 +50,7 @@ public class TabSet implements SelectionListener, CTabFolder2Listener {
     super();
     tabfolder = createTabFolder( parent );
 
-    //tabfolder.setSimple( false );
+    tabfolder.setSimple( false );
     tabfolder.setUnselectedImageVisible( true );
     tabfolder.setUnselectedCloseVisible( true );
     tabfolder.addSelectionListener( this );

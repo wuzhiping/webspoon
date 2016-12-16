@@ -100,7 +100,6 @@ public class SpoonBrowser implements TabItemInterface, XulEventHandler {
 
     composite.setLayout( new FormLayout() );
 
-    /*
     if ( showControls ) {
       addToolBar();
 
@@ -114,19 +113,16 @@ public class SpoonBrowser implements TabItemInterface, XulEventHandler {
       fdToolBar.top = new FormAttachment( 0, 0 );
 
     }
-    */
 
     browser = createBrowser();
     FormData fdBrowser = new FormData();
     fdBrowser.left = new FormAttachment( 0, 0 );
     fdBrowser.right = new FormAttachment( 100, 0 );
-    /*
     if ( showControls ) {
       fdBrowser.top = new FormAttachment( (Control) toolbar.getManagedObject(), 2 );
     } else {
       fdBrowser.top = new FormAttachment( 0, 2 );
     }
-    */
     fdBrowser.top = new FormAttachment( 0, 2 );
     fdBrowser.bottom = new FormAttachment( 100, 0 );
     browser.setLayoutData( fdBrowser );

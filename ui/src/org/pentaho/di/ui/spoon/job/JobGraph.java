@@ -448,7 +448,7 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
     lastclick = null;
 
     canvas.addMouseListener( this );
-    //canvas.addMouseMoveListener( this );
+    canvas.addMouseMoveListener( this );
     //canvas.addMouseTrackListener( this );
     //canvas.addMouseWheelListener( this );
 

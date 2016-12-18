@@ -31,6 +31,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -77,6 +78,11 @@ public class LogBrowser {
     final AtomicInteger lastLogId = new AtomicInteger( -1 );
     final AtomicBoolean busy = new AtomicBoolean( false );
     final KettleLogLayout logLayout = new KettleLogLayout( true );
+
+    final StyleRange normalLogLineStyle = new StyleRange();
+    normalLogLineStyle.foreground = GUIResource.getInstance().getColorBlue();
+    final StyleRange errorLogLineStyle = new StyleRange();
+    errorLogLineStyle.foreground = GUIResource.getInstance().getColorRed();
 
     // Refresh the log every second or so
     //
@@ -131,6 +137,20 @@ public class LogBrowser {
                     if ( length > 0 ) {
                       text.append( line );
                       text.append( Const.CR );
+
+                      if ( event.getLevel() == LogLevel.ERROR ) {
+                        StyleRange styleRange = new StyleRange();
+                        styleRange.foreground = GUIResource.getInstance().getColorRed();
+                        styleRange.start = start;
+                        styleRange.length = length;
+                        text.setStyleRange( styleRange );
+                      } else {
+                        StyleRange styleRange = new StyleRange();
+                        styleRange.foreground = GUIResource.getInstance().getColorBlue();
+                        styleRange.start = start;
+                        styleRange.length = Math.min( 20, length );
+                        text.setStyleRange( styleRange );
+                      }
                     }
                   }
                 }

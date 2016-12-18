@@ -31,7 +31,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.MouseAdapter;
@@ -58,13 +58,13 @@ import org.pentaho.di.ui.spoon.Spoon;
 public class LogBrowser {
   private static Class<?> PKG = Spoon.class; // for i18n purposes, needed by Translator2!!
 
-  private Text text;
+  private StyledText text;
   private LogParentProvidedInterface logProvider;
   private List<String> childIds = new ArrayList<String>();
   private Date lastLogRegistryChange;
   private AtomicBoolean paused;
 
-  public LogBrowser( final Text text, final LogParentProvidedInterface logProvider ) {
+  public LogBrowser( final StyledText text, final LogParentProvidedInterface logProvider ) {
     this.text = text;
     this.logProvider = logProvider;
     this.paused = new AtomicBoolean( false );
@@ -142,7 +142,7 @@ public class LogBrowser {
                 if ( maxSize > 0 && size > maxSize ) {
 
                   int dropIndex = ( text.getText().indexOf( Const.CR, size - maxSize ) ) + Const.CR.length();
-                  text.setText( text.getText().substring( dropIndex ) );
+                  text.replaceTextRange( 0, dropIndex, "" );
                 }
 
                 text.setSelection( text.getText().length() );
@@ -194,7 +194,7 @@ public class LogBrowser {
   /**
    * @return the text
    */
-  public Text getText() {
+  public StyledText getText() {
     return text;
   }
 

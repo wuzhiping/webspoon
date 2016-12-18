@@ -26,6 +26,7 @@ package org.pentaho.di.ui.core.widget;
 //import org.eclipse.jface.window.ToolTip;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.KeyAdapter;
@@ -210,8 +211,8 @@ public class ControlSpaceKeyAdapter extends KeyAdapter {
         combo.setText( extra ); // We can't know the location of the cursor yet. All we can do is overwrite.
       } else if ( control instanceof StyledTextComp ) {
         ( (StyledTextComp) control ).insert( extra );
-      } else if ( control instanceof Text ) {
-        ( (Text) control ).insert( extra );
+      } else if ( control instanceof StyledText ) {
+        ( (StyledText) control ).insert( extra );
       }
     }
     if ( !shell.isDisposed() ) {

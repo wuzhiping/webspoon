@@ -28,7 +28,7 @@ import java.util.ResourceBundle;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabItem;
-import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.layout.FormAttachment;
@@ -67,7 +67,7 @@ public class TransLogDelegate extends SpoonDelegate implements XulEventHandler {
 
   private CTabItem transLogTab;
 
-  private Text transLogText;
+  private StyledText transLogText;
 
   private XulToolbar toolbar;
 
@@ -119,7 +119,7 @@ public class TransLogDelegate extends SpoonDelegate implements XulEventHandler {
 
     toolbarControl.setParent( transLogComposite );
 
-    transLogText = new Text( transLogComposite, SWT.READ_ONLY | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL );
+    transLogText = new StyledText( transLogComposite, SWT.READ_ONLY | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL );
     spoon.props.setLook( transLogText );
     FormData fdText = new FormData();
     fdText.left = new FormAttachment( 0, 0 );

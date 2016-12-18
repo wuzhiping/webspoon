@@ -36,7 +36,7 @@ import java.util.Vector;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.custom.SashForm;
-import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.KeyEvent;
@@ -84,7 +84,7 @@ public class LibFormulaEditor extends Dialog implements KeyListener {
   private Tree tree;
   // private TreeEditor treeEditor;
   private SashForm sashForm;
-  private Text expressionEditor;
+  private StyledText expressionEditor;
   private String formula;
   private Browser message;
 
@@ -214,7 +214,7 @@ public class LibFormulaEditor extends Dialog implements KeyListener {
 
     // An expression editor on the right
     //
-    expressionEditor = new Text( rightSash, SWT.NONE );
+    expressionEditor = new StyledText( rightSash, SWT.NONE );
     expressionEditor.setText( this.formula );
     expressionEditor.addKeyListener( this );
 
@@ -310,7 +310,7 @@ public class LibFormulaEditor extends Dialog implements KeyListener {
       //
       StringBuffer beforeBuffer = new StringBuffer();
       String editor = expressionEditor.getText();
-      int pos = expressionEditor.getCaretPosition() - 1;
+      int pos = expressionEditor.getCaretOffset() - 1;
       while ( pos >= 0 && pos < editor.length() ) {
         char c = editor.charAt( pos );
         if ( Character.isWhitespace( c ) ) {
@@ -367,7 +367,7 @@ public class LibFormulaEditor extends Dialog implements KeyListener {
         }
       }
       // final int offset = expressionEditor.getCaretOffset();
-      final int offset = expressionEditor.getCaretPosition();
+      final int offset = expressionEditor.getCaretOffset();
       Point p = expressionEditor.getLocation( );
       int h = expressionEditor.getLineHeight( );
       Point l = GUIResource.calculateControlPosition( expressionEditor );

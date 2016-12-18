@@ -142,8 +142,8 @@ import org.pentaho.di.ui.core.PropsUI;
 import org.pentaho.di.ui.core.dialog.EnterTextDialog;
 import org.pentaho.di.ui.core.dialog.ErrorDialog;
 import org.pentaho.di.ui.core.gui.GUIResource;
-//import org.pentaho.di.ui.core.widget.CheckBoxToolTip;
-//import org.pentaho.di.ui.core.widget.CheckBoxToolTipListener;
+import org.pentaho.di.ui.core.widget.CheckBoxToolTip;
+import org.pentaho.di.ui.core.widget.CheckBoxToolTipListener;
 import org.pentaho.di.ui.job.dialog.JobDialog;
 import org.pentaho.di.ui.repository.RepositorySecurityUI;
 import org.pentaho.di.ui.repository.dialog.RepositoryExplorerDialog;
@@ -283,7 +283,7 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
 
   private Label minMaxButton;
 
-//  private CheckBoxToolTip helpTip;
+  private CheckBoxToolTip helpTip;
 
   private List<AreaOwner> areaOwners;
 
@@ -299,7 +299,7 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
 
   private JobEntryCopy endHopEntry;
   private JobEntryCopy noInputEntry;
-  //private DefaultToolTip toolTip;
+  private CheckBoxToolTip toolTip;
   private Point[] previous_step_locations;
   private Point[] previous_note_locations;
   private JobEntryCopy currentEntry;
@@ -393,21 +393,21 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
           .getString( PKG, "JobGraph.Exception.ErrorReadingXULFile.Message", Spoon.XUL_FILE_MENUS ),
         new Exception( t ) );
     }
-    /*
-    toolTip = new DefaultToolTip( canvas, ToolTip.NO_RECREATE, true );
-    toolTip.setRespectMonitorBounds( true );
-    toolTip.setRespectDisplayBounds( true );
-    toolTip.setPopupDelay( 350 );
-    toolTip.setShift( new org.eclipse.swt.graphics.Point( ConstUI.TOOLTIP_OFFSET, ConstUI.TOOLTIP_OFFSET ) );
 
-    helpTip = new CheckBoxToolTip( canvas );
+    toolTip = new CheckBoxToolTip( shell );
+//    toolTip.setRespectMonitorBounds( true );
+//    toolTip.setRespectDisplayBounds( true );
+//    toolTip.setPopupDelay( 350 );
+//    toolTip.setShift( new org.eclipse.swt.graphics.Point( ConstUI.TOOLTIP_OFFSET, ConstUI.TOOLTIP_OFFSET ) );
+
+    helpTip = new CheckBoxToolTip( shell );
     helpTip.addCheckBoxToolTipListener( new CheckBoxToolTipListener() {
 
       public void checkBoxSelected( boolean enabled ) {
         spoon.props.setShowingHelpToolTips( enabled );
       }
     } );
-    */
+
     newProps();
 
     selectionRegion = null;
@@ -500,9 +500,9 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
                 //
                 if ( jobMeta.nrJobEntries() > 1
                   && jobMeta.nrJobEntries() < 5 && spoon.props.isShowingHelpToolTips() ) {
-//                  showHelpTip(
-//                    p.x, p.y, BaseMessages.getString( PKG, "JobGraph.HelpToolTip.CreatingHops.Title" ),
-//                    BaseMessages.getString( PKG, "JobGraph.HelpToolTip.CreatingHops.Message" ) );
+                  showHelpTip(
+                    p.x, p.y, BaseMessages.getString( PKG, "JobGraph.HelpToolTip.CreatingHops.Title" ),
+                    BaseMessages.getString( PKG, "JobGraph.HelpToolTip.CreatingHops.Message" ) );
                 }
               }
               break;
@@ -612,8 +612,8 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
   }
 
   protected void hideToolTips() {
-    //toolTip.hide();
-    //helpTip.hide();
+    toolTip.hide();
+    helpTip.hide();
   }
 
   public void mouseDoubleClick( MouseEvent e ) {
@@ -658,6 +658,7 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
 
   public void mouseDown( MouseEvent e ) {
 
+    mouseHover( e );
     boolean control = ( e.stateMask & SWT.MOD1 ) != 0;
     boolean shift = ( e.stateMask & SWT.SHIFT ) != 0;
 
@@ -1057,7 +1058,7 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
 
     // disable the tooltip
     //
-    //toolTip.hide();
+    toolTip.hide();
 
     Point real = screen2real( e.x, e.y );
     // Remember the last position of the mouse for paste with keyboard
@@ -1187,9 +1188,9 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
               endHopLocation = null;
             } else {
               noInputEntry = jobEntryCopy;
-              //toolTip.setImage( null );
-              //toolTip.setText( "The start entry can only be used at the start of a Job" );
-              //toolTip.show( new org.eclipse.swt.graphics.Point( real.x, real.y ) );
+              toolTip.setImage( null );
+              toolTip.setText( "The start entry can only be used at the start of a Job" );
+              toolTip.show( new org.eclipse.swt.graphics.Point( real.x, real.y ) );
             }
           } else if ( endHopEntry != null ) {
             hop_candidate = new JobHopMeta( jobEntryCopy, endHopEntry );
@@ -1265,13 +1266,13 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
       }
     }
 
-//    if ( tip ) {
-//      // Show a tool tip upon mouse-over of an object on the canvas
-//      //
-//      if ( !helpTip.isVisible() ) {
-//        setToolTip( real.x, real.y, e.x, e.y );
-//      }
-//    }
+    if ( tip ) {
+      // Show a tool tip upon mouse-over of an object on the canvas
+      //
+      if ( !helpTip.isVisible() ) {
+        setToolTip( real.x, real.y, e.x, e.y );
+      }
+    }
   }
 
   public void mouseEnter( MouseEvent event ) {
@@ -1756,15 +1757,15 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
 
   private void showHelpTip( int x, int y, String tipTitle, String tipMessage ) {
 
-//    helpTip.setTitle( tipTitle );
-//    helpTip.setMessage( tipMessage );
-//    helpTip.setCheckBoxMessage( BaseMessages.getString(
-//      PKG, "JobGraph.HelpToolTip.DoNotShowAnyMoreCheckBox.Message" ) );
-//    // helpTip.hide();
-//    // int iconSize = spoon.props.getIconSize();
-//    org.eclipse.swt.graphics.Point location = new org.eclipse.swt.graphics.Point( x - 5, y - 5 );
-//
-//    helpTip.show( location );
+    helpTip.setTitle( tipTitle );
+    helpTip.setMessage( tipMessage );
+    helpTip.setCheckBoxMessage( BaseMessages.getString(
+      PKG, "JobGraph.HelpToolTip.DoNotShowAnyMoreCheckBox.Message" ) );
+    // helpTip.hide();
+    // int iconSize = spoon.props.getIconSize();
+    org.eclipse.swt.graphics.Point location = new org.eclipse.swt.graphics.Point( x - 5, y - 5 );
+
+    helpTip.show( location );
   }
 
   public void setJobEntry( JobEntryCopy jobEntry ) {
@@ -2482,7 +2483,7 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
         }
       }
     }
-    /*
+
     if ( tip == null || tip.length() == 0 ) {
       toolTip.hide();
     } else {
@@ -2497,7 +2498,6 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
         toolTip.show( new org.eclipse.swt.graphics.Point( screenX, screenY ) );
       }
     }
-    */
   }
 
   public void launchStuff( JobEntryCopy jobEntryCopy ) {

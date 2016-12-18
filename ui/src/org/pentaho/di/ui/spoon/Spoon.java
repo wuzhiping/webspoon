@@ -275,6 +275,7 @@ import org.pentaho.di.ui.core.dialog.Splash;
 import org.pentaho.di.ui.core.dialog.SubjectDataBrowserDialog;
 import org.pentaho.di.ui.core.gui.GUIResource;
 import org.pentaho.di.ui.core.gui.WindowProperty;
+import org.pentaho.di.ui.core.widget.CheckBoxToolTip;
 import org.pentaho.di.ui.core.widget.OsHelper;
 import org.pentaho.di.ui.core.widget.TreeMemory;
 import org.pentaho.di.ui.imp.ImportRulesDialog;
@@ -542,7 +543,7 @@ public class Spoon extends AbstractEntryPoint implements AddUndoPositionInterfac
 
   private Map<String, String> coreJobToolTipMap;
 
-  //private DefaultToolTip toolTip;
+  private CheckBoxToolTip toolTip;
 
   public Map<String, SharedObjects> sharedObjectsFileMap;
 
@@ -2222,14 +2223,12 @@ public class Spoon extends AbstractEntryPoint implements AddUndoPositionInterfac
       }
     } );
 
-    /*
-    toolTip = new DefaultToolTip( variableComposite, ToolTip.RECREATE, true );
-    toolTip.setRespectMonitorBounds( true );
-    toolTip.setRespectDisplayBounds( true );
-    toolTip.setPopupDelay( 350 );
-    toolTip.setHideDelay( 5000 );
-    toolTip.setShift( new org.eclipse.swt.graphics.Point( ConstUI.TOOLTIP_OFFSET, ConstUI.TOOLTIP_OFFSET ) );
-    */
+    toolTip = new CheckBoxToolTip( shell );
+//    toolTip.setRespectMonitorBounds( true );
+//    toolTip.setRespectDisplayBounds( true );
+//    toolTip.setPopupDelay( 350 );
+//    toolTip.setHideDelay( 5000 );
+//    toolTip.setShift( new org.eclipse.swt.graphics.Point( ConstUI.TOOLTIP_OFFSET, ConstUI.TOOLTIP_OFFSET ) );
   }
 
   protected TreeItem searchMouseOverTreeItem( TreeItem[] treeItems, int x, int y ) {
@@ -2514,9 +2513,9 @@ public class Spoon extends AbstractEntryPoint implements AddUndoPositionInterfac
   }
 
   public void hideToolTips() {
-//    if ( toolTip != null ) {
-//      toolTip.hide();
-//    }
+    if ( toolTip != null ) {
+      toolTip.hide();
+    }
   }
 
   /**

@@ -135,8 +135,8 @@ public class ControlSpaceKeyAdapter extends KeyAdapter {
       final List list = new List( shell, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL );
       props.setLook( list );
       list.setItems( getVariableNames( variables ) );
-//      final DefaultToolTip toolTip = new DefaultToolTip( list, ToolTip.RECREATE, true );
-//      toolTip.setImage( GUIResource.getInstance().getImageVariable() );
+      final CheckBoxToolTip toolTip = new CheckBoxToolTip( shell );
+      toolTip.setImage( GUIResource.getInstance().getImageVariable() );
 //      toolTip.setHideOnMouseDown( true );
 //      toolTip.setRespectMonitorBounds( true );
 //      toolTip.setRespectDisplayBounds( true );
@@ -162,9 +162,9 @@ public class ControlSpaceKeyAdapter extends KeyAdapter {
           if ( name.startsWith( Const.INTERNAL_VARIABLE_PREFIX ) ) {
             message += BaseMessages.getString( PKG, "TextVar.InternalVariable.Message" );
           }
-//          toolTip.setText( message );
-//          toolTip.hide();
-//          toolTip.show( new Point( shellBounds.width, 0 ) );
+          toolTip.setText( message );
+          toolTip.hide();
+          toolTip.show( new Point( shellBounds.width, 0 ) );
         }
       } );
 

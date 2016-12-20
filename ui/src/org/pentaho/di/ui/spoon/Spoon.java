@@ -758,7 +758,7 @@ public class Spoon extends AbstractEntryPoint implements AddUndoPositionInterfac
    * TODO: create a SpoonLifecycle listener that can notify interested parties of a pre-initialization state so this can
    * happen in those listeners.
    */
-  private static void registerUIPluginObjectTypes() {
+  public static void registerUIPluginObjectTypes() {
     RepositoryPluginType.getInstance()
                         .addObjectType( RepositoryRevisionBrowserDialogInterface.class, "version-browser-classname" );
     RepositoryPluginType.getInstance().addObjectType( RepositoryDialogInterface.class, "dialog-classname" );

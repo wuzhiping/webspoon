@@ -48,13 +48,34 @@ webSpoon does not work with Java 7 since the dependent library (Eclipse RAP/RWT)
 
 ## Deploy
 
-The following procedures assume that Pentaho BI server (CE or EE) has already been installed and webSpoon is deployed to the Apache Tomcat shipped with them, but webSpoon can also be deployed to other Java Application server (e.g., Jetty).
+The following procedures assume that Pentaho BI server (CE or EE) has already been installed and webSpoon is deployed to the Apache Tomcat shipped with them, but webSpoon can also be deployed to other servlet container (e.g., Jetty).
+
+### CE
 
 1. Download the latest `spoon.war` from [here](https://github.com/HiromuHota/pentaho-kettle/releases).
-2. Copy the downloaded `spoon.war` to the `webapps` folder, e.g., `biserver-ce/tomcat/webapps` for CE, `Pentaho/server/biserver-ee/tomcat/webapps` for EE.
-3. (Re)start the BI server.
+2. Copy the downloaded `spoon.war` to `biserver-ce/tomcat/webapps`.
+3. Download and unzip `pdi-ce-6.1.0.1-196.zip`, then copy the `system` folder to `biserver-ce/tomcat/bin`.
+4. Configure Apache Karaf as below.
+5. (Re)start the BI server, namely `./start-pentaho.sh`.
+
+### EE
+
+1. Download the latest `spoon.war` from [here](https://github.com/HiromuHota/pentaho-kettle/releases).
+2. Copy the downloaded `spoon.war` to `Pentaho/server/biserver-ee/tomcat/webapps`.
+3. Download and unzip `pdi-ce-6.1.0.1-196.zip` (should be CE), then copy the `system` folder to `Pentaho`.
+4. Configure Apache Karaf as below.
+5. (Re)start the BI server, namely `./ctlscript.sh start baserver`.
 
 WebSpoon will sit next to the Pentaho User Console (i.e., `http://address:8080/spoon` when PUC is `http://address:8080/pentaho`).
+
+### Apache Karaf features configuration
+
+- Change `featureBoot` in `system/karaf/etc/org.apache.karaf.features.cfg` as
+
+```
+#featuresBoot=config,pentaho-client,pentaho-metaverse,pdi-dataservice,pdi-data-refinery
+featuresBoot=config,pentaho-client-minimal
+```
 
 ## Config
 
@@ -187,4 +208,5 @@ Finally import the project (pentaho-kettle/ui) into Eclipse IDE.
 - Mac and OS X are trademarks of Apple Inc., registered in the U.S. and other countries.
 - Windows is a registered trademark of Microsoft Corporation in the U.S. and other countries.
 - Eclipse is a registered trademark of the Eclipse Foundation, Inc. in the US and/or other countries.
+- Apache Karaf is a trademark of The Apache Software Foundation.
 - Other company and product names mentioned in this document may be the trademarks of their respective owners.

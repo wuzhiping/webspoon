@@ -6,11 +6,11 @@
 
   <context-param>
     <param-name>org.eclipse.rap.applicationConfiguration</param-name>
-    <param-value>org.pentaho.di.ui.spoon.BasicApplication</param-value>
+    <param-value>org.pentaho.di.ui.spoon.WebSpoon</param-value>
   </context-param>
 
   <listener>
-    <listener-class>org.eclipse.rap.rwt.engine.RWTServletContextListener</listener-class>
+    <listener-class>org.pentaho.di.ui.spoon.WebSpoonServletContextListener</listener-class>
   </listener>
 
   <servlet>

@@ -19,6 +19,7 @@
     <dependency org="${ivy.artifact.group}" name="kettle-core"         rev="${dependency.kettle.revision}" changing="true"/>
     <dependency org="${ivy.artifact.group}" name="kettle-engine"       rev="${dependency.kettle.revision}" changing="true"/>
     <dependency org="${ivy.artifact.group}" name="kettle-dbdialog"     rev="${dependency.kettle.revision}" changing="true"/>
+    <dependency org="${ivy.artifact.group}" name="kettle-ui-swt"       rev="${dependency.kettle.revision}" changing="true"/>
     <dependency org="${ivy.artifact.group}" name="pdi-pur-plugin"      rev="${dependency.kettle.revision}" changing="true"/>
 
     <!-- Pentaho (non-Kettle) dependencies -->
@@ -26,10 +27,20 @@
     <dependency org="pentaho"               name="pentaho-xul-core"    rev="${dependency.pentaho-xul.revision}"         changing="true"/>
     <dependency org="pentaho"               name="pentaho-xul-swt"     rev="${dependency.pentaho-xul.revision}"         changing="true"/>
     <dependency org="pentaho"               name="pentaho-xul-swing"   rev="${dependency.pentaho-xul.revision}"         changing="true"/>
-    <dependency org="pentaho"               name="pentaho-platform-core" rev="${dependency.pentaho-xul.revision}"       changing="true"/>
-    <dependency org="pentaho"               name="pentaho-platform-api" rev="${dependency.pentaho-xul.revision}"        changing="true" transitive="false"/>
+    <dependency org="pentaho"               name="pentaho-platform-core" rev="${dependency.kettle.revision}"            changing="true"/>
+    <dependency org="pentaho"               name="pentaho-platform-api" rev="$${dependency.kettle.revision}"            changing="true" transitive="false"/>
+    <dependency org="pentaho"               name="pentaho-platform-extensions" rev="${dependency.kettle.revision}"      changing="true" transitive="false"/>
+    <dependency org="pentaho"               name="pdi-osgi-bridge-core" rev="${dependency.kettle.revision}"             changing="true" />
+    <!-- pentaho-metaverse -->
+    <dependency org="pentaho" name="pentaho-metaverse-api" rev="${dependency.kettle.revision}" changing="true" transitive="false"/>
 
     <dependency org="pentaho" name="pentaho-capability-manager" rev="${dependency.pentaho-capability-manager.revision}" conf="default->default" transitive="false"/>
+
+    <!-- Karaf Dependencies -->
+    <dependency org="org.apache.karaf" name="org.apache.karaf.main" rev="3.0.3"  transitive="false"/>
+    <dependency org="org.apache.karaf" name="org.apache.karaf.util" rev="3.0.3"  transitive="false"/>
+    <dependency org="org.apache.karaf.jaas" name="org.apache.karaf.jaas.boot" rev="2.4.2"  transitive="false"/>
+    <dependency org="org.apache.felix" name="org.apache.felix.main" rev="4.2.1"  transitive="false"/>
 
     <!-- Third-party (external) dependencies -->
 
@@ -54,7 +65,6 @@
     <!-- Exclude some modules that were replaced by rap -->
     <exclude module="swt-linux-x86_64"/>
     <exclude module="jface"/>
-    <exclude module="kettle-ui-swt"/>
     <exclude module="servlet-api"/>
   </dependencies>
 </ivy-module>

@@ -1,5 +1,18 @@
 # Change Log
 
+## 0.6.1.4 - 2016-12-21
+
+### Changed
+- Rebase to 6.1.0.1-R (6.1.0.1-196).
+- Change versioning (this is the 4th patch applied to 6.1).
+- Change how to deploy (need the `system/karaf` folder).
+
+### Fixed
+- Restore the ability to launch Apache Karaf.
+- Restore the marketplace.
+- Restore toolTip and helpTip.
+- Fix broken unit tests.
+
 ## 0.0.0.3 - 2016-11-22
 ### Fixed
 - Restore the missing menubar.

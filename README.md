@@ -133,9 +133,10 @@ webSpoon uses 4 digits versioning with the following rules:
 
 - The 1st digit is always 0 (never be released as a separate software).
 - The 2nd and 3rd digits represent the base Kettle version, e.g., 6.1, 7.0.
-- The last digit represents the minor revisions within webSpoon.
+- The last digit represents the patch version.
 
-As a result, the next (pre-)release version will be 0.6.1.4, meaning it is from the branch webspoon-6.1 and the 4th minor revision.
+As a result, the next (pre-)release version will be 0.6.1.4, meaning it is based on the Kettle version 6.1 with the 4th patch.
+There could be a version of 0.7.0.4, which is based on the Kettle version 7.0 with (basically) the same patch.
 
 ## Build in the command line
 
@@ -156,13 +157,12 @@ Resolve dependencies
 $ ant resolve
 ```
 
-Replace some of the dependent libraries with patched one.
-The source code of patched libraries can be downloaded from [rap](https://github.com/HiromuHota/rap) and [pentaho-commons-xul](https://github.com/HiromuHota/pentaho-commons-xul).
+Replace some of the dependent libraries with patched ones, which can be downloaded from [rap](https://github.com/HiromuHota/rap/releases) and [pentaho-commons-xul](https://github.com/HiromuHota/pentaho-commons-xul/releases).
 
 ```bash
-$ cp ${path_to_lib}/org.eclipse.rap.filedialog-3.1.1-SNAPSHOT.jar lib/org.eclipse.rap.filedialog-3.1.1.jar
-$ cp ${path_to_lib}/org.eclipse.rap.jface-3.1.1-SNAPSHOT.jar lib/org.eclipse.rap.jface-3.1.1.jar
-$ cp ${path_to_lib}/org.eclipse.rap.rwt-3.1.1-SNAPSHOT.jar lib/org.eclipse.rap.rwt-3.1.1.jar
+$ cp ${path_to_lib}/org.eclipse.rap.filedialog_3.1.1.YYYYMMDD-XXXX.jar lib/org.eclipse.rap.filedialog-3.1.1.jar
+$ cp ${path_to_lib}/org.eclipse.rap.jface_3.1.1.YYYYMMDD-XXXX.jar lib/org.eclipse.rap.jface-3.1.1.jar
+$ cp ${path_to_lib}/org.eclipse.rap.rwt_3.1.1.YYYYMMDD-XXXX.jar lib/org.eclipse.rap.rwt-3.1.1.jar
 $ cp ${path_to_lib}/pentaho-xul-swt-6.1-SNAPSHOT.jar lib/pentaho-xul-swt-6.1.0.1-196.jar
 ```
 
@@ -173,11 +173,11 @@ $ ant war
 ```
 ## Testing
 
-`TestContext` has been added to some test cases to simulate the environment that RAP UI code normally runs. `TestContext` is in the bundle org.eclipse.rap.rwt.testfixture, which is not hosted by the Maven Repository. So please download it from [here](https://github.com/HiromuHota/rap/releases/download/webspoon%2F0.0.0.1/org.eclipse.rap.rwt.testfixture-3.1.1-SNAPSHOT.jar) and copy it to the `test-lib` directory.
+`TestContext` has been added to some test cases to simulate the environment that RAP UI code normally runs. `TestContext` is in the bundle org.eclipse.rap.rwt.testfixture, which is not hosted by the Maven Repository. So please download it from [here](https://github.com/HiromuHota/rap/releases) and copy it to the `test-lib` directory.
 
 ```
 $ ant resolve
-$ cp ${path_to_lib}/org.eclipse.rap.rwt.testfixture-3.1.1-SNAPSHOT.jar test-lib/
+$ cp ${path_to_lib}/org.eclipse.rap.rwt.testfixture_3.1.1.YYYYMMDD-XXXX.jar test-lib/
 $ ant test
 ```
 

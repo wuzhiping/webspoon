@@ -49,35 +49,29 @@ webSpoon does not work with Java 7 since the dependent library (Eclipse RAP/RWT)
 ## Deploy
 
 The following procedures assume that Pentaho BI server (CE or EE) has already been installed and webSpoon is deployed to the Apache Tomcat shipped with them, but webSpoon can also be deployed to other servlet container (e.g., Jetty).
+The 3rd and 4th steps are optional if PDI plugin OSGi bundles (e.g., marketplace) are not required.
 
 ### CE
 
 1. Download the latest `spoon.war` from [here](https://github.com/HiromuHota/pentaho-kettle/releases).
 2. Copy the downloaded `spoon.war` to `biserver-ce/tomcat/webapps`.
-3. Download and unzip `pdi-ce-6.1.0.1-196.zip`, then copy the `system` folder to `biserver-ce/tomcat/bin`.
-4. Configure Apache Karaf as below.
+3. (Optional) download and unzip `pdi-ce-6.1.0.1-196.zip`, then copy the `system` folder to `biserver-ce/tomcat/bin`.
+4. (Optional) configure Apache Karaf as below.
 5. (Re)start the BI server, namely `./start-pentaho.sh`.
 
 ### EE
 
 1. Download the latest `spoon.war` from [here](https://github.com/HiromuHota/pentaho-kettle/releases).
 2. Copy the downloaded `spoon.war` to `Pentaho/server/biserver-ee/tomcat/webapps`.
-3. Download and unzip `pdi-ce-6.1.0.1-196.zip` (should be CE), then copy the `system` folder to `Pentaho`.
-4. Configure Apache Karaf as below.
+3. (Optional) download and unzip `pdi-ce-6.1.0.1-196.zip` (should be CE), then copy the `system` folder to `Pentaho`.
+4. (Optional) configure Apache Karaf as below.
 5. (Re)start the BI server, namely `./ctlscript.sh start baserver`.
 
 WebSpoon will sit next to the Pentaho User Console (i.e., `http://address:8080/spoon` when PUC is `http://address:8080/pentaho`).
 
-### Apache Karaf features configuration
-
-- Change `featureBoot` in `system/karaf/etc/org.apache.karaf.features.cfg` as
-
-```
-#featuresBoot=config,pentaho-client,pentaho-metaverse,pdi-dataservice,pdi-data-refinery
-featuresBoot=config,pentaho-client-minimal
-```
-
 ## Config
+
+### Repository
 
 It is strongly recommended to use webSpoon with a Repository (can be Pentaho Repository, Kettle Database Repository, or Kettle File Repository), otherwise opening/saving files does not function as you would expect.
 The steps to connect to a Repository is described [here](https://help.pentaho.com/Documentation/6.1/0J0/0C0/015) and [here](https://help.pentaho.com/Documentation/6.1/0L0/0Y0/040).
@@ -87,6 +81,30 @@ Please remember to move the progress bar, otherwise it will not close.
 
 One can also automatically login to a repository by setting environment variables.
 The details are described [here](http://wiki.pentaho.com/display/EAI/.01+Introduction+to+Spoon#.01IntroductiontoSpoon-Repository).
+
+### (Optional) Apache Karaf
+
+- Change `featureBoot` in `system/karaf/etc/org.apache.karaf.features.cfg` as
+
+```
+featuresBoot=config,pentaho-client-minimal
+```
+
+- Firewall / port forward
+
+Please make sure that a client can access the OSGI Service Port of the server (e.g., 9051).
+It is known that the marketplace does not work properly when the port is not accessible.
+The port seems to be automatically assigned and sometimes changes, so it is needed to check which port is actually used.
+The port information like below can be found in the Tomcat log: `tomcat/logs/catalina.out`.
+
+```
+*******************************************************************************
+*** Karaf Instance Number: 1 at /XXX/biserver-ce/tomcat/bin/./syst ***
+***   em/karaf/caches/webspoonservletcontextlistener/data-1                 ***
+*** Karaf Port:8802                                                         ***
+*** OSGI Service Port:9051                                                  ***
+*******************************************************************************
+```
 
 ## Plugins
 

@@ -68,6 +68,7 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.rap.rwt.RWT;
 import org.eclipse.rap.rwt.application.AbstractEntryPoint;
 import org.eclipse.rap.rwt.client.service.ExitConfirmation;
+import org.eclipse.rap.rwt.client.service.StartupParameters;
 import org.eclipse.rap.rwt.service.ServerPushSession;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
@@ -348,6 +349,7 @@ import org.pentaho.vfs.ui.VfsFileChooserDialog;
 import org.pentaho.xul.swt.tab.TabItem;
 import org.pentaho.xul.swt.tab.TabListener;
 import org.pentaho.xul.swt.tab.TabSet;
+import org.springframework.util.CollectionUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -9245,12 +9247,35 @@ public class Spoon extends AbstractEntryPoint implements AddUndoPositionInterfac
     props = PropsUI.getInstance();
 
     // original in createContents
-    ExitConfirmation service = RWT.getClient().getService( ExitConfirmation.class );
-    service.setMessage( "Do you really wanna leave this site?" );
+    ExitConfirmation serviceConfirm = RWT.getClient().getService( ExitConfirmation.class );
+    serviceConfirm.setMessage( "Do you really wanna leave this site?" );
 
     shell = getShell();
 
     init( null );
+
+    /* Open a file when appropriate parameters are given */
+    StartupParameters serviceParams = RWT.getClient().getService( StartupParameters.class );
+    String fileType = serviceParams.getParameter( "fileType" );
+    String filename = serviceParams.getParameter( "filename" );
+    String directory = serviceParams.getParameter( "directory" );
+    Boolean sourceRepository = serviceParams.getParameter( "sourceRepository" ) == null ? null : serviceParams.getParameter( "sourceRepository" ).equalsIgnoreCase( "true" );
+    String repositoryName = serviceParams.getParameter( "repositoryName" );
+    if ( !CollectionUtils.isEmpty( serviceParams.getParameterNames() ) ) {
+      if ( fileType == null | filename == null | directory == null | sourceRepository == null | repositoryName == null ) {
+        MessageBox box = new MessageBox( shell, SWT.ICON_WARNING | SWT.OK );
+        box.setText( "Incorrect parameters" );
+        box.setMessage( "Check your URL parameters\n"
+          + "Ex1) /?fileType=Trans\n&&filename=Transformation%201\n&&directory=%2Fhome%2Fadmin\n&&sourceRepository=true\n&&repositoryName=pentaho-ee\n"
+          + "Ex2) /?fileType=Trans\n&&filename=file%3A%2F%2F%2Fhome%2Fuser%2F%2FTransformation%202.ktr\n&&directory=\n&&sourceRepository=false\n&&repositoryName=" );
+        box.open();
+      } else {
+        List<LastUsedFile> lastUsedFiles = new ArrayList<LastUsedFile>();
+        lastUsedFiles.add( new LastUsedFile( fileType, filename, directory, sourceRepository, repositoryName, false, LastUsedFile.OPENED_ITEM_TYPE_MASK_GRAPH ) );
+        props.setLastUsedFiles( lastUsedFiles );
+        lastFileSelect( "0" );
+      }
+    }
 
     openSpoon();
 

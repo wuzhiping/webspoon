@@ -872,7 +872,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       the defined directories.
       ====================================================================-->
   <target name="resolve"
-          depends="resolve-default, resolve-test, ivy.check-releasable"
+          depends="resolve-default, resolve-test, resolve-plugins, ivy.check-releasable"
           description="Retrieves all the dependent libraries"/>
 
   <target name="resolve-init" unless="resolve-init.skip" depends="install-ivy">
@@ -931,6 +931,23 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                   symlink="${ivy.use.symlinks.internal}"/>
   </target>
 
+  <target name="resolve-plugins" depends="resolve-init">
+    <ivy:resolve file="${ivyfile}" conf="plugins" />
+    <ivy:retrieve conf="plugins" pattern="${plugins.dir}/[module]-[revision](-[classifier]).[ext]" sync="true" />
+    <for param="plugin">
+      <path id="plugin-list">
+        <fileset dir="${plugins.dir}">
+          <include name="*.zip"/>
+        </fileset>
+      </path>
+      <sequential>
+        <unzip src="@{plugin}" dest="${plugins.dir}" overwrite="true"/>
+      </sequential>
+    </for>
+    <delete>
+      <fileset dir="${plugins.dir}" includes="*.zip"/>
+    </delete>
+  </target>
 
   <!--=======================================================================
       ivy-clean-cache

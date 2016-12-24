@@ -58,9 +58,6 @@
     <copy todir="./docs">
         <fileset dir="../assembly/package-res/docs" includes="**/*"/>
     </copy>
-    <copy todir="./plugins">
-        <fileset file="./lib/pdi-pur-plugin-*.jar"/>
-    </copy>
 
     <if>
       <not>

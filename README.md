@@ -84,12 +84,6 @@ The details are described [here](http://wiki.pentaho.com/display/EAI/.01+Introdu
 
 ### (Optional) Apache Karaf
 
-- Change `featureBoot` in `system/karaf/etc/org.apache.karaf.features.cfg` as
-
-```
-featuresBoot=config,pentaho-client-minimal
-```
-
 - Firewall / port forward
 
 Please make sure that a client can access the OSGI Service Port of the server (e.g., 9051).

@@ -7,6 +7,7 @@
     <conf name="default-ext"/>
     <conf name="runtime"/>
     <conf name="test" extends="runtime" visibility="private"/>
+    <conf name="plugins"/>
     <conf name="source"/>
   </configurations>
 
@@ -20,19 +21,53 @@
     <dependency org="${ivy.artifact.group}" name="kettle-engine"       rev="${dependency.kettle.revision}"/>
     <dependency org="${ivy.artifact.group}" name="kettle-dbdialog"     rev="${dependency.kettle.revision}"/>
     <dependency org="${ivy.artifact.group}" name="kettle-ui-swt"       rev="${dependency.kettle.revision}"/>
-    <dependency org="${ivy.artifact.group}" name="pdi-pur-plugin"      rev="${dependency.kettle.revision}"/>
+
+    <dependency org="pentaho"               name="pdi-osgi-bridge-core" rev="${dependency.kettle.revision}"/>
 
     <!-- Pentaho (non-Kettle) dependencies -->
     <dependency org="pentaho"               name="pentaho-vfs-browser" rev="${dependency.pentaho-vfs-browser.revision}"/>
     <dependency org="pentaho"               name="pentaho-xul-core"    rev="${dependency.pentaho-xul.revision}"/>
     <dependency org="pentaho"               name="pentaho-xul-swt"     rev="${dependency.pentaho-xul.revision}"/>
     <dependency org="pentaho"               name="pentaho-xul-swing"   rev="${dependency.pentaho-xul.revision}"/>
-    <dependency org="pentaho"               name="pentaho-platform-core" rev="${dependency.pentaho-platform.revision}"/>
-    <dependency org="pentaho"               name="pentaho-platform-api" rev="${dependency.pentaho-platform.revision}" transitive="false"/>
-    <dependency org="pentaho"               name="pentaho-platform-extensions" rev="${dependency.kettle.revision}" transitive="false"/>
-    <dependency org="pentaho"               name="pdi-osgi-bridge-core" rev="${dependency.kettle.revision}"/>
-    <dependency org="pentaho"               name="pentaho-metaverse-api" rev="${dependency.kettle.revision}" transitive="false"/>
     <dependency org="pentaho"               name="pentaho-capability-manager" rev="${dependency.pentaho-capability-manager.revision}" transitive="false"/>
+
+    <dependency org="pentaho"               name="pentaho-hadoop-hive-jdbc-shim" rev="61.2016.04.01-196"/>
+    <dependency org="pentaho-kettle" name="pdi-pur-plugin" rev="${dependency.kettle.revision}" transitive="false" conf="plugins->default">
+      <artifact name="pdi-pur-plugin" type="zip"/>
+    </dependency>
+
+    <dependency org="pentaho" name="pentaho-platform-extensions"  rev="${dependency.pentaho-platform.revision}" transitive="false"/>
+    <dependency org="org.slf4j" name="slf4j-api" rev="1.7.5"/>
+    <dependency org="org.slf4j" name="slf4j-log4j12" rev="1.7.5"/>
+    <dependency org="org.springframework" name="spring-aop"     rev="${dependency.spring.framework.revision}" />
+    <dependency org="org.springframework" name="spring-beans"   rev="${dependency.spring.framework.revision}" />
+    <dependency org="org.springframework" name="spring-context" rev="${dependency.spring.framework.revision}" />
+    <dependency org="org.springframework.security" name="spring-security-core" rev="${dependency.spring.security.revision}" />
+    <dependency org="org.glassfish.metro" name="webservices-api" rev="2.1" transitive="false"/>
+    <dependency org="org.glassfish.metro" name="webservices-rt" rev="2.1" transitive="false"/>
+
+    <!-- pentaho-metaverse -->
+    <dependency org="pentaho"               name="pentaho-metaverse-api" rev="${dependency.kettle.revision}" transitive="false"/>
+    <dependency org="pentaho"               name="pentaho-platform-api" rev="${dependency.pentaho-platform.revision}" transitive="false"/>
+    <dependency org="pentaho"               name="pentaho-platform-core" rev="${dependency.pentaho-platform.revision}" transitive="false"/>
+
+    <!--  Pentaho reporting dependencies -->
+    <dependency org="${dependency.reporting-engine.group}" name="pentaho-reporting-engine-classic-extensions" rev="${dependency.pentaho-reporting.revision}" changing="true">
+      <exclude name="pentaho-reporting-engine-classic-core-test"/>
+    </dependency>
+    <dependency org="${dependency.reporting-engine.group}" name="pentaho-reporting-engine-classic-extensions-drill-down" rev="${dependency.pentaho-reporting.revision}" changing="true"/>
+    <dependency org="${dependency.reporting-engine.group}" name="pentaho-reporting-engine-classic-extensions-kettle" rev="${dependency.pentaho-reporting.revision}" changing="true"/>
+    <dependency org="${dependency.reporting-engine.group}" name="pentaho-reporting-engine-classic-extensions-mondrian" rev="${dependency.pentaho-reporting.revision}" transitive="true" changing="true"/>
+    <dependency org="${dependency.reporting-engine.group}" name="pentaho-reporting-engine-classic-extensions-olap4j" rev="${dependency.pentaho-reporting.revision}" transitive="true" changing="true"/>
+    <dependency org="${dependency.reporting-engine.group}" name="pentaho-reporting-engine-classic-extensions-pmd" rev="${dependency.pentaho-reporting.revision}" transitive="true" changing="true"/>
+    <dependency org="${dependency.reporting-engine.group}" name="pentaho-reporting-engine-classic-extensions-reportdesigner-parser" rev="${dependency.pentaho-reporting.revision}" transitive="true" changing="true"/>
+    <dependency org="${dependency.reporting-engine.group}" name="pentaho-reporting-engine-classic-extensions-sampledata" rev="${dependency.pentaho-reporting.revision}" transitive="true" changing="true"/>
+    <dependency org="${dependency.reporting-engine.group}" name="pentaho-reporting-engine-classic-extensions-scripting" rev="${dependency.pentaho-reporting.revision}" transitive="true" changing="true"/>
+    <dependency org="${dependency.reporting-engine.group}" name="pentaho-reporting-engine-classic-extensions-toc" rev="${dependency.pentaho-reporting.revision}" transitive="true" changing="true"/>
+    <dependency org="${dependency.reporting-engine.group}" name="pentaho-reporting-engine-classic-extensions-xpath" rev="${dependency.pentaho-reporting.revision}" transitive="true" changing="true"/>
+    <dependency org="${dependency.reporting-engine.group}" name="pentaho-reporting-engine-legacy-charts" rev="${dependency.pentaho-reporting.revision}" transitive="true" changing="true"/>
+    <dependency org="${dependency.reporting-engine.group}" name="pentaho-reporting-engine-legacy-functions" rev="${dependency.pentaho-reporting.revision}" transitive="true" changing="true"/>
+    <dependency org="${dependency.reporting-engine.group}" name="pentaho-reporting-engine-wizard-core"  rev="${dependency.pentaho-reporting.revision}" changing="true" transitive="true"/>
 
     <!-- Karaf Dependencies -->
     <dependency org="org.apache.karaf" name="org.apache.karaf.main" rev="3.0.3"  transitive="false"/>
@@ -40,25 +75,57 @@
     <dependency org="org.apache.karaf.jaas" name="org.apache.karaf.jaas.boot" rev="2.4.2"  transitive="false"/>
     <dependency org="org.apache.felix" name="org.apache.felix.main" rev="4.2.1"  transitive="false"/>
 
-    <!-- Third-party (external) dependencies -->
+    <!-- Third-party JDBC dependencies -->
+    <dependency org="org.apache.derby"     name="derby"                 rev="10.2.1.6"      transitive="false"/>
+    <dependency org="org.apache.derby"     name="derbyclient"           rev="10.2.1.6"      transitive="false"/>
+    <dependency org="com.h2database"       name="h2"                    rev="1.2.131"       transitive="false"/>
+    <dependency org="org.hsqldb"           name="hsqldb"                rev="2.3.2"         transitive="false"/>
+    <dependency org="infobright"           name="infobright-core"       rev="3.4"           transitive="false"/>
+    <dependency org="org.firebirdsql.jdbc" name="jaybird"               rev="2.1.6"         transitive="false"/>
+    <dependency org="net.sf.jt400"         name="jt400"                 rev="6.1"           transitive="false"/>
+    <dependency org="jtds"                 name="jtds"                  rev="1.2.5"         transitive="false"/>
+    <dependency org="luciddb"              name="LucidDbClient-minimal" rev="0.9.4"         transitive="false"/>
+    <dependency org="monetdb"              name="monetdb-jdbc"          rev="2.1"           transitive="false"/>
+    <dependency org="org.postgresql"       name="postgresql"            rev="9.3-1102-jdbc4" transitive="false"/>
+    <dependency org="com.sap"              name="sapdbc"                rev="7.4.4"         transitive="false"/>
+    <dependency org="org.xerial"           name="sqlite-jdbc"           rev="3.7.2"         transitive="false"/>
+    <dependency org="jaxen"                name="jaxen"                 rev="1.1.1"         transitive="false"/>
 
+    <!-- Third-party (external) dependencies -->
     <dependency org="org.eclipse.rap"       name="org.eclipse.rap.rwt" rev="${dependency.rap.revision}" transitive="false"/>
     <dependency org="org.eclipse.rap"       name="org.eclipse.rap.filedialog" rev="${dependency.rap.revision}" transitive="false"/>
     <dependency org="org.eclipse.rap"       name="org.eclipse.rap.jface" rev="${dependency.rap.revision}" transitive="false"/>
     <dependency org="org.eclipse.rap"       name="org.eclipse.rap.fileupload" rev="${dependency.rap.revision}" transitive="false"/>
-    <dependency org="commons-fileupload"    name="commons-fileupload" rev="1.3.2" transitive="false"/>
+    <dependency org="commons-fileupload"    name="commons-fileupload" rev="1.3.1" transitive="false"/>
     <dependency org="javax.servlet"         name="javax.servlet-api"   rev="3.1.0"/>
 
     <dependency org="org.eclipse.equinox"   name="common"              rev="3.3.0-v20070426"      transitive="false"/>
     <dependency org="jfree"                 name="jfreechart"          rev="1.0.13"               transitive="false"/>
     <dependency org="rhino"                 name="js"                  rev="1.7R3"                transitive="false"/>
-    <dependency org="org.glassfish.metro"   name="webservices-api"     rev="2.1"                  transitive="false"/>
-    <dependency org="org.glassfish.metro"   name="webservices-rt"      rev="2.1"                  transitive="false" />
+
+    <!-- Other third-party dependencies -->
+    <dependency org="asm"                  name="asm"                   rev="3.2"           transitive="false"/>
+    <dependency org="net.sf.saxon"         name="saxon-dom"             rev="9.1.0.8"       transitive="false"/>
+    <dependency org="com.tinkerpop.blueprints" name="blueprints-core"   rev="2.6.0"         transitive="false"/>
+    <dependency org="commons-configuration" name="commons-configuration" rev="1.9"          transitive="false"/>
+    <dependency org="net.sf.flexjson"      name="flexjson"              rev="2.1"           transitive="false"/>
+    <dependency org="com.fasterxml.jackson.core" name="jackson-annotations" rev="2.3.3"     transitive="false"/>
+    <dependency org="com.fasterxml.jackson.core" name="jackson-databind" rev="2.3.3"        transitive="false"/>
+    <dependency org="com.fasterxml.jackson.core" name="jackson-core" rev="2.3.3"            transitive="false"/>
+    <!-- To support Enunciate Annotations in Resource classes -->
+    <dependency org="org.codehaus.enunciate" name="enunciate-jersey-rt" rev="1.27"          transitive="false" />
+    <dependency org="org.codehaus.enunciate" name="enunciate-core-annotations" rev="1.27"   transitive="false" />
+
+    <dependency org="org.codehaus.jackson" name="jackson-xc" rev="1.9.3" transitive="false"/>
+    <dependency org="com.sun.jersey.contribs" name="jersey-multipart" rev="1.16" transitive="false"/>
 
     <!-- Testing dependencies -->
     <dependency org="junit"                 name="junit"               rev="4.9"   conf="test->default"  transitive="false"/>
     <dependency org="org.mockito"           name="mockito-all"         rev="1.9.5" conf="test->default"  transitive="false"/>
     <dependency org="${ivy.artifact.group}" name="kettle-engine-test"  rev="${dependency.kettle.revision}" conf="test->default" transitive="false"/>
+
+    <!-- Manually include dependencies to align with the official distribution -->
+    <dependency org="stax" name="stax-api" rev="1.0.1" transitive="false"/>
 
     <!-- Exclude some modules that were replaced by rap -->
     <exclude module="swt-linux-x86_64"/>

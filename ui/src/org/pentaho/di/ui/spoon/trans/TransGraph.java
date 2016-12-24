@@ -42,6 +42,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.MessageDialogWithToggle;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.rap.rwt.service.ServerPushSession;
 //import org.eclipse.jface.window.DefaultToolTip;
 //import org.eclipse.jface.window.ToolTip;
 import org.eclipse.swt.SWT;
@@ -4075,6 +4076,8 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
   }
 
   private synchronized void prepareTrans( final Thread parentThread, final String[] args ) {
+    final ServerPushSession pushSession = new ServerPushSession();
+    pushSession.start();
     Runnable runnable = new Runnable() {
       public void run() {
         try {
@@ -4099,6 +4102,7 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
           running = false;
           checkErrorVisuals();
         }
+        pushSession.stop();
       }
     };
     Thread thread = new Thread( runnable );

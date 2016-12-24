@@ -68,6 +68,7 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.rap.rwt.RWT;
 import org.eclipse.rap.rwt.application.AbstractEntryPoint;
 import org.eclipse.rap.rwt.client.service.ExitConfirmation;
+import org.eclipse.rap.rwt.service.ServerPushSession;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.browser.LocationEvent;
@@ -8513,6 +8514,8 @@ public class Spoon extends AbstractEntryPoint implements AddUndoPositionInterfac
       return;
     }
 
+    final ServerPushSession pushSession = new ServerPushSession();
+    pushSession.start();
     Thread thread = new Thread() {
       public void run() {
         getDisplay().asyncExec( new Runnable() {
@@ -8520,6 +8523,7 @@ public class Spoon extends AbstractEntryPoint implements AddUndoPositionInterfac
             try {
               delegates.trans.executeTransformation(
                 transMeta, local, remote, cluster, preview, debug, replayDate, safe, logLevel );
+              pushSession.stop();
             } catch ( Exception e ) {
               new ErrorDialog(
                 shell, "Execute transformation", "There was an error during transformation execution", e );

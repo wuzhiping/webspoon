@@ -24,6 +24,7 @@ package org.pentaho.di.ui.repository.controllers;
 
 import java.util.ResourceBundle;
 
+import org.eclipse.rap.rwt.service.ServerPushSession;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.pentaho.di.i18n.BaseMessages;
@@ -202,6 +203,7 @@ public class RepositoriesController extends AbstractXulEventHandler {
       return;
     }
     XulWaitBox box;
+    final ServerPushSession pushSession = new ServerPushSession();
     try {
       box = (XulWaitBox) document.createElement( "waitbox" );
       box.setIndeterminate( true );
@@ -220,6 +222,7 @@ public class RepositoriesController extends AbstractXulEventHandler {
             display.asyncExec( new Runnable() {
               public void run() {
                 waitBox.stop();
+                pushSession.stop();
               }
             } );
 
@@ -244,6 +247,7 @@ public class RepositoriesController extends AbstractXulEventHandler {
             display.asyncExec( new Runnable() {
               public void run() {
                 waitBox.stop();
+                pushSession.stop();
               }
             } );
 
@@ -270,6 +274,7 @@ public class RepositoriesController extends AbstractXulEventHandler {
       } );
       okButton.setDisabled( true );
       cancelButton.setDisabled( true );
+      pushSession.start();
       box.start();
     } catch ( XulException e1 ) {
       getCallback().onError( e1 );

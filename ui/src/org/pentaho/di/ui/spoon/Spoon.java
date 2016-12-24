@@ -65,7 +65,9 @@ import org.eclipse.jface.window.ApplicationWindow;
 //import org.eclipse.jface.window.ToolTip;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.rap.rwt.RWT;
 import org.eclipse.rap.rwt.application.AbstractEntryPoint;
+import org.eclipse.rap.rwt.client.service.ExitConfirmation;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.browser.LocationEvent;
@@ -9239,6 +9241,9 @@ public class Spoon extends AbstractEntryPoint implements AddUndoPositionInterfac
     props = PropsUI.getInstance();
 
     // original in createContents
+    ExitConfirmation service = RWT.getClient().getService( ExitConfirmation.class );
+    service.setMessage( "Do you really wanna leave this site?" );
+
     shell = getShell();
 
     init( null );

@@ -9,6 +9,7 @@
     <conf name="test" extends="runtime" visibility="private"/>
     <conf name="plugins"/>
     <conf name="source"/>
+    <conf name="pentaho-system" />
   </configurations>
 
   <publications>
@@ -30,6 +31,10 @@
     <dependency org="pentaho"               name="pentaho-xul-swt"     rev="${dependency.pentaho-xul.revision}"/>
     <dependency org="pentaho"               name="pentaho-xul-swing"   rev="${dependency.pentaho-xul.revision}"/>
     <dependency org="pentaho"               name="pentaho-capability-manager" rev="${dependency.pentaho-capability-manager.revision}" transitive="false"/>
+
+    <dependency org="pentaho" name="pentaho-karaf-assembly" rev="${project.revision}" conf="pentaho-system->default" m:classifier="client">
+      <artifact name="pentaho-karaf-assembly" type="zip" m:classifier="client"/>
+    </dependency>
 
     <dependency org="pentaho"               name="pentaho-hadoop-hive-jdbc-shim" rev="61.2016.04.01-196"/>
     <dependency org="pentaho-kettle" name="pdi-pur-plugin" rev="${dependency.kettle.revision}" transitive="false" conf="plugins->default">

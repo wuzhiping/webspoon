@@ -32,6 +32,7 @@ import org.eclipse.rap.rwt.application.Application;
 import org.eclipse.rap.rwt.application.ApplicationConfiguration;
 import org.eclipse.rap.rwt.client.WebClient;
 import org.eclipse.rap.rwt.service.ResourceLoader;
+import org.eclipse.rap.rwt.service.ServiceHandler;
 
 public class WebSpoon implements ApplicationConfiguration {
 
@@ -46,5 +47,7 @@ public class WebSpoon implements ApplicationConfiguration {
     properties.put( WebClient.FAVICON, "ui/images/spoon.ico" );
     application.addEntryPoint( "/", Spoon.class, properties );
     application.setOperationMode( Application.OperationMode.SWT_COMPATIBILITY );
+
+    application.addServiceHandler( "downloadServiceHandler", new DownloadServiceHandler() );
   }
 }

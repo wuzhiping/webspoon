@@ -23,18 +23,27 @@
 
 package org.pentaho.di.ui.spoon;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.rap.rwt.application.Application;
 import org.eclipse.rap.rwt.application.ApplicationConfiguration;
 import org.eclipse.rap.rwt.client.WebClient;
+import org.eclipse.rap.rwt.service.ResourceLoader;
 
 public class WebSpoon implements ApplicationConfiguration {
 
   public void configure( Application application ) {
+    application.addResource( "ui/images/spoon.ico", new ResourceLoader() {
+      public InputStream getResourceAsStream( String resourceName ) throws IOException {
+        return this.getClass().getClassLoader().getResourceAsStream( "ui/images/spoon.ico" );
+      }
+    } );
     Map<String, String> properties = new HashMap<String, String>();
     properties.put( WebClient.PAGE_TITLE, "Spoon" );
+    properties.put( WebClient.FAVICON, "ui/images/spoon.ico" );
     application.addEntryPoint( "/", Spoon.class, properties );
     application.setOperationMode( Application.OperationMode.SWT_COMPATIBILITY );
   }

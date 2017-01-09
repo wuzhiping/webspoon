@@ -1619,9 +1619,11 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
       case TARGET:
         // We connect a target of the source step to an output step...
         //
-        stream.setStepMeta( candidate.getToStep() );
-        candidate.getFromStep().getStepMetaInterface().handleStreamSelection( stream );
-        spoon.newHop( transMeta, candidate );
+        if ( candidate != null ) {
+          stream.setStepMeta( candidate.getToStep() );
+          candidate.getFromStep().getStepMetaInterface().handleStreamSelection( stream );
+          spoon.newHop( transMeta, candidate );
+        }
         break;
       default:
         break;

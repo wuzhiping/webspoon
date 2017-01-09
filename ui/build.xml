@@ -78,6 +78,7 @@
       </lib>
       <classes dir="${classes.dir}"/>
       <zipfileset dir="plugins" prefix="plugins"/>
+      <fileset file="PentahoDataIntegration_OSS_Licenses.html"/>
     </war>
   </target>
 

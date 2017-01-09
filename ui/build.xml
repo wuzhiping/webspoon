@@ -76,7 +76,9 @@
 
   <target name="war" depends="resolve,compile">
     <war destfile="${dist.dir}/spoon.war" webxml="WEB-INF/web.xml">
-      <lib dir="${lib.dir}"/>
+      <lib dir="${lib.dir}">
+        <exclude name="javax.servlet-api-*.jar"/>
+      </lib>
       <classes dir="${classes.dir}"/>
       <zipfileset dir="plugins" prefix="plugins"/>
     </war>

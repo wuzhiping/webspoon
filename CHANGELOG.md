@@ -1,5 +1,23 @@
 # Change Log
 
+## 0.6.1.5 - 2017-01-10
+
+### Added
+- Add exit confirmation.
+- Add license notices for third-party libraries.
+- Take parameters in url to open a file (experimental).
+- Set favicon.
+
+### Changed
+- Update dependencies to align w/ the official dist.
+
+### Fixed
+- Leverage RAP's "Server Push" to trigger UI update.
+- Restore Help - About.
+- Restore repository export.
+- Restore ConditionEditor in FilterRows.
+- Fix the hop creation error for multiple streams.
+
 ## 0.6.1.4 - 2016-12-21
 
 ### Changed

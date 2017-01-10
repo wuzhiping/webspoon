@@ -67,7 +67,7 @@ The 3rd and 4th steps are optional if PDI plugin OSGi bundles (e.g., marketplace
 4. (Optional) configure Apache Karaf as below.
 5. (Re)start the BI server, namely `./ctlscript.sh start baserver`.
 
-WebSpoon will sit next to the Pentaho User Console (i.e., `http://address:8080/spoon` when PUC is `http://address:8080/pentaho`).
+webSpoon will sit next to the Pentaho User Console (i.e., `http://address:8080/spoon/` **with a trailing slash** when PUC is `http://address:8080/pentaho`).
 
 ## Config
 

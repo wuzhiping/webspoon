@@ -77,7 +77,7 @@
         <exclude name="javax.servlet-api-*.jar"/>
       </lib>
       <classes dir="${classes.dir}"/>
-      <zipfileset dir="plugins" prefix="plugins"/>
+      <zipfileset dir="plugins/pdi-pur-plugin" prefix="plugins/pdi-pur-plugin"/>
       <fileset file="OSS_Licenses.html"/>
     </war>
   </target>

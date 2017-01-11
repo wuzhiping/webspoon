@@ -49,6 +49,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTarget;
 import org.eclipse.swt.dnd.DropTargetEvent;
@@ -82,7 +83,9 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.MessageBox;
@@ -472,7 +475,14 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
 
     // Add a canvas below it, use up all space initially
     //
-    canvas = new Canvas( sashForm, SWT.V_SCROLL | SWT.H_SCROLL | SWT.NO_BACKGROUND | SWT.BORDER );
+    scrolledcomposite = new ScrolledComposite( sashForm, SWT.V_SCROLL | SWT.H_SCROLL );
+    canvas = new Canvas( scrolledcomposite, SWT.NO_BACKGROUND | SWT.BORDER );
+    scrolledcomposite.setContent( canvas );
+    scrolledcomposite.addListener( SWT.Resize, new Listener() {
+      public void handleEvent( Event event ) {
+        resize();
+      }
+    } );
 
     sashForm.setWeights( new int[]{ 100, } );
 
@@ -513,8 +523,8 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
     impact = new ArrayList<DatabaseImpact>();
     impactFinished = false;
 
-    hori = canvas.getHorizontalBar();
-    vert = canvas.getVerticalBar();
+    hori = scrolledcomposite.getHorizontalBar();
+    vert = scrolledcomposite.getVerticalBar();
 
     hori.addSelectionListener( new SelectionAdapter() {
       public void widgetSelected( SelectionEvent e ) {
@@ -1843,6 +1853,7 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
       mb.setText( BaseMessages.getString( PKG, "TransGraph.Dialog.InvalidZoomMeasurement.Title" ) );
       mb.open();
     }
+    resize();
     redraw();
   }
 
@@ -3117,6 +3128,10 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
     Point max = transMeta.getMaximum();
     Point thumb = getThumb( area, max );
     return getOffset( thumb, area );
+  }
+
+  protected Point getMaximum() {
+    return transMeta.getMaximum();
   }
 
   private void editStep( StepMeta stepMeta ) {

@@ -226,9 +226,11 @@ public class TransPreviewDelegate extends SpoonDelegate implements XulEventHandl
    * This refresh is driven by outside influenced using listeners and so on.
    */
   public synchronized void refreshView() {
-    if ( transGraph != null && !transGraph.extraViewTabFolder.isDisposed() ) {
-      if ( transGraph.extraViewTabFolder.getSelection() != transPreviewTab ) {
-        return;
+    if ( transGraph != null && transGraph.extraViewTabFolder != null ) {
+      if ( !transGraph.extraViewTabFolder.isDisposed() ) {
+        if ( transGraph.extraViewTabFolder.getSelection() != transPreviewTab ) {
+          return;
+        }
       }
     }
 

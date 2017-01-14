@@ -68,8 +68,10 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.rap.rwt.RWT;
 import org.eclipse.rap.rwt.application.AbstractEntryPoint;
 import org.eclipse.rap.rwt.client.service.ExitConfirmation;
+import org.eclipse.rap.rwt.client.service.JavaScriptExecutor;
 import org.eclipse.rap.rwt.client.service.StartupParameters;
 import org.eclipse.rap.rwt.service.ServerPushSession;
+import org.eclipse.rap.rwt.widgets.WidgetUtil;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.browser.LocationEvent;
@@ -127,6 +129,7 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
+import org.eclipse.swt.widgets.Widget;
 import org.pentaho.di.base.AbstractMeta;
 import org.pentaho.di.cluster.ClusterSchema;
 import org.pentaho.di.cluster.SlaveServer;
@@ -1897,6 +1900,7 @@ public class Spoon extends AbstractEntryPoint implements AddUndoPositionInterfac
     view.setControl( new Composite( tabFolder, SWT.NONE ) );
     view.setText( STRING_SPOON_MAIN_TREE );
     view.setImage( GUIResource.getInstance().getImageExploreSolutionSmall() );
+    setTestId( view, "tree_exploreSolution" );
 
     design = new CTabItem( tabFolder, SWT.NONE );
     design.setText( STRING_SPOON_CORE_OBJECTS_TREE );
@@ -1928,6 +1932,7 @@ public class Spoon extends AbstractEntryPoint implements AddUndoPositionInterfac
    */
     ToolItem expandAll = new ToolItem( treeTb, SWT.PUSH );
     expandAll.setImage( GUIResource.getInstance().getImageExpandAll() );
+    setTestId( expandAll, "tree_expandAll" );
     ToolItem collapseAll = new ToolItem( treeTb, SWT.PUSH );
     collapseAll.setImage( GUIResource.getInstance().getImageCollapseAll() );
 
@@ -6256,6 +6261,7 @@ public class Spoon extends AbstractEntryPoint implements AddUndoPositionInterfac
     TreeItem item = new TreeItem( parent, SWT.NONE );
     item.setText( text );
     item.setImage( image );
+    setTestId( item, "tree_" + text );
     return item;
   }
 
@@ -9353,4 +9359,22 @@ public class Spoon extends AbstractEntryPoint implements AddUndoPositionInterfac
     authProviderDialog.show();
   }
 
+  static void setTestId( Widget widget, String value ) {
+    if ( !widget.isDisposed() ) {
+      String $el = widget instanceof Text ? "$input" : "$el";
+      String id = WidgetUtil.getId( widget );
+      exec( "rap.getObject( '", id, "' ).", $el, ".attr( 'test-id', '", value + "' );" );
+    }
+  }
+
+  private static void exec( String... strings ) {
+    StringBuilder builder = new StringBuilder();
+    builder.append( "try{" );
+    for ( String str : strings ) {
+      builder.append( str );
+    }
+    builder.append( "}catch(e){}" );
+    JavaScriptExecutor executor = RWT.getClient().getService( JavaScriptExecutor.class );
+    executor.execute( builder.toString() );
+  }
 }

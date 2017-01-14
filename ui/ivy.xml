@@ -202,6 +202,12 @@
     <dependency org="junit"                 name="junit"               rev="4.9"   conf="test->default"  transitive="false"/>
     <dependency org="org.mockito"           name="mockito-all"         rev="1.9.5" conf="test->default"  transitive="false"/>
     <dependency org="${ivy.artifact.group}" name="kettle-engine-test"  rev="${dependency.kettle.revision}" conf="test->default" transitive="false"/>
+    <!-- UI Testing dependencies -->
+    <dependency org="org.seleniumhq.selenium" name="selenium-java" rev="3.0.1" conf="test->default" transitive="false"/>
+    <dependency org="org.seleniumhq.selenium" name="selenium-api" rev="3.0.1" conf="test->default" transitive="false"/>
+    <dependency org="org.seleniumhq.selenium" name="selenium-support" rev="3.0.1" conf="test->default" transitive="false"/>
+    <dependency org="org.seleniumhq.selenium" name="selenium-chrome-driver" rev="3.0.1" conf="test->default" transitive="false"/>
+    <dependency org="org.seleniumhq.selenium" name="selenium-remote-driver" rev="3.0.1" conf="test->default" transitive="true"/>
 
     <!-- Manually include dependencies to align with the official distribution -->
     <dependency org="stax" name="stax-api" rev="1.0.1" transitive="false"/>

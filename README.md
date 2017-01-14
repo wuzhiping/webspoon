@@ -193,6 +193,17 @@ $ cp ${path_to_lib}/org.eclipse.rap.rwt.testfixture_3.1.1.YYYYMMDD-XXXX.jar test
 $ ant test
 ```
 
+### UI testing using Selenium
+
+Currently, Google Chrome browser is used when running UI test cases, but other supported browsers should work too.
+Ideally, PhantomJS should be used for head-less testing, but it is not supported by Eclipse RAP/RWT and some of the codes like mouse-move do not work as far as I've tested it.
+The default url is `http://localhost:8080/spoon/`.
+Pass a parameter like below if webSpoon is deployed to a different url.
+
+```
+$ ant test -Dtest.baseurl=http://localhost:8080
+```
+
 ## Develop in Eclipse IDE
 
 It is recommened to install the RAP Tools to your Eclipse IDE.
@@ -223,4 +234,5 @@ Finally import the project (pentaho-kettle/ui) into Eclipse IDE.
 - Windows is a registered trademark of Microsoft Corporation in the U.S. and other countries.
 - Eclipse is a registered trademark of the Eclipse Foundation, Inc. in the US and/or other countries.
 - Apache Karaf is a trademark of The Apache Software Foundation.
+- Google Chrome browser is a trademark of Google Inc.
 - Other company and product names mentioned in this document may be the trademarks of their respective owners.

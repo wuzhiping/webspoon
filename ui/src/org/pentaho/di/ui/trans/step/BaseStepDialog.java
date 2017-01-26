@@ -809,9 +809,7 @@ public class BaseStepDialog extends Dialog {
    * @return the database dialog
    */
   protected DatabaseDialog getDatabaseDialog( Shell shell ) {
-    if ( databaseDialog == null ) {
-      databaseDialog = new DatabaseDialog( shell );
-    }
+    databaseDialog = new DatabaseDialog( shell );
     return databaseDialog;
   }
 

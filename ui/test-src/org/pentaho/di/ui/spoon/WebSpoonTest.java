@@ -34,17 +34,21 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class WebSpoonTest {
   private WebDriver driver;
-  private Actions action;
+  private Actions actions;
   private String baseUrl;
   private WebElement element;
+  private WebDriverWait wait;
 
   @Before
   public void setUp() throws Exception {
     driver = new ChromeDriver();
-    action = new Actions( driver );
+    actions = new Actions( driver );
+    wait = new WebDriverWait( driver, 10 );
     baseUrl = System.getProperty( "test.baseurl", "http://localhost:8080/spoon/" );
     driver.get( baseUrl );
     driver.manage().timeouts().implicitlyWait( 10, TimeUnit.SECONDS );
@@ -66,15 +70,53 @@ public class WebSpoonTest {
     // Drag & drop a step
     driver.findElement( By.xpath( "//div[text() = 'Input']" ) ).click();
     element = driver.findElement( By.xpath( "//div[text() = 'Generate Rows']" ) );
-    action.clickAndHold( element ).moveByOffset( 300, 0 ).release().build().perform();
+    actions.clickAndHold( element ).moveByOffset( 300, 0 ).release().build().perform();
 
     // Open a step dialog
     driver.findElement( By.xpath( "//div[@test-id = 'tree_exploreSolution']" ) ).click();
     driver.findElement( By.xpath( "//div[@test-id = 'tree_expandAll']" ) ).click();
     element = driver.findElement( By.xpath( "//div[@test-id = 'tree_Steps']/../..//div[text() = 'Generate Rows']" ) );
-    action.click( element ).click( element ).build().perform();
+    actions.click( element ).click( element ).build().perform();
 
     Assert.assertEquals( 1, driver.findElements( By.xpath( "//div[text() = 'Never stop generating rows']" ) ).size() );
+  }
+
+  @Test
+  public void testDatabaseConnectionDialog() throws Exception {
+    // Create a new transformation
+    driver.findElement( By.xpath( "//div[text() = 'File']" ) ).click();
+    driver.findElement( By.xpath( "//div[text() = 'New']" ) ).click();
+    driver.findElement( By.xpath( "//div[text() = 'Transformation']" ) ).click();
+
+    // Filter a step
+    driver.findElement( By.xpath( "//input[@test-id = 'selectionFilter']" ) ).sendKeys( "table" );
+
+    // Draw a step
+    element = driver.findElement( By.xpath( "//div[text() = 'Table input']" ) );
+    actions.click( element ).click( element ).build().perform();
+
+    // Open a step dialog
+    driver.findElement( By.xpath( "//div[@test-id = 'tree_exploreSolution']" ) ).click();
+    driver.findElement( By.xpath( "//div[@test-id = 'tree_expandAll']" ) ).click();
+    element = driver.findElement( By.xpath( "//div[@test-id = 'tree_Steps']/../..//div[text() = 'Table input']" ) );
+    actions.click( element ).click( element ).build().perform();
+
+    /* TODO
+     * Cancel button does not become clickable unless thread.sleep and window.setSize.
+     * The wait duration might depend on an environment.
+     */
+    wait.until( ExpectedConditions.elementToBeClickable( By.xpath( "//div[text() = 'New...']" ) ) ).click();
+    Thread.sleep( 1000 );
+    driver.manage().window().setSize( new Dimension( 1280, 799 ) );
+    wait.until( ExpectedConditions.elementToBeClickable( By.xpath( "//div[text() = 'Cancel']" ) ) ).click();
+    Thread.sleep( 1000 );
+    driver.manage().window().setSize( new Dimension( 1280, 800 ) );
+    wait.until( ExpectedConditions.elementToBeClickable( By.xpath( "//div[text() = 'Edit...']" ) ) ).click();
+    Thread.sleep( 1000 );
+    driver.manage().window().setSize( new Dimension( 1280, 799 ) );
+    wait.until( ExpectedConditions.elementToBeClickable( By.xpath( "//div[text() = 'Cancel']" ) ) ).click();
+    Thread.sleep( 1000 );
+    Assert.assertEquals( "5", driver.switchTo().activeElement().getAttribute( "tabindex" ) );
   }
 
   @After

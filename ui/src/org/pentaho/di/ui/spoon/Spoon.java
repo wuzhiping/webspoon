@@ -1949,6 +1949,7 @@ public class Spoon extends AbstractEntryPoint implements AddUndoPositionInterfac
       new Text( mainComposite, SWT.SINGLE
         | SWT.BORDER | SWT.LEFT | SWT.SEARCH | SWT.ICON_SEARCH | SWT.ICON_CANCEL );
     selectionFilter.setToolTipText( BaseMessages.getString( PKG, "Spoon.SelectionFilter.Tooltip" ) );
+    setTestId( selectionFilter, "selectionFilter" );
     FormData fdSelectionFilter = new FormData();
     int offset = -( GUIResource.getInstance().getImageExpandAll().getBounds().height + 5 );
     if ( Const.isLinux() ) {

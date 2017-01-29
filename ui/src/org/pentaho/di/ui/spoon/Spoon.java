@@ -66,6 +66,7 @@ import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.rap.rwt.RWT;
+import org.eclipse.rap.rwt.SingletonUtil;
 import org.eclipse.rap.rwt.application.AbstractEntryPoint;
 import org.eclipse.rap.rwt.client.service.ExitConfirmation;
 import org.eclipse.rap.rwt.client.service.JavaScriptExecutor;
@@ -717,11 +718,13 @@ public class Spoon extends AbstractEntryPoint implements AddUndoPositionInterfac
     }
   }
 
-  public Spoon() {
+  //prevent instantiation from outside
+  private Spoon() {
     this( null );
   }
 
-  public Spoon( Repository rep ) {
+  //prevent instantiation from outside
+  private Spoon( Repository rep ) {
     //super( null );
     //this.addMenuBar();
     log = new LogChannel( APP_NAME );
@@ -1021,7 +1024,7 @@ public class Spoon extends AbstractEntryPoint implements AddUndoPositionInterfac
   }
 
   public static Spoon getInstance() {
-    return staticSpoon;
+    return SingletonUtil.getSessionInstance( Spoon.class );
   }
 
   public VfsFileChooserDialog getVfsFileChooserDialog( FileObject rootFile, FileObject initialFile ) {
@@ -9246,7 +9249,7 @@ public class Spoon extends AbstractEntryPoint implements AddUndoPositionInterfac
     ExitConfirmation serviceConfirm = RWT.getClient().getService( ExitConfirmation.class );
     serviceConfirm.setMessage( "Do you really wanna leave this site?" );
 
-    shell = getShell();
+    shell = parent.getShell();
 
     init( null );
 
@@ -9300,7 +9303,7 @@ public class Spoon extends AbstractEntryPoint implements AddUndoPositionInterfac
 
   @Override
   public Shell getShell() {
-    return super.getShell();
+    return shell;
   }
 
   public void start() {

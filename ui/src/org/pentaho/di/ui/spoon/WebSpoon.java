@@ -45,7 +45,7 @@ public class WebSpoon implements ApplicationConfiguration {
     Map<String, String> properties = new HashMap<String, String>();
     properties.put( WebClient.PAGE_TITLE, "Spoon" );
     properties.put( WebClient.FAVICON, "ui/images/spoon.ico" );
-    application.addEntryPoint( "/", Spoon.class, properties );
+    application.addEntryPoint( "/", WebSpoonEntryPoint.class, properties );
     application.setOperationMode( Application.OperationMode.SWT_COMPATIBILITY );
 
     application.addServiceHandler( "downloadServiceHandler", new DownloadServiceHandler() );

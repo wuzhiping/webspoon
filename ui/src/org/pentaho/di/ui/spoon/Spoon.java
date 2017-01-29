@@ -67,7 +67,6 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.rap.rwt.RWT;
 import org.eclipse.rap.rwt.SingletonUtil;
-import org.eclipse.rap.rwt.application.AbstractEntryPoint;
 import org.eclipse.rap.rwt.client.service.ExitConfirmation;
 import org.eclipse.rap.rwt.client.service.JavaScriptExecutor;
 import org.eclipse.rap.rwt.client.service.StartupParameters;
@@ -110,7 +109,6 @@ import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 //import org.eclipse.swt.printing.Printer;
 import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Composite;
@@ -345,7 +343,7 @@ import org.pentaho.ui.xul.components.XulWaitBox;
 import org.pentaho.ui.xul.containers.XulMenupopup;
 import org.pentaho.ui.xul.containers.XulToolbar;
 import org.pentaho.ui.xul.impl.XulEventHandler;
-//import org.pentaho.ui.xul.jface.tags.ApplicationWindowLocal;
+import org.pentaho.ui.xul.jface.tags.ApplicationWindowLocal;
 import org.pentaho.ui.xul.jface.tags.JfaceMenuitem;
 import org.pentaho.ui.xul.jface.tags.JfaceMenupopup;
 import org.pentaho.ui.xul.swt.tags.SwtDeck;
@@ -365,7 +363,7 @@ import com.google.common.annotations.VisibleForTesting;
  * @author Matt
  * @since 16-may-2003, i18n at 07-Feb-2006, redesign 01-Dec-2006
  */
-public class Spoon extends AbstractEntryPoint implements AddUndoPositionInterface, TabListener, SpoonInterface,
+public class Spoon extends ApplicationWindow implements AddUndoPositionInterface, TabListener, SpoonInterface,
   OverwritePrompter, PDIObserver, LifeEventHandler, XulEventSource, XulEventHandler, PartitionSchemasProvider {
 
   private static Class<?> PKG = Spoon.class;
@@ -725,7 +723,7 @@ public class Spoon extends AbstractEntryPoint implements AddUndoPositionInterfac
 
   //prevent instantiation from outside
   private Spoon( Repository rep ) {
-    //super( null );
+    super( null );
     //this.addMenuBar();
     log = new LogChannel( APP_NAME );
     SpoonFactory.setSpoonInstance( this );
@@ -747,8 +745,7 @@ public class Spoon extends AbstractEntryPoint implements AddUndoPositionInterfac
 
     setRepository( rep );
 
-    // Comment out to avoid an error "Could not create entrypoint instance: org.pentaho.di.ui.spoon.Spoon"
-    // props = PropsUI.getInstance();
+    props = PropsUI.getInstance();
     sharedObjectsFileMap = new Hashtable<String, SharedObjects>();
     Thread uiThread = Thread.currentThread();
 
@@ -835,7 +832,7 @@ public class Spoon extends AbstractEntryPoint implements AddUndoPositionInterfac
       xulLoader.setOuterContext( shell );
       xulLoader.setSettingsManager( XulSpoonSettingsManager.getInstance() );
 
-      //ApplicationWindowLocal.setApplicationWindow( this );
+      ApplicationWindowLocal.setApplicationWindow( this );
 
       mainSpoonContainer = xulLoader.loadXul( XUL_FILE_MAIN, new XulSpoonResourceBundle() );
 
@@ -4958,7 +4955,7 @@ public class Spoon extends AbstractEntryPoint implements AddUndoPositionInterfac
         this.selectionLabel.forceFocus();
       }
 
-      //close();
+      close();
     }
 
     return exit;
@@ -9231,7 +9228,7 @@ public class Spoon extends AbstractEntryPoint implements AddUndoPositionInterfac
   }
 
   @Override
-  protected void createContents( Composite parent ) {
+  protected Control createContents( Composite parent ) {
     // from main
     display = Display.getCurrent();
     List<String> args = new ArrayList<String>( Arrays.asList( "" ) );
@@ -9298,7 +9295,7 @@ public class Spoon extends AbstractEntryPoint implements AddUndoPositionInterfac
     }
     //getMenuBarManager().updateAll( true );
 
-    //return parent;
+    return parent;
   }
 
   @Override
@@ -9308,9 +9305,9 @@ public class Spoon extends AbstractEntryPoint implements AddUndoPositionInterfac
 
   public void start() {
     // We store the UI thread for the getDisplay() method
-    //setBlockOnOpen( false );
+    setBlockOnOpen( false );
     try {
-      //open();
+      open();
       // Load the last loaded files
       loadLastUsedFiles();
       waitForDispose();
@@ -9345,7 +9342,7 @@ public class Spoon extends AbstractEntryPoint implements AddUndoPositionInterfac
         .getString( PKG, "Spoon.Dialog.LoginFailed.Message", t ), t );
     }
   }
-/*
+
   @Override
   protected void handleShellCloseEvent() {
     try {
@@ -9357,7 +9354,7 @@ public class Spoon extends AbstractEntryPoint implements AddUndoPositionInterfac
       LogChannel.GENERAL.logError( "Error closing Spoon", e );
     }
   }
-*/
+
   public void showAuthenticationOptions() {
     AuthProviderDialog authProviderDialog = new AuthProviderDialog( shell );
     authProviderDialog.show();

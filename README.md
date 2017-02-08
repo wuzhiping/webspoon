@@ -1,24 +1,23 @@
 # Web-based Spoon (aka webSpoon)
 
-This is an attempt to run Spoon as a web app.
-You can create and run Kettle transformation/job files from your favorite web browser.
+webSpoon is a web-based graphical designer for Pentaho Data Integration with the same look & feel as Spoon.
+Kettle transformation/job files can be designed and executed in your favorite web browser.
+This is one of the community activities and not supported by Pentaho.
 
 ## Use cases
 
-### PDI on-the-go
-
-- Access from smartphone/tablet
-
-### Security
+### Data security
 
 - Keep sensitive data where they should be
 
-### No installation
+### Managed Pentaho development environment
 
-- Kick-start hands-on
-- Be nice to thin clients
+- Accessible from any network-connected devices (including thin clients, smartphones/tablets)
+- No installation/upgrade/update required (by end-users)
+- No undesired plugins or JDBC drivers installed (by end-users)
+- Same version, plugins, drivers, etc. among a team (my Kettle files run in your screen without an error)
 
-### Seamless user experience
+### Embedded data integration
 
 - Edit Kettle queries in CDE
 - Edit Kettle endpoints in App Builder (aka Sparkl)
@@ -29,22 +28,9 @@ Please refer to the [wiki](https://github.com/HiromuHota/pentaho-kettle/wiki) an
 
 # How to deploy & config (admin perspective)
 
-## Compatibiliy
+## System requirements
 
-Here is a list of versions of Java and OS that were verified to be compatible with webSpoon.
-webSpoon does not work with Java 7 since the dependent library (Eclipse RAP/RWT) is not compatible with Java 7 (see [here](http://www.eclipse.org/rap/noteworthy/3.1/) for the details).
-
-### Java
-
-- Oracle Java SE 8
-- OpenJDK 8
-
-### Operating systems
-
-- Ubuntu 14.04
-- Mac OS X El Capitan
-- Windows 7 Professional
-- Windows 10 Professional
+Please refer to the [wiki](https://github.com/HiromuHota/pentaho-kettle/wiki/System-Requirements).
 
 ## Deploy
 
@@ -109,6 +95,17 @@ If not defined, the following folders are used:
 2. `$HOME/.kettle/plugins`
 3. `$CUR_DIR/plugins ` (the current folder: `$CUR_DIR` depends on how and where webSpoon is running, e.g., `biserver-ce/tomcat/bin` for CE and `Pentaho` for EE)
 
+### Big Data Plugin
+
+If Pentaho Big Data Plugin is used with webSpoon, errors would occur (see #22 and #23).
+To resolve these errors, please replace jar files with patched ones.
+The patched jar files can be downloaded from [here](https://github.com/HiromuHota/big-data-plugin/releases) (now only support 6.1.0.1-196).
+
+```
+$ cp ${path_to_lib}/pentaho-big-data-legacy-6.1.0.1-196.jar plugins/pentaho-big-data-plugin/
+$ cp ${path_to_lib}/pentaho-big-data-kettle-plugins-common-ui-6.1.0.1-196.jar system/karaf/system/pentaho/pentaho-big-data-kettle-plugins-common-ui/
+```
+
 ## JDBC drivers
 
 Place jar files into either one of the following folders:
@@ -129,10 +126,10 @@ Having said that, some APIs are not implemented; hence, a little more code chang
 
 These are the major changes so far:
 
-- Add org.pentaho.di.ui.spoon.BasicApplication, which configures web app.
+- Add org.pentaho.di.ui.spoon.WebSpoon, which configures web app.
 - Modify ui/ivy.xml in order to add RWT-related dependencies and remove SWT.
 - Many comment-outs/deletions to avoid compile errors due to RWT/SWT difference.
-- Make singleton objects (e.g., `PropsUI`, `GUIResource`) "session aware" (see [here](http://www.eclipse.org/rap/developers-guide/devguide.php?topic=singletons.html) for the details).
+- Make singleton objects (e.g., `PropsUI`, `GUIResource`) session-unique (see [here](http://www.eclipse.org/rap/developers-guide/devguide.php?topic=singletons.html) for the details).
 
 ## Branches and Versioning
 

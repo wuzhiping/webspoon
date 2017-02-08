@@ -1,5 +1,21 @@
 # Change Log
 
+## 0.6.1.6 - 2017-02-08
+
+### Added
+- Automated UI testing using Selenium.
+
+### Changed
+- Make Spoon.class a session-unique singleton.
+- Remove plugins folder from war file.
+
+### Fixed
+- Many bugfixes related to multi-session use.
+- Restore scrollbar and proper zooming.
+- Restore Get Fields of Fixed Input.
+- Fix the partially broken DB connection dialog.
+- Make "Open Referenced Object" clickable.
+
 ## 0.6.1.5 - 2017-01-10
 
 ### Added

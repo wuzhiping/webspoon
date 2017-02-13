@@ -69,7 +69,7 @@ public class WebSpoonServletContextListener extends RWTServletContextListener {
     super.contextInitialized( event );
   }
   public void contextDestroyed( ServletContextEvent event ) {
-    super.contextInitialized( event );
+    super.contextDestroyed( event );
     // Kill all remaining things in this VM!
     System.exit( 0 );
   }

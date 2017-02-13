@@ -39,6 +39,10 @@ import org.pentaho.di.core.exception.KettleException;
 
 public class WebSpoonServletContextListener extends RWTServletContextListener {
   public void contextInitialized( ServletContextEvent event ) {
+    /*
+     *  The following lines are from Spoon.main
+     *  because they are application-wide context.
+     */
     ExecutorService executor = Executors.newCachedThreadPool();
     Future<KettleException> pluginRegistryFuture = executor.submit( new Callable<KettleException>() {
 

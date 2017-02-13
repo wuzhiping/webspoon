@@ -9230,14 +9230,11 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
   @Override
   protected Control createContents( Composite parent ) {
     // from main
-    display = Display.getCurrent();
     List<String> args = new ArrayList<String>( Arrays.asList( "" ) );
     CommandLineOption[] commandLineOptions = getCommandLineArgs( args );
     PropsUI.init( display, Props.TYPE_PROPERTIES_SPOON );
     KettleLogStore
       .init( PropsUI.getInstance().getMaxNrLinesInLog(), PropsUI.getInstance().getMaxLogLineTimeoutMinutes() );
-    log = new LogChannel( APP_NAME );
-    props = PropsUI.getInstance();
 
     // original in createContents
     ExitConfirmation serviceConfirm = RWT.getClient().getService( ExitConfirmation.class );

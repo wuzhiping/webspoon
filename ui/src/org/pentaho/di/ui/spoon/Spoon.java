@@ -689,7 +689,7 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
     System.exit( 0 );
   }
 
-  private static void initLogging( CommandLineOption[] options ) throws KettleException {
+  public static void initLogging( CommandLineOption[] options ) throws KettleException {
     StringBuffer optionLogFile = getCommandLineOption( options, "logfile" ).getArgument();
     StringBuffer optionLogLevel = getCommandLineOption( options, "level" ).getArgument();
 
@@ -9236,9 +9236,6 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
     PropsUI.init( display, Props.TYPE_PROPERTIES_SPOON );
     KettleLogStore
       .init( PropsUI.getInstance().getMaxNrLinesInLog(), PropsUI.getInstance().getMaxLogLineTimeoutMinutes() );
-    try {
-      initLogging( commandLineOptions );
-    } catch ( Throwable t ) { }
     log = new LogChannel( APP_NAME );
     props = PropsUI.getInstance();
 

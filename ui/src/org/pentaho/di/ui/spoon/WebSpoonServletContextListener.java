@@ -23,6 +23,8 @@
 
 package org.pentaho.di.ui.spoon;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -60,6 +62,7 @@ public class WebSpoonServletContextListener extends RWTServletContextListener {
       if ( registryException != null ) {
         throw registryException;
       }
+      Spoon.initLogging( Spoon.getCommandLineArgs( new ArrayList<String>( Arrays.asList( "" ) ) ) );
     } catch ( Throwable t ) {
       // avoid calls to Messages i18n method getString() in this block
       // We do this to (hopefully) also catch Out of Memory Exceptions

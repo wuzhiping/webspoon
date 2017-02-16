@@ -98,12 +98,13 @@ If not defined, the following folders are used:
 ### Big Data Plugin
 
 If Pentaho Big Data Plugin is used with webSpoon, errors would occur (see #22 and #23).
-To resolve these errors, please replace jar files with patched ones.
+To resolve these errors, please replace jar files with patched ones and delete the Karaf cache directory if necessary.
 The patched jar files can be downloaded from [here](https://github.com/HiromuHota/big-data-plugin/releases) (now only support 6.1.0.1-196).
 
 ```
 $ cp ${path_to_lib}/pentaho-big-data-legacy-6.1.0.1-196.jar plugins/pentaho-big-data-plugin/
-$ cp ${path_to_lib}/pentaho-big-data-kettle-plugins-common-ui-6.1.0.1-196.jar system/karaf/system/pentaho/pentaho-big-data-kettle-plugins-common-ui/
+$ cp ${path_to_lib}/pentaho-big-data-kettle-plugins-common-ui-6.1.0.1-196.jar system/karaf/system/pentaho/pentaho-big-data-kettle-plugins-common-ui/6.1.0.1-196/
+$ rm -rf system/karaf/caches/webspoonservletcontextlistener
 ```
 
 ## JDBC drivers

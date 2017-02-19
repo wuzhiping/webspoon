@@ -684,10 +684,6 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
 
     // Set the pop-up menu
     if ( e.button == 3 ) {
-      final JobEntryCopy jobEntry = jobMeta.getJobEntryCopy( real.x, real.y, iconsize );
-      if ( jobEntry != null ) { // We clicked on a Job Entry!
-        return;
-      }
       setMenu( real.x, real.y );
       return;
     }

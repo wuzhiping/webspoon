@@ -819,10 +819,6 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
 
     // Set the pop-up menu
     if ( e.button == 3 ) {
-      final StepMeta stepMeta = transMeta.getStep( real.x, real.y, iconsize );
-      if ( stepMeta != null ) { // We clicked on a Step!)
-        return;
-      }
       setMenu( real.x, real.y );
       return;
     }

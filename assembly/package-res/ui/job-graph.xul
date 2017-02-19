@@ -38,13 +38,13 @@
     <menu id="job-graph-entry-align" label="${JobGraph.PopupMenu.JobEntry.AllignDistribute}">
       <menupopup id="job-graph-entry-align-popup">
         <menuitem id="job-graph-entry-align-left" label="${JobGraph.PopupMenu.JobEntry.AllignDistribute.Left}"
-          command="jobgraph.allignleft()" />
+         acceltext="CTRL-LEFT" accesskey="ctrl-left" command="jobgraph.allignleft()" />
         <menuitem id="job-graph-entry-align-right" label="${JobGraph.PopupMenu.JobEntry.AllignDistribute.Right}"
-          command="jobgraph.allignright()" />
+         acceltext="CTRL-RIGHT" accesskey="ctrl-right" command="jobgraph.allignright()" />
         <menuitem id="job-graph-entry-align-top" label="${JobGraph.PopupMenu.JobEntry.AllignDistribute.Top}"
-          command="jobgraph.alligntop()" />
+          acceltext="CTRL-UP" accesskey="ctrl-up" command="jobgraph.alligntop()" />
         <menuitem id="job-graph-entry-align-bottom" label="${JobGraph.PopupMenu.JobEntry.AllignDistribute.Bottom}"
-          command="jobgraph.allignbottom()" />
+          acceltext="CTRL-DOWN" accesskey="ctrl-down" command="jobgraph.allignbottom()" />
         <menuseparator />
         <menuitem id="job-graph-entry-align-horz" label="${JobGraph.PopupMenu.JobEntry.AllignDistribute.Horizontally}"
           acceltext="ALT-RIGHT" accesskey="alt-right" command="jobgraph.distributehorizontal()" />

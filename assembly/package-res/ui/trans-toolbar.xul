@@ -96,13 +96,13 @@
     <menuseparator />
     <menu id="trans-graph-entry-align" label="${TransGraph.PopupMenu.AllignDistribute}">
       <menupopup id="trans-graph-entry-align-popup">
-        <menuitem id="trans-graph-entry-align-left" label="${TransGraph.PopupMenu.AllignLeft}"
+        <menuitem id="trans-graph-entry-align-left" label="${TransGraph.PopupMenu.AllignLeft}" acceltext="CTRL-LEFT" accesskey="ctrl-left"
           command="transgraph.allignleft()" />
-        <menuitem id="trans-graph-entry-align-right" label="${TransGraph.PopupMenu.AllignRight}"
+        <menuitem id="trans-graph-entry-align-right" label="${TransGraph.PopupMenu.AllignRight}" acceltext="CTRL-RIGHT" accesskey="ctrl-right"
           command="transgraph.allignright()" />
-        <menuitem id="trans-graph-entry-align-top" label="${TransGraph.PopupMenu.AllignTop}"
+        <menuitem id="trans-graph-entry-align-top" label="${TransGraph.PopupMenu.AllignTop}" acceltext="CTRL-UP" accesskey="ctrl-up"
           command="transgraph.alligntop()" />
-        <menuitem id="trans-graph-entry-align-bottom" label="${TransGraph.PopupMenu.AllignBottom}"
+        <menuitem id="trans-graph-entry-align-bottom" label="${TransGraph.PopupMenu.AllignBottom}" acceltext="CTRL-DOWN" accesskey="ctrl-down"
           command="transgraph.allignbottom()" />
         <menuseparator />
         <menuitem id="trans-graph-entry-align-horz" label="${TransGraph.PopupMenu.DistributeHorizontally}"

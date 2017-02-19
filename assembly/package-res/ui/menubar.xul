@@ -7,25 +7,25 @@
       <menupopup id="file-popup">
         <menu id="file-new" label="${Spoon.Menu.File.New}">
           <menupopup id="file-newfile-new-popup">
-            <menuitem id="file-new-trans" label="${Spoon.Menu.Transformation}"
+            <menuitem id="file-new-trans" acceltext="CTRL-N" accesskey="ctrl-n" label="${Spoon.Menu.Transformation}"
               command="spoon.newTransFile()" />
-            <menuitem id="file-new-job" label="${Spoon.Menu.Job}"
+            <menuitem id="file-new-job" acceltext="CTRL-ALT-N" accesskey="ctrl-alt-n" label="${Spoon.Menu.Job}"
               command="spoon.newJobFile()" />
             <menuitem id="file-new-database" label="${Spoon.Menu.File.NewDB}"
               command="spoon.newConnection()" />
           </menupopup>
         </menu>
-        <menuitem id="file-open" label="${Spoon.Menu.File.Open}" command="spoon.openFile()" />
+        <menuitem id="file-open" acceltext="CTRL-O" accesskey="ctrl-o" label="${Spoon.Menu.File.Open}" command="spoon.openFile()" />
         <menuitem id="file-open-from-vfs" label="${Spoon.Menu.File.OpenVFS}" command="spoon.openFileVFSFile()" />
         <menu id="file-open-recent" label="${Spoon.Menu.File.Open.Recent.Popup}">
           <menupopup id="file-open-recent-popup" />
         </menu>
-        <menuitem id="file-close" label="${Spoon.Menu.File.Close}"
+        <menuitem id="file-close" acceltext="CTRL-W" accesskey="ctrl-w" label="${Spoon.Menu.File.Close}"
           command="spoon.tabCloseSelected()" />
-        <menuitem id="file-close-all" label="${Spoon.Menu.File.Close.All}" command="spoon.closeAllFiles()" />
+        <menuitem id="file-close-all" acceltext="SHIFT-CTRL-W" accesskey="shift-ctrl-w" label="${Spoon.Menu.File.Close.All}" command="spoon.closeAllFiles()" />
 
         <menuseparator id="file-separator-1"/>
-        <menuitem id="file-save" label="${Spoon.Menu.File.Save}" command="spoon.saveFile()" />
+        <menuitem id="file-save" acceltext="CTRL-S" accesskey="ctrl-s" label="${Spoon.Menu.File.Save}" command="spoon.saveFile()" />
         <menuitem id="file-save-as" label="${Spoon.Menu.File.SaveAs}" command="spoon.saveFileAs()" />
         <menuitem id="file-save-as-vfs" label="${Spoon.Menu.File.SaveAsVFS}" command="spoon.saveXMLFileToVfs()" />
         <!-- <menuitem id="file-publish" label="${Spoon.Menu.File.Publish}"/> -->
@@ -33,7 +33,7 @@
         <menuitem id="file-print" label="${Spoon.Menu.File.Print}" command="spoon.printFile()" />
 
         <menuseparator id="file-separator-3"/>
-        <menuitem id="file-import-from-xml" label="${Spoon.Menu.File.Import}"
+        <menuitem id="file-import-from-xml" acceltext="CTRL-I" accesskey="ctrl-i" label="${Spoon.Menu.File.Import}"
           command="spoon.importFile()" />
         <menu id="file-export" label="${Spoon.Menu.File.Export.Popup}" >
           <menupopup id="export-popup">
@@ -51,35 +51,35 @@
     
     <menu id="edit" label="${Spoon.Menu.Edit}">
       <menupopup id="edit-popup">
-        <menuitem id="edit-undo" label="${Spoon.Menu.Undo.NotAvailable}"
+        <menuitem id="edit-undo" acceltext="CTRL-Z" accesskey="ctrl-z" label="${Spoon.Menu.Undo.NotAvailable}"
           command="spoon.undoAction()" />
-        <menuitem id="edit-redo" label="${Spoon.Menu.Redo.NotAvailable}"
+        <menuitem id="edit-redo" acceltext="CTRL-Y" accesskey="ctrl-y" label="${Spoon.Menu.Redo.NotAvailable}"
           command="spoon.redoAction()" />
         <menuseparator />
-        <menuitem id="edit-cut-steps" label="${Spoon.Menu.Edit.Cut}" command="spoon.cut()" />
-        <menuitem id="edit-copy-steps" label="${Spoon.Menu.Edit.CopyToClipboard}"
+        <menuitem id="edit-cut-steps" acceltext="CTRL-X" accesskey="ctrl-x" label="${Spoon.Menu.Edit.Cut}" command="spoon.cut()" />
+        <menuitem id="edit-copy-steps" acceltext="CTRL-C" accesskey="ctrl-c" label="${Spoon.Menu.Edit.CopyToClipboard}"
           command="spoon.copy()" />
         <menuitem id="edit.copy-file" label="${Spoon.Menu.Edit.Copy.File}" command="spoon.copyFile()" />
-        <menuitem id="edit-paste-steps" label="${Spoon.Menu.Edit.PasteFromClipboard}"
+        <menuitem id="edit-paste-steps" acceltext="CTRL-V" accesskey="ctrl-v" label="${Spoon.Menu.Edit.PasteFromClipboard}"
           command="spoon.paste()" />
         <menuseparator />
-        <menuitem id="trans-copy-image"
+        <menuitem id="trans-copy-image" acceltext="CTRL-ALT-I" accesskey="ctrl-alt-i"
           label="${Spoon.Menu.Transformation.CopyTransformationImageClipboard}" command="spoon.copyTransformationImage()" />   
         <menuseparator />
-        <menuitem id="edit-clear-selection" label="${Spoon.Menu.Edit.ClearSelection}"
+        <menuitem id="edit-clear-selection" acceltext="ESC" accesskey="esc" label="${Spoon.Menu.Edit.ClearSelection}"
           command="spoon.editUnselectAll()" />
-        <menuitem id="edit-select-all" label="${Spoon.Menu.Edit.SelectAllSteps}"
+        <menuitem id="edit-select-all" acceltext="CTRL-A" accesskey="ctrl-a" label="${Spoon.Menu.Edit.SelectAllSteps}"
           command="spoon.editSelectAll()" />
         <menuseparator />
-        <menuitem id="edit-search-metadata" label="${Spoon.Menu.Edit.Search}"
+        <menuitem id="edit-search-metadata" acceltext="CTRL-F" accesskey="ctrl-f" label="${Spoon.Menu.Edit.Search}"
           command="spoon.searchMetaData()" />
-        <menuitem id="edit-set-env-vars" label="${Spoon.Menu.Edit.Variables}"
+        <menuitem id="edit-set-env-vars" acceltext="CTRL-ALT-J" accesskey="ctrl-alt-j" label="${Spoon.Menu.Edit.Variables}"
           command="spoon.setVariables()" />
-        <menuitem id="edit-show-env-vars" label="${Spoon.Menu.Edit.ShowVariables}"
+        <menuitem id="edit-show-env-vars" acceltext="CTRL-L" accesskey="ctrl-l" label="${Spoon.Menu.Edit.ShowVariables}"
           command="spoon.showVariables()" />
-        <menuitem id="edit-kettle-properties" label="${Spoon.Menu.Edit.EditKettleProperties}"
+        <menuitem id="edit-kettle-properties" acceltext="CTRL-ALT-P" accesskey="ctrl-alt-p" label="${Spoon.Menu.Edit.EditKettleProperties}"
           command="spoon.editKettlePropertiesFile()" />
-        <menuitem id="edit-show-arguments" label="${Spoon.Menu.Edit.ShowArguments}"
+        <menuitem id="edit-show-arguments" acceltext="CTRL-ALT-U" accesskey="ctrl-alt-u" label="${Spoon.Menu.Edit.ShowArguments}"
           command="spoon.showArguments()" />
         <menuseparator />
         <menuitem id="edit-settings" label="${Spoon.Menu.Transformation.Settings}"
@@ -96,11 +96,11 @@
           </menupopup>
         </menu>
         <menuseparator />
-        <menuitem id="view-zoom-in" label="${Spoon.Menu.View.ZoomIn}"
+        <menuitem id="view-zoom-in" acceltext="PAGE-UP" accesskey="pageup" label="${Spoon.Menu.View.ZoomIn}"
           command="spoon.zoomIn()" />
-        <menuitem id="view-zoom-out" label="${Spoon.Menu.View.ZoomOut}"
+        <menuitem id="view-zoom-out" acceltext="PAGE-DOWN" accesskey="pagedown" label="${Spoon.Menu.View.ZoomOut}"
           command="spoon.zoomOut()" />
-        <menuitem id="view-zoom-100pct" label="${Spoon.Menu.View.Zoom100}"
+        <menuitem id="view-zoom-100pct" acceltext="HOME" accesskey="home" label="${Spoon.Menu.View.Zoom100}"
           command="spoon.zoom100Percent()" />
         <menuseparator id="view-perspective-seperator" />
         <menuitem id="view-results" type="checkbox" label="${Spoon.Menu.View.Results}" command="spoon.showExecutionResults()"/>  
@@ -147,11 +147,11 @@
         </menu>
         <menu id="repository" label="${Spoon.Menu.Repository}">
           <menupopup id="repository-popup">
-            <menuitem id="repository-connect"
+            <menuitem id="repository-connect" acceltext="CTRL-R" accesskey="ctrl-r"
               label="${Spoon.Menu.Repository.ConnectToRepository}" command="spoon.openRepository()" />
-            <menuitem id="repository-disconnect" disabled="true"
+            <menuitem id="repository-disconnect" acceltext="CTRL-D" accesskey="ctrl-d" disabled="true"
               label="${Spoon.Menu.Repository.DisconnectRepository}" command="spoon.closeRepository()" />
-            <menuitem id="repository-explore" disabled="true"
+            <menuitem id="repository-explore" acceltext="CTRL-E" accesskey="ctrl-e" disabled="true"
               label="${Spoon.Menu.Repository.ExploreRepository}" command="spoon.exploreRepository()" />
             <menuseparator />
             <menuitem id="repository-clear-shared-object-cache" disabled="true"

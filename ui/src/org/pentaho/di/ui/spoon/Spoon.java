@@ -1773,8 +1773,16 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
     for ( int i = 0; i < lastUsedFiles.size(); i++ ) {
       final LastUsedFile lastUsedFile = lastUsedFiles.get( i );
 
+      char chr = (char) ( '1' + i );
+      String accessKey = "ctrl-" + chr;
+      String accessText = "CTRL-" + chr;
       String text = lastUsedFile.toString();
       String id = "last-file-" + i;
+
+      if ( i > 8 ) {
+        accessKey = null;
+        accessText = null;
+      }
 
       final String lastFileId = Integer.toString( i );
 
@@ -1804,6 +1812,10 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
 
       miFileLast.setLabel( text );
       miFileLast.setId( id );
+      if ( accessText != null && accessKey != null ) {
+        miFileLast.setAcceltext( accessText );
+        miFileLast.setAccesskey( accessKey );
+      }
 
       if ( lastUsedFile.isTransformation() ) {
         miFileLast.setImage( GUIResource.getInstance().getImageTransGraph() );
@@ -6829,7 +6841,7 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
 
         disableMenuItem( doc, "edit-clear-selection", disableTransMenu && disableJobMenu );
         disableMenuItem( doc, "edit-select-all", disableTransMenu && disableJobMenu );
-        // updateSettingsMenu( doc, disableTransMenu, disableJobMenu );
+        updateSettingsMenu( doc, disableTransMenu, disableJobMenu );
         disableMenuItem( doc, "edit-settings", disableTransMenu && disableJobMenu && disableMetaMenu );
 
         // View Menu

@@ -68,6 +68,9 @@ public class WebSpoonEntryPoint extends AbstractEntryPoint {
     Spoon.getInstance().createContents( parent );
     Spoon.getInstance().setArguments( args.toArray( new String[ args.size() ] ) );
 
+    // Load last used files
+    Spoon.getInstance().loadLastUsedFiles();
+
     /*
      *  The following lines are webSpoon additional functions
      */

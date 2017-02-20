@@ -7971,7 +7971,7 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
     }
   }
 
-  private void loadLastUsedFiles() {
+  public void loadLastUsedFiles() {
     if ( props.openLastFile() ) {
       if ( log.isDetailed() ) {
         // "Trying to open the last file used."

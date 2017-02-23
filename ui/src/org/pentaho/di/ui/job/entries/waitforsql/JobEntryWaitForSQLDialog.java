@@ -68,6 +68,7 @@ import org.pentaho.di.ui.core.widget.TextVar;
 import org.pentaho.di.ui.job.dialog.JobDialog;
 import org.pentaho.di.ui.job.entry.JobEntryDialog;
 import org.pentaho.di.ui.trans.step.BaseStepDialog;
+import org.pentaho.di.ui.trans.steps.tableinput.SQLValuesHighlight;
 
 /**
  * This dialog allows you to edit the Wait for SQL job entry settings.
@@ -608,7 +609,7 @@ public class JobEntryWaitForSQLDialog extends JobEntryDialog implements JobEntry
     wSQL.addModifyListener( lsMod );
 
     // Text Higlighting
-//    wSQL.addLineStyleListener( new SQLValuesHighlight() );
+    wSQL.addLineStyleListener( new SQLValuesHighlight() );
 
     fdCustomGroup = new FormData();
     fdCustomGroup.left = new FormAttachment( 0, margin );

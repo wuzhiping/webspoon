@@ -912,7 +912,7 @@ public class UserDefinedJavaClassDialog extends BaseStepDialog implements StepDi
     wScript.addModifyListener( lsMod );
 
     // Text Higlighting
-    //wScript.addLineStyleListener( new UserDefinedJavaClassHighlight() );
+    wScript.addLineStyleListener( new UserDefinedJavaClassHighlight() );
     item.setControl( wScript );
 
     // Adding new Item to Tree

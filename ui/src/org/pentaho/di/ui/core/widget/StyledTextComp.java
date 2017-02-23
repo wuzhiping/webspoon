@@ -27,6 +27,7 @@ import java.util.List;
 
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.LineStyleListener;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTarget;
@@ -187,6 +188,10 @@ public class StyledTextComp extends Composite {
 
   public void addModifyListener( ModifyListener lsMod ) {
     styledText.addModifyListener( lsMod );
+  }
+
+  public void addLineStyleListener( LineStyleListener lineStyler ) {
+    styledText.addLineStyleListener( lineStyler );
   }
 
   public void addKeyListener( KeyAdapter keyAdapter ) {

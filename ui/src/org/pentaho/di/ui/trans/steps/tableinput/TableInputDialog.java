@@ -371,7 +371,7 @@ public class TableInputDialog extends BaseStepDialog implements StepDialogInterf
     } );
 
     // Text Higlighting
-//    wSQL.addLineStyleListener( new SQLValuesHighlight() );
+    wSQL.addLineStyleListener( new SQLValuesHighlight() );
 
     // Add listeners
     lsCancel = new Listener() {

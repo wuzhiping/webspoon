@@ -92,6 +92,8 @@ public class OlapInputDialog extends BaseStepDialog implements StepDialogInterfa
 
   private OlapInputMeta input;
 
+  private MDXValuesHighlight lineStyler = new MDXValuesHighlight();
+
   private Label wlPosition;
   private FormData fdlPosition;
 
@@ -357,8 +359,8 @@ public class OlapInputDialog extends BaseStepDialog implements StepDialogInterfa
     } );
 
     // Text Higlighting
-    //lineStyler = new MDXValuesHighlight();
-    //wMDX.addLineStyleListener( lineStyler );
+    lineStyler = new MDXValuesHighlight();
+    wMDX.addLineStyleListener( lineStyler );
 
     // Add listeners
     lsCancel = new Listener() {

@@ -194,7 +194,7 @@ public class KettleFileRepositoryDialog implements RepositoryDialogInterface {
       public void widgetSelected( SelectionEvent arg0 ) {
         DirectoryDialog dialog = new DirectoryDialog( shell, SWT.NONE );
         dialog.setText( "Select root directory" );
-//        dialog.setMessage( "Select the repository root directory" );
+        dialog.setMessage( "Select the repository root directory" );
         String folder = dialog.open();
         if ( folder != null ) {
           wBaseDir.setText( folder );

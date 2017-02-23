@@ -53,6 +53,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.pentaho.di.core.Const;
+import org.pentaho.di.core.gui.GCInterface;
 import org.pentaho.di.core.gui.Point;
 import org.pentaho.di.core.logging.LoggingObjectInterface;
 import org.pentaho.di.core.logging.LoggingRegistry;
@@ -192,9 +193,9 @@ public class JobMetricsDelegate extends SpoonDelegate {
         if ( jobGraph.job != null && jobGraph.job.isFinished() ) {
           refreshImage( event.gc );
 
-          if ( image != null && !image.isDisposed() ) {
-            event.gc.drawImage( image, 0, 0 );
-          }
+//          if ( image != null && !image.isDisposed() ) {
+//            event.gc.drawImage( image, 0, 0 );
+//          }
         } else {
           Rectangle bounds = canvas.getBounds();
           if ( bounds.width <= 0 || bounds.height <= 0 ) {
@@ -351,14 +352,14 @@ public class JobMetricsDelegate extends SpoonDelegate {
     //
     bounds.height = Math.max( durations.size() * barHeight, bounds.height );
     canvas.setSize( bounds.width, bounds.height );
-/*
-    SWTGC gc =
-        new SWTGC( Display.getCurrent(), new Point( bounds.width, bounds.height ), PropsUI.getInstance().getIconSize() );
+
+    GCInterface gc =
+        new SWTGC( canvasGc, new Point( bounds.width, bounds.height ), PropsUI.getInstance().getIconSize() );
     MetricsPainter painter = new MetricsPainter( gc, barHeight );
     // checking according to method's contract
     drawAreas = painter.paint( durations );
-    image = (Image) gc.getImage();
-*/
+//    image = (Image) gc.getImage();
+
     // refresh the scrolled composite
     //
     // sMetricsComposite.setMinHeight(bounds.height);
@@ -367,11 +368,11 @@ public class JobMetricsDelegate extends SpoonDelegate {
 
     // close shop on the SWT GC side.
     //
-//    gc.dispose();
+    gc.dispose();
 
     // Draw the image on the canvas...
     //
-    canvas.redraw();
+//    canvas.redraw();
   }
 
   /**

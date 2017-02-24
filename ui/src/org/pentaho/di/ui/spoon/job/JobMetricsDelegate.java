@@ -230,6 +230,14 @@ public class JobMetricsDelegate extends SpoonDelegate {
       }
     } );
 
+    // When the browser tab/window is closed, we remove the update timer
+    jobMetricsTab.getDisplay().disposeExec( new Runnable() {
+      @Override
+      public void run() {
+        timer.cancel();
+      }
+    } );
+
     // Show tool tips with details...
     //
     canvas.addMouseListener( new MouseAdapter() {
@@ -286,6 +294,9 @@ public class JobMetricsDelegate extends SpoonDelegate {
   }
 
   public void updateGraph() {
+    if ( jobGraph.getDisplay().isDisposed() ) {
+      return;
+    }
 
     jobGraph.getDisplay().asyncExec( new Runnable() {
       public void run() {

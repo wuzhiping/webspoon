@@ -230,6 +230,14 @@ public class TransMetricsDelegate extends SpoonDelegate {
       }
     } );
 
+    // When the browser tab/window is closed, we remove the update timer
+    transGraph.getDisplay().disposeExec( new Runnable() {
+      @Override
+      public void run() {
+        timer.cancel();
+      }
+    } );
+
     // Show tool tips with details...
     //
     canvas.addMouseListener( new MouseAdapter() {
@@ -283,6 +291,9 @@ public class TransMetricsDelegate extends SpoonDelegate {
   }
 
   public void updateGraph() {
+    if ( transGraph.getDisplay().isDisposed() ) {
+      return;
+    }
 
     transGraph.getDisplay().asyncExec( new Runnable() {
       public void run() {

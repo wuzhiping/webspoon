@@ -744,6 +744,15 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
         timer.cancel();
       }
     } );
+
+    // Make sure the timer stops when we close the browser tab/window
+    //
+    getDisplay().disposeExec( new Runnable() {
+      @Override
+      public void run() {
+        timer.cancel();
+      }
+    } );
   }
 
   public void mouseDoubleClick( MouseEvent e ) {
@@ -1741,6 +1750,9 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
   }
 
   protected void asyncRedraw() {
+    if ( spoon.getDisplay().isDisposed() ) {
+      return;
+    }
     spoon.getDisplay().asyncExec( new Runnable() {
       public void run() {
         if ( !TransGraph.this.isDisposed() ) {

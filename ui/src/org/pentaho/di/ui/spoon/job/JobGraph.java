@@ -622,6 +622,14 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
       }
     } );
 
+    // Make sure the timer stops when we close the browser tab/window
+    //
+    getDisplay().disposeExec( new Runnable() {
+      @Override
+      public void run() {
+        timer.cancel();
+      }
+    } );
   }
 
   protected void hideToolTips() {
@@ -1428,6 +1436,9 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
   }
 
   protected void asyncRedraw() {
+    if ( spoon.getDisplay().isDisposed() ) {
+      return;
+    }
     spoon.getDisplay().asyncExec( new Runnable() {
       public void run() {
         if ( !isDisposed() ) {

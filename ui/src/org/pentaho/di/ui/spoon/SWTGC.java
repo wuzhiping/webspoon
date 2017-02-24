@@ -434,7 +434,7 @@ public class SWTGC implements GCInterface {
     }
     if ( jobEntryCopy.isMissing() ) {
       swtImage = GUIResource.getInstance().getSwtImageMissing();
-    } 
+    }
     if ( swtImage == null ) {
       return;
     }

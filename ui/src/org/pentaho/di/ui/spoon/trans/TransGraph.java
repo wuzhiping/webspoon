@@ -2643,6 +2643,7 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
           String activeReferencedObjectDescription = stepMetaInterface.getActiveReferencedObjectDescription();
           if ( getActiveSubtransformation( this, stepMeta ) != null && activeReferencedObjectDescription != null ) {
             action = new Action( activeReferencedObjectDescription, Action.AS_PUSH_BUTTON ) {
+              @Override
               public void run() {
                 openMapping( stepMeta, -1 ); // negative by convention
               }
@@ -2659,6 +2660,7 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
               final int index = i;
               String referencedObject = referencedObjects[i];
               action = new Action( referencedObject, Action.AS_PUSH_BUTTON ) {
+                @Override
                 public void run() {
                   openMapping( stepMeta, index );
                 }

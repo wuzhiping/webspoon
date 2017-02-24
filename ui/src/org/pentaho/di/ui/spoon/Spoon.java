@@ -1787,6 +1787,7 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
       final String lastFileId = Integer.toString( i );
 
       Action action = new Action( "open-last-file-" + ( i + 1 ), Action.AS_PUSH_BUTTON ) {
+        @Override
         public void run() {
           lastFileSelect( lastFileId );
         }
@@ -5534,7 +5535,7 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
    * @return false if we want to stop processing. true if we need to continue.
    */
   public boolean exportRepositoryDirectory( RepositoryDirectory directoryToExport ) {
-    //ok, let's show one more modal dialog, users like modal dialogs. 
+    //ok, let's show one more modal dialog, users like modal dialogs.
     //They feel that their opinion are important to us.
     MessageBox box =
       new MessageBox( shell, SWT.ICON_QUESTION

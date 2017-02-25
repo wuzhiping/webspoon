@@ -1559,12 +1559,12 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
     }
   }
 
-  @Override
-  public void mouseScrolled( MouseEvent e ) {
-    /*
-     * if (e.count == 3) { // scroll up zoomIn(); } else if (e.count == -3) { // scroll down zoomOut(); } }
-     */
-  }
+//  @Override
+//  public void mouseScrolled( MouseEvent e ) {
+//    /*
+//     * if (e.count == 3) { // scroll up zoomIn(); } else if (e.count == -3) { // scroll down zoomOut(); } }
+//     */
+//  }
 
   private void addCandidateAsHop( int mouseX, int mouseY ) {
 

@@ -67,12 +67,10 @@ public class RepositoryConnectController {
   private RepositoryMeta connectedRepository;
   private RepositoriesMeta repositoriesMeta;
   private PluginRegistry pluginRegistry;
-  private Spoon spoon;
   private List<RepositoryContollerListener> listeners = new ArrayList<>();
 
   public RepositoryConnectController( PluginRegistry pluginRegistry, Spoon spoon, RepositoriesMeta repositoriesMeta ) {
     this.pluginRegistry = pluginRegistry;
-    this.spoon = spoon;
     this.repositoriesMeta = repositoriesMeta;
     try {
       repositoriesMeta.readData();
@@ -82,7 +80,7 @@ public class RepositoryConnectController {
   }
 
   public RepositoryConnectController() {
-    this( PluginRegistry.getInstance(), Spoon.getInstance(), new RepositoriesMeta() );
+    this( PluginRegistry.getInstance(), null, new RepositoriesMeta() );
   }
 
   @SuppressWarnings( "unchecked" )
@@ -383,10 +381,7 @@ public class RepositoryConnectController {
   }
 
   private Spoon getSpoon() {
-    if ( spoon == null ) {
-      spoon = Spoon.getInstance();
-    }
-    return spoon;
+    return Spoon.getInstance();
   }
 
   @SuppressWarnings( "unchecked" )
@@ -403,6 +398,10 @@ public class RepositoryConnectController {
 
   public void addListener( RepositoryContollerListener listener ) {
     listeners.add( listener );
+  }
+
+  public void removeListener( RepositoryContollerListener listener ) {
+    listeners.remove( listener );
   }
 
   public void fireListeners() {

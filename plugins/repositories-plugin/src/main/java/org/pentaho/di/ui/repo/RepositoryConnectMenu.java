@@ -38,6 +38,7 @@ import org.pentaho.di.core.logging.LogChannelInterface;
 import org.pentaho.di.i18n.BaseMessages;
 import org.pentaho.di.repository.RepositoriesMeta;
 import org.pentaho.di.repository.RepositoryMeta;
+import org.pentaho.di.ui.repo.RepositoryConnectController.RepositoryContollerListener;
 import org.pentaho.di.ui.spoon.Spoon;
 
 public class RepositoryConnectMenu {
@@ -47,7 +48,6 @@ public class RepositoryConnectMenu {
       RepositoryConnectMenu.class );
   private static final int MAX_REPO_NAME_PIXEL_LENGTH = 230;
 
-  private Spoon spoon;
   private ToolBar toolBar;
   private ToolItem connectButton;
   private ToolItem connectDropdown;
@@ -56,17 +56,24 @@ public class RepositoryConnectMenu {
 
   public RepositoryConnectMenu( Spoon spoon, ToolBar toolBar, RepositoryConnectController repoConnectController ) {
     this.toolBar = toolBar;
-    this.spoon = spoon;
     this.repoConnectController = repoConnectController;
-    repoConnectController.addListener( new RepositoryConnectController.RepositoryContollerListener() {
+    RepositoryContollerListener listener = new RepositoryConnectController.RepositoryContollerListener() {
       @Override
       public void update() {
         renderAndUpdate();
+      }
+    };
+    repoConnectController.addListener( listener );
+    spoon.getDisplay().disposeExec( new Runnable() {
+      @Override
+      public void run() {
+        repoConnectController.removeListener( listener );
       }
     } );
   }
 
   public void update() {
+    Spoon spoon = Spoon.getInstance();
     Rectangle rect = toolBar.getBounds();
     if ( connectDropdown != null && !connectDropdown.isDisposed() ) {
       if ( spoon.rep != null ) {
@@ -105,6 +112,14 @@ public class RepositoryConnectMenu {
   }
 
   private void renderAndUpdate() {
+    // Return when wrong thread
+    if ( connectDropdown != null && Spoon.getInstance().getDisplay() != connectDropdown.getDisplay() ) {
+      return;
+    }
+    if ( connectButton != null && Spoon.getInstance().getDisplay() != connectButton.getDisplay() ) {
+      return;
+    }
+
     if ( connectDropdown != null && !connectDropdown.isDisposed() ) {
       connectDropdown.dispose();
     }
@@ -121,13 +136,14 @@ public class RepositoryConnectMenu {
     connectButton.addSelectionListener( new SelectionAdapter() {
       @Override
       public void widgetSelected( SelectionEvent selectionEvent ) {
-        new RepositoryDialog( spoon.getShell(), repoConnectController ).openCreation();
+        new RepositoryDialog( Spoon.getInstance().getShell(), repoConnectController ).openCreation();
         renderAndUpdate();
       }
     } );
   }
 
   private void renderConnectDropdown() {
+    Spoon spoon = Spoon.getInstance();
     connectDropdown = new ToolItem( toolBar, SWT.DROP_DOWN, toolBar.getItems().length );
     connectDropdown.setText( BaseMessages.getString( PKG, "RepositoryConnectMenu.Connect" ) );
     connectDropdown.addSelectionListener( new SelectionAdapter() {

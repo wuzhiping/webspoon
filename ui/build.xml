@@ -78,6 +78,7 @@
       </lib>
       <classes dir="${classes.dir}"/>
       <fileset file="OSS_Licenses.html"/>
+      <zipfileset dir="docs" prefix="docs"/>
     </war>
   </target>
 

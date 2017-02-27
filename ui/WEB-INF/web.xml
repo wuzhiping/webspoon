@@ -22,4 +22,13 @@
     <servlet-name>rwtServlet</servlet-name>
     <url-pattern></url-pattern>
   </servlet-mapping>
+
+  <servlet>
+    <servlet-name>welcome</servlet-name>
+    <jsp-file>/docs/English/welcome/index.html</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>welcome</servlet-name>
+    <url-pattern>/docs/English/welcome/index.html</url-pattern>
+  </servlet-mapping>
 </web-app>

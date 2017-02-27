@@ -1673,7 +1673,6 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
   }
 
   public void showWelcomePage() {
-    try {
       LocationListener listener = new LocationListener() {
         public void changing( LocationEvent event ) {
           if ( event.location.endsWith( ".pdf" ) ) {
@@ -1703,22 +1702,7 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
         }
       };
 
-      // see if we are in webstart mode
-      String webstartRoot = System.getProperty( "spoon.webstartroot" );
-      if ( webstartRoot != null ) {
-        URL url = new URL( webstartRoot + '/' + FILE_WELCOME_PAGE );
-        addSpoonBrowser( STRING_WELCOME_TAB_NAME, url.toString(), listener ); // ./docs/English/tips/index.htm
-      } else {
-        // see if we can find the welcome file on the file system
-        File file = new File( FILE_WELCOME_PAGE );
-        if ( file.exists() ) {
-          // ./docs/English/tips/index.htm
-          addSpoonBrowser( STRING_WELCOME_TAB_NAME, file.toURI().toURL().toString(), listener );
-        }
-      }
-    } catch ( MalformedURLException e1 ) {
-      log.logError( Const.getStackTracker( e1 ) );
-    }
+      addSpoonBrowser( STRING_WELCOME_TAB_NAME, FILE_WELCOME_PAGE, listener ); // ./docs/English/tips/index.htm
   }
 
   public void showDocumentMap() {

@@ -213,6 +213,9 @@
     <!-- Manually include dependencies to align with the official distribution -->
     <dependency org="stax" name="stax-api" rev="1.0.1" transitive="false"/>
 
+    <!-- For welcome page -->
+    <dependency org="org.eclipse.jetty" name="jetty-jsp" rev="8.1.15.v20140411"/>
+
     <!-- Exclude some modules that were replaced by rap -->
     <exclude module="swt-linux-x86_64"/>
     <exclude module="jface"/>

@@ -1,5 +1,18 @@
 # Change Log
 
+## 0.6.1.7 - 2017-02-28
+
+### Changed
+- Rework: Take parameters in url to open a file
+- Updated `pentaho-xul-swt` and `org.eclipse.rap.rwt`
+
+### Fixed
+- Restore shortcut keys (may conflict with browser's shortcut keys)
+- Restore cut/copy/paste of step/job entry
+- Restore png image loading
+- Restore Metrics drawing
+- Restore welcome page
+
 ## 0.6.1.6 - 2017-02-08
 
 ### Added

@@ -145,7 +145,7 @@ public class Splash {
         } else {
           fullVersionText =  fullVersionText + " "  + buildVersion;
         }
-        fullVersionText += ", webSpoon (0.6.1.6)";
+        fullVersionText += ", webSpoon (0.6.1.7)";
         e.gc.setFont( verFont );
         e.gc.drawText( fullVersionText, 290, 205, true );
 

@@ -71,7 +71,7 @@
     </if>
   </target>
 
-  <target name="war" depends="resolve,compile">
+  <target name="war" depends="clean,resolve,compile">
     <war destfile="${dist.dir}/spoon.war" webxml="WEB-INF/web.xml">
       <lib dir="${lib.dir}">
         <exclude name="javax.servlet-api-*.jar"/>

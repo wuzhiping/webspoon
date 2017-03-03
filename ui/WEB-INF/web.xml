@@ -31,4 +31,13 @@
     <servlet-name>welcome</servlet-name>
     <url-pattern>/docs/English/welcome/index.html</url-pattern>
   </servlet-mapping>
+
+  <servlet>
+    <servlet-name>Carte</servlet-name>
+    <servlet-class>org.pentaho.di.www.CarteServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Carte</servlet-name>
+    <url-pattern>/kettle/*</url-pattern>
+  </servlet-mapping>
 </web-app>

@@ -224,5 +224,6 @@
     <exclude module="servlet-api"/>
     <exclude module="jsp-api"/>
     <exclude module="org.eclipse.swt.gtk.linux.x86_64"/>
+    <exclude module="kettle-ui-swt"/>
   </dependencies>
 </ivy-module>

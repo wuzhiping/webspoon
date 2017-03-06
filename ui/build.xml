@@ -74,12 +74,17 @@
     </if>
   </target>
 
-  <target name="war" depends="clean,resolve,compile">
+  <target name="war" depends="clean,resolve,compile,dist">
+    <copy todir="${lib.dir}">
+      <fileset file="${dist.dir}/${ivy.artifact.id}-${project.revision}.jar"/>
+    </copy>
     <war destfile="${dist.dir}/spoon.war" webxml="WEB-INF/web.xml">
       <lib dir="${lib.dir}">
         <exclude name="javax.servlet-api-*.jar"/>
       </lib>
-      <classes dir="${classes.dir}"/>
+      <classes dir="${classes.dir}">
+        <include name="*.xml"/>
+      </classes>
       <fileset file="OSS_Licenses.html"/>
       <zipfileset dir="docs" prefix="docs"/>
     </war>

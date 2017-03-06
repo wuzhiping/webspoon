@@ -89,9 +89,9 @@ public class RepositoryDialog extends ThinDialog {
 
     new BrowserFunction( browser, "close" ) {
       @Override public Object function( Object[] arguments ) {
-        browser.dispose();
-        dialog.close();
-        dialog.dispose();
+//        browser.dispose();
+//        dialog.close();
+//        dialog.dispose();
         return true;
       }
     };
@@ -292,6 +292,6 @@ public class RepositoryDialog extends ThinDialog {
   }
 
   private static String getRepoURL( String path ) {
-    return "http://localhost:" + getOsgiServicePort() + path;
+    return path;
   }
 }

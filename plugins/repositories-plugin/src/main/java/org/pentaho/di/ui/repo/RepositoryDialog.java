@@ -292,6 +292,6 @@ public class RepositoryDialog extends ThinDialog {
   }
 
   private static String getRepoURL( String path ) {
-    return path;
+    return System.getProperty( "KETTLE_CONTEXT_PATH", "" ) + path;
   }
 }

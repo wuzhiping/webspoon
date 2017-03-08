@@ -215,6 +215,9 @@
     <!-- For welcome page -->
     <dependency org="org.eclipse.jetty" name="jetty-jsp" rev="8.1.15.v20140411"/>
 
+    <!-- A reverse proxy for the repository plugin -->
+    <dependency org="org.mitre.dsmiley.httpproxy" name="smiley-http-proxy-servlet" rev="1.8"/>
+
     <!-- Exclude some modules that were replaced by rap -->
     <exclude module="swt-linux-x86_64"/>
     <exclude module="jface"/>

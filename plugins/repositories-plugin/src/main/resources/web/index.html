@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <script src="/requirejs-manager/js/require-init.js"></script>
+  <script src="../../requirejs-manager/js/require-init.js"></script>
   <link href="css/style.css" rel="stylesheet">
   <script>
+    var baseUrl = window.location.pathname.substring( 0, window.location.pathname.indexOf( "repositories" ) );
+    require.config({
+	    baseUrl: baseUrl
+    });
         require(['repositoriesMain_7.0'], function(app) {
             app.init(document);
         });

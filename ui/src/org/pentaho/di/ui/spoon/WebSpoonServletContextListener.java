@@ -39,6 +39,7 @@ import org.pentaho.di.core.exception.KettleException;
 
 public class WebSpoonServletContextListener extends RWTServletContextListener {
   public void contextInitialized( ServletContextEvent event ) {
+    System.setProperty( "KETTLE_CONTEXT_PATH", event.getServletContext().getContextPath() );
     /*
      *  The following lines are from Spoon.main
      *  because they are application-wide context.

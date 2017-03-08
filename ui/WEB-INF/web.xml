@@ -14,12 +14,12 @@
   </listener>
 
   <servlet>
-    <servlet-name>rwtServlet</servlet-name>
+    <servlet-name>Spoon</servlet-name>
     <servlet-class>org.eclipse.rap.rwt.engine.RWTServlet</servlet-class>
   </servlet>
 
   <servlet-mapping>
-    <servlet-name>rwtServlet</servlet-name>
+    <servlet-name>Spoon</servlet-name>
     <url-pattern></url-pattern>
   </servlet-mapping>
 
@@ -39,5 +39,91 @@
   <servlet-mapping>
     <servlet-name>Carte</servlet-name>
     <url-pattern>/kettle/*</url-pattern>
+  </servlet-mapping>
+
+  <!-- A reverse proxy for the repository plugin -->
+  <servlet>
+    <servlet-name>repositories</servlet-name>
+    <servlet-class>org.pentaho.di.ui.spoon.WebSpoonProxyServlet</servlet-class>
+    <init-param>
+      <param-name>targetUri</param-name>
+      <param-value>/repositories</param-value>
+    </init-param>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>repositories</servlet-name>
+    <url-pattern>/repositories/*</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>requirejs-manager</servlet-name>
+    <servlet-class>org.pentaho.di.ui.spoon.WebSpoonProxyServlet</servlet-class>
+    <init-param>
+      <param-name>targetUri</param-name>
+      <param-value>/requirejs-manager</param-value>
+    </init-param>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>requirejs-manager</servlet-name>
+    <url-pattern>/requirejs-manager/*</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>jquery</servlet-name>
+    <servlet-class>org.pentaho.di.ui.spoon.WebSpoonProxyServlet</servlet-class>
+    <init-param>
+      <param-name>targetUri</param-name>
+      <param-value>/jquery</param-value>
+    </init-param>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>jquery</servlet-name>
+    <url-pattern>/jquery/*</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>angular</servlet-name>
+    <servlet-class>org.pentaho.di.ui.spoon.WebSpoonProxyServlet</servlet-class>
+    <init-param>
+      <param-name>targetUri</param-name>
+      <param-value>/angular</param-value>
+    </init-param>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>angular</servlet-name>
+    <url-pattern>/angular/*</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>angular-sanitize</servlet-name>
+    <servlet-class>org.pentaho.di.ui.spoon.WebSpoonProxyServlet</servlet-class>
+    <init-param>
+      <param-name>targetUri</param-name>
+      <param-value>/angular-sanitize</param-value>
+    </init-param>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>angular-sanitize</servlet-name>
+    <url-pattern>/angular-sanitize/*</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>angular-route</servlet-name>
+    <servlet-class>org.pentaho.di.ui.spoon.WebSpoonProxyServlet</servlet-class>
+    <init-param>
+      <param-name>targetUri</param-name>
+      <param-value>/angular-route</param-value>
+    </init-param>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>angular-route</servlet-name>
+    <url-pattern>/angular-route/*</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>angular-translate</servlet-name>
+    <servlet-class>org.pentaho.di.ui.spoon.WebSpoonProxyServlet</servlet-class>
+    <init-param>
+      <param-name>targetUri</param-name>
+      <param-value>/angular-translate</param-value>
+    </init-param>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>angular-translate</servlet-name>
+    <url-pattern>/angular-translate/*</url-pattern>
   </servlet-mapping>
 </web-app>

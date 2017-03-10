@@ -64,7 +64,7 @@ public class RepositoryDialog extends ThinDialog {
   private static final String LOGIN_TITLE = BaseMessages.getString( PKG, "RepositoryDialog.Dialog.Login.Title" );
   private static final String LOGIN_WEB_CLIENT_PATH = "/repositories/web/index.html#repository-connect";
   private static final String OSGI_SERVICE_PORT = "OSGI_SERVICE_PORT";
-  private static final Image LOGO = GUIResource.getInstance().getImageLogoSmall();
+  private Image LOGO;
 
 
   private RepositoryConnectController controller;
@@ -75,6 +75,7 @@ public class RepositoryDialog extends ThinDialog {
     super( shell, WIDTH, HEIGHT );
     this.controller = controller;
     this.shell = shell;
+    this.LOGO = GUIResource.getInstance().getImageLogoSmall();
   }
 
   private boolean open() {

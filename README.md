@@ -22,11 +22,27 @@ This is one of the community activities and not supported by Pentaho.
 - Edit Kettle queries in CDE
 - Edit Kettle endpoints in App Builder (aka Sparkl)
 
-# How to use (end-user perspective)
+# How to use
 
 Please refer to the [wiki](https://github.com/HiromuHota/pentaho-kettle/wiki) and [issues](https://github.com/HiromuHota/pentaho-kettle/issues).
 
-# How to deploy & config (admin perspective)
+# How to deploy with Docker (no config)
+
+The following command gives you webSpoon without plugins:
+
+```
+$ docker run -d -p 8080:8080 hiromuhota/webspoon:latest
+```
+
+The following command gives you webSpoon with all the plugins included in the CE distribution:
+
+```
+$ docker run -d -p 8080:8080 hiromuhota/webspoon:latest-full
+```
+
+In either way, access `http://address:8080/spoon/spoon` with a browser.
+
+# How to deploy & config
 
 ## System requirements
 
@@ -34,26 +50,21 @@ Please refer to the [wiki](https://github.com/HiromuHota/pentaho-kettle/wiki/Sys
 
 ## Deploy
 
-The following procedures assume that Pentaho BI server (CE or EE) has already been installed and webSpoon is deployed to the Apache Tomcat shipped with them, but webSpoon can also be deployed to other servlet container (e.g., Jetty).
-The 3rd and 4th steps are optional if PDI plugin OSGi bundles (e.g., marketplace) are not required.
-
-### CE
+### Deploy to (bare) Tomcat
 
 1. Download the latest `spoon.war` from [here](https://github.com/HiromuHota/pentaho-kettle/releases).
-2. Copy the downloaded `spoon.war` to `biserver-ce/tomcat/webapps`.
-3. (Optional) download and unzip `pdi-ce-6.1.0.1-196.zip`, then copy the `system` folder to `biserver-ce/tomcat/bin`.
+2. Copy the downloaded `spoon.war` to `tomcat/webapps/spoon.war`.
+3. (Optional) download and unzip `pdi-ce-7.0.0.0-25.zip`, then copy the `system` and `plugins` folders to `tomcat/system` and `tomcat/plugins`, respectively.
 4. (Optional) configure Apache Karaf as below.
-5. (Re)start the BI server, namely `./start-pentaho.sh`.
+5. (Re)start the Tomcat.
+6. Access `http://address:8080/spoon/spoon`
 
-### EE
+### Deploy to Pentaho server
 
 1. Download the latest `spoon.war` from [here](https://github.com/HiromuHota/pentaho-kettle/releases).
-2. Copy the downloaded `spoon.war` to `Pentaho/server/biserver-ee/tomcat/webapps`.
-3. (Optional) download and unzip `pdi-ce-6.1.0.1-196.zip` (should be CE), then copy the `system` folder to `Pentaho`.
-4. (Optional) configure Apache Karaf as below.
-5. (Re)start the BI server, namely `./ctlscript.sh start baserver`.
-
-webSpoon will sit next to the Pentaho User Console (i.e., `http://address:8080/spoon/` **with a trailing slash** when PUC is `http://address:8080/pentaho`).
+2. Copy the downloaded `spoon.war` to `pentaho-server/tomcat/webapps/spoon.war`.
+3. (Re)start the Pentaho server.
+4. Access `http://address:8080/spoon/spoon`
 
 ## Config
 
@@ -61,9 +72,6 @@ webSpoon will sit next to the Pentaho User Console (i.e., `http://address:8080/s
 
 It is strongly recommended to use webSpoon with a Repository (can be Pentaho Repository, Kettle Database Repository, or Kettle File Repository), otherwise opening/saving files does not function as you would expect.
 The steps to connect to a Repository is described [here](https://help.pentaho.com/Documentation/6.1/0J0/0C0/015) and [here](https://help.pentaho.com/Documentation/6.1/0L0/0Y0/040).
-
-A progress bar will appear when clicking a OK button after selecting a connection, typing username and password.
-Please remember to move the progress bar, otherwise it will not close.
 
 One can also automatically login to a repository by setting environment variables.
 The details are described [here](http://wiki.pentaho.com/display/EAI/.01+Introduction+to+Spoon#.01IntroductiontoSpoon-Repository).
@@ -114,7 +122,7 @@ Place jar files into either one of the following folders:
 1. `biserver-ce/tomcat/lib` for CE or `Pentaho/server/biserver-ee/tomcat/lib` for EE.
 2. `webapps/spoon/WEB-INF/lib`, but not recommended because this folder is overwritten when upgrading `spoon.war`.
 
-# How to develop (developer perspective)
+# How to develop
 
 Spoon relies on SWT for UI widgets, which is great for being OS agnostic, but it only runs as a desktop app.
 RAP/RWT provides web UIs with SWT API, so replacing SWT with RAP/RWT allows Spoon to run as a web app with a little code change.

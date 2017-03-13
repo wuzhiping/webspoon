@@ -58,6 +58,9 @@
     <copy todir="./docs">
         <fileset dir="../assembly/package-res/docs" includes="**/*"/>
     </copy>
+    <copy todir="${system.dir}">
+        <fileset dir="../assembly/package-res/system" includes="**/*"/>
+    </copy>
 
     <if>
       <not>

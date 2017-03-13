@@ -20,7 +20,7 @@
 
   <servlet-mapping>
     <servlet-name>Spoon</servlet-name>
-    <url-pattern></url-pattern>
+    <url-pattern>/spoon</url-pattern>
   </servlet-mapping>
 
   <servlet>

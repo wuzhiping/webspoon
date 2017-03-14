@@ -58,9 +58,6 @@
     <copy todir="./docs">
         <fileset dir="../assembly/package-res/docs" includes="**/*"/>
     </copy>
-    <copy todir="${system.dir}">
-        <fileset dir="../assembly/package-res/system" includes="**/*"/>
-    </copy>
 
     <if>
       <not>
@@ -74,7 +71,7 @@
     </if>
   </target>
 
-  <target name="war" depends="clean,resolve,compile,dist">
+  <target name="war" depends="clean-all,resolve,dist">
     <copy todir="${lib.dir}">
       <fileset file="${dist.dir}/${ivy.artifact.id}-${project.revision}.jar"/>
     </copy>

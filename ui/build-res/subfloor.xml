@@ -863,7 +863,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       the defined directories.
       ====================================================================-->
   <target name="resolve"
-          depends="resolve-default, resolve-test, resolve-plugins, resolve-pentaho-system, ivy.check-releasable"
+          depends="resolve-default, resolve-test, ivy.check-releasable"
           description="Retrieves all the dependent libraries"/>
 
   <target name="resolve-init" unless="resolve-init.skip" depends="install-ivy">
@@ -955,6 +955,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       </sequential>
     </for>
     <move file="${system.dir}/pentaho-karaf-assembly" tofile="${system.dir}/karaf" />
+    <copy todir="${system.dir}">
+        <fileset dir="../assembly/package-res/system" includes="**/*"/>
+    </copy>
   </target>
 
   <!--=======================================================================
@@ -1483,8 +1486,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <target name="clean-jars">
     <delete dir="${lib.dir}"/>
     <delete dir="${testlib.dir}"/>
-    <delete dir="${plugins.dir}"/>
-    <delete dir="${system.dir}"/>
   </target>
 
 
@@ -1498,6 +1499,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
           depends="clean-tests, clean-cobertura, clean-sonar, clean-javadoc, clean-dist">
     <delete dir="${classes.dir}"/>
     <delete dir="${bin.dir}"/>
+    <delete dir="${plugins.dir}"/>
+    <delete dir="${system.dir}"/>
   </target>
 
 

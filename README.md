@@ -208,10 +208,10 @@ It is recommened to install the RAP Tools to your Eclipse IDE.
 Please refer to the [developer's guide for RAP](http://www.eclipse.org/rap/developers-guide/) for how to install.
 Once installed, follow these instructions.
 
-Resolve dependencies, create a classpath file, and copy resources
+Resolve dependencies, create a classpath file, resolve plugins and system folders
 
 ```bash
-$ ant create-dot-classpath compile.res_copy
+$ ant create-dot-classpath resolve-plugins resolve-pentaho-system
 ```
 
 Change output directory from `bin` to `bin/classes` to align with the Ant compile task.
@@ -221,7 +221,12 @@ Change output directory from `bin` to `bin/classes` to align with the Ant compil
 $ sed -i "" "s/bin/bin\/classes/" .classpath
 ```
 
-Finally import the project (pentaho-kettle/ui) into Eclipse IDE.
+Then import the project (pentaho-kettle/ui) into Eclipse IDE.
+Once Eclipse finishes building the project, run the following command to copy resources.
+
+```bash
+$ ant compile.res_copy
+```
 
 # Notices
 

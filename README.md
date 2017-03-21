@@ -66,6 +66,8 @@ Please refer to the [wiki](https://github.com/HiromuHota/pentaho-kettle/wiki/Sys
 3. (Re)start the Pentaho server.
 4. Access `http://address:8080/spoon/spoon`
 
+It is not recommended to place `system` and `plugins` folders along with the Pentaho server due to [#32](https://github.com/HiromuHota/pentaho-kettle/issues/32) and [#35](https://github.com/HiromuHota/pentaho-kettle/issues/35).
+
 ## Config
 
 ### Repository
@@ -103,15 +105,17 @@ If not defined, the following folders are used:
 2. `$HOME/.kettle/plugins`
 3. `$CUR_DIR/plugins ` (the current folder: `$CUR_DIR` depends on how and where webSpoon is running, e.g., `biserver-ce/tomcat/bin` for CE and `Pentaho` for EE)
 
-### Big Data Plugin
+### Replace some plugins with patched ones
 
-If Pentaho Big Data Plugin is used with webSpoon, errors would occur (see #22 and #23).
-To resolve these errors, please replace jar files with patched ones and delete the Karaf cache directory if necessary.
-The patched jar files can be downloaded from [here](https://github.com/HiromuHota/big-data-plugin/releases) (now only support 6.1.0.1-196).
+Some of the plugins are not compatible with webSpoon.
+Please replace jar files with patched ones and delete the Karaf cache directory if necessary.
+The patched jar files are [pdi-platform-utils-plugin](https://github.com/HiromuHota/pdi-platform-utils-plugin/releases), [big-data-plugin](https://github.com/HiromuHota/big-data-plugin/releases), [repositories-plugin](https://github.com/HiromuHota/pentaho-kettle/releases) (only 7.0.0.0-25 is supported).
 
 ```
-$ cp ${path_to_lib}/pentaho-big-data-legacy-6.1.0.1-196.jar plugins/pentaho-big-data-plugin/
-$ cp ${path_to_lib}/pentaho-big-data-kettle-plugins-common-ui-6.1.0.1-196.jar system/karaf/system/pentaho/pentaho-big-data-kettle-plugins-common-ui/6.1.0.1-196/
+$ cp ${path_to_lib}/pdi-platform-utils-plugin-7.0.0.0-25.jar plugins/platform-utils-plugin/
+$ cp ${path_to_lib}/pentaho-big-data-legacy-7.0.0.0-25.jar plugins/pentaho-big-data-plugin/
+$ cp ${path_to_lib}/pentaho-big-data-kettle-plugins-common-ui-7.0.0.0-25.jar system/karaf/system/pentaho/pentaho-big-data-kettle-plugins-common-ui/7.0.0.0-25/
+$ cp ${path_to_lib}/repositories-plugin.jar system/karaf/system/pentaho-kettle/repositories-plugin/7.0.0.0-25/repositories-plugin-7.0.0.0-25.jar
 $ rm -rf system/karaf/caches/webspoonservletcontextlistener
 ```
 

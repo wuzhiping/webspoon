@@ -1,5 +1,20 @@
 # Change Log
 
+## 0.7.0.8 - 2017-03-21
+
+### Added
+- Start Carte with webSpoon
+
+### Changed
+- Rebased to 7.0.0.0-25
+- Change url-pattern from `http://address:8080/spoon/` to `http://address:8080/spoon/spoon`
+- Build a jar file for kettle-ui-swt
+- Refactor build.xml to quickly build a WAR file
+
+### Fixed
+- Restore repositories-plugin
+- Restore the use of dummyGC in TableView
+
 ## 0.6.1.7 - 2017-02-28
 
 ### Changed

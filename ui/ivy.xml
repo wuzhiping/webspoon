@@ -16,7 +16,7 @@
 
   <dependencies defaultconf="default->default">
     <!-- Kettle dependencies -->
-    <dependency org="${ivy.artifact.group}" name="kettle-core"         rev="${dependency.kettle.revision}"/>
+    <dependency org="${ivy.artifact.group}" name="kettle-core"         rev="${dependency.webspoon.revision}" changing="true"/>
     <dependency org="${ivy.artifact.group}" name="kettle-engine"       rev="${dependency.kettle.revision}"/>
     <dependency org="${ivy.artifact.group}" name="kettle-dbdialog"     rev="${dependency.kettle.revision}"/>
 

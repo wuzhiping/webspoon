@@ -26,6 +26,7 @@ package org.pentaho.di.core;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.text.StrBuilder;
+import org.eclipse.rap.rwt.RWT;
 import org.pentaho.di.core.exception.KettleException;
 import org.pentaho.di.core.row.ValueMetaInterface;
 import org.pentaho.di.core.util.EnvUtil;
@@ -1901,6 +1902,20 @@ public class Const {
    */
   public static String getKettleDirectory() {
     return getUserHomeDirectory() + FILE_SEPARATOR + getUserBaseDir();
+  }
+
+  /**
+   * Determines the Kettle absolute directory in the user's home directory.
+   * This is per user-basis.
+   *
+   * @return The Kettle absolute directory.
+   */
+  public static String getKettleUserDirectory() {
+    if ( RWT.getRequest().getRemoteUser() == null ) {
+      return getUserHomeDirectory() + FILE_SEPARATOR + getUserBaseDir();
+    } else {
+      return getUserHomeDirectory() + FILE_SEPARATOR + getUserBaseDir() + FILE_SEPARATOR + "users" + FILE_SEPARATOR + RWT.getRequest().getRemoteUser();
+    }
   }
 
   /**

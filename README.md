@@ -57,18 +57,36 @@ Please refer to the [wiki](https://github.com/HiromuHota/pentaho-kettle/wiki/Sys
 3. (Optional) download and unzip `pdi-ce-7.0.0.0-25.zip`, then copy the `system` and `plugins` folders to `tomcat/system` and `tomcat/plugins`, respectively.
 4. (Optional) configure Apache Karaf as below.
 5. (Re)start the Tomcat.
-6. Access `http://address:8080/spoon/spoon`
+6. Access `http://address:8080/spoon/spoon` as <i>user</i> with password of <i>password</i>
 
 ### Deploy to Pentaho server
 
 1. Download the latest `spoon.war` from [here](https://github.com/HiromuHota/pentaho-kettle/releases).
 2. Copy the downloaded `spoon.war` to `pentaho-server/tomcat/webapps/spoon.war`.
 3. (Re)start the Pentaho server.
-4. Access `http://address:8080/spoon/spoon`
+4. Access `http://address:8080/spoon/spoon` as <i>user</i> with password of <i>password</i>
 
 It is not recommended to place `system` and `plugins` folders along with the Pentaho server due to [#32](https://github.com/HiromuHota/pentaho-kettle/issues/32) and [#35](https://github.com/HiromuHota/pentaho-kettle/issues/35).
 
 ## Config
+
+### Users
+
+Edit `WEB-INF/spring/security.xml` to manage users.
+The following example shows how to assign <i>user</i> with password of <i>password</i> to <i>USER</i> role.
+
+```
+<b:beans>
+  <user-service>
+    <user name="user" password="password" authorities="ROLE_USER" />
+  </user-service>
+</b:beans>
+```
+
+It would be possible to use LDAP as an authentication provider.
+See [here](http://docs.spring.io/spring-security/site/docs/4.1.x/reference/html/ns-config.html) for more details.
+webSpoon uses the same framework for user authentication: Spring Security, as Pentaho User Console.
+Thus, it would also be possible to use Microsoft Active Directory as described in Pentaho's official documentation for [User Security](https://help.pentaho.com/Documentation/7.0/0P0/Setting_Up_User_Security).
 
 ### Repository
 
@@ -246,7 +264,7 @@ $ ant compile.res_copy
 - Oracle and Java are registered trademarks of Oracle and/or its affiliates.
 - Ubuntu is a registered trademark of Canonical Ltd.
 - Mac and OS X are trademarks of Apple Inc., registered in the U.S. and other countries.
-- Windows is a registered trademark of Microsoft Corporation in the U.S. and other countries.
+- Windows and Active Directory are registered trademark of Microsoft Corporation in the U.S. and other countries.
 - Eclipse is a registered trademark of the Eclipse Foundation, Inc. in the US and/or other countries.
 - Apache Karaf is a trademark of The Apache Software Foundation.
 - Google Chrome browser is a trademark of Google Inc.

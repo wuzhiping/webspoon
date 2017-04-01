@@ -123,6 +123,8 @@
     <dependency org="org.springframework" name="spring-beans"   rev="${dependency.spring.framework.revision}" />
     <dependency org="org.springframework" name="spring-context" rev="${dependency.spring.framework.revision}" />
     <dependency org="org.springframework.security" name="spring-security-core" rev="${dependency.spring.security.revision}" />
+    <dependency org="org.springframework.security" name="spring-security-web" rev="${dependency.spring.security.revision}" />
+    <dependency org="org.springframework.security" name="spring-security-config" rev="${dependency.spring.security.revision}" />
     <dependency org="org.glassfish.metro" name="webservices-api" rev="2.1" transitive="false"/>
     <dependency org="org.glassfish.metro" name="webservices-rt" rev="2.1" transitive="false"/>
 

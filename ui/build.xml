@@ -76,6 +76,9 @@
       <fileset file="${dist.dir}/${ivy.artifact.id}-${project.revision}.jar"/>
     </copy>
     <war destfile="${dist.dir}/spoon.war" webxml="WEB-INF/web.xml">
+      <webinf dir="WEB-INF">
+        <exclude name="web.xml"/>
+      </webinf>
       <lib dir="${lib.dir}">
         <exclude name="javax.servlet-api-*.jar"/>
       </lib>

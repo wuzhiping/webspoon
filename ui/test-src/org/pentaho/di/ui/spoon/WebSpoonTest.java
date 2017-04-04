@@ -53,6 +53,11 @@ public class WebSpoonTest {
     driver.get( baseUrl );
     driver.manage().timeouts().implicitlyWait( 10, TimeUnit.SECONDS );
     driver.manage().window().setSize( new Dimension( 1280, 800 ) );
+
+    // Login with username and password
+    driver.findElement( By.xpath( "//input[@name = 'username']" ) ).sendKeys( "user" );
+    driver.findElement( By.xpath( "//input[@name = 'password']" ) ).sendKeys( "password" );
+    driver.findElement( By.xpath( "//input[@name = 'submit']" ) ).click();
   }
 
   @Test

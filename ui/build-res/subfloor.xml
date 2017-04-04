@@ -474,6 +474,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     </fileset>
     <fileset dir="${lib.dir}">
       <include name="**/*.jar"/>
+      <exclude name="**/pdi-osgi-bridge-core-*.jar"/>
     </fileset>
   </path>
 

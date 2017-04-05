@@ -49,15 +49,17 @@ public class WebSpoonTest {
     driver = new ChromeDriver();
     actions = new Actions( driver );
     wait = new WebDriverWait( driver, 10 );
-    baseUrl = System.getProperty( "test.baseurl", "http://localhost:8080/spoon/" );
+    baseUrl = System.getProperty( "test.baseurl", "http://localhost:8080/spoon" );
     driver.get( baseUrl );
     driver.manage().timeouts().implicitlyWait( 10, TimeUnit.SECONDS );
     driver.manage().window().setSize( new Dimension( 1280, 800 ) );
 
     // Login with username and password
-    driver.findElement( By.xpath( "//input[@name = 'username']" ) ).sendKeys( "user" );
-    driver.findElement( By.xpath( "//input[@name = 'password']" ) ).sendKeys( "password" );
-    driver.findElement( By.xpath( "//input[@name = 'submit']" ) ).click();
+    if ( driver.findElements( By.xpath( "//input[@name = 'username']" ) ).size() != 0 ) {
+      driver.findElement( By.xpath( "//input[@name = 'username']" ) ).sendKeys( "user" );
+      driver.findElement( By.xpath( "//input[@name = 'password']" ) ).sendKeys( "password" );
+      driver.findElement( By.xpath( "//input[@name = 'submit']" ) ).click();
+    }
   }
 
   @Test

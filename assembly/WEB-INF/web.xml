@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+  version="2.4">
+
+  <!--
+    - Location of the XML file that defines the root application context
+    - Applied by ContextLoaderListener.
+    -->
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>
+      /WEB-INF/spring/*.xml
+    </param-value>
+  </context-param>
+
+
+  <filter>
+    <filter-name>springSecurityFilterChain</filter-name>
+    <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>springSecurityFilterChain</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <!--
+    - Loads the root application context of this web app at startup.
+    - The application context is then available via
+    - WebApplicationContextUtils.getWebApplicationContext(servletContext).
+  -->
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+
+  <context-param>
+    <param-name>org.eclipse.rap.applicationConfiguration</param-name>
+    <param-value>org.pentaho.di.ui.spoon.WebSpoon</param-value>
+  </context-param>
+
+  <listener>
+    <listener-class>org.pentaho.di.ui.spoon.WebSpoonServletContextListener</listener-class>
+  </listener>
+
+  <servlet>
+    <servlet-name>Spoon</servlet-name>
+    <servlet-class>org.eclipse.rap.rwt.engine.RWTServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>Spoon</servlet-name>
+    <url-pattern>/spoon</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>welcome</servlet-name>
+    <jsp-file>/docs/English/welcome/index.html</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>welcome</servlet-name>
+    <url-pattern>/docs/English/welcome/index.html</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>Carte</servlet-name>
+    <servlet-class>org.pentaho.di.www.CarteServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Carte</servlet-name>
+    <url-pattern>/kettle/*</url-pattern>
+  </servlet-mapping>
+
+  <!-- A reverse proxy for the repository plugin -->
+  <servlet>
+    <servlet-name>repositories</servlet-name>
+    <servlet-class>org.pentaho.di.ui.spoon.WebSpoonProxyServlet</servlet-class>
+    <init-param>
+      <param-name>targetUri</param-name>
+      <param-value>/repositories</param-value>
+    </init-param>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>repositories</servlet-name>
+    <url-pattern>/repositories/*</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>requirejs-manager</servlet-name>
+    <servlet-class>org.pentaho.di.ui.spoon.WebSpoonProxyServlet</servlet-class>
+    <init-param>
+      <param-name>targetUri</param-name>
+      <param-value>/requirejs-manager</param-value>
+    </init-param>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>requirejs-manager</servlet-name>
+    <url-pattern>/requirejs-manager/*</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>jquery</servlet-name>
+    <servlet-class>org.pentaho.di.ui.spoon.WebSpoonProxyServlet</servlet-class>
+    <init-param>
+      <param-name>targetUri</param-name>
+      <param-value>/jquery</param-value>
+    </init-param>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>jquery</servlet-name>
+    <url-pattern>/jquery/*</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>angular</servlet-name>
+    <servlet-class>org.pentaho.di.ui.spoon.WebSpoonProxyServlet</servlet-class>
+    <init-param>
+      <param-name>targetUri</param-name>
+      <param-value>/angular</param-value>
+    </init-param>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>angular</servlet-name>
+    <url-pattern>/angular/*</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>angular-sanitize</servlet-name>
+    <servlet-class>org.pentaho.di.ui.spoon.WebSpoonProxyServlet</servlet-class>
+    <init-param>
+      <param-name>targetUri</param-name>
+      <param-value>/angular-sanitize</param-value>
+    </init-param>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>angular-sanitize</servlet-name>
+    <url-pattern>/angular-sanitize/*</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>angular-route</servlet-name>
+    <servlet-class>org.pentaho.di.ui.spoon.WebSpoonProxyServlet</servlet-class>
+    <init-param>
+      <param-name>targetUri</param-name>
+      <param-value>/angular-route</param-value>
+    </init-param>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>angular-route</servlet-name>
+    <url-pattern>/angular-route/*</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>angular-translate</servlet-name>
+    <servlet-class>org.pentaho.di.ui.spoon.WebSpoonProxyServlet</servlet-class>
+    <init-param>
+      <param-name>targetUri</param-name>
+      <param-value>/angular-translate</param-value>
+    </init-param>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>angular-translate</servlet-name>
+    <url-pattern>/angular-translate/*</url-pattern>
+  </servlet-mapping>
+</web-app>

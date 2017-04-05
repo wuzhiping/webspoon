@@ -183,18 +183,13 @@ There could be a version of 0.7.0.4, which is based on the Kettle version 7.0 wi
 Since the repository is heavy, it is recommened to clone only the latest commit of the branch.
 
 ```bash
-$ git clone -b webspoon --depth 1 https://github.com/HiromuHota/pentaho-kettle.git
+$ git clone -b webspoon-7.0 --depth 1 https://github.com/HiromuHota/pentaho-kettle.git
 ```
-Change the directory
+Change directory and resolve dependencies
 
 ```bash
 $ cd pentaho-kettle/ui/
-```
-
-Resolve dependencies
-
-```bash
-$ ant resolve
+$ ant clean-all resolve
 ```
 
 Replace some of the dependent libraries with patched ones, which can be downloaded from [rap](https://github.com/HiromuHota/rap/releases) and [pentaho-commons-xul](https://github.com/HiromuHota/pentaho-commons-xul/releases).
@@ -206,11 +201,20 @@ $ cp ${path_to_lib}/org.eclipse.rap.rwt_3.1.1.YYYYMMDD-XXXX.jar lib/org.eclipse.
 $ cp ${path_to_lib}/pentaho-xul-swt-6.1-SNAPSHOT.jar lib/pentaho-xul-swt-6.1.0.1-196.jar
 ```
 
-Build and you will get a WAR file in `dist` folder, which can be deployed to the Java Application server of your choice.
+Build and locally publish `kettle-ui-swt-7.0.0.0-25-X.jar`, which will be copied to `~/.ivy2/local/pentaho-kettle/kettle-ui-swt/`
 
 ```bash
-$ ant war
+$ ant publish-local
 ```
+
+Change directory and build a war file.
+The published jar file will be picked up on the way.
+
+```bash
+$ cd pentaho-kettle/assembly
+$ ant clean-all resolve war
+```
+
 ## Testing
 
 `TestContext` has been added to some test cases to simulate the environment that RAP UI code normally runs. `TestContext` is in the bundle org.eclipse.rap.rwt.testfixture, which is not hosted by the Maven Repository. So please download it from [here](https://github.com/HiromuHota/rap/releases) and copy it to the `test-lib` directory.
@@ -225,11 +229,11 @@ $ ant test
 
 Currently, Google Chrome browser is used when running UI test cases, but other supported browsers should work too.
 Ideally, PhantomJS should be used for head-less testing, but it is not supported by Eclipse RAP/RWT and some of the codes like mouse-move do not work as far as I've tested it.
-The default url is `http://localhost:8080/spoon/`.
+The default url is `http://localhost:8080/spoon`.
 Pass a parameter like below if webSpoon is deployed to a different url.
 
 ```
-$ ant test -Dtest.baseurl=http://localhost:8080
+$ ant test -Dtest.baseurl=http://localhost:8080/spoon/spoon
 ```
 
 ## Develop in Eclipse IDE
@@ -238,25 +242,18 @@ It is recommened to install the RAP Tools to your Eclipse IDE.
 Please refer to the [developer's guide for RAP](http://www.eclipse.org/rap/developers-guide/) for how to install.
 Once installed, follow these instructions.
 
-Resolve dependencies, create a classpath file, resolve plugins and system folders
+Copy resources (*.xul and laf.properties), resolve dependencies, create a classpath file
 
 ```bash
-$ ant create-dot-classpath resolve-plugins resolve-pentaho-system
+$ cd pentaho-kettle/ui
+$ cp -r ../assembly/package-res/ui/* package-res/ui/
+$ ant create-dot-classpath
 ```
 
-Change output directory from `bin` to `bin/classes` to align with the Ant compile task.
+Then import the project (pentaho-kettle/ui) into Eclipse IDE and use `package-res` as Source folder.
 
-
-```bash
-$ sed -i "" "s/bin/bin\/classes/" .classpath
-```
-
-Then import the project (pentaho-kettle/ui) into Eclipse IDE.
-Once Eclipse finishes building the project, run the following command to copy resources.
-
-```bash
-$ ant compile.res_copy
-```
+Configure your Run/Debug configurations as described [here](http://www.eclipse.org/rap/developers-guide/devguide.php?topic=launcher.html&version=3.1#rwt-launcher),
+but please make sure to choose <i>Run from web.xml</i> and set `/Kettle UI/WEB-INF/web.xml` for Location.
 
 # Notices
 

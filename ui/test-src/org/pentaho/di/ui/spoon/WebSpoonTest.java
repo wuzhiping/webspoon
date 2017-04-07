@@ -88,6 +88,27 @@ public class WebSpoonTest {
     Assert.assertEquals( 1, driver.findElements( By.xpath( "//div[text() = 'Never stop generating rows']" ) ).size() );
   }
 
+  /*
+   * testModifiedJavaScriptValue1 and 2 collectively demonstrate multi-session use.
+   */
+  @Test
+  public void testModifiedJavaScriptValue1() throws Exception {
+    createNewTrans();
+    drawStep( "Modified Java Script Value" );
+    openDialog( "Modified Java Script Value" );
+
+    Assert.assertEquals( 1, driver.findElements( By.xpath( "//div[text() = 'Script Values / Mod']" ) ).size() );
+  }
+
+  @Test
+  public void testModifiedJavaScriptValue2() throws Exception {
+    createNewTrans();
+    drawStep( "Modified Java Script Value" );
+    openDialog( "Modified Java Script Value" );
+
+    Assert.assertEquals( 1, driver.findElements( By.xpath( "//div[text() = 'Script Values / Mod']" ) ).size() );
+  }
+
   @Test
   public void testDatabaseConnectionDialog() throws Exception {
     // Create a new transformation
@@ -124,6 +145,31 @@ public class WebSpoonTest {
     wait.until( ExpectedConditions.elementToBeClickable( By.xpath( "//div[text() = 'Cancel']" ) ) ).click();
     Thread.sleep( 1000 );
     Assert.assertEquals( "5", driver.switchTo().activeElement().getAttribute( "tabindex" ) );
+  }
+
+  private void createNewTrans() {
+    // Create a new transformation
+    driver.findElement( By.xpath( "//div[text() = 'File']" ) ).click();
+    driver.findElement( By.xpath( "//div[text() = 'New']" ) ).click();
+    driver.findElement( By.xpath( "//div[text() = 'Transformation']" ) ).click();
+    wait.until( ExpectedConditions.presenceOfElementLocated( By.xpath( "//div[text() = 'Transformation 1']" ) ) );
+  }
+
+  private void drawStep( String stepName ) throws InterruptedException {
+    // Filter a step
+    driver.findElement( By.xpath( "//input[@test-id = 'selectionFilter']" ) ).sendKeys( stepName );
+
+    // Draw a step
+    element = driver.findElement( By.xpath( "//div[text() = '" + stepName + "']" ) );
+    actions.click( element ).click( element ).build().perform();
+  }
+
+  private void openDialog( String stepName ) {
+    // Open a step dialog
+    driver.findElement( By.xpath( "//div[@test-id = 'tree_exploreSolution']" ) ).click();
+    driver.findElement( By.xpath( "//div[@test-id = 'tree_expandAll']" ) ).click();
+    element = driver.findElement( By.xpath( "//div[@test-id = 'tree_Steps']/../..//div[text() = '" + stepName + "']" ) );
+    actions.click( element ).click( element ).build().perform();
   }
 
   @After

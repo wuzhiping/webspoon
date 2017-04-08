@@ -6,7 +6,7 @@
 
   <http>
     <intercept-url pattern="/**" access="hasRole('USER')" />
-    <form-login default-target-url="/spoon" always-use-default-target='true'/>
+    <form-login default-target-url="/spoon"/>
     <logout />
     <!-- Spring Security's CSRF protection is disabled because RAP/RWT does not handle the CSRF token issued by Spring Security.
          RAP/RWT has its own CSRF protection. See https://bugs.eclipse.org/bugs/show_bug.cgi?id=413668 for more details -->

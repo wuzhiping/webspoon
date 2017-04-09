@@ -260,6 +260,7 @@
       <classes dir="package-res/classes"/>
       <fileset file="OSS_Licenses.html"/>
       <zipfileset dir="package-res/docs" prefix="docs"/>
+      <fileset dir="src/jsp"/>
     </war>
   </target>
 </project>

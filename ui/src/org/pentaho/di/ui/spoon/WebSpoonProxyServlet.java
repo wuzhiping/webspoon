@@ -26,6 +26,7 @@ package org.pentaho.di.ui.spoon;
 import java.net.URI;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.http.client.utils.URIUtils;
 import org.mitre.dsmiley.httpproxy.ProxyServlet;
@@ -38,16 +39,19 @@ public class WebSpoonProxyServlet extends ProxyServlet {
 
   @Override
   protected void initTarget() throws ServletException {
-    targetUri = getConfigParam(P_TARGET_URI);
-    if (targetUri == null)
-      throw new ServletException(P_TARGET_URI+" is required.");
     //test it's valid
     try {
-      targetUriObj = new URI( "http://localhost:" + getOsgiServicePort() + targetUri );
+      targetUriObj = new URI( "http://localhost:" + getOsgiServicePort() );
     } catch (Exception e) {
       throw new ServletException("Trying to process targetUri init parameter: "+e,e);
     }
     targetHost = URIUtils.extractHost(targetUriObj);
+  }
+
+  @Override
+  protected String rewriteUrlFromRequest(HttpServletRequest servletRequest) {
+    servletRequest.setAttribute( ATTR_TARGET_URI, servletRequest.getServletPath() );
+    return super.rewriteUrlFromRequest( servletRequest );
   }
 
   private static Integer getOsgiServicePort() {

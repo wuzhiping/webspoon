@@ -48,17 +48,17 @@ public class WebSpoonTest {
   public void setUp() throws Exception {
     driver = new ChromeDriver();
     actions = new Actions( driver );
-    wait = new WebDriverWait( driver, 10 );
+    wait = new WebDriverWait( driver, 5 );
     baseUrl = System.getProperty( "test.baseurl", "http://localhost:8080/spoon" );
     driver.get( baseUrl );
-    driver.manage().timeouts().implicitlyWait( 10, TimeUnit.SECONDS );
+    driver.manage().timeouts().implicitlyWait( 5, TimeUnit.SECONDS );
     driver.manage().window().setSize( new Dimension( 1280, 800 ) );
 
     // Login with username and password
     if ( driver.findElements( By.xpath( "//input[@name = 'username']" ) ).size() != 0 ) {
       driver.findElement( By.xpath( "//input[@name = 'username']" ) ).sendKeys( "user" );
       driver.findElement( By.xpath( "//input[@name = 'password']" ) ).sendKeys( "password" );
-      driver.findElement( By.xpath( "//input[@name = 'submit']" ) ).click();
+      clickElement( "//input[@name = 'submit']" );
     }
   }
 
@@ -70,20 +70,19 @@ public class WebSpoonTest {
   @Test
   public void testNewTransformation() throws Exception {
     // Create a new transformation
-    driver.findElement( By.xpath( "//div[text() = 'File']" ) ).click();
-    driver.findElement( By.xpath( "//div[text() = 'New']" ) ).click();
-    driver.findElement( By.xpath( "//div[text() = 'Transformation']" ) ).click();
+    clickElement( "//div[text() = 'File']" );
+    clickElement( "//div[text() = 'New']" );
+    clickElement( "//div[text() = 'Transformation']" );
 
     // Drag & drop a step
-    driver.findElement( By.xpath( "//div[text() = 'Input']" ) ).click();
+    clickElement( "//div[text() = 'Input']" );
     element = driver.findElement( By.xpath( "//div[text() = 'Generate Rows']" ) );
     actions.clickAndHold( element ).moveByOffset( 300, 0 ).release().build().perform();
 
     // Open a step dialog
-    driver.findElement( By.xpath( "//div[@test-id = 'tree_exploreSolution']" ) ).click();
-    driver.findElement( By.xpath( "//div[@test-id = 'tree_expandAll']" ) ).click();
-    element = driver.findElement( By.xpath( "//div[@test-id = 'tree_Steps']/../..//div[text() = 'Generate Rows']" ) );
-    actions.click( element ).click( element ).build().perform();
+    clickElement( "//div[@test-id = 'tree_exploreSolution']" );
+    clickElement( "//div[@test-id = 'tree_expandAll']" );
+    doubleClickElement( "//div[@test-id = 'tree_Steps']/../..//div[text() = 'Generate Rows']" );
 
     Assert.assertEquals( 1, driver.findElements( By.xpath( "//div[text() = 'Never stop generating rows']" ) ).size() );
   }
@@ -112,46 +111,44 @@ public class WebSpoonTest {
   @Test
   public void testDatabaseConnectionDialog() throws Exception {
     // Create a new transformation
-    driver.findElement( By.xpath( "//div[text() = 'File']" ) ).click();
-    driver.findElement( By.xpath( "//div[text() = 'New']" ) ).click();
-    driver.findElement( By.xpath( "//div[text() = 'Transformation']" ) ).click();
+    clickElement( "//div[text() = 'File']" );
+    clickElement( "//div[text() = 'New']" );
+    clickElement( "//div[text() = 'Transformation']" );
 
     // Filter a step
     driver.findElement( By.xpath( "//input[@test-id = 'selectionFilter']" ) ).sendKeys( "table" );
 
     // Draw a step
-    element = driver.findElement( By.xpath( "//div[text() = 'Table input']" ) );
-    actions.click( element ).click( element ).build().perform();
+    doubleClickElement( "//div[text() = 'Table input']" );
 
     // Open a step dialog
-    driver.findElement( By.xpath( "//div[@test-id = 'tree_exploreSolution']" ) ).click();
-    driver.findElement( By.xpath( "//div[@test-id = 'tree_expandAll']" ) ).click();
-    element = driver.findElement( By.xpath( "//div[@test-id = 'tree_Steps']/../..//div[text() = 'Table input']" ) );
-    actions.click( element ).click( element ).build().perform();
+    clickElement( "//div[@test-id = 'tree_exploreSolution']" );
+    clickElement( "//div[@test-id = 'tree_expandAll']" );
+    doubleClickElement( "//div[@test-id = 'tree_Steps']/../..//div[text() = 'Table input']" );
 
     /* TODO
      * Cancel button does not become clickable unless thread.sleep and window.setSize.
      * The wait duration might depend on an environment.
      */
-    wait.until( ExpectedConditions.elementToBeClickable( By.xpath( "//div[text() = 'New...']" ) ) ).click();
+    clickElement( "//div[text() = 'New...']" );
     Thread.sleep( 1000 );
     driver.manage().window().setSize( new Dimension( 1280, 799 ) );
-    wait.until( ExpectedConditions.elementToBeClickable( By.xpath( "//div[text() = 'Cancel']" ) ) ).click();
+    clickElement( "//div[text() = 'Cancel']" );
     Thread.sleep( 1000 );
     driver.manage().window().setSize( new Dimension( 1280, 800 ) );
-    wait.until( ExpectedConditions.elementToBeClickable( By.xpath( "//div[text() = 'Edit...']" ) ) ).click();
+    clickElement( "//div[text() = 'Edit...']" );
     Thread.sleep( 1000 );
     driver.manage().window().setSize( new Dimension( 1280, 799 ) );
-    wait.until( ExpectedConditions.elementToBeClickable( By.xpath( "//div[text() = 'Cancel']" ) ) ).click();
+    clickElement( "//div[text() = 'Cancel']" );
     Thread.sleep( 1000 );
     Assert.assertEquals( "5", driver.switchTo().activeElement().getAttribute( "tabindex" ) );
   }
 
   private void createNewTrans() {
     // Create a new transformation
-    driver.findElement( By.xpath( "//div[text() = 'File']" ) ).click();
-    driver.findElement( By.xpath( "//div[text() = 'New']" ) ).click();
-    driver.findElement( By.xpath( "//div[text() = 'Transformation']" ) ).click();
+    clickElement( "//div[text() = 'File']" );
+    clickElement( "//div[text() = 'New']" );
+    clickElement( "//div[text() = 'Transformation']" );
     wait.until( ExpectedConditions.presenceOfElementLocated( By.xpath( "//div[text() = 'Transformation 1']" ) ) );
   }
 
@@ -166,9 +163,17 @@ public class WebSpoonTest {
 
   private void openDialog( String stepName ) {
     // Open a step dialog
-    driver.findElement( By.xpath( "//div[@test-id = 'tree_exploreSolution']" ) ).click();
-    driver.findElement( By.xpath( "//div[@test-id = 'tree_expandAll']" ) ).click();
-    element = driver.findElement( By.xpath( "//div[@test-id = 'tree_Steps']/../..//div[text() = '" + stepName + "']" ) );
+    clickElement( "//div[@test-id = 'tree_exploreSolution']" );
+    clickElement( "//div[@test-id = 'tree_expandAll']" );
+    doubleClickElement( "//div[@test-id = 'tree_Steps']/../..//div[text() = '" + stepName + "']" );
+  }
+
+  private void clickElement( String xpath ) {
+    wait.until( ExpectedConditions.elementToBeClickable( By.xpath( xpath ) ) ).click();
+  }
+
+  private void doubleClickElement( String xpath ) {
+    element = driver.findElement( By.xpath( xpath ) );
     actions.click( element ).click( element ).build().perform();
   }
 

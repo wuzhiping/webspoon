@@ -261,15 +261,22 @@ public class ConstUI {
   public static void displayMenu( Menu menu, Control control ) {
     Menu oldMenu = control.getMenu();
     if ( oldMenu != null && oldMenu != menu ) {
-      oldMenu.setVisible( false );
+//      oldMenu.setVisible( false );
+      oldMenu.dispose();
     }
 
     // XXX: Stubbing out this line prevents context dialogs from appearing twice
     // on OS X. Tested on Windows to be sure there is no adverse effect.
     // Unfortunately, I do *not* understand why this works. I ran it by
     // mcasters and he didn't know for sure either.
-    // control.setMenu(menu);
-    menu.setVisible( true );
+    /*
+     * This dates back to May 22, 2008 (b065e5d6be6bb93e019dc127077843144f7e03da).
+     * PDI-1272: Context menus get duplicated when right-clicking on Trans/Job canvas in OS X
+     * However, RWT does not depend on OS, so dialogs appear once even when a server is running on OS X.
+     * I revert back to control.setMenu from menu.setVisible for webSpoon.
+     */
+    control.setMenu( menu );
+//    menu.setVisible( true );
   }
 
 }

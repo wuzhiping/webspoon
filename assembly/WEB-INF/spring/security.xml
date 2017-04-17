@@ -5,6 +5,7 @@
             http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 
   <http>
+    <intercept-url pattern="/favicon.ico" access="permitAll"/>
     <intercept-url pattern="/**" access="hasRole('USER')" />
     <form-login default-target-url="/spoon"/>
     <logout />

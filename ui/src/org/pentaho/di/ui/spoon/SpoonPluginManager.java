@@ -56,7 +56,6 @@ import java.util.Map;
  */
 public class SpoonPluginManager implements PluginTypeListener {
 
-  private static SpoonPluginManager instance = new SpoonPluginManager();
   private Map<Object, SpoonPluginInterface> plugins = new HashMap<>();
   private Map<String, List<SpoonPluginInterface>> pluginCategoryMap = new HashMap<>();
 

@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <window id="label-test" title="Flow Test" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
   xmlns:pen="http://www.pentaho.org/2008/xul" onload="spoon.onLoad()">
-  <menubar id="spoon-menubar">
+  <toolbar id="spoon-menubar">
   
-    <menu id="file" label="${Spoon.Menu.File}" accesskey="alt-f">
+    <toolbarbutton id="file" label="${Spoon.Menu.File}" accesskey="alt-f" menu="file-popup">
       <menupopup id="file-popup">
         <menu id="file-new" label="${Spoon.Menu.File.New}">
           <menupopup id="file-newfile-new-popup">
@@ -47,9 +47,9 @@
         <menuseparator id="file-separator-4"/>
         <menuitem id="file-quit" label="${Spoon.Menu.File.Quit}" command="spoon.quitFile(true)" />        
       </menupopup>
-    </menu>
+    </toolbarbutton>
     
-    <menu id="edit" label="${Spoon.Menu.Edit}">
+    <toolbarbutton id="edit" label="${Spoon.Menu.Edit}" menu="edit-popup">
       <menupopup id="edit-popup">
         <menuitem id="edit-undo" acceltext="CTRL-Z" accesskey="ctrl-z" label="${Spoon.Menu.Undo.NotAvailable}"
           command="spoon.undoAction()" />
@@ -85,9 +85,9 @@
         <menuitem id="edit-settings" label="${Spoon.Menu.Transformation.Settings}"
           command="spoon.editProperties()" />
       </menupopup>
-    </menu>
+    </toolbarbutton>
     
-    <menu id="view" label="${Spoon.Menu.View}">
+    <toolbarbutton id="view" label="${Spoon.Menu.View}" menu="view-popup">
       <menupopup id="view-popup">
         <menu id="view-perspectives" label="${Spoon.Menu.View.Perspectives}">
           <menupopup id="view-perspectives-popup">
@@ -105,9 +105,9 @@
         <menuseparator id="view-perspective-seperator" />
         <menuitem id="view-results" type="checkbox" label="${Spoon.Menu.View.Results}" command="spoon.showExecutionResults()"/>  
       </menupopup>
-    </menu>
+    </toolbarbutton>
   
-    <menu id="action" label="${Spoon.Menu.Action}">
+    <toolbarbutton id="action" label="${Spoon.Menu.Action}" menu="trans-popup">
       <menupopup id="trans-popup">
         <menuitem id="process-run" acceltext="F9" accesskey="f9" label="${Spoon.Menu.Transformation.Run}"
           command="spoon.runFile()" />
@@ -135,9 +135,9 @@
           </menupopup>
         </menu>
       </menupopup>
-    </menu>
+    </toolbarbutton>
     
-    <menu id="tools" label="${Spoon.Menu.Tools}">
+    <toolbarbutton id="tools" label="${Spoon.Menu.Tools}" menu="tools-popup">
       <menupopup id="tools-popup">
         <menu id="tools-data" label="${Spoon.Menu.Tools.Data.Popup}">
           <menupopup id="tools-data-popup">
@@ -179,17 +179,17 @@
         <menuitem id="help-plugins" label="${Spoon.Menu.ShowPluginInfo}" command="spoon.showPluginInfo()" />
         
       </menupopup>
-    </menu>
+    </toolbarbutton>
     
-    <menu id="help" label="${Spoon.Menu.Help}">
+    <toolbarbutton id="help" label="${Spoon.Menu.Help}" menu="help-popup">
       <menupopup id="help-popup">
         <menuitem id="help-welcome" label="${Spoon.Menu.Help.Welcome}" command="spoon.showWelcomePage()" />
         <menuitem id="help-welcome" label="${Spoon.Menu.Help.Documentation}" command="spoon.showDocumentMap()" />
         <menuseparator id="help-separator-1"/>
         <menuitem id="help-about" label="${Spoon.Menu.About}" command="spoon.helpAbout()" />
       </menupopup>
-    </menu>
-  </menubar>
+    </toolbarbutton>
+  </toolbar>
 
   <menupopup id="trans-class">
     <menuitem id="trans-class-new" label="${Spoon.Menu.Popup.BASE.New}" command="spoon.newTransFile()" />

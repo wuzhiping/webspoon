@@ -6,15 +6,6 @@
     
   <pen:include src="menubar.xul" ignoreroot="true"/>
     
-  <toolbar id="spoon-menubar">
-    <toolbarbutton id="file" label="${Spoon.Menu.File}" accesskey="alt-f" menu="file-popup" />
-    <toolbarbutton id="edit" label="${Spoon.Menu.Edit}" menu="edit-popup" />
-    <toolbarbutton id="view" label="${Spoon.Menu.View}" menu="view-popup" />
-    <toolbarbutton id="action" label="${Spoon.Menu.Action}" menu="trans-popup" />
-    <toolbarbutton id="tools" label="${Spoon.Menu.Tools}" menu="tools-popup" />
-    <toolbarbutton id="help" label="${Spoon.Menu.Help}" menu="help-popup" />
-  </toolbar>
-
   <toolbar id="main-toolbar" mode="full" >
     <toolbarbutton id="toolbar-file-new" image="images/new.svg" tooltiptext="${Spoon.Tooltip.NewFile}" menu="new-file-popup" />
     <toolbarseparator />

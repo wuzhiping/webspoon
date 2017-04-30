@@ -59,7 +59,7 @@ public class DownloadServiceHandler implements ServiceHandler {
     // Send the file in the response
     response.setContentType( "application/octet-stream" );
     response.setContentLength( download.length );
-    String contentDisposition = "attachment; filename=\"export.xml\"";
+    String contentDisposition = "attachment; filename=\"" + file.getName() + "\"";
     response.setHeader( "Content-Disposition", contentDisposition );
     response.getOutputStream().write( download );
   }

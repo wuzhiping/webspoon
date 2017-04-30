@@ -29,6 +29,7 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
@@ -72,6 +73,7 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.rap.rwt.RWT;
 import org.eclipse.rap.rwt.SingletonUtil;
 import org.eclipse.rap.rwt.client.service.JavaScriptExecutor;
+import org.eclipse.rap.rwt.client.service.UrlLauncher;
 import org.eclipse.rap.rwt.service.ServerPushSession;
 import org.eclipse.rap.rwt.widgets.WidgetUtil;
 import org.eclipse.swt.SWT;
@@ -5368,7 +5370,12 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
       saved = saveToRepository( meta, true );
 
     } else {
-      saved = saveXMLFile( meta, false );
+      /*
+       * In webSpoon, saveXMLFile allows users to download the Trans/Job.
+       * When export=false, the Trans/Job will be recognized as "locally saved", but it is not.
+       * Thus, export=true to make it equivalent to exportXMLFile().
+       */
+      saved = saveXMLFile( meta, true );
     }
 
     delegates.tabs.renameTabs(); // filename or name of transformation might
@@ -5574,32 +5581,14 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
    * @return false if we want to stop processing. true if we need to continue.
    */
   public boolean exportRepositoryDirectory( RepositoryDirectory directoryToExport ) {
-
-    FileDialog dialog = this.getExportFileDialog();
-    if ( dialog.open() == null ) {
-      return false;
-    }
-
-    String filename = dialog.getFilterPath() + Const.FILE_SEPARATOR + dialog.getFileName();
-    log.logBasic( BaseMessages.getString( PKG, "Spoon.Log.Exporting" ), BaseMessages.getString(
-      PKG, "Spoon.Log.ExportObjectsToFile", filename ) );
-
-    // check if file is exists
-    MessageBox box = RepositoryExportProgressDialog.checkIsFileIsAcceptable( shell, log, filename );
-    int answer = ( box == null ) ? SWT.OK : box.open();
-    if ( answer != SWT.OK ) {
-      // seems user don't want to overwrite file...
-      return false;
-    }
-
     //ok, let's show one more modal dialog, users like modal dialogs.
     //They feel that their opinion are important to us.
-    box =
+    MessageBox box =
       new MessageBox( shell, SWT.ICON_QUESTION
         | SWT.APPLICATION_MODAL | SWT.SHEET | SWT.YES | SWT.NO | SWT.CANCEL );
     box.setText( BaseMessages.getString( PKG, "Spoon.QuestionApplyImportRulesToExport.Title" ) );
     box.setMessage( BaseMessages.getString( PKG, "Spoon.QuestionApplyImportRulesToExport.Message" ) );
-    answer = box.open();
+    int answer = box.open();
     if ( answer == SWT.CANCEL ) {
       return false;
     }
@@ -5614,8 +5603,15 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
       }
     }
 
+    File file = null;
+    try {
+      file = File.createTempFile( "export_", ".xml" );
+      file.delete();
+    } catch ( IOException e ) {
+      e.printStackTrace();
+    }
     RepositoryExportProgressDialog repd =
-      new RepositoryExportProgressDialog( shell, rep, directoryToExport, filename, importRules );
+      new RepositoryExportProgressDialog( shell, rep, directoryToExport, file.getAbsolutePath(), importRules );
     repd.open();
 
     return true;
@@ -5762,15 +5758,16 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
     String beforeFilename = meta.getFilename();
     String beforeName = meta.getName();
 
-    FileDialog dialog = new FileDialog( shell, SWT.SAVE );
     String[] extensions = meta.getFilterExtensions();
-    dialog.setFilterExtensions( extensions );
-    dialog.setFilterNames( meta.getFilterNames() );
-    setFilterPath( dialog );
-    String filename = dialog.open();
+    File file = null;
+    try {
+      file = File.createTempFile( "export_", "" );
+      file.delete();
+    } catch ( IOException e ) {
+      e.printStackTrace();
+    }
+    String filename = file.getAbsolutePath();
     if ( filename != null ) {
-      lastDirOpened = dialog.getFilterPath();
-
       // Is the filename ending on .ktr, .xml?
       boolean ending = false;
       for ( int i = 0; i < extensions.length - 1; i++ ) {
@@ -5825,6 +5822,13 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
         if ( !saved ) {
           meta.setFilename( beforeFilename );
           meta.setName( beforeName );
+        } else {
+          StringBuilder url = new StringBuilder();
+          url.append( RWT.getServiceManager().getServiceHandlerUrl( "downloadServiceHandler" ) );
+          url.append( '&' ).append( "filename" ).append( '=' ).append( filename );
+          UrlLauncher launcher = RWT.getClient().getService( UrlLauncher.class );
+          launcher.openURL( url.toString() );
+          file.delete();
         }
       }
     }

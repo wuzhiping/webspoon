@@ -5419,36 +5419,14 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
     //
     try {
       String zipFilename = null;
-      while ( Utils.isEmpty( zipFilename ) ) {
-        FileDialog dialog = new FileDialog( shell, SWT.SAVE );
-        dialog.setText( BaseMessages.getString( PKG, "Spoon.ExportResourceSelectZipFile" ) );
-        dialog.setFilterExtensions( new String[] { "*.zip;*.ZIP", "*" } );
-        dialog.setFilterNames( new String[] {
-          BaseMessages.getString( PKG, "System.FileType.ZIPFiles" ),
-          BaseMessages.getString( PKG, "System.FileType.AllFiles" ), } );
-        setFilterPath( dialog );
-        if ( dialog.open() != null ) {
-          lastDirOpened = dialog.getFilterPath();
-          zipFilename = dialog.getFilterPath() + Const.FILE_SEPARATOR + dialog.getFileName();
-          FileObject zipFileObject = KettleVFS.getFileObject( zipFilename );
-          if ( zipFileObject.exists() ) {
-            MessageBox box = new MessageBox( shell, SWT.YES | SWT.NO | SWT.CANCEL );
-            box
-              .setMessage( BaseMessages
-                .getString( PKG, "Spoon.ExportResourceZipFileExists.Message", zipFilename ) );
-            box.setText( BaseMessages.getString( PKG, "Spoon.ExportResourceZipFileExists.Title" ) );
-            int answer = box.open();
-            if ( answer == SWT.CANCEL ) {
-              return;
-            }
-            if ( answer == SWT.NO ) {
-              zipFilename = null;
-            }
-          }
-        } else {
-          return;
-        }
+      File file = null;
+      try {
+        file = File.createTempFile( "export_", ".zip" );
+        file.delete();
+      } catch ( IOException e ) {
+        e.printStackTrace();
       }
+      zipFilename = file.getAbsolutePath();
 
       // Export the resources linked to the currently loaded file...
       //
@@ -5473,6 +5451,12 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
        */
 
       // Show some information concerning all this work...
+
+      StringBuilder url = new StringBuilder();
+      url.append( RWT.getServiceManager().getServiceHandlerUrl( "downloadServiceHandler" ) );
+      url.append( '&' ).append( "filename" ).append( '=' ).append( zipFilename );
+      UrlLauncher launcher = RWT.getClient().getService( UrlLauncher.class );
+      launcher.openURL( url.toString() );
 
       EnterTextDialog enterTextDialog =
         new EnterTextDialog(

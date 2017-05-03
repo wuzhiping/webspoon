@@ -109,6 +109,17 @@ public class WebSpoonTest {
   }
 
   @Test
+  public void testOpenSaveMenus() throws Exception {
+    clickElement( "//div[text() = 'File']" );
+    Assert.assertTrue( isMenuItemDisabled( "//div[text() = 'Open...']" ) );
+
+    createNewTrans();
+    clickElement( "//div[text() = 'File']" );
+    Assert.assertTrue( isMenuItemDisabled( "//div[text() = 'Save']" ) );
+    Assert.assertFalse( isMenuItemDisabled( "//div[text() = 'Save as (VFS)...']" ) );
+  }
+
+  @Test
   public void testDatabaseConnectionDialog() throws Exception {
     // Create a new transformation
     clickElement( "//div[text() = 'File']" );
@@ -175,6 +186,15 @@ public class WebSpoonTest {
   private void doubleClickElement( String xpath ) {
     element = driver.findElement( By.xpath( xpath ) );
     actions.click( element ).click( element ).build().perform();
+  }
+
+  private boolean isMenuItemDisabled( String xpath ) {
+    /*
+     *  Determine if a menu item is grayed out (=disabled)
+     *  ExpectedConditions.elementToBeClickable does not work here because it is clickable.
+     */
+    String color = driver.findElement( By.xpath( xpath ) ).getCssValue("color");
+    return color.equals( "rgba(189, 189, 189, 1)" );
   }
 
   @After

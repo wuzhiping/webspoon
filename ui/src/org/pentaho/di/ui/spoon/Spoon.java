@@ -957,15 +957,25 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
         final DiskFileUploadReceiver receiver = new DiskFileUploadReceiver();
         final FileUploadHandler uploadHandler = new FileUploadHandler( receiver );
         final Display display = Display.getCurrent();
+        final ServerPushSession pushSession = new ServerPushSession();
+        pushSession.start();
         uploadHandler.addUploadListener( new FileUploadListener() {
           public void uploadProgress( FileUploadEvent event ) {}
           public void uploadFailed( FileUploadEvent event ) {}
           public void uploadFinished( FileUploadEvent event ) {
-            display.asyncExec( new Runnable() {
+            Thread thread = new Thread() {
+              @Override
               public void run() {
-                openFile( receiver.getTargetFiles()[ 0 ].getAbsolutePath(), true );
+                display.asyncExec( new Runnable() {
+                  @Override
+                  public void run() {
+                    openFile( receiver.getTargetFiles()[ 0 ].getAbsolutePath(), true );
+                    pushSession.stop();
+                  }
+                } );
               }
-            } );
+            };
+            thread.start();
           }
         } );
         RWT.getClient().getService( ClientFileUploader.class ).submit( uploadHandler.getUploadUrl(), files );

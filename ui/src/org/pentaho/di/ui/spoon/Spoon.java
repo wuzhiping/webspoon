@@ -6879,9 +6879,10 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
           && disableJobMenu && disableMetaMenu || disableSave || !isRepositoryRunning );
         disableMenuItem( doc, "file-save-as-vfs", disableTransMenu && disableJobMenu && disableMetaMenu );
         disableMenuItem( doc, "file-close", disableTransMenu && disableJobMenu && disableMetaMenu );
-        disableMenuItem( doc, "file-print", disableTransMenu && disableJobMenu );
+        disableMenuItem( doc, "file-print", disableTransMenu && disableJobMenu || true );
         disableMenuItem( doc, "file-export-to-xml", disableTransMenu && disableJobMenu );
         disableMenuItem( doc, "file-export-all-to-xml", disableTransMenu && disableJobMenu );
+        disableMenuItem( doc, "file-quit", true );
 
         // Disable the undo and redo menus if there is no active transformation
         // or active job
@@ -6890,6 +6891,8 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
         disableMenuItem( doc, UNDO_MENU_ITEM, disableTransMenu && disableJobMenu );
         disableMenuItem( doc, REDO_MENU_ITEM, disableTransMenu && disableJobMenu );
 
+        disableMenuItem( doc, "edit.copy-file", true );
+        disableMenuItem( doc, "trans-copy-image", true );
         disableMenuItem( doc, "edit-clear-selection", disableTransMenu && disableJobMenu );
         disableMenuItem( doc, "edit-select-all", disableTransMenu && disableJobMenu );
         updateSettingsMenu( doc, disableTransMenu, disableJobMenu );

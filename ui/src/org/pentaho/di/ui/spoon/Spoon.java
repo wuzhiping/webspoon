@@ -70,10 +70,17 @@ import org.eclipse.jface.window.ApplicationWindow;
 //import org.eclipse.jface.window.ToolTip;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.rap.fileupload.DiskFileUploadReceiver;
+import org.eclipse.rap.fileupload.FileUploadEvent;
+import org.eclipse.rap.fileupload.FileUploadHandler;
+import org.eclipse.rap.fileupload.FileUploadListener;
 import org.eclipse.rap.rwt.RWT;
 import org.eclipse.rap.rwt.SingletonUtil;
+import org.eclipse.rap.rwt.client.ClientFile;
+import org.eclipse.rap.rwt.client.service.ClientFileUploader;
 import org.eclipse.rap.rwt.client.service.JavaScriptExecutor;
 import org.eclipse.rap.rwt.client.service.UrlLauncher;
+import org.eclipse.rap.rwt.dnd.ClientFileTransfer;
 import org.eclipse.rap.rwt.service.ServerPushSession;
 import org.eclipse.rap.rwt.widgets.WidgetUtil;
 import org.eclipse.swt.SWT;
@@ -86,6 +93,7 @@ import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTarget;
+import org.eclipse.swt.dnd.DropTargetAdapter;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.DropTargetListener;
 import org.eclipse.swt.dnd.FileTransfer;
@@ -938,58 +946,29 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
     }
 
     // Allow data to be copied or moved to the drop target
-    int operations = DND.DROP_COPY | DND.DROP_DEFAULT;
+    int operations = DND.DROP_MOVE;
     DropTarget target = new DropTarget( shell, operations );
+    target.setTransfer( new Transfer[] { ClientFileTransfer.getInstance() } );
 
-    // Receive data in File format
-    final FileTransfer fileTransfer = FileTransfer.getInstance();
-    Transfer[] types = new Transfer[] { fileTransfer };
-    target.setTransfer( types );
-
-    target.addDropListener( new DropTargetListener() {
-      @Override
-      public void dragEnter( DropTargetEvent event ) {
-        if ( event.detail == DND.DROP_DEFAULT ) {
-          if ( ( event.operations & DND.DROP_COPY ) != 0 ) {
-            event.detail = DND.DROP_COPY;
-          } else {
-            event.detail = DND.DROP_NONE;
-          }
-        }
-      }
-
-      @Override
-      public void dragOver( DropTargetEvent event ) {
-        event.feedback = DND.FEEDBACK_SELECT | DND.FEEDBACK_SCROLL;
-      }
-
-      @Override
-      public void dragOperationChanged( DropTargetEvent event ) {
-        if ( event.detail == DND.DROP_DEFAULT ) {
-          if ( ( event.operations & DND.DROP_COPY ) != 0 ) {
-            event.detail = DND.DROP_COPY;
-          } else {
-            event.detail = DND.DROP_NONE;
-          }
-        }
-      }
-
-      @Override
-      public void dragLeave( DropTargetEvent event ) {
-      }
-
-      @Override
-      public void dropAccept( DropTargetEvent event ) {
-      }
-
+    target.addDropListener( new DropTargetAdapter() {
       @Override
       public void drop( DropTargetEvent event ) {
-        if ( fileTransfer.isSupportedType( event.currentDataType ) ) {
-          String[] files = (String[]) event.data;
-          for ( String file : files ) {
-            openFile( file, false );
+        ClientFile[] files =  ( ClientFile[] )event.data;
+        final DiskFileUploadReceiver receiver = new DiskFileUploadReceiver();
+        final FileUploadHandler uploadHandler = new FileUploadHandler( receiver );
+        final Display display = Display.getCurrent();
+        uploadHandler.addUploadListener( new FileUploadListener() {
+          public void uploadProgress( FileUploadEvent event ) {}
+          public void uploadFailed( FileUploadEvent event ) {}
+          public void uploadFinished( FileUploadEvent event ) {
+            display.asyncExec( new Runnable() {
+              public void run() {
+                openFile( receiver.getTargetFiles()[ 0 ].getAbsolutePath(), true );
+              }
+            } );
           }
-        }
+        } );
+        RWT.getClient().getService( ClientFileUploader.class ).submit( uploadHandler.getUploadUrl(), files );
       }
     } );
 

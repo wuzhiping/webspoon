@@ -25,6 +25,7 @@ package org.pentaho.di.ui.spoon;
 import java.util.List;
 
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.rap.rwt.service.ServerPushSession;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Combo;
@@ -56,6 +57,7 @@ public abstract class AbstractGraph extends Composite {
   protected Combo zoomLabel;
 
   protected XulDomContainer xulDomContainer;
+  protected final ServerPushSession pushSession = new ServerPushSession();
 
   public AbstractGraph( Composite parent, int style ) {
     super( parent, style );

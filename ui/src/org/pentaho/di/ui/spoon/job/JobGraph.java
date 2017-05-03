@@ -38,7 +38,6 @@ import java.util.concurrent.Callable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.MessageDialogWithToggle;
-import org.eclipse.rap.rwt.service.ServerPushSession;
 //import org.eclipse.jface.window.DefaultToolTip;
 //import org.eclipse.jface.window.ToolTip;
 import org.eclipse.swt.SWT;
@@ -308,8 +307,6 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
   private Point[] previous_step_locations;
   private Point[] previous_note_locations;
   private JobEntryCopy currentEntry;
-
-  private final ServerPushSession pushSession = new ServerPushSession();
 
   public JobGraph( Composite par, final Spoon spoon, final JobMeta jobMeta ) {
     super( par, SWT.NONE );
@@ -1445,7 +1442,6 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
       public void run() {
         if ( !isDisposed() ) {
           redraw();
-          pushSession.stop();
         }
       }
     } );
@@ -3584,6 +3580,7 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
             job.addJobListener( new JobAdapter() {
               public void jobFinished( Job job ) {
                 JobGraph.this.jobFinished();
+                pushSession.stop();
               }
             } );
 

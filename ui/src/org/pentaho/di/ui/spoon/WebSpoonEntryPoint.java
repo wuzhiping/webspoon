@@ -61,6 +61,7 @@ public class WebSpoonEntryPoint extends AbstractEntryPoint {
     Spoon.getInstance().setCommandLineArgs( Spoon.getCommandLineArgs( args ) );
     Spoon.getInstance().setShell( parent.getShell() );
     Spoon.getInstance().createContents( parent );
+    Spoon.getInstance().setArguments( args.toArray( new String[ args.size() ] ) );
 
     /*
      *  The following lines are webSpoon additional functions

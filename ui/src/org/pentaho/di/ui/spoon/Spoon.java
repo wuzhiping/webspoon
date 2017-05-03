@@ -5359,12 +5359,7 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
       saved = saveToRepository( meta, true );
 
     } else {
-      /*
-       * In webSpoon, saveXMLFile allows users to download the Trans/Job.
-       * When export=false, the Trans/Job will be recognized as "locally saved", but it is not.
-       * Thus, export=true to make it equivalent to exportXMLFile().
-       */
-      saved = saveXMLFile( meta, true );
+      saved = saveXMLFile( meta, false );
     }
 
     delegates.tabs.renameTabs(); // filename or name of transformation might

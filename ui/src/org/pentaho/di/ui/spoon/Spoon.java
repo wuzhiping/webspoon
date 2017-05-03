@@ -5876,7 +5876,6 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
       }
       if ( id == SWT.YES ) {
         save( meta, filename, false );
-        enableMenus();
       }
     }
     return false;
@@ -6840,7 +6839,6 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
     }
     boolean disableSave = true;
     boolean disableDatabaseExplore = true;
-    boolean isSavable = true;
     TabItemInterface currentTab = getActiveTabitem();
     if ( currentTab != null && currentTab.canHandleSave() ) {
       disableSave = !currentTab.hasContentChanged();
@@ -6848,7 +6846,6 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
     EngineMetaInterface meta = getActiveMeta();
     if ( meta != null ) {
       disableSave = !meta.canSave();
-      isSavable = rep != null ? true : meta.getFilename() != null;
       disableDatabaseExplore = false;
     }
 
@@ -6871,9 +6868,9 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
         disableMenuItem( doc, "menubar-new-database", disableTransMenu && disableJobMenu );
         disableMenuItem( doc, "file-open", !isRepositoryRunning );
         disableMenuItem( doc, "toolbar-file-open", !isRepositoryRunning );
-        disableMenuItem( doc, "file-save", disableTransMenu && disableJobMenu && disableMetaMenu || disableSave || !isSavable );
+        disableMenuItem( doc, "file-save", disableTransMenu && disableJobMenu && disableMetaMenu || disableSave || !isRepositoryRunning );
         disableMenuItem( doc, "toolbar-file-save", disableTransMenu
-          && disableJobMenu && disableMetaMenu || disableSave || !isSavable );
+          && disableJobMenu && disableMetaMenu || disableSave || !isRepositoryRunning );
         disableMenuItem( doc, "file-save-as", disableTransMenu && disableJobMenu && disableMetaMenu || disableSave || !isRepositoryRunning );
         disableMenuItem( doc, "toolbar-file-save-as", disableTransMenu
           && disableJobMenu && disableMetaMenu || disableSave || !isRepositoryRunning );

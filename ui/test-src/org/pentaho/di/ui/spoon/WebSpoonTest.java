@@ -155,6 +155,29 @@ public class WebSpoonTest {
     Assert.assertEquals( "5", driver.switchTo().activeElement().getAttribute( "tabindex" ) );
   }
 
+  @Test
+  public void testContextMenu() throws Exception {
+    // Create a new transformation
+    createNewTrans();
+    drawStep( "Table input" );
+
+    // Open a step dialog
+    clickElement( "//div[@test-id = 'tree_exploreSolution']" );
+    clickElement( "//div[@test-id = 'tree_expandAll']" );
+
+    // Right-click on the step to pop-up a context menu
+    // for some reason, multiple double right clicks are needed.
+    for ( int i = 0; i < 5; i++ ){
+      element = wait.until( ExpectedConditions.elementToBeClickable( By.xpath( "//div[@test-id = 'tree_Steps']/../..//div[text() = 'Table input']" ) ) );
+      actions.contextClick( element ).build().perform();
+      if ( driver.findElements( By.xpath( "//div[text() = 'Duplicate']" ) ).size() == 1 ) {
+        break;
+      }
+    }
+
+    Assert.assertEquals( 1, driver.findElements( By.xpath( "//div[text() = 'Duplicate']" ) ).size() );
+  }
+
   private void createNewTrans() {
     // Create a new transformation
     clickElement( "//div[text() = 'File']" );

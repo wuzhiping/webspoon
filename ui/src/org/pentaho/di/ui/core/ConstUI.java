@@ -259,11 +259,15 @@ public class ConstUI {
   }
 
   public static void displayMenu( Menu menu, Control control ) {
-    Menu oldMenu = control.getMenu();
-    if ( oldMenu != null && oldMenu != menu ) {
+    /*
+     * Comment-out these lines to resolve the regression caused by 94f07bff4e1019fc187333a43b9c9530eaa0fd59
+     * The regression is that the context menu of the tree in the View tab won't pop-up.
+     */
+//    Menu oldMenu = control.getMenu();
+//    if ( oldMenu != null && oldMenu != menu ) {
 //      oldMenu.setVisible( false );
-      oldMenu.dispose();
-    }
+//      oldMenu.dispose();
+//    }
 
     // XXX: Stubbing out this line prevents context dialogs from appearing twice
     // on OS X. Tested on Windows to be sure there is no adverse effect.

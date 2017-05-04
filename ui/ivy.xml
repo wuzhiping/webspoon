@@ -23,7 +23,7 @@
     <!-- Pentaho (non-Kettle) dependencies -->
     <dependency org="pentaho"               name="pentaho-vfs-browser" rev="${dependency.pentaho-vfs-browser.revision}"/>
     <dependency org="pentaho"               name="pentaho-xul-core"    rev="${dependency.pentaho-xul.revision}"/>
-    <dependency org="pentaho"               name="pentaho-xul-swt"     rev="${dependency.pentaho-xul.revision}"/>
+    <dependency org="pentaho"               name="pentaho-xul-swt"     rev="${dependency.webspoon.revision}"         changing="true"/>
     <dependency org="pentaho"               name="pentaho-xul-swing"   rev="${dependency.pentaho-xul.revision}"/>
 
     <dependency org="pentaho" name="pentaho-capability-manager" rev="${dependency.pentaho-osgi-bundles.revision}" conf="default->default" transitive="false"/>
@@ -45,6 +45,7 @@
     <dependency org="org.mockito"           name="mockito-all"         rev="1.9.5" conf="test->default"  transitive="false"/>
     <dependency org="${ivy.artifact.group}" name="kettle-engine-test"  rev="${dependency.kettle.revision}" conf="test->default" transitive="false"/>
     <!-- UI Testing dependencies -->
+    <dependency org="org.eclipse.rap"       name="org.eclipse.rap.rwt.testfixture" rev="${dependency.rap.revision}" conf="test->default" transitive="false"/>
     <dependency org="org.seleniumhq.selenium" name="selenium-java" rev="3.0.1" conf="test->default" transitive="false"/>
     <dependency org="org.seleniumhq.selenium" name="selenium-api" rev="3.0.1" conf="test->default" transitive="false"/>
     <dependency org="org.seleniumhq.selenium" name="selenium-support" rev="3.0.1" conf="test->default" transitive="false"/>

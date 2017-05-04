@@ -31,13 +31,13 @@ Please refer to the [wiki](https://github.com/HiromuHota/pentaho-kettle/wiki) an
 The following command gives you webSpoon without plugins:
 
 ```
-$ docker run -d -p 8080:8080 hiromuhota/webspoon:latest
+$ docker run -e JAVA_OPTS="-Xms1024m -Xmx2048m" -d -p 8080:8080 hiromuhota/webspoon:latest
 ```
 
 The following command gives you webSpoon with all the plugins included in the CE distribution:
 
 ```
-$ docker run -d -p 8080:8080 hiromuhota/webspoon:latest-full
+$ docker run -e JAVA_OPTS="-Xms1024m -Xmx2048m" -d -p 8080:8080 -p 9051:9051 hiromuhota/webspoon:latest-full
 ```
 
 In either way, access `http://address:8080/spoon/spoon` with a browser.
@@ -178,33 +178,46 @@ webSpoon uses 4 digits versioning with the following rules:
 As a result, the next (pre-)release version will be 0.6.1.4, meaning it is based on the Kettle version 6.1 with the 4th patch.
 There could be a version of 0.7.0.4, which is based on the Kettle version 7.0 with (basically) the same patch.
 
+## Build and locally publish dependent libraries
+
+Please build and locally-publish the following dependent libraries.
+
+- pentaho-xul-swt
+- org.eclipse.rap.rwt
+- org.eclipse.rap.jface
+- org.eclipse.rap.filedialog
+- org.eclipse.rap.rwt.testfixture
+
+### pentaho-commons-xul
+
+```
+$ git clone -b webspoon-7.0 https://github.com/HiromuHota/pentaho-commons-xul.git
+$ cd pentaho-commons-xul/pentaho-xul-swt
+$ ant clean-all resolve publish-local
+```
+
+### rap
+
+```
+$ git clone -b webspoon-3.1-maintenance https://github.com/HiromuHota/rap.git
+$ cd rap
+$ mvn clean install -N
+$ mvn clean install -pl bundles/org.eclipse.rap.rwt -am
+$ mvn clean install -pl bundles/org.eclipse.rap.jface -am
+$ mvn clean install -pl bundles/org.eclipse.rap.filedialog -am
+$ mvn clean install -pl tests/org.eclipse.rap.rwt.testfixture -am
+```
+
 ## Build in the command line
 
-Since the repository is heavy, it is recommened to clone only the latest commit of the branch.
-
-```bash
-$ git clone -b webspoon-7.0 --depth 1 https://github.com/HiromuHota/pentaho-kettle.git
-```
-Change directory and resolve dependencies
-
-```bash
-$ cd pentaho-kettle/ui/
-$ ant clean-all resolve
-```
-
-Replace some of the dependent libraries with patched ones, which can be downloaded from [rap](https://github.com/HiromuHota/rap/releases) and [pentaho-commons-xul](https://github.com/HiromuHota/pentaho-commons-xul/releases).
-
-```bash
-$ cp ${path_to_lib}/org.eclipse.rap.filedialog_3.1.1.YYYYMMDD-XXXX.jar lib/org.eclipse.rap.filedialog-3.1.1.jar
-$ cp ${path_to_lib}/org.eclipse.rap.jface_3.1.1.YYYYMMDD-XXXX.jar lib/org.eclipse.rap.jface-3.1.1.jar
-$ cp ${path_to_lib}/org.eclipse.rap.rwt_3.1.1.YYYYMMDD-XXXX.jar lib/org.eclipse.rap.rwt-3.1.1.jar
-$ cp ${path_to_lib}/pentaho-xul-swt-6.1-SNAPSHOT.jar lib/pentaho-xul-swt-6.1.0.1-196.jar
-```
+**Make sure patched dependent libraries have been published locally.**
 
 Build and locally publish `kettle-ui-swt-7.0.0.0-25-X.jar`, which will be copied to `~/.ivy2/local/pentaho-kettle/kettle-ui-swt/`
 
 ```bash
-$ ant publish-local
+$ git clone -b webspoon-7.0 https://github.com/HiromuHota/pentaho-kettle.git
+$ cd pentaho-kettle/ui/
+$ ant clean-all resolve publish-local
 ```
 
 Change directory and build a war file.
@@ -217,12 +230,11 @@ $ ant clean-all resolve war
 
 ## Testing
 
-`TestContext` has been added to some test cases to simulate the environment that RAP UI code normally runs. `TestContext` is in the bundle org.eclipse.rap.rwt.testfixture, which is not hosted by the Maven Repository. So please download it from [here](https://github.com/HiromuHota/rap/releases) and copy it to the `test-lib` directory.
+**Make sure patched dependent libraries have been published locally.**
 
 ```
-$ ant resolve
-$ cp ${path_to_lib}/org.eclipse.rap.rwt.testfixture_3.1.1.YYYYMMDD-XXXX.jar test-lib/
-$ ant test
+$ cd pentaho-kettle/ui/
+$ ant clean-all resolve test
 ```
 
 ### UI testing using Selenium

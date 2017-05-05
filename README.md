@@ -57,20 +57,46 @@ Please refer to the [wiki](https://github.com/HiromuHota/pentaho-kettle/wiki/Sys
 3. (Optional) download and unzip `pdi-ce-7.0.0.0-25.zip`, then copy the `system` and `plugins` folders to `tomcat/system` and `tomcat/plugins`, respectively.
 4. (Optional) configure Apache Karaf as below.
 5. (Re)start the Tomcat.
-6. Access `http://address:8080/spoon/spoon` as <i>user</i> with password of <i>password</i>
+6. Access `http://address:8080/spoon/spoon`
 
 ### Deploy to Pentaho server
 
 1. Download the latest `spoon.war` from [here](https://github.com/HiromuHota/pentaho-kettle/releases).
 2. Copy the downloaded `spoon.war` to `pentaho-server/tomcat/webapps/spoon.war`.
 3. (Re)start the Pentaho server.
-4. Access `http://address:8080/spoon/spoon` as <i>user</i> with password of <i>password</i>
+4. Access `http://address:8080/spoon/spoon`
 
 It is not recommended to place `system` and `plugins` folders along with the Pentaho server due to [#32](https://github.com/HiromuHota/pentaho-kettle/issues/32) and [#35](https://github.com/HiromuHota/pentaho-kettle/issues/35).
 
 ## Config
 
-### Users
+### User authentication
+
+Edit `WEB-INF/web.xml` to uncomment/enable user authentication.
+
+```
+  <!-- Uncomment the followings to enable login page for webSpoon
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>
+      /WEB-INF/spring/*.xml
+    </param-value>
+  </context-param>
+
+  <filter>
+    <filter-name>springSecurityFilterChain</filter-name>
+    <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>springSecurityFilterChain</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+  -->
+```
 
 Edit `WEB-INF/spring/security.xml` to manage users.
 The following example shows how to assign <i>user</i> with password of <i>password</i> to <i>USER</i> role.

@@ -158,10 +158,10 @@
     </dependency>
      
     <!-- The RAP/RWT libraries -->
-    <dependency org="org.eclipse.rap"       name="org.eclipse.rap.rwt" rev="${dependency.rap.revision}" transitive="false"/>
-    <dependency org="org.eclipse.rap"       name="org.eclipse.rap.filedialog" rev="${dependency.rap.revision}" transitive="false"/>
-    <dependency org="org.eclipse.rap"       name="org.eclipse.rap.jface" rev="${dependency.rap.revision}" transitive="false"/>
-    <dependency org="org.eclipse.rap"       name="org.eclipse.rap.fileupload" rev="${dependency.rap.revision}" transitive="false"/>
+    <dependency org="org.eclipse.rap"       name="org.eclipse.rap.rwt"        rev="${dependency.rap.revision}" changing="true" transitive="false"/>
+    <dependency org="org.eclipse.rap"       name="org.eclipse.rap.filedialog" rev="${dependency.rap.revision}" changing="true" transitive="false"/>
+    <dependency org="org.eclipse.rap"       name="org.eclipse.rap.jface"      rev="${dependency.rap.revision}" changing="true" transitive="false"/>
+    <dependency org="org.eclipse.rap"       name="org.eclipse.rap.fileupload" rev="${dependency.rap.revision}" changing="true" transitive="false"/>
     <dependency org="commons-fileupload"    name="commons-fileupload" rev="1.3.1" transitive="false"/>
     <dependency org="javax.servlet"         name="javax.servlet-api"   rev="3.1.0"/>
       

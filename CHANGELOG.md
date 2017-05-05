@@ -1,5 +1,26 @@
 # Change Log
 
+## 0.7.0.9 - 2017-05-05
+
+### Added
+- Add login page using Spring Security (optional, disabled by default)
+
+### Changed
+- Change the build process: ui/ for kettle-ui-swt.jar and assembly/ for spoon.war
+- Disable open/save menu items when not connected to a repository
+- Disable broken menu items
+
+### Fixed
+- Fix disappearing buttons (OK, Preview, Cancel) for Generate Rows, DB Procedure Call, and Add constants
+- Make Modified Java Script Value, User Defined Java Class, and Script to be multi-session compatible
+- Set location of the context menu properly
+- Correct the window icon size of KettleWaitBox and KettleDialog
+- Restore Export to XML, Export Linked Resources to XML, and repository export
+- Restore Drag&Drop to open a Kettle file
+- Restore "Show Arguments" menuitem
+- Fix UI redrawing for a trans/job that takes a long time to finish
+- Fix the window icon and header of the DB Connection dialog
+
 ## 0.7.0.8 - 2017-03-21
 
 ### Added

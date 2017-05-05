@@ -22,10 +22,11 @@
 
 package org.pentaho.di.ui.spoon;
 
+import static org.junit.Assert.*;
+
 import java.util.concurrent.TimeUnit;
 
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -64,7 +65,7 @@ public class WebSpoonTest {
 
   @Test
   public void testAppLoading() throws Exception {
-    Assert.assertEquals( driver.getTitle(), "Spoon" );
+    assertEquals( driver.getTitle(), "Spoon" );
   }
 
   @Test
@@ -84,7 +85,7 @@ public class WebSpoonTest {
     clickElement( "//div[@test-id = 'tree_expandAll']" );
     doubleClickElement( "//div[@test-id = 'tree_Steps']/../..//div[text() = 'Generate Rows']" );
 
-    Assert.assertEquals( 1, driver.findElements( By.xpath( "//div[text() = 'Never stop generating rows']" ) ).size() );
+    assertEquals( 1, driver.findElements( By.xpath( "//div[text() = 'Never stop generating rows']" ) ).size() );
   }
 
   /*
@@ -96,7 +97,7 @@ public class WebSpoonTest {
     drawStep( "Modified Java Script Value" );
     openDialog( "Modified Java Script Value" );
 
-    Assert.assertEquals( 1, driver.findElements( By.xpath( "//div[text() = 'Script Values / Mod']" ) ).size() );
+    assertEquals( 1, driver.findElements( By.xpath( "//div[text() = 'Script Values / Mod']" ) ).size() );
   }
 
   @Test
@@ -105,18 +106,18 @@ public class WebSpoonTest {
     drawStep( "Modified Java Script Value" );
     openDialog( "Modified Java Script Value" );
 
-    Assert.assertEquals( 1, driver.findElements( By.xpath( "//div[text() = 'Script Values / Mod']" ) ).size() );
+    assertEquals( 1, driver.findElements( By.xpath( "//div[text() = 'Script Values / Mod']" ) ).size() );
   }
 
   @Test
   public void testOpenSaveMenus() throws Exception {
     clickElement( "//div[text() = 'File']" );
-    Assert.assertTrue( isMenuItemDisabled( "//div[text() = 'Open...']" ) );
+    assertTrue( isMenuItemDisabled( "//div[text() = 'Open...']" ) );
 
     createNewTrans();
     clickElement( "//div[text() = 'File']" );
-    Assert.assertTrue( isMenuItemDisabled( "//div[text() = 'Save']" ) );
-    Assert.assertFalse( isMenuItemDisabled( "//div[text() = 'Save as (VFS)...']" ) );
+    assertTrue( isMenuItemDisabled( "//div[text() = 'Save']" ) );
+    assertFalse( isMenuItemDisabled( "//div[text() = 'Save as (VFS)...']" ) );
   }
 
   @Test
@@ -152,7 +153,7 @@ public class WebSpoonTest {
     driver.manage().window().setSize( new Dimension( 1280, 799 ) );
     clickElement( "//div[text() = 'Cancel']" );
     Thread.sleep( 1000 );
-    Assert.assertEquals( "5", driver.switchTo().activeElement().getAttribute( "tabindex" ) );
+    assertEquals( "5", driver.switchTo().activeElement().getAttribute( "tabindex" ) );
   }
 
   @Test
@@ -166,10 +167,9 @@ public class WebSpoonTest {
     clickElement( "//div[@test-id = 'tree_expandAll']" );
 
     // Right-click on a step
-    element = wait.until( ExpectedConditions.elementToBeClickable( By.xpath( "//div[@test-id = 'tree_Steps']/../..//div[text() = 'Table input']" ) ) );
-    actions.contextClick( element ).build().perform();
+    rightClickElement( "//div[@test-id = 'tree_Steps']/../..//div[text() = 'Table input']" );
 
-    Assert.assertEquals( 1, driver.findElements( By.xpath( "//div[text() = 'Duplicate']" ) ).size() );
+    assertEquals( 1, driver.findElements( By.xpath( "//div[text() = 'Duplicate']" ) ).size() );
   }
 
   private void createNewTrans() {
@@ -185,8 +185,7 @@ public class WebSpoonTest {
     driver.findElement( By.xpath( "//input[@test-id = 'selectionFilter']" ) ).sendKeys( stepName );
 
     // Draw a step
-    element = driver.findElement( By.xpath( "//div[text() = '" + stepName + "']" ) );
-    actions.click( element ).click( element ).build().perform();
+    doubleClickElement( "//div[text() = '" + stepName + "']" );
   }
 
   private void openDialog( String stepName ) {
@@ -197,12 +196,18 @@ public class WebSpoonTest {
   }
 
   private void clickElement( String xpath ) {
-    wait.until( ExpectedConditions.elementToBeClickable( By.xpath( xpath ) ) ).click();
+    element = wait.until( ExpectedConditions.elementToBeClickable( By.xpath( xpath ) ) );
+    element.click();
   }
 
   private void doubleClickElement( String xpath ) {
-    element = driver.findElement( By.xpath( xpath ) );
+    element = wait.until( ExpectedConditions.elementToBeClickable( By.xpath( xpath ) ) );
     actions.click( element ).click( element ).build().perform();
+  }
+
+  private void rightClickElement( String xpath ) {
+    element = wait.until( ExpectedConditions.elementToBeClickable( By.xpath( xpath ) ) );
+    actions.contextClick( element ).build().perform();
   }
 
   private boolean isMenuItemDisabled( String xpath ) {

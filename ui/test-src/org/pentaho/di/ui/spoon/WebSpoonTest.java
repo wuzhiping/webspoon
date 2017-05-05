@@ -161,19 +161,13 @@ public class WebSpoonTest {
     createNewTrans();
     drawStep( "Table input" );
 
-    // Open a step dialog
+    // Open the View tab
     clickElement( "//div[@test-id = 'tree_exploreSolution']" );
     clickElement( "//div[@test-id = 'tree_expandAll']" );
 
-    // Right-click on the step to pop-up a context menu
-    // for some reason, multiple double right clicks are needed.
-    for ( int i = 0; i < 5; i++ ){
-      element = wait.until( ExpectedConditions.elementToBeClickable( By.xpath( "//div[@test-id = 'tree_Steps']/../..//div[text() = 'Table input']" ) ) );
-      actions.contextClick( element ).build().perform();
-      if ( driver.findElements( By.xpath( "//div[text() = 'Duplicate']" ) ).size() == 1 ) {
-        break;
-      }
-    }
+    // Right-click on a step
+    element = wait.until( ExpectedConditions.elementToBeClickable( By.xpath( "//div[@test-id = 'tree_Steps']/../..//div[text() = 'Table input']" ) ) );
+    actions.contextClick( element ).build().perform();
 
     Assert.assertEquals( 1, driver.findElements( By.xpath( "//div[text() = 'Duplicate']" ) ).size() );
   }

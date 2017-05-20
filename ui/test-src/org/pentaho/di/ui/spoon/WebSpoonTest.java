@@ -182,7 +182,8 @@ public class WebSpoonTest {
 
   private void drawStep( String stepName ) throws InterruptedException {
     // Filter a step
-    driver.findElement( By.xpath( "//input[@test-id = 'selectionFilter']" ) ).sendKeys( stepName );
+    element = wait.until( ExpectedConditions.visibilityOfElementLocated( By.xpath( "//input[@test-id = 'selectionFilter']" ) ) );
+    element.sendKeys( stepName );
 
     // Draw a step
     doubleClickElement( "//div[text() = '" + stepName + "']" );

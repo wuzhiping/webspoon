@@ -34,6 +34,7 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -47,13 +48,15 @@ public class WebSpoonTest {
 
   @Before
   public void setUp() throws Exception {
-    driver = new ChromeDriver();
+    ChromeOptions options = new ChromeOptions();
+    options.addArguments( "headless" );
+    options.addArguments( "--window-size=1280,800" );
+    driver = new ChromeDriver( options );
     actions = new Actions( driver );
     wait = new WebDriverWait( driver, 5 );
     baseUrl = System.getProperty( "test.baseurl", "http://localhost:8080/spoon" );
     driver.get( baseUrl );
     driver.manage().timeouts().implicitlyWait( 5, TimeUnit.SECONDS );
-    driver.manage().window().setSize( new Dimension( 1280, 800 ) );
 
     // Login with username and password
     if ( driver.findElements( By.xpath( "//input[@name = 'username']" ) ).size() != 0 ) {
@@ -142,16 +145,13 @@ public class WebSpoonTest {
      * Cancel button does not become clickable unless thread.sleep and window.setSize.
      * The wait duration might depend on an environment.
      */
-    clickElement( "//div[text() = 'New...']" );
-    Thread.sleep( 1000 );
-    driver.manage().window().setSize( new Dimension( 1280, 799 ) );
-    clickElement( "//div[text() = 'Cancel']" );
-    Thread.sleep( 1000 );
-    driver.manage().window().setSize( new Dimension( 1280, 800 ) );
     clickElement( "//div[text() = 'Edit...']" );
     Thread.sleep( 1000 );
-    driver.manage().window().setSize( new Dimension( 1280, 799 ) );
-    clickElement( "//div[text() = 'Cancel']" );
+    clickElement( "//div[text() = 'OK']" );
+    Thread.sleep( 1000 );
+    clickElement( "//div[text() = 'Edit...']" );
+    Thread.sleep( 1000 );
+    clickElement( "//div[text() = 'OK']" );
     Thread.sleep( 1000 );
     assertEquals( "5", driver.switchTo().activeElement().getAttribute( "tabindex" ) );
   }

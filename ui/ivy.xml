@@ -49,11 +49,12 @@
     <dependency org="${ivy.artifact.group}" name="kettle-engine-test"  rev="${dependency.kettle.revision}" conf="test->default" transitive="false"/>
     <!-- UI Testing dependencies -->
     <dependency org="org.eclipse.rap"       name="org.eclipse.rap.rwt.testfixture" rev="${dependency.rap.revision}" conf="test->default" changing="true" transitive="false"/>
-    <dependency org="org.seleniumhq.selenium" name="selenium-java" rev="3.0.1" conf="test->default" transitive="false"/>
-    <dependency org="org.seleniumhq.selenium" name="selenium-api" rev="3.0.1" conf="test->default" transitive="false"/>
-    <dependency org="org.seleniumhq.selenium" name="selenium-support" rev="3.0.1" conf="test->default" transitive="false"/>
-    <dependency org="org.seleniumhq.selenium" name="selenium-chrome-driver" rev="3.0.1" conf="test->default" transitive="false"/>
-    <dependency org="org.seleniumhq.selenium" name="selenium-remote-driver" rev="3.0.1" conf="test->default" transitive="true"/>
+    <dependency org="org.seleniumhq.selenium" name="selenium-java" rev="${dependency.selenium.revision}" conf="test->default" transitive="false"/>
+    <dependency org="org.seleniumhq.selenium" name="selenium-api" rev="${dependency.selenium.revision}" conf="test->default" transitive="false"/>
+    <dependency org="org.seleniumhq.selenium" name="selenium-support" rev="${dependency.selenium.revision}" conf="test->default" transitive="false"/>
+    <dependency org="org.seleniumhq.selenium" name="selenium-chrome-driver" rev="${dependency.selenium.revision}" conf="test->default" transitive="false"/>
+    <dependency org="org.seleniumhq.selenium" name="selenium-remote-driver" rev="${dependency.selenium.revision}" conf="test->default" transitive="true"/>
+    <dependency org="com.google.guava"        name="guava" rev="21.0" transitive="false"/>
 
     <!-- A reverse proxy for the repository plugin -->
     <dependency org="org.mitre.dsmiley.httpproxy" name="smiley-http-proxy-servlet" rev="1.8"/>

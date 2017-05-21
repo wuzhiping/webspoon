@@ -48,8 +48,11 @@ public class WebSpoonTest {
 
   @Before
   public void setUp() throws Exception {
+    boolean isHeadless = Boolean.parseBoolean( System.getProperty( "java.awt.headless", "true" ) );
     ChromeOptions options = new ChromeOptions();
-    options.addArguments( "headless" );
+    if ( isHeadless ) {
+      options.addArguments( "headless" );
+    }
     options.addArguments( "--window-size=1280,800" );
     driver = new ChromeDriver( options );
     actions = new Actions( driver );

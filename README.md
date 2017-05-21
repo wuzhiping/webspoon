@@ -265,13 +265,17 @@ $ ant clean-all resolve test
 
 ### UI testing using Selenium
 
-Currently, Google Chrome browser is used when running UI test cases, but other supported browsers should work too.
-Ideally, PhantomJS should be used for head-less testing, but it is not supported by Eclipse RAP/RWT and some of the codes like mouse-move do not work as far as I've tested it.
+Currently, only Google Chrome browser has been tested for when running UI test cases.
+The tests run in headless mode unless a parameter `-Dheadless.unittest=false` is passed.
+To run tests in headless mode, the version of Chrome should be higher than 59 (only available in the beta channel as of writing).
+
 The default url is `http://localhost:8080/spoon`.
 Pass a parameter like below if webSpoon is deployed to a different url.
 
+The following command runs all the unit test cases including UI in non-headless mode.
+
 ```
-$ ant test -Dtest.baseurl=http://localhost:8080/spoon/spoon
+$ ant test -Dtest.baseurl=http://localhost:8080/spoon/spoon -Dheadless.unittest=false
 ```
 
 ## Develop in Eclipse IDE

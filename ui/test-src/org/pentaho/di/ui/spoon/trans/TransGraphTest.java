@@ -55,6 +55,7 @@ public class TransGraphTest {
 
     TransGraph transGraph = mock( TransGraph.class );
     StepMeta stepMeta = mock( StepMeta.class );
+    TransMeta transMeta = mock( TransMeta.class );
     StepErrorMeta errorMeta = new StepErrorMeta( null, null );
     TransHopMeta selectedHop = new TransHopMeta();
     selectedHop.setErrorHop( true );
@@ -64,7 +65,10 @@ public class TransGraphTest {
     when( stepMeta.getStepErrorMeta() ).thenReturn( errorMeta );
     when( transGraph.findHop( x, y ) ).thenReturn( selectedHop );
     when( transGraph.screen2real( any( Integer.class ), any( Integer.class ) ) ).thenReturn( new Point( x, y ) );
+    when( transMeta.getStep( any( Integer.class ), any( Integer.class ), any( Integer.class ) ) ).thenReturn( null );
 
+    doCallRealMethod().when( transGraph ).setTransMeta( transMeta );
+    transGraph.setTransMeta( transMeta );
     doCallRealMethod().when( transGraph ).mouseUp( event );
     transGraph.mouseUp( event );
 

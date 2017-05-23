@@ -52,10 +52,7 @@ public class RunConfigurationPopupMenuExtension implements ExtensionPointInterfa
   private static Class<?> PKG = RunConfigurationPopupMenuExtension.class;
 
   private Supplier<Spoon> spoonSupplier = Spoon::getInstance;
-  private RunConfiguration runConfiguration;
   private RunConfigurationDelegate runConfigurationDelegate;
-  private Menu rootMenu;
-  private Menu itemMenu;
 
   public RunConfigurationPopupMenuExtension( RunConfigurationDelegate runConfigurationDelegate ) {
     this.runConfigurationDelegate = runConfigurationDelegate;
@@ -70,6 +67,7 @@ public class RunConfigurationPopupMenuExtension implements ExtensionPointInterfa
     TreeSelection object = objects[ 0 ];
     Object selection = object.getSelection();
 
+    RunConfiguration runConfiguration;
     if ( selection == RunConfiguration.class ) {
       popupMenu = createRootPopupMenu( selectionTree );
     } else if ( selection instanceof RunConfiguration ) {
@@ -77,7 +75,7 @@ public class RunConfigurationPopupMenuExtension implements ExtensionPointInterfa
       if ( runConfiguration.isReadOnly() ) {
         return;
       }
-      popupMenu = createItemPopupMenu( selectionTree );
+      popupMenu = createItemPopupMenu( selectionTree, runConfiguration );
     }
 
     if ( popupMenu != null ) {
@@ -88,8 +86,7 @@ public class RunConfigurationPopupMenuExtension implements ExtensionPointInterfa
   }
 
   private Menu createRootPopupMenu( Tree tree ) {
-    if ( rootMenu == null ) {
-      rootMenu = new Menu( tree );
+    Menu rootMenu = new Menu( tree );
       MenuItem menuItem = new MenuItem( rootMenu, SWT.NONE );
       menuItem.setText( BaseMessages.getString( PKG, "RunConfigurationPopupMenuExtension.MenuItem.New" ) );
       menuItem.addSelectionListener( new SelectionAdapter() {
@@ -98,13 +95,11 @@ public class RunConfigurationPopupMenuExtension implements ExtensionPointInterfa
           runConfigurationDelegate.create();
         }
       } );
-    }
     return rootMenu;
   }
 
-  private Menu createItemPopupMenu( Tree tree ) {
-    if ( itemMenu == null ) {
-      itemMenu = new Menu( tree );
+  private Menu createItemPopupMenu( Tree tree, RunConfiguration runConfiguration ) {
+    Menu itemMenu = new Menu( tree );
       MenuItem editMenuItem = new MenuItem( itemMenu, SWT.NONE );
       editMenuItem.setText( BaseMessages.getString( PKG, "RunConfigurationPopupMenuExtension.MenuItem.Edit" ) );
       editMenuItem.addSelectionListener( new SelectionAdapter() {
@@ -120,7 +115,6 @@ public class RunConfigurationPopupMenuExtension implements ExtensionPointInterfa
           runConfigurationDelegate.delete( runConfiguration );
         }
       } );
-    }
     return itemMenu;
   }
 }

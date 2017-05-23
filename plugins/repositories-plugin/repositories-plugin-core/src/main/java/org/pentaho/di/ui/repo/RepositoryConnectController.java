@@ -416,10 +416,6 @@ public class RepositoryConnectController {
     }
   }
 
-  private Spoon getSpoon() {
-    return Spoon.getInstance();
-  }
-
   @SuppressWarnings( "unchecked" )
   private Repository wrapWithRepositoryTimeoutHandler( ReconnectableRepository repository ) {
     List<Class<?>> repositoryIntrerfaces = ClassUtils.getAllInterfaces( repository.getClass() );

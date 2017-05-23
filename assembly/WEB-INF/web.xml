@@ -74,6 +74,10 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>reverseProxy</servlet-name>
+    <url-pattern>/cxf/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>reverseProxy</servlet-name>
     <url-pattern>/repositories/*</url-pattern>
   </servlet-mapping>
   <servlet-mapping>

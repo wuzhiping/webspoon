@@ -27,7 +27,9 @@ define( [
 
       repoConnectionApp.service("repositoriesService", function($http) {
 
-        this.baseUrl = "/cxf/repositories";
+//      this.baseUrl = "/cxf/repositories";
+        // Add context path
+        this.baseUrl = window.location.pathname.substring( 0, window.location.pathname.indexOf( "/", 2 ) ) + "/cxf/repositories";
 
         this.login = function(username, password)
         {

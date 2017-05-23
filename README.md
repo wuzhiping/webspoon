@@ -26,7 +26,7 @@ This is one of the community activities and not supported by Pentaho.
 
 Please refer to the [wiki](https://github.com/HiromuHota/pentaho-kettle/wiki) and [issues](https://github.com/HiromuHota/pentaho-kettle/issues).
 
-# How to deploy with Docker (no config)
+# How to deploy with Docker (pre-configured)
 
 The following command gives you webSpoon without plugins:
 

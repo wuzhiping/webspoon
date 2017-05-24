@@ -88,9 +88,12 @@ public class RepositoryDialog extends ThinDialog {
 
     new BrowserFunction( browser, "close" ) {
       @Override public Object function( Object[] arguments ) {
-//        browser.dispose();
-//        dialog.close();
-//        dialog.dispose();
+        Runnable execute = () -> {
+          browser.dispose();
+          dialog.close();
+          dialog.dispose();
+        };
+        display.asyncExec( execute );
         return true;
       }
     };
@@ -145,7 +148,10 @@ public class RepositoryDialog extends ThinDialog {
       @Override public Object function( Object[] objects ) {
         try {
           controller.connectToRepository();
-          dialog.dispose();
+          Runnable execute = () -> {
+            dialog.dispose();
+          };
+          display.asyncExec( execute );
         } catch ( KettleException e ) {
           return false;
         }

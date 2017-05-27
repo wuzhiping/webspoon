@@ -110,6 +110,8 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.ShellEvent;
+import org.eclipse.swt.events.ShellListener;
 import org.eclipse.swt.events.TreeAdapter;
 import org.eclipse.swt.events.TreeEvent;
 import org.eclipse.swt.graphics.Cursor;
@@ -1018,6 +1020,41 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
 
       @Override
       public void pluginChanged( Object serviceObject ) {
+      }
+    } );
+
+    shell.addShellListener( new ShellListener() {
+      @Override
+      public void shellActivated( ShellEvent e ) {
+        for ( XulComponent obj : mainSpoonContainer.getDocumentRoot().getElementById( "edit-popup" ).getChildNodes() ) {
+          try {
+            XulMenuitem item = (XulMenuitem) obj;
+            item.setAcceltext( item.getAttributeValue( "acceltext" ) );
+            item.setAccesskey( item.getAttributeValue( "accesskey" ) );
+          } catch ( Exception e1 ) {
+            // Do nothing
+          }
+        }
+        getMenuBarManager().updateAll( true );
+      }
+
+      @Override
+      public void shellDeactivated( ShellEvent e ) {
+        for ( XulComponent obj : mainSpoonContainer.getDocumentRoot().getElementById( "edit-popup" ).getChildNodes() ) {
+          try {
+            XulMenuitem item = (XulMenuitem) obj;
+            item.setAcceltext( "" );
+            item.setAccesskey( "" );
+          } catch ( Exception e1 ) {
+            // Do nothing
+          }
+        }
+        getMenuBarManager().updateAll( true );
+      }
+
+      @Override
+      public void shellClosed( ShellEvent e ) {
+        // Do nothing
       }
     } );
   }

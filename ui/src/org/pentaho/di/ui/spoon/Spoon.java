@@ -125,6 +125,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Decorations;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.FileDialog;
@@ -760,7 +761,7 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
   //prevent instantiation from outside
   private Spoon( Repository rep ) {
     super( null );
-    //this.addMenuBar();
+    this.addMenuBar();
     log = new LogChannel( APP_NAME );
     SpoonFactory.setSpoonInstance( this );
 
@@ -874,6 +875,10 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
       bf.setDocument( mainSpoonContainer.getDocumentRoot() );
       mainSpoonContainer.addEventHandler( this );
       /* menuBar = (XulMenubar) */
+      MenuManager menuManager = getMenuBarManager();
+      menuManager.createMenuBar( (Decorations) getShell() );
+      shell.setMenuBar( menuManager.getMenu() );
+
       mainSpoonContainer.getDocumentRoot().getElementById( "spoon-menubar" );
       mainToolbar = (XulToolbar) mainSpoonContainer.getDocumentRoot().getElementById( "main-toolbar" );
       props.setLook( (Control) mainToolbar.getManagedObject(), Props.WIDGET_STYLE_TOOLBAR );
@@ -6960,8 +6965,8 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
 
         SpoonPluginManager.getInstance().notifyLifecycleListeners( SpoonLifeCycleEvent.MENUS_REFRESHED );
 
-        //MenuManager menuManager = getMenuBarManager();
-        //menuManager.updateAll( true );
+        MenuManager menuManager = getMenuBarManager();
+        menuManager.updateAll( true );
 
         // What steps & plugins to show?
         refreshCoreObjects();
@@ -9212,9 +9217,9 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
     mainSpoonContainer.getDocumentRoot().getElementById( "tools" ).setVisible( visible );
     mainSpoonContainer.getDocumentRoot().getElementById( "help" ).setVisible( visible );
 
-    //MenuManager menuManager = getMenuBarManager();
-    //menuManager.getMenu().setVisible( visible );
-    //menuManager.updateAll( true );
+    MenuManager menuManager = getMenuBarManager();
+    menuManager.getMenu().setVisible( visible );
+    menuManager.updateAll( true );
   }
 
   @Override
@@ -9244,7 +9249,7 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
       box.setMessage( e.getMessage() );
       box.open();
     }
-    //getMenuBarManager().updateAll( true );
+    getMenuBarManager().updateAll( true );
 
     return parent;
   }

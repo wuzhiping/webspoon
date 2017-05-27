@@ -119,6 +119,7 @@ public class WebSpoonTest {
   public void testOpenSaveMenus() throws Exception {
     clickElement( "//div[text() = 'File']" );
     assertTrue( isMenuItemDisabled( "//div[text() = 'Open...']" ) );
+    clickElement( "//div[text() = 'File']" ); // Close the menu
 
     createNewTrans();
     clickElement( "//div[text() = 'File']" );

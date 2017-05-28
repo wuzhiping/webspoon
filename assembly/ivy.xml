@@ -255,9 +255,6 @@
     <dependency org="org.jvnet.mimepull"  name="mimepull" rev="1.9.3" transitive="false"/>
     <dependency org="javax.ws.rs" name="jsr311-api" rev="1.1.1" transitive="false"/>
 
-    <!-- For welcome page -->
-    <dependency org="org.eclipse.jetty" name="jetty-jsp" rev="8.1.15.v20140411"/>
-
     <!-- A reverse proxy for the repository plugin -->
     <dependency org="org.mitre.dsmiley.httpproxy" name="smiley-http-proxy-servlet" rev="1.8"/>
 

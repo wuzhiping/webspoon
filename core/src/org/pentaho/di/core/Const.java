@@ -1911,10 +1911,14 @@ public class Const {
    * @return The Kettle absolute directory.
    */
   public static String getKettleUserDirectory() {
-    if ( RWT.getRequest().getRemoteUser() == null ) {
+    try {
+      if ( RWT.getRequest().getRemoteUser() == null ) {
+        return getUserHomeDirectory() + FILE_SEPARATOR + getUserBaseDir();
+      } else {
+        return getUserHomeDirectory() + FILE_SEPARATOR + getUserBaseDir() + FILE_SEPARATOR + "users" + FILE_SEPARATOR + RWT.getRequest().getRemoteUser();
+      }
+    } catch ( Exception e ) { // invalid thread access
       return getUserHomeDirectory() + FILE_SEPARATOR + getUserBaseDir();
-    } else {
-      return getUserHomeDirectory() + FILE_SEPARATOR + getUserBaseDir() + FILE_SEPARATOR + "users" + FILE_SEPARATOR + RWT.getRequest().getRemoteUser();
     }
   }
 

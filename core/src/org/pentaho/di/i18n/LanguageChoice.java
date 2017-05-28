@@ -36,6 +36,8 @@ public class LanguageChoice {
   private static final String STRING_FAILOVER_LOCALE = "LocaleFailover";
   private static final String STRING_DEFAULT_LOCALE = "LocaleDefault";
 
+  private static LanguageChoice choice;
+
   private Locale defaultLocale;
   private Locale failoverLocale;
 
@@ -54,7 +56,15 @@ public class LanguageChoice {
   }
 
   public static final LanguageChoice getInstance() {
-    return SingletonUtil.getSessionInstance( LanguageChoice.class );
+    try {
+      return SingletonUtil.getSessionInstance( LanguageChoice.class );
+    } catch ( Exception e ) { // invalid thread access
+      if ( choice != null ) {
+        return choice;
+      }
+      choice = new LanguageChoice();
+      return choice;
+    }
   }
 
   /**

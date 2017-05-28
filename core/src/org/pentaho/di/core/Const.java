@@ -1949,7 +1949,7 @@ public class Const {
    * @return the name of the shared objects file
    */
   public static String getSharedObjectsFile() {
-    return getKettleDirectory() + FILE_SEPARATOR + SHARED_DATA_FILE;
+    return getKettleUserDirectory() + FILE_SEPARATOR + SHARED_DATA_FILE;
   }
 
   /**

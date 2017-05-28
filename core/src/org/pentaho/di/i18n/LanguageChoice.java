@@ -28,14 +28,13 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.Properties;
 
+import org.eclipse.rap.rwt.SingletonUtil;
 import org.pentaho.di.core.Const;
 import org.pentaho.di.core.util.EnvUtil;
 
 public class LanguageChoice {
   private static final String STRING_FAILOVER_LOCALE = "LocaleFailover";
   private static final String STRING_DEFAULT_LOCALE = "LocaleDefault";
-
-  private static LanguageChoice choice;
 
   private Locale defaultLocale;
   private Locale failoverLocale;
@@ -55,13 +54,7 @@ public class LanguageChoice {
   }
 
   public static final LanguageChoice getInstance() {
-    if ( choice != null ) {
-      return choice;
-    }
-
-    choice = new LanguageChoice();
-
-    return choice;
+    return SingletonUtil.getSessionInstance( LanguageChoice.class );
   }
 
   /**
@@ -126,6 +119,6 @@ public class LanguageChoice {
   }
 
   public String getSettingsFilename() {
-    return Const.getKettleDirectory() + Const.FILE_SEPARATOR + ".languageChoice";
+    return Const.getKettleUserDirectory() + Const.FILE_SEPARATOR + ".languageChoice";
   }
 }

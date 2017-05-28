@@ -1912,13 +1912,18 @@ public class Const {
    */
   public static String getKettleUserDirectory() {
     try {
-      if ( RWT.getRequest().getRemoteUser() == null ) {
-        return getUserHomeDirectory() + FILE_SEPARATOR + getUserBaseDir();
-      } else {
+      if ( RWT.getRequest().getRemoteUser() == null ) { // when no user authentication is used
+        return getKettleDirectory();
+      } else { // when a user is authenticated
         return getUserHomeDirectory() + FILE_SEPARATOR + getUserBaseDir() + FILE_SEPARATOR + "users" + FILE_SEPARATOR + RWT.getRequest().getRemoteUser();
       }
-    } catch ( Exception e ) { // invalid thread access
-      return getUserHomeDirectory() + FILE_SEPARATOR + getUserBaseDir();
+    } catch ( IllegalStateException e ) {
+      if ( e.getMessage().equals( "Invalid thread access" ) ) { // when the webSpoon server is starting
+        return getKettleDirectory();
+      } else {
+        e.printStackTrace();
+        return getKettleDirectory();
+      }
     }
   }
 

@@ -747,39 +747,39 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
 
     // Add a timer to set correct the state of the run/stop buttons every 2 seconds...
     //
-    final Timer timer = new Timer( "TransGraph.setControlStates Timer: " + getMeta().getName() );
-    TimerTask timerTask = new TimerTask() {
-
-      @Override
-      public void run() {
-        try {
-          setControlStates();
-        } catch ( KettleRepositoryLostException krle ) {
-          if ( log.isBasic() ) {
-            log.logBasic( krle.getLocalizedMessage() );
-          }
-        }
-      }
-    };
-    timer.schedule( timerTask, 2000, 1000 );
+//    final Timer timer = new Timer( "TransGraph.setControlStates Timer: " + getMeta().getName() );
+//    TimerTask timerTask = new TimerTask() {
+//
+//      @Override
+//      public void run() {
+//        try {
+//          setControlStates();
+//        } catch ( KettleRepositoryLostException krle ) {
+//          if ( log.isBasic() ) {
+//            log.logBasic( krle.getLocalizedMessage() );
+//          }
+//        }
+//      }
+//    };
+//    timer.schedule( timerTask, 2000, 1000 );
 
     // Make sure the timer stops when we close the tab...
     //
-    addDisposeListener( new DisposeListener() {
-      @Override
-      public void widgetDisposed( DisposeEvent arg0 ) {
-        timer.cancel();
-      }
-    } );
+//    addDisposeListener( new DisposeListener() {
+//      @Override
+//      public void widgetDisposed( DisposeEvent arg0 ) {
+//        timer.cancel();
+//      }
+//    } );
 
     // Make sure the timer stops when we close the browser tab/window
     //
-    getDisplay().disposeExec( new Runnable() {
-      @Override
-      public void run() {
-        timer.cancel();
-      }
-    } );
+//    getDisplay().disposeExec( new Runnable() {
+//      @Override
+//      public void run() {
+//        timer.cancel();
+//      }
+//    } );
   }
 
   @Override
@@ -4320,6 +4320,7 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
           checkTransEnded();
           checkErrorVisuals();
           stopRedrawTimer();
+          setControlStates();
 
           transMetricsDelegate.resetLastRefreshTime();
           transMetricsDelegate.updateGraph();

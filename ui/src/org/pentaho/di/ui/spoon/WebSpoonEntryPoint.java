@@ -44,8 +44,6 @@ public class WebSpoonEntryPoint extends AbstractEntryPoint {
      *  because they are session specific.
      */
     PropsUI.init( parent.getDisplay(), Props.TYPE_PROPERTIES_SPOON );
-    KettleLogStore
-      .init( PropsUI.getInstance().getMaxNrLinesInLog(), PropsUI.getInstance().getMaxLogLineTimeoutMinutes() );
 
     // Options
     StartupParameters serviceParams = RWT.getClient().getService( StartupParameters.class );

@@ -629,6 +629,7 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
 
         // What's the real drop position?
         Point p = getRealPosition( canvas, event.x, event.y );
+        lastMove = p;
 
         //
         // We expect a Drag and Drop container... (encased in XML)
@@ -1047,6 +1048,7 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
         }
       }
     }
+    mouseMove( e );
   }
 
   @Override

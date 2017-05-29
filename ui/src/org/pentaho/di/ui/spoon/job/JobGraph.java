@@ -495,6 +495,7 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
         }
 
         Point p = getRealPosition( canvas, event.x, event.y );
+        lastMove = p;
 
         try {
           DragAndDropContainer container = (DragAndDropContainer) event.data;
@@ -847,6 +848,7 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
         }
       }
     }
+    mouseMove( e );
   }
 
   public void mouseUp( MouseEvent e ) {

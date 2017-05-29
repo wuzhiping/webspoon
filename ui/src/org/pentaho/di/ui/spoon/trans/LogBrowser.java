@@ -30,6 +30,7 @@ import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.eclipse.rap.rwt.service.ServerPushSession;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
@@ -88,6 +89,7 @@ public class LogBrowser {
 
     // Refresh the log every second or so
     //
+    final ServerPushSession pushSession = new ServerPushSession();
     final Timer logRefreshTimer = new Timer( "log sniffer Timer" );
     TimerTask timerTask = new TimerTask() {
       public void run() {
@@ -173,12 +175,15 @@ public class LogBrowser {
               }
 
               busy.set( false );
+              pushSession.stop();
+              pushSession.start();
             }
           }
         } );
       }
     };
 
+    pushSession.start();
     // Refresh every often enough
     //
     logRefreshTimer
@@ -190,6 +195,7 @@ public class LogBrowser {
     text.addDisposeListener( new DisposeListener() {
       public void widgetDisposed( DisposeEvent event ) {
         logRefreshTimer.cancel();
+        pushSession.stop();
       }
     } );
 
@@ -198,6 +204,7 @@ public class LogBrowser {
       @Override
       public void run() {
         logRefreshTimer.cancel();
+        pushSession.stop();
       }
     } );
 

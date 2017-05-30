@@ -161,10 +161,6 @@ public class KettleClientEnvironment {
     try {
       dir.mkdirs();
 
-      // Also create a file called kettle.properties
-      //
-      createDefaultKettleProperties( directory );
-
       // Create a data directory for this user
       dir = new File( Const.getKettleUserDataDirectory() );
       dir.mkdirs();

@@ -28,6 +28,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.MessageDialogWithToggle;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.rap.rwt.RWT;
 //import org.eclipse.jface.window.DefaultToolTip;
 //import org.eclipse.jface.window.ToolTip;
 import org.eclipse.swt.SWT;
@@ -3883,7 +3884,7 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
           trans.setMetaStore( spoon.getMetaStore() );
 
           String spoonLogObjectId = UUID.randomUUID().toString();
-          SimpleLoggingObject spoonLoggingObject = new SimpleLoggingObject( "SPOON", LoggingObjectType.SPOON, null );
+          SimpleLoggingObject spoonLoggingObject = new SimpleLoggingObject( RWT.getUISession().getId(), LoggingObjectType.SPOON, null );
           spoonLoggingObject.setContainerObjectId( spoonLogObjectId );
           spoonLoggingObject.setLogLevel( executionConfiguration.getLogLevel() );
           trans.setParent( spoonLoggingObject );

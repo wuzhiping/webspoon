@@ -38,6 +38,7 @@ import java.util.concurrent.Callable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.MessageDialogWithToggle;
+import org.eclipse.rap.rwt.RWT;
 //import org.eclipse.jface.window.DefaultToolTip;
 //import org.eclipse.jface.window.ToolTip;
 import org.eclipse.swt.SWT;
@@ -3534,7 +3535,7 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
 
             String spoonObjectId = UUID.randomUUID().toString();
             SimpleLoggingObject spoonLoggingObject =
-              new SimpleLoggingObject( "SPOON", LoggingObjectType.SPOON, null );
+              new SimpleLoggingObject( RWT.getUISession().getId(), LoggingObjectType.SPOON, null );
             spoonLoggingObject.setContainerObjectId( spoonObjectId );
             spoonLoggingObject.setLogLevel( executionConfiguration.getLogLevel() );
             job = new Job( spoon.rep, runJobMeta, spoonLoggingObject );

@@ -120,7 +120,7 @@ public class LogBrowser {
               int lastNr = KettleLogStore.getLastBufferLineNr();
               if ( lastNr > lastLogId.get() ) {
                 List<KettleLoggingEvent> logLines =
-                  KettleLogStore.getLogBufferFromTo( childIds, true, lastLogId.get(), lastNr );
+                  KettleLogStore.getLogBufferFromTo( childIds, false, lastLogId.get(), lastNr );
 
                 // The maximum size of the log buffer
                 //

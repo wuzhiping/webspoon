@@ -31,7 +31,9 @@ import org.eclipse.rap.rwt.application.AbstractEntryPoint;
 import org.eclipse.rap.rwt.client.service.ExitConfirmation;
 import org.eclipse.rap.rwt.client.service.StartupParameters;
 import org.eclipse.swt.widgets.Composite;
+import org.pentaho.di.core.Const;
 import org.pentaho.di.core.KettleClientEnvironment;
+import org.pentaho.di.core.LastUsedFile;
 import org.pentaho.di.core.Props;
 import org.pentaho.di.core.logging.KettleLogStore;
 import org.pentaho.di.ui.core.PropsUI;
@@ -70,6 +72,16 @@ public class WebSpoonEntryPoint extends AbstractEntryPoint {
 
     // Load last used files
     Spoon.getInstance().loadLastUsedFiles();
+
+    // For VFS browser set the last open file if exists, otherwise set the user data directory
+    Spoon.getInstance().setLastFileOpened( Const.getKettleUserDataDirectory() );
+    List<LastUsedFile> lastUsedFiles = Spoon.getInstance().getProperties().getOpenTabFiles();
+    if ( lastUsedFiles.size() != 0 ) {
+      LastUsedFile lastUsedFile = lastUsedFiles.get( lastUsedFiles.size() - 1 );
+      if ( !lastUsedFile.isSourceRepository() ) {
+        Spoon.getInstance().setLastFileOpened( lastUsedFile.getFilename() );
+      }
+    }
 
     /*
      *  The following lines are webSpoon additional functions

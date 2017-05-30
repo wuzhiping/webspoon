@@ -164,6 +164,10 @@ public class KettleClientEnvironment {
       // Also create a file called kettle.properties
       //
       createDefaultKettleProperties( directory );
+
+      // Create a data directory for this user
+      dir = new File( Const.getKettleUserDataDirectory() );
+      dir.mkdirs();
     } catch ( Exception e ) {
       // ignore - should likely propagate the error
 

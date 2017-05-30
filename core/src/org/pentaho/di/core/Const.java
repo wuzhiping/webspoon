@@ -1928,6 +1928,16 @@ public class Const {
   }
 
   /**
+   * Determines the Kettle user data directory in the user's home directory.
+   * This is per user-basis.
+   *
+   * @return The Kettle user data directory.
+   */
+  public static String getKettleUserDataDirectory() {
+    return getKettleUserDirectory() + Const.FILE_SEPARATOR + "data";
+  }
+
+  /**
    * Determines the Kettle directory in the user's home directory.
    *
    * @return The Kettle directory.

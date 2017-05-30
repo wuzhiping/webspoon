@@ -28,7 +28,6 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.Properties;
 
-import org.eclipse.rap.rwt.SingletonUtil;
 import org.pentaho.di.core.Const;
 import org.pentaho.di.core.util.EnvUtil;
 
@@ -56,15 +55,13 @@ public class LanguageChoice {
   }
 
   public static final LanguageChoice getInstance() {
-    try {
-      return SingletonUtil.getSessionInstance( LanguageChoice.class );
-    } catch ( Exception e ) { // invalid thread access
-      if ( choice != null ) {
-        return choice;
-      }
-      choice = new LanguageChoice();
+    if ( choice != null ) {
       return choice;
     }
+
+    choice = new LanguageChoice();
+
+    return choice;
   }
 
   /**
@@ -129,6 +126,6 @@ public class LanguageChoice {
   }
 
   public String getSettingsFilename() {
-    return Const.getKettleUserDirectory() + Const.FILE_SEPARATOR + ".languageChoice";
+    return Const.getKettleDirectory() + Const.FILE_SEPARATOR + ".languageChoice";
   }
 }

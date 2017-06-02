@@ -4321,7 +4321,6 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
           checkTransEnded();
           checkErrorVisuals();
           stopRedrawTimer();
-          setControlStates();
 
           transMetricsDelegate.resetLastRefreshTime();
           transMetricsDelegate.updateGraph();
@@ -4378,6 +4377,7 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
 
   protected void stopRedrawTimer() {
     pushSession.stop();
+    setControlStates();
     if ( redrawTimer != null ) {
       redrawTimer.cancel();
       redrawTimer.purge();

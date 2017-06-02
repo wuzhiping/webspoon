@@ -3596,6 +3596,8 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
               shell, BaseMessages.getString( PKG, "JobLog.Dialog.CanNotOpenJob.Title" ), BaseMessages.getString(
                 PKG, "JobLog.Dialog.CanNotOpenJob.Message" ), e );
             job = null;
+            pushSession.stop();
+            setControlStates();
           }
         } else {
           MessageBox m = new MessageBox( shell, SWT.OK | SWT.ICON_WARNING );

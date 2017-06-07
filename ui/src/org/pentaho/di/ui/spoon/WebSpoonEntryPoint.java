@@ -32,7 +32,10 @@ import org.eclipse.rap.rwt.client.service.ExitConfirmation;
 import org.eclipse.rap.rwt.client.service.StartupParameters;
 import org.eclipse.swt.widgets.Composite;
 import org.pentaho.di.core.Props;
-import org.pentaho.di.core.logging.KettleLogStore;
+import org.pentaho.di.core.extension.ExtensionPointHandler;
+import org.pentaho.di.core.extension.KettleExtensionPoint;
+import org.pentaho.di.core.logging.LogChannel;
+import org.pentaho.di.pan.CommandLineOption;
 import org.pentaho.di.ui.core.PropsUI;
 
 public class WebSpoonEntryPoint extends AbstractEntryPoint {
@@ -56,10 +59,16 @@ public class WebSpoonEntryPoint extends AbstractEntryPoint {
     }
 
     // Execute Spoon.createContents
-    Spoon.getInstance().setCommandLineArgs( Spoon.getCommandLineArgs( args ) );
+    CommandLineOption[] commandLineArgs = Spoon.getCommandLineArgs( args );
+    Spoon.getInstance().setCommandLineArgs( commandLineArgs );
     Spoon.getInstance().setShell( parent.getShell() );
     Spoon.getInstance().createContents( parent );
     Spoon.getInstance().setArguments( args.toArray( new String[ args.size() ] ) );
+    try {
+      ExtensionPointHandler.callExtensionPoint( Spoon.getInstance().getLog(), KettleExtensionPoint.SpoonStart.id, commandLineArgs );
+    } catch ( Throwable e ) {
+      LogChannel.GENERAL.logError( "Error calling extension points", e );
+    }
 
     /*
      *  The following lines are webSpoon additional functions

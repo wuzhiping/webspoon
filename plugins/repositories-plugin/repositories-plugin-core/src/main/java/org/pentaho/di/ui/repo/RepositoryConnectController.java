@@ -33,6 +33,7 @@ import org.pentaho.di.core.plugins.PluginInterface;
 import org.pentaho.di.core.plugins.PluginRegistry;
 import org.pentaho.di.core.plugins.RepositoryPluginType;
 import org.pentaho.di.core.util.ExecutorUtil;
+import org.pentaho.di.i18n.BaseMessages;
 import org.pentaho.di.repository.AbstractRepository;
 import org.pentaho.di.repository.ReconnectableRepository;
 import org.pentaho.di.repository.RepositoriesMeta;
@@ -70,6 +71,8 @@ public class RepositoryConnectController {
   public static final String DO_NOT_MODIFY = "doNotModify";
 
   public static final String DEFAULT_URL = "defaultUrl";
+  public static final String ERROR_MESSAGE = "errorMessage";
+  public static final String SUCCESS = "success";
   public static final String ERROR_401 = "401";
 
   private static Class<?> PKG = RepositoryConnectController.class;
@@ -212,37 +215,50 @@ public class RepositoryConnectController {
     connectToRepository( currentRepository );
   }
 
-  public void connectToRepository( String username, String password ) throws KettleException {
-    connectToRepository( currentRepository, username, password );
+  public String connectToRepository( String username, String password ) {
+    return connectToRepository( currentRepository, username, password );
   }
 
   public void connectToRepository( RepositoryMeta repositoryMeta ) throws KettleException {
     connectToRepository( repositoryMeta, null, null );
   }
 
-  public void connectToRepository( RepositoryMeta repositoryMeta, String username, String password ) throws KettleException {
-    final Repository repository = loadRepositoryObject( repositoryMeta.getId() );
-    repository.init( repositoryMeta );
-    repositoryConnect( repository, username, password );
-    if ( username != null ) {
-      getPropsUI().setLastRepositoryLogin( username );
-    }
-    Spoon spoon = spoonSupplier.get();
-    Runnable execute = () -> {
-      if ( spoon.getRepository() != null ) {
-        spoon.closeRepository();
-      } else {
-        spoon.closeAllJobsAndTransformations( true );
+  public String connectToRepository( RepositoryMeta repositoryMeta, String username, String password ) {
+    JSONObject jsonObject = new JSONObject();
+    try {
+      final Repository repository = loadRepositoryObject( repositoryMeta.getId() );
+      repository.init( repositoryMeta );
+      repositoryConnect( repository, username, password );
+      if ( username != null ) {
+        getPropsUI().setLastRepositoryLogin( username );
       }
-      spoon.setRepository( repository );
-      setConnectedRepository( repositoryMeta );
-      fireListeners();
-    };
-    if ( spoon.getShell() != null ) {
-      spoon.getShell().getDisplay().asyncExec( execute );
-    } else {
-      execute.run();
+      Spoon spoon = spoonSupplier.get();
+      Runnable execute = () -> {
+        if ( spoon.getRepository() != null ) {
+          spoon.closeRepository();
+        } else {
+          spoon.closeAllJobsAndTransformations( true );
+        }
+        spoon.setRepository( repository );
+        setConnectedRepository( repositoryMeta );
+        fireListeners();
+      };
+      if ( spoon.getShell() != null ) {
+        spoon.getShell().getDisplay().asyncExec( execute );
+      } else {
+        execute.run();
+      }
+      jsonObject.put( SUCCESS, true );
+    } catch ( KettleException ke ) {
+      if ( ke.getMessage().contains( ERROR_401 ) ) {
+        jsonObject.put( ERROR_MESSAGE, BaseMessages.getString( PKG, "RepositoryConnection.Error.InvalidCredentials" ) );
+      } else {
+        jsonObject.put( ERROR_MESSAGE, BaseMessages.getString( PKG, "RepositoryConnection.Error.InvalidServer" ) );
+      }
+      jsonObject.put( SUCCESS, false );
+      log.logError( "Unable to connect to repository", ke );
     }
+    return jsonObject.toString();
   }
 
   private Repository loadRepositoryObject( String id ) throws KettleException {
@@ -255,21 +271,34 @@ public class RepositoryConnectController {
     return repository;
   }
 
-  public void reconnectToRepository( String username, String password ) throws KettleException {
+  public String reconnectToRepository( String username, String password ) {
     Repository currentRepositoryInstance = getConnectedRepositoryInstance();
-    reconnectToRepository( currentRepository, (ReconnectableRepository) currentRepositoryInstance, username, password );
+    return reconnectToRepository( currentRepository, (ReconnectableRepository) currentRepositoryInstance, username, password );
   }
 
-  private void reconnectToRepository( RepositoryMeta repositoryMeta, ReconnectableRepository repository,
-                                      String username, String password ) throws KettleException {
-    if ( username != null ) {
-      getPropsUI().setLastRepositoryLogin( username );
+  private String reconnectToRepository( RepositoryMeta repositoryMeta, ReconnectableRepository repository,
+                                      String username, String password ) {
+    JSONObject jsonObject = new JSONObject();
+    try {
+      if ( username != null ) {
+        getPropsUI().setLastRepositoryLogin( username );
+      }
+      if ( repository.isConnected() ) {
+        repository.disconnect();
+      }
+      repository.init( repositoryMeta );
+      repositoryConnect( repository, username, password );
+      jsonObject.put( "success", true );
+    } catch ( KettleException ke ) {
+      if ( ke.getMessage().contains( ERROR_401 ) ) {
+        jsonObject.put( ERROR_MESSAGE, BaseMessages.getString( PKG, "RepositoryConnection.Error.InvalidCredentials" ) );
+      } else {
+        jsonObject.put( ERROR_MESSAGE, BaseMessages.getString( PKG, "RepositoryConnection.Error.InvalidServer" ) );
+      }
+      jsonObject.put( "success", false );
+      log.logError( "Unable to connect to repository", ke );
     }
-    if ( repository.isConnected() ) {
-      repository.disconnect();
-    }
-    repository.init( repositoryMeta );
-    repositoryConnect( repository, username, password );
+    return jsonObject.toString();
   }
 
   private void repositoryConnect( Repository repository, String username, String password ) throws KettleException {

@@ -479,18 +479,17 @@ define(
         }
         loadingAnimationModel.displayName = this.model.currentRepositoryName;
         $timeout(function(){
-          repositoriesService.login( $scope.model.username, $scope.model.password ).
-          then(function(response) {
-            console.log(response);
-            close();
-          }, function (response) {
-            console.log(response);
+          var response = JSON.parse(loginToRepository($scope.model.username, $scope.model.password));
+          console.log(response);
+          if( response.success == false){
             $timeout(function(){
-              $rootScope.triggerError(response.data.message);
+              $rootScope.triggerError(response.errorMessage);
             },600);
             $location.path("/repository-connect");
             $rootScope.backFade();
-          });
+          } else {
+            close();
+          }
         },1000);
         $location.path("/loading-animation");
         $rootScope.nextFade();

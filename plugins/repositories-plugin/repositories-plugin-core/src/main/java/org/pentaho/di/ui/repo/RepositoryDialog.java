@@ -165,6 +165,18 @@ public class RepositoryDialog extends ThinDialog {
       }
     };
 
+    new BrowserFunction( browser, "loginToRepository" ) {
+      @Override public Object function( Object[] objects ) {
+        String username = (String) objects[0];
+        String password = (String) objects[1];
+        if ( relogin ) {
+          return controller.reconnectToRepository( username, password );
+        } else {
+          return controller.connectToRepository( username, password );
+        }
+      }
+    };
+
     new BrowserFunction( browser, "getDatabases" ) {
       @Override public Object function( Object[] objects ) {
         return controller.getDatabases();

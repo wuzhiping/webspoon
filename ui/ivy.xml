@@ -43,9 +43,6 @@
     <!-- Testing dependencies -->
     <dependency org="junit"                 name="junit"               rev="4.9"   conf="test->default"  transitive="false"/>
     <dependency org="org.mockito"           name="mockito-all"         rev="1.9.5" conf="test->default"  transitive="false"/>
-    <dependency org="org.powermock" name="powermock-module-junit4" rev="1.6.6" conf="test->default"/>
-    <dependency org="org.powermock" name="powermock-api-easymock" rev="1.6.6" conf="test->default"/>
-    <dependency org="org.easymock" name="easymock" rev="3.4" conf="test->default"/>
     <dependency org="${ivy.artifact.group}" name="kettle-engine-test"  rev="${dependency.kettle.revision}" conf="test->default" transitive="false"/>
     <!-- UI Testing dependencies -->
     <dependency org="org.eclipse.rap"       name="org.eclipse.rap.rwt.testfixture" rev="${dependency.rap.revision}" conf="test->default" changing="true" transitive="false"/>

@@ -24,18 +24,15 @@ package org.pentaho.di.ui.spoon;
 
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
-import static org.powermock.api.easymock.PowerMock.*;
 import static junit.framework.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-import org.easymock.EasyMock;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -67,8 +64,6 @@ import org.pentaho.di.ui.spoon.delegates.SpoonTabsDelegate;
 import org.pentaho.metastore.stores.delegate.DelegatingMetaStore;
 import org.pentaho.xul.swt.tab.TabItem;
 import org.pentaho.xul.swt.tab.TabSet;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 /**
  * Spoon tests
@@ -76,21 +71,19 @@ import org.powermock.modules.junit4.PowerMockRunner;
  * @author Pavel Sakun
  * @see Spoon
  */
-@RunWith( PowerMockRunner.class )
-@PrepareForTest( SpoonPerspectiveManager.class )
 public class SpoonTest {
 
   private final Spoon spoon = mock( Spoon.class );
   private final LogChannelInterface log = mock( LogChannelInterface.class );
   private static SpoonPerspective mockSpoonPerspective = mock( SpoonPerspective.class );
-  private static SpoonPerspectiveManager perspective = mock( SpoonPerspectiveManager.class );
+  private static SpoonPerspectiveManager perspective = SpoonPerspectiveManager.getInstance();
+
+  static {
+    perspective.addPerspective( mockSpoonPerspective );
+  }
 
   @Before
   public void setUp() throws KettleException {
-    mockStatic( SpoonPerspectiveManager.class );
-    EasyMock.expect( SpoonPerspectiveManager.getInstance() ).andReturn( perspective );
-    when( perspective.getActivePerspective() ).thenReturn( mockSpoonPerspective );
-    replay( SpoonPerspectiveManager.class );
     doCallRealMethod().when( spoon ).copySelected( any( TransMeta.class ), anyListOf( StepMeta.class ),
         anyListOf( NotePadMeta.class ) );
     doCallRealMethod().when( spoon ).pasteXML( any( TransMeta.class ), anyString(), any( Point.class ) );

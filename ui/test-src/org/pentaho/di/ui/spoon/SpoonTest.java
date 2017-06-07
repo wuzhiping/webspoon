@@ -29,9 +29,11 @@ import static junit.framework.Assert.*;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import org.eclipse.rap.rwt.testfixture.TestContext;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
@@ -75,15 +77,16 @@ public class SpoonTest {
 
   private final Spoon spoon = mock( Spoon.class );
   private final LogChannelInterface log = mock( LogChannelInterface.class );
-  private static SpoonPerspective mockSpoonPerspective = mock( SpoonPerspective.class );
-  private static SpoonPerspectiveManager perspective = SpoonPerspectiveManager.getInstance();
+  private SpoonPerspective mockSpoonPerspective = mock( SpoonPerspective.class );
+  private SpoonPerspectiveManager perspective;
 
-  static {
-    perspective.addPerspective( mockSpoonPerspective );
-  }
+  @Rule
+  public TestContext context = new TestContext();
 
   @Before
   public void setUp() throws KettleException {
+    perspective = SpoonPerspectiveManager.getInstance();
+    perspective.addPerspective( mockSpoonPerspective );
     doCallRealMethod().when( spoon ).copySelected( any( TransMeta.class ), anyListOf( StepMeta.class ),
         anyListOf( NotePadMeta.class ) );
     doCallRealMethod().when( spoon ).pasteXML( any( TransMeta.class ), anyString(), any( Point.class ) );

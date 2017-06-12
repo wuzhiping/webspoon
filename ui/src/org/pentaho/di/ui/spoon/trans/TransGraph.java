@@ -4802,10 +4802,7 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
 
   @Override
   public int showChangedWarning() throws KettleException {
-    MessageBox mb = new MessageBox( shell, SWT.YES | SWT.NO | SWT.CANCEL | SWT.ICON_WARNING );
-    mb.setMessage( BaseMessages.getString( PKG, "Spoon.Dialog.PromptSave.Message", transMeta.getName() ) );
-    mb.setText( BaseMessages.getString( PKG, "Spoon.Dialog.PromptSave.Title" ) );
-    return mb.open();
+    return showChangedWarning( transMeta.getName() );
   }
 
   private class StepVelocity {

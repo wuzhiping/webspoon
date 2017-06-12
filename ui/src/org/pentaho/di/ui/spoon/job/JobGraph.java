@@ -3810,10 +3810,7 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
 
   @Override
   public int showChangedWarning() throws KettleException {
-    MessageBox mb = new MessageBox( shell, SWT.YES | SWT.NO | SWT.CANCEL | SWT.ICON_WARNING );
-    mb.setMessage( BaseMessages.getString( PKG, "JobGraph.Dialog.PromptSave.Message", jobMeta.getName() ) );
-    mb.setText( BaseMessages.getString( PKG, "JobGraph.Dialog.PromptSave.Title" ) );
-    return mb.open();
+    return showChangedWarning( jobMeta.getName() );
   }
 
   public void replayJob() {

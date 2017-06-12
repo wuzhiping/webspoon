@@ -205,7 +205,7 @@ public abstract class AbstractGraph extends Composite {
    * @return ChangedWarningInterface The class that provides the dialog and return value
    */
   public ChangedWarningInterface getChangedWarning() {
-    return ChangedWarningDialog.getInstance();
+    return new ChangedWarningDialog();
   }
 
   /**

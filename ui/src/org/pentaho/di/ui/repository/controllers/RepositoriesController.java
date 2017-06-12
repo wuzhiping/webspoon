@@ -24,7 +24,6 @@ package org.pentaho.di.ui.repository.controllers;
 
 import java.util.ResourceBundle;
 
-import org.eclipse.rap.rwt.service.ServerPushSession;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.pentaho.di.i18n.BaseMessages;
@@ -203,7 +202,6 @@ public class RepositoriesController extends AbstractXulEventHandler {
       return;
     }
     KettleWaitBox box;
-    final ServerPushSession pushSession = new ServerPushSession();
     try {
       box = (KettleWaitBox) document.createElement( "iconwaitbox" );
       box.setIndeterminate( true );
@@ -220,13 +218,7 @@ public class RepositoriesController extends AbstractXulEventHandler {
           try {
             helper.loginToRepository();
 
-            display.asyncExec( new Runnable() {
-              public void run() {
-                waitBox.stop();
-                pushSession.stop();
-              }
-            } );
-
+            waitBox.stop();
             display.syncExec( new Runnable() {
               public void run() {
                 loginDialog.hide();
@@ -245,12 +237,7 @@ public class RepositoriesController extends AbstractXulEventHandler {
 
           } catch ( final Throwable th ) {
 
-            display.asyncExec( new Runnable() {
-              public void run() {
-                waitBox.stop();
-                pushSession.stop();
-              }
-            } );
+            waitBox.stop();
 
             try {
               display.syncExec( new Runnable() {
@@ -275,7 +262,6 @@ public class RepositoriesController extends AbstractXulEventHandler {
       } );
       okButton.setDisabled( true );
       cancelButton.setDisabled( true );
-      pushSession.start();
       box.start();
     } catch ( XulException e1 ) {
       getCallback().onError( e1 );

@@ -376,7 +376,7 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
 
   private StreamType candidateHopType;
 
-  private Map<StepMeta, DelayTimer> delayTimers;
+//  private Map<StepMeta, DelayTimer> delayTimers;
 
   private StepMeta showTargetStreamsStep;
 
@@ -424,7 +424,7 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
     spoon.selectionFilter.setText( "" );
 
     this.mouseOverSteps = new ArrayList<>();
-    this.delayTimers = new HashMap<>();
+//    this.delayTimers = new HashMap<>();
 
     transLogDelegate = new TransLogDelegate( spoon, this );
     transGridDelegate = new TransGridDelegate( spoon, this );
@@ -1746,10 +1746,10 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
   }
 
   private void resetDelayTimer( StepMeta stepMeta ) {
-    DelayTimer delayTimer = delayTimers.get( stepMeta );
-    if ( delayTimer != null ) {
-      delayTimer.reset();
-    }
+//    DelayTimer delayTimer = delayTimers.get( stepMeta );
+//    if ( delayTimer != null ) {
+//      delayTimer.reset();
+//    }
   }
 
   /*
@@ -1784,54 +1784,60 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
 
     mouseOverSteps.add( stepMeta );
 
-    DelayTimer delayTimer = new DelayTimer( 500, new DelayListener() {
-      @Override
-      public void expired() {
-        mouseOverSteps.remove( stepMeta );
-        delayTimers.remove( stepMeta );
-        showTargetStreamsStep = null;
-        asyncRedraw();
-      }
-    }, new Callable<Boolean>() {
-
-      @Override
-      public Boolean call() throws Exception {
-        Point cursor = getLastMove();
-        if ( cursor != null ) {
-          AreaOwner areaOwner = getVisibleAreaOwner( cursor.x, cursor.y );
-          if ( areaOwner != null ) {
-            AreaType areaType = areaOwner.getAreaType();
-            if ( areaType == AreaType.STEP_ICON ) {
-              StepMeta selectedStepMeta = (StepMeta) areaOwner.getOwner();
-              return selectedStepMeta == stepMeta;
-            } else if ( areaType != null && areaType.belongsToTransContextMenu() ) {
-              StepMeta selectedStepMeta = (StepMeta) areaOwner.getParent();
-              return selectedStepMeta == stepMeta;
-            } else if ( areaOwner.getExtensionAreaType() != null ) {
-              return true;
-            }
-          }
-        }
-        return false;
-      }
-    } );
-
-    new Thread( delayTimer ).start();
-
-    delayTimers.put( stepMeta, delayTimer );
+//    DelayTimer delayTimer = new DelayTimer( 500, new DelayListener() {
+//      @Override
+//      public void expired() {
+//        mouseOverSteps.remove( stepMeta );
+//        delayTimers.remove( stepMeta );
+//        showTargetStreamsStep = null;
+//        asyncRedraw();
+//      }
+//    }, new Callable<Boolean>() {
+//
+//      @Override
+//      public Boolean call() throws Exception {
+//        Point cursor = getLastMove();
+//        if ( cursor != null ) {
+//          AreaOwner areaOwner = getVisibleAreaOwner( cursor.x, cursor.y );
+//          if ( areaOwner != null ) {
+//            AreaType areaType = areaOwner.getAreaType();
+//            if ( areaType == AreaType.STEP_ICON ) {
+//              StepMeta selectedStepMeta = (StepMeta) areaOwner.getOwner();
+//              return selectedStepMeta == stepMeta;
+//            } else if ( areaType != null && areaType.belongsToTransContextMenu() ) {
+//              StepMeta selectedStepMeta = (StepMeta) areaOwner.getParent();
+//              return selectedStepMeta == stepMeta;
+//            } else if ( areaOwner.getExtensionAreaType() != null ) {
+//              return true;
+//            }
+//          }
+//        }
+//        return false;
+//      }
+//    } );
+//
+//    new Thread( delayTimer ).start();
+//
+//    delayTimers.put( stepMeta, delayTimer );
   }
 
   private void stopStepMouseOverDelayTimer( final StepMeta stepMeta ) {
-    DelayTimer delayTimer = delayTimers.get( stepMeta );
-    if ( delayTimer != null ) {
-      delayTimer.stop();
-    }
+//    DelayTimer delayTimer = delayTimers.get( stepMeta );
+//    if ( delayTimer != null ) {
+//      delayTimer.stop();
+//    }
+    mouseOverSteps.remove( stepMeta );
+    showTargetStreamsStep = null;
+    asyncRedraw();
   }
 
   private void stopStepMouseOverDelayTimers() {
-    for ( DelayTimer timer : delayTimers.values() ) {
-      timer.stop();
-    }
+//    for ( DelayTimer timer : delayTimers.values() ) {
+//      timer.stop();
+//    }
+    mouseOverSteps.clear();
+    showTargetStreamsStep = null;
+    asyncRedraw();
   }
 
   protected void asyncRedraw() {

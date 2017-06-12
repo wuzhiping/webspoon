@@ -165,7 +165,7 @@ import org.pentaho.di.ui.spoon.XulSpoonResourceBundle;
 import org.pentaho.di.ui.spoon.XulSpoonSettingsManager;
 import org.pentaho.di.ui.spoon.dialog.NotePadDialog;
 import org.pentaho.di.ui.spoon.trans.DelayListener;
-import org.pentaho.di.ui.spoon.trans.DelayTimer;
+//import org.pentaho.di.ui.spoon.trans.DelayTimer;
 import org.pentaho.di.ui.spoon.trans.TransGraph;
 import org.pentaho.di.ui.xul.KettleXulLoader;
 import org.pentaho.ui.xul.XulDomContainer;
@@ -297,7 +297,7 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
   /** A map that keeps track of which log line was written by which job entry */
   private Map<JobEntryCopy, String> entryLogMap;
 
-  private Map<JobEntryCopy, DelayTimer> delayTimers;
+//  private Map<JobEntryCopy, DelayTimer> delayTimers;
 
   private JobEntryCopy startHopEntry;
   private Point endHopLocation;
@@ -320,7 +320,7 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
     this.props = PropsUI.getInstance();
     this.areaOwners = new ArrayList<AreaOwner>();
     this.mouseOverEntries = new ArrayList<JobEntryCopy>();
-    this.delayTimers = new HashMap<JobEntryCopy, DelayTimer>();
+//    this.delayTimers = new HashMap<JobEntryCopy, DelayTimer>();
 
     jobLogDelegate = new JobLogDelegate( spoon, this );
     jobHistoryDelegate = new JobHistoryDelegate( spoon, this );
@@ -1387,54 +1387,58 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
 
     mouseOverEntries.add( jobEntryCopy );
 
-    DelayTimer delayTimer = new DelayTimer( 500, new DelayListener() {
-      public void expired() {
-        mouseOverEntries.remove( jobEntryCopy );
-        delayTimers.remove( jobEntryCopy );
-        asyncRedraw();
-      }
-    }, new Callable<Boolean>() {
-
-      @Override
-      public Boolean call() throws Exception {
-        Point cursor = getLastMove();
-        if ( cursor != null ) {
-          AreaOwner areaOwner = getVisibleAreaOwner( cursor.x, cursor.y );
-          if ( areaOwner != null && areaOwner.getAreaType() != null ) {
-            AreaType areaType = areaOwner.getAreaType();
-            if ( areaType == AreaType.JOB_ENTRY_ICON || areaType.belongsToJobContextMenu() ) {
-              JobEntryCopy selectedJobEntryCopy = (JobEntryCopy) areaOwner.getOwner();
-              return selectedJobEntryCopy == jobEntryCopy;
-            }
-          }
-        }
-        return false;
-      }
-    } );
-
-    new Thread( delayTimer ).start();
-
-    delayTimers.put( jobEntryCopy, delayTimer );
+//    DelayTimer delayTimer = new DelayTimer( 500, new DelayListener() {
+//      public void expired() {
+//        mouseOverEntries.remove( jobEntryCopy );
+//        delayTimers.remove( jobEntryCopy );
+//        asyncRedraw();
+//      }
+//    }, new Callable<Boolean>() {
+//
+//      @Override
+//      public Boolean call() throws Exception {
+//        Point cursor = getLastMove();
+//        if ( cursor != null ) {
+//          AreaOwner areaOwner = getVisibleAreaOwner( cursor.x, cursor.y );
+//          if ( areaOwner != null && areaOwner.getAreaType() != null ) {
+//            AreaType areaType = areaOwner.getAreaType();
+//            if ( areaType == AreaType.JOB_ENTRY_ICON || areaType.belongsToJobContextMenu() ) {
+//              JobEntryCopy selectedJobEntryCopy = (JobEntryCopy) areaOwner.getOwner();
+//              return selectedJobEntryCopy == jobEntryCopy;
+//            }
+//          }
+//        }
+//        return false;
+//      }
+//    } );
+//
+//    new Thread( delayTimer ).start();
+//
+//    delayTimers.put( jobEntryCopy, delayTimer );
   }
 
   private void stopEntryMouseOverDelayTimer( final JobEntryCopy jobEntryCopy ) {
-    DelayTimer delayTimer = delayTimers.get( jobEntryCopy );
-    if ( delayTimer != null ) {
-      delayTimer.stop();
-    }
+//    DelayTimer delayTimer = delayTimers.get( jobEntryCopy );
+//    if ( delayTimer != null ) {
+//      delayTimer.stop();
+//    }
+    mouseOverEntries.remove( jobEntryCopy );
+    asyncRedraw();
   }
 
   private void stopEntryMouseOverDelayTimers() {
-    for ( DelayTimer timer : delayTimers.values() ) {
-      timer.stop();
-    }
+//    for ( DelayTimer timer : delayTimers.values() ) {
+//      timer.stop();
+//    }
+    mouseOverEntries.clear();
+    asyncRedraw();
   }
 
   private void resetDelayTimer( JobEntryCopy jobEntryCopy ) {
-    DelayTimer delayTimer = delayTimers.get( jobEntryCopy );
-    if ( delayTimer != null ) {
-      delayTimer.reset();
-    }
+//    DelayTimer delayTimer = delayTimers.get( jobEntryCopy );
+//    if ( delayTimer != null ) {
+//      delayTimer.reset();
+//    }
   }
 
   protected void asyncRedraw() {

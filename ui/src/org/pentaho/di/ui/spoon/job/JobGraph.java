@@ -1180,7 +1180,7 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
         for ( int i = 0; i < selectedEntries.size(); i++ ) {
           JobEntryCopy jobEntryCopy = selectedEntries.get( i );
           PropsUI.setLocation( jobEntryCopy, jobEntryCopy.getLocation().x + dx, jobEntryCopy.getLocation().y + dy );
-          stopEntryMouseOverDelayTimer( jobEntryCopy );
+//          stopEntryMouseOverDelayTimer( jobEntryCopy );
         }
       }
       // Adjust location of selected hops...

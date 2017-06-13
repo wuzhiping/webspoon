@@ -1176,18 +1176,21 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
       selectedEntries = jobMeta.getSelectedEntries();
 
       // Adjust location of selected steps...
-      if ( selectedEntries != null ) {
-        for ( int i = 0; i < selectedEntries.size(); i++ ) {
-          JobEntryCopy jobEntryCopy = selectedEntries.get( i );
-          PropsUI.setLocation( jobEntryCopy, jobEntryCopy.getLocation().x + dx, jobEntryCopy.getLocation().y + dy );
-//          stopEntryMouseOverDelayTimer( jobEntryCopy );
+      // only if the mouse cursor moved
+      if ( dx != 0 || dy != 0 ) {
+        if ( selectedEntries != null ) {
+          for ( int i = 0; i < selectedEntries.size(); i++ ) {
+            JobEntryCopy jobEntryCopy = selectedEntries.get( i );
+            PropsUI.setLocation( jobEntryCopy, jobEntryCopy.getLocation().x + dx, jobEntryCopy.getLocation().y + dy );
+  //          stopEntryMouseOverDelayTimer( jobEntryCopy );
+          }
         }
-      }
-      // Adjust location of selected hops...
-      if ( selectedNotes != null ) {
-        for ( int i = 0; i < selectedNotes.size(); i++ ) {
-          NotePadMeta ni = selectedNotes.get( i );
-          PropsUI.setLocation( ni, ni.getLocation().x + dx, ni.getLocation().y + dy );
+        // Adjust location of selected hops...
+        if ( selectedNotes != null ) {
+          for ( int i = 0; i < selectedNotes.size(); i++ ) {
+            NotePadMeta ni = selectedNotes.get( i );
+            PropsUI.setLocation( ni, ni.getLocation().x + dx, ni.getLocation().y + dy );
+          }
         }
       }
 

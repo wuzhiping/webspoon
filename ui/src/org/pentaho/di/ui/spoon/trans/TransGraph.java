@@ -1446,18 +1446,21 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
       selectedSteps = transMeta.getSelectedSteps();
 
       // Adjust location of selected steps...
-      if ( selectedSteps != null ) {
-        for ( int i = 0; i < selectedSteps.size(); i++ ) {
-          StepMeta stepMeta = selectedSteps.get( i );
-          PropsUI.setLocation( stepMeta, stepMeta.getLocation().x + dx, stepMeta.getLocation().y + dy );
-//          stopStepMouseOverDelayTimer( stepMeta );
+      // only if the mouse cursor moved
+      if ( dx != 0 || dy != 0 ) {
+        if ( selectedSteps != null ) {
+          for ( int i = 0; i < selectedSteps.size(); i++ ) {
+            StepMeta stepMeta = selectedSteps.get( i );
+            PropsUI.setLocation( stepMeta, stepMeta.getLocation().x + dx, stepMeta.getLocation().y + dy );
+  //          stopStepMouseOverDelayTimer( stepMeta );
+          }
         }
-      }
-      // Adjust location of selected hops...
-      if ( selectedNotes != null ) {
-        for ( int i = 0; i < selectedNotes.size(); i++ ) {
-          NotePadMeta ni = selectedNotes.get( i );
-          PropsUI.setLocation( ni, ni.getLocation().x + dx, ni.getLocation().y + dy );
+        // Adjust location of selected hops...
+        if ( selectedNotes != null ) {
+          for ( int i = 0; i < selectedNotes.size(); i++ ) {
+            NotePadMeta ni = selectedNotes.get( i );
+            PropsUI.setLocation( ni, ni.getLocation().x + dx, ni.getLocation().y + dy );
+          }
         }
       }
 

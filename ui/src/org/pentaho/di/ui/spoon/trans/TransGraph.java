@@ -4337,7 +4337,7 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
       startRedrawTimer();
 
       setControlStates();
-    } catch ( KettleException e ) {
+    } catch ( Exception e ) {
       log.logError( "Error starting step threads", e );
       checkErrorVisuals();
       stopRedrawTimer();

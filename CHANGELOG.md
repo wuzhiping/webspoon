@@ -1,5 +1,27 @@
 # Change Log
 
+## 0.7.1.10 - 2017-06-14
+
+### Changed
+- VfsFileChooserDialog for DirectoryDialog
+- Use headless Chrome for UI testing
+- Disable keyboard shortcut F4 because it is invoked when Enter key is pressed for unknown reason
+- Disable keyboard shortcuts under "Edit" menu while a dialog (e.g., step dialog) is focused
+- Do not share logs across sessions and do not show the general logs
+
+### Removed
+- Remove the Timer for setControlStates() and execute it when trans/job Finished
+- Stop using DelayTimer because it does not effectively work in webSpoon
+
+### Fixed
+- Make RunConfigurationPopupMenu multi-session enabled
+- Fix the "SWTError: BrowserFunction is disposed" when pressing Connect Now
+- Refresh the log display periodically
+- Restore the ability to connect to a repository by query parameters
+- Restore the connectivity to Pentaho Repository and Database Repository
+- Catch any exception when executing trans.startThreads() or job.start()
+- Move steps/job entries only if a cursor moves
+
 ## 0.7.1.9 - 2017-05-23
 
 ### Changed

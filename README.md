@@ -54,7 +54,7 @@ Please refer to the [wiki](https://github.com/HiromuHota/pentaho-kettle/wiki/Sys
 
 1. Download the latest `spoon.war` from [here](https://github.com/HiromuHota/pentaho-kettle/releases).
 2. Copy the downloaded `spoon.war` to `tomcat/webapps/spoon.war`.
-3. (Optional) download and unzip `pdi-ce-7.0.0.0-25.zip`, then copy the `system` and `plugins` folders to `tomcat/system` and `tomcat/plugins`, respectively.
+3. (Optional) download and unzip `pdi-ce-7.1.0.0-12.zip`, then copy the `system` and `plugins` folders to `tomcat/system` and `tomcat/plugins`, respectively.
 4. (Optional) configure Apache Karaf as below.
 5. (Re)start the Tomcat.
 6. Access `http://address:8080/spoon/spoon`
@@ -153,13 +153,14 @@ If not defined, the following folders are used:
 
 Some of the plugins are not compatible with webSpoon.
 Please replace jar files with patched ones and delete the Karaf cache directory if necessary.
-The patched jar files are [pdi-platform-utils-plugin](https://github.com/HiromuHota/pdi-platform-utils-plugin/releases), [big-data-plugin](https://github.com/HiromuHota/big-data-plugin/releases), [repositories-plugin](https://github.com/HiromuHota/pentaho-kettle/releases) (only 7.0.0.0-25 is supported).
+The patched jar files are [pdi-platform-utils-plugin](https://github.com/HiromuHota/pdi-platform-utils-plugin/releases), [big-data-plugin](https://github.com/HiromuHota/big-data-plugin/releases), [repositories-plugin](https://github.com/HiromuHota/pentaho-kettle/releases), and [pdi-engine-configuration](https://github.com/HiromuHota/pentaho-kettle/releases).
 
 ```
-$ cp ${path_to_lib}/pdi-platform-utils-plugin-7.0.0.0-25.jar plugins/platform-utils-plugin/
-$ cp ${path_to_lib}/pentaho-big-data-legacy-7.0.0.0-25.jar plugins/pentaho-big-data-plugin/
-$ cp ${path_to_lib}/pentaho-big-data-kettle-plugins-common-ui-7.0.0.0-25.jar system/karaf/system/pentaho/pentaho-big-data-kettle-plugins-common-ui/7.0.0.0-25/
-$ cp ${path_to_lib}/repositories-plugin.jar system/karaf/system/pentaho-kettle/repositories-plugin/7.0.0.0-25/repositories-plugin-7.0.0.0-25.jar
+$ cp ${path_to_lib}/pdi-platform-utils-plugin-7.1.0.0-12.jar plugins/platform-utils-plugin/
+$ cp ${path_to_lib}/pentaho-big-data-legacy-7.1.0.0-12.jar plugins/pentaho-big-data-plugin/
+$ cp ${path_to_lib}/pentaho-big-data-kettle-plugins-common-ui-7.1.0.0-12.jar system/karaf/system/pentaho/pentaho-big-data-kettle-plugins-common-ui/7.1.0.0-12/
+$ cp ${path_to_lib}/repositories-plugin-core-7.1.0.0-12.jar system/karaf/system/org/pentaho/repositories-plugin-core/7.1.0.0-12/
+$ cp ${path_to_lib}/pdi-engine-configuration-ui-7.1.0.0-12.jar system/karaf/system/org/pentaho/pdi-engine-configuration-ui/7.1.0.0-12/
 $ rm -rf system/karaf/caches/webspoonservletcontextlistener
 ```
 
@@ -217,7 +218,7 @@ Please build and locally-publish the following dependent libraries.
 ### pentaho-commons-xul
 
 ```
-$ git clone -b webspoon-7.0 https://github.com/HiromuHota/pentaho-commons-xul.git
+$ git clone -b webspoon-7.1 https://github.com/HiromuHota/pentaho-commons-xul.git
 $ cd pentaho-commons-xul/pentaho-xul-swt
 $ ant clean-all resolve publish-local
 ```
@@ -238,10 +239,10 @@ $ mvn clean install -pl tests/org.eclipse.rap.rwt.testfixture -am
 
 **Make sure patched dependent libraries have been published locally.**
 
-Build and locally publish `kettle-ui-swt-7.0.0.0-25-X.jar`, which will be copied to `~/.ivy2/local/pentaho-kettle/kettle-ui-swt/`
+Build and locally publish `kettle-ui-swt-7.1.0.0-12-X.jar`, which will be copied to `~/.ivy2/local/pentaho-kettle/kettle-ui-swt/`
 
 ```bash
-$ git clone -b webspoon-7.0 https://github.com/HiromuHota/pentaho-kettle.git
+$ git clone -b webspoon-7.1 https://github.com/HiromuHota/pentaho-kettle.git
 $ cd pentaho-kettle/ui/
 $ ant clean-all resolve publish-local
 ```

@@ -408,10 +408,10 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
     }
 
     toolTip = new CheckBoxToolTip( shell );
-//    toolTip.setRespectMonitorBounds( true );
-//    toolTip.setRespectDisplayBounds( true );
-//    toolTip.setPopupDelay( 350 );
-//    toolTip.setShift( new org.eclipse.swt.graphics.Point( ConstUI.TOOLTIP_OFFSET, ConstUI.TOOLTIP_OFFSET ) );
+    toolTip.setRespectMonitorBounds( true );
+    toolTip.setRespectDisplayBounds( true );
+    toolTip.setPopupDelay( 350 );
+    toolTip.setShift( new org.eclipse.swt.graphics.Point( ConstUI.TOOLTIP_OFFSET, ConstUI.TOOLTIP_OFFSET ) );
 
     helpTip = new CheckBoxToolTip( shell );
     helpTip.addCheckBoxToolTipListener( new CheckBoxToolTipListener() {

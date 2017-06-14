@@ -30,6 +30,7 @@ import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
@@ -285,5 +286,45 @@ public class CheckBoxToolTip extends ToolTip {
    */
   public void setShowingScrollBars( boolean showingScrollBars ) {
     this.showingScrollBars = showingScrollBars;
+  }
+
+  public void setRespectMonitorBounds(boolean b) {
+    // TODO Auto-generated method stub
+    
+  }
+
+  public void setRespectDisplayBounds(boolean b) {
+    // TODO Auto-generated method stub
+    
+  }
+
+  public void setPopupDelay(int i) {
+    // TODO Auto-generated method stub
+    
+  }
+
+  public void setHideDelay(int i) {
+    // TODO Auto-generated method stub
+    
+  }
+
+  public void setShift(org.eclipse.swt.graphics.Point point) {
+    // TODO Auto-generated method stub
+    
+  }
+
+  public void setHideOnMouseDown(boolean b) {
+    // TODO Auto-generated method stub
+    
+  }
+
+  public void setBackgroundColor(Color color) {
+    // TODO Auto-generated method stub
+    
+  }
+
+  public void setForegroundColor(Color color) {
+    // TODO Auto-generated method stub
+    
   }
 }

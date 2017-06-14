@@ -2229,8 +2229,8 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
               }
               toolTip.setImage( image );
               toolTip.setText( name + Const.CR + Const.CR + tip );
-//              toolTip.setBackgroundColor( GUIResource.getInstance().getColor( 255, 254, 225 ) );
-//              toolTip.setForegroundColor( GUIResource.getInstance().getColor( 0, 0, 0 ) );
+              toolTip.setBackgroundColor( GUIResource.getInstance().getColor( 255, 254, 225 ) );
+              toolTip.setForegroundColor( GUIResource.getInstance().getColor( 0, 0, 0 ) );
               toolTip.show( new org.eclipse.swt.graphics.Point( move.x + 10, move.y + 10 ) );
             }
           }
@@ -2244,8 +2244,8 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
                       display, ConstUI.ICON_SIZE, ConstUI.ICON_SIZE );
               toolTip.setImage( image );
               toolTip.setText( name + Const.CR + Const.CR + tip );
-//              toolTip.setBackgroundColor( GUIResource.getInstance().getColor( 255, 254, 225 ) );
-//              toolTip.setForegroundColor( GUIResource.getInstance().getColor( 0, 0, 0 ) );
+              toolTip.setBackgroundColor( GUIResource.getInstance().getColor( 255, 254, 225 ) );
+              toolTip.setForegroundColor( GUIResource.getInstance().getColor( 0, 0, 0 ) );
               toolTip.show( new org.eclipse.swt.graphics.Point( move.x + 10, move.y + 10 ) );
             }
           }
@@ -2264,11 +2264,11 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
     } );
 
     toolTip = new CheckBoxToolTip( shell );
-//    toolTip.setRespectMonitorBounds( true );
-//    toolTip.setRespectDisplayBounds( true );
-//    toolTip.setPopupDelay( 350 );
-//    toolTip.setHideDelay( 5000 );
-//    toolTip.setShift( new org.eclipse.swt.graphics.Point( ConstUI.TOOLTIP_OFFSET, ConstUI.TOOLTIP_OFFSET ) );
+    toolTip.setRespectMonitorBounds( true );
+    toolTip.setRespectDisplayBounds( true );
+    toolTip.setPopupDelay( 350 );
+    toolTip.setHideDelay( 5000 );
+    toolTip.setShift( new org.eclipse.swt.graphics.Point( ConstUI.TOOLTIP_OFFSET, ConstUI.TOOLTIP_OFFSET ) );
   }
 
   protected TreeItem searchMouseOverTreeItem( TreeItem[] treeItems, int x, int y ) {

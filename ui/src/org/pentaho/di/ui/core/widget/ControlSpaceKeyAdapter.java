@@ -138,10 +138,10 @@ public class ControlSpaceKeyAdapter extends KeyAdapter {
       list.setItems( getVariableNames( variables ) );
       final CheckBoxToolTip toolTip = new CheckBoxToolTip( shell );
       toolTip.setImage( GUIResource.getInstance().getImageVariable() );
-//      toolTip.setHideOnMouseDown( true );
-//      toolTip.setRespectMonitorBounds( true );
-//      toolTip.setRespectDisplayBounds( true );
-//      toolTip.setPopupDelay( 350 );
+      toolTip.setHideOnMouseDown( true );
+      toolTip.setRespectMonitorBounds( true );
+      toolTip.setRespectDisplayBounds( true );
+      toolTip.setPopupDelay( 350 );
 
       list.addSelectionListener( new SelectionAdapter() {
         // Enter or double-click: picks the variable

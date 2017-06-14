@@ -23,6 +23,7 @@
 package org.pentaho.di.ui.repo;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.SWTException;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.GC;
@@ -112,22 +113,19 @@ public class RepositoryConnectMenu {
   }
 
   private void renderAndUpdate() {
-    // Return when wrong thread
-    if ( connectDropdown != null && Spoon.getInstance().getDisplay() != connectDropdown.getDisplay() ) {
-      return;
+    try {
+      if ( connectDropdown != null && !connectDropdown.isDisposed() ) {
+        connectDropdown.dispose();
+      }
+      if ( connectButton != null && !connectButton.isDisposed() ) {
+        connectButton.dispose();
+      }
+      render();
+      update();
+    } catch ( SWTException e ) {
+      // TODO this should be handled more appropriately
+      // Do nothing
     }
-    if ( connectButton != null && Spoon.getInstance().getDisplay() != connectButton.getDisplay() ) {
-      return;
-    }
-
-    if ( connectDropdown != null && !connectDropdown.isDisposed() ) {
-      connectDropdown.dispose();
-    }
-    if ( connectButton != null && !connectButton.isDisposed() ) {
-      connectButton.dispose();
-    }
-    render();
-    update();
   }
 
   private void renderConnectButton() {

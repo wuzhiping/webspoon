@@ -231,6 +231,7 @@ $ cd rap
 $ mvn clean install -N
 $ mvn clean install -pl bundles/org.eclipse.rap.rwt -am
 $ mvn clean install -pl bundles/org.eclipse.rap.jface -am
+$ mvn clean install -pl bundles/org.eclipse.rap.fileupload -am
 $ mvn clean install -pl bundles/org.eclipse.rap.filedialog -am
 $ mvn clean install -pl tests/org.eclipse.rap.rwt.testfixture -am
 ```

@@ -131,6 +131,7 @@ import org.eclipse.swt.widgets.Decorations;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.IFileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
@@ -143,6 +144,7 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
+import org.eclipse.swt.widgets.UploadDialog;
 import org.eclipse.swt.widgets.Widget;
 import org.pentaho.di.base.AbstractMeta;
 import org.pentaho.di.cluster.ClusterSchema;
@@ -4274,7 +4276,12 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
 
       if ( rep == null || importfile || !etlPerspective ) { // Load from XML
 
-        FileDialog dialog = new FileDialog( shell, SWT.OPEN );
+        IFileDialog dialog;
+        if ( importfile ) {
+          dialog = new UploadDialog( shell, SWT.OPEN );
+        } else {
+          dialog = new FileDialog( shell, SWT.OPEN );
+        }
 
         LinkedHashSet<String> extensions = new LinkedHashSet<>();
         LinkedHashSet<String> extensionNames = new LinkedHashSet<>();
@@ -4385,7 +4392,7 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
     }
   }
 
-  private void setFilterPath( FileDialog dialog ) {
+  private void setFilterPath( IFileDialog dialog ) {
     if ( !Utils.isEmpty( lastDirOpened ) ) {
       if ( new File( lastDirOpened ).exists() ) {
         dialog.setFilterPath( lastDirOpened );
@@ -5654,7 +5661,7 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
 
 
   public void importDirectoryToRepository() {
-    FileDialog dialog = new FileDialog( shell, SWT.OPEN | SWT.MULTI );
+    UploadDialog dialog = new UploadDialog( shell, SWT.OPEN | SWT.MULTI );
     dialog.setText( BaseMessages.getString( PKG, "Spoon.SelectAnXMLFileToImportFrom.Message" ) );
     if ( dialog.open() == null ) {
       return;

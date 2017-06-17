@@ -212,6 +212,7 @@ Please build and locally-publish the following dependent libraries.
 - pentaho-xul-swt
 - org.eclipse.rap.rwt
 - org.eclipse.rap.jface
+- org.eclipse.rap.fileupload
 - org.eclipse.rap.filedialog
 - org.eclipse.rap.rwt.testfixture
 
@@ -236,9 +237,21 @@ $ mvn clean install -pl bundles/org.eclipse.rap.filedialog -am
 $ mvn clean install -pl tests/org.eclipse.rap.rwt.testfixture -am
 ```
 
+RAP jars are marked as `changing="true"` in ivy.xml and the "local-mvn" resolver is configured to `checkmodified="true"` in ivysettings.xml.
+However, updated jars are not used and cached ones are used instead.
+There are some discussions in [here](https://stackoverflow.com/questions/14445268/whats-wrong-with-this-ivy-changingpattern-snapshot-configuration/14445694#14445694) and [there](https://stackoverflow.com/questions/38483757/apache-ivy-and-local-maven-repo-how-to-handle-snapshots-built-with-maven-3),
+but I only found a workaround that deletes the cached jars as follows:
+
+```
+$ rm ~/.ivy2/cache/org.eclipse.rap/org.eclipse.rap.rwt/eclipse-plugins/org.eclipse.rap.rwt-3.1.1-SNAPSHOT.jar
+$ rm ~/.ivy2/cache/org.eclipse.rap/org.eclipse.rap.jface/eclipse-plugins/org.eclipse.rap.jface-3.1.1-SNAPSHOT.jar
+$ rm ~/.ivy2/cache/org.eclipse.rap/org.eclipse.rap.fileupload/eclipse-plugins/org.eclipse.rap.fileupload-3.1.1-SNAPSHOT.jar
+$ rm ~/.ivy2/cache/org.eclipse.rap/org.eclipse.rap.filedialog/eclipse-plugins/org.eclipse.rap.filedialog-3.1.1-SNAPSHOT.jar
+```
+
 ## Build in the command line
 
-**Make sure patched dependent libraries have been published locally.**
+**Make sure patched dependent libraries have been published locally, and no cached jars for RAP (if there is any update).**
 
 Build and locally publish `kettle-ui-swt-7.1.0.0-12-X.jar`, which will be copied to `~/.ivy2/local/pentaho-kettle/kettle-ui-swt/`
 

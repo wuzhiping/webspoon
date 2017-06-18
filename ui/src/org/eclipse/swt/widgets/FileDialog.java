@@ -47,8 +47,9 @@ public class FileDialog implements IFileDialog {
   String [] filterExtensions = new String[] { "*" };
   String [] fileNames = new String[1];
   String fileName = null;
+  int fileDialogMode = VfsFileChooserDialog.VFS_DIALOG_OPEN_FILE;
 
-  private VfsFileChooserDialog vfsFileChooserDialog;
+  protected VfsFileChooserDialog vfsFileChooserDialog;
 
   public FileDialog( Shell parent ) {
     this.parent = parent;
@@ -74,7 +75,7 @@ public class FileDialog implements IFileDialog {
   public String open() {
     String filePath = null;
     FileObject returnFile =
-        vfsFileChooserDialog.open( parent, fileName, filterExtensions, filterNames, VfsFileChooserDialog.VFS_DIALOG_OPEN_FILE );
+        vfsFileChooserDialog.open( parent, fileName, filterExtensions, filterNames, fileDialogMode );
     File file = null;
     if ( returnFile != null ) {
       try {
@@ -127,8 +128,16 @@ public class FileDialog implements IFileDialog {
     return style;
   }
 
+  public String[] getFilterExtensions() {
+    return filterExtensions;
+  }
+
   public void setFilterExtensions( String[] exts ) {
     filterExtensions = exts;
+  }
+
+  public String[] getFilterNames() {
+    return filterNames;
   }
 
   public void setFilterNames( String[] strings ) {

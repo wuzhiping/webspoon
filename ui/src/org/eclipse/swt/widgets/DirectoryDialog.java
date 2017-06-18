@@ -27,40 +27,16 @@ import java.io.File;
 
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemException;
-import org.eclipse.swt.SWT;
-import org.pentaho.di.core.Const;
-import org.pentaho.di.core.vfs.KettleVFS;
-import org.pentaho.di.core.vfs.KettleVfsDelegatingResolver;
-import org.pentaho.di.i18n.BaseMessages;
-import org.pentaho.di.ui.core.dialog.ErrorDialog;
 import org.pentaho.di.ui.spoon.Spoon;
 import org.pentaho.vfs.ui.VfsFileChooserDialog;
 
-public class DirectoryDialog {
-  private static Class<?> PKG = Spoon.class;
-
-  int style;
-  Shell parent;
-  String title;
-  String message = "";
-  String filterPath = "";
-
-  private VfsFileChooserDialog vfsFileChooserDialog;
+public class DirectoryDialog extends FileDialog {
 
   public DirectoryDialog( Shell parent ) {
-    this.parent = parent;
-    FileObject initialFile;
-    FileObject rootFile;
-    try {
-      initialFile = KettleVFS.getFileObject( Spoon.getInstance().getLastFileOpened() );
-      rootFile = initialFile.getFileSystem().getRoot();
-    } catch ( Exception e ) {
-      String message = Const.getStackTracker( e );
-      new ErrorDialog( parent, BaseMessages.getString( PKG, "Spoon.Error" ), message, e );
-
-      return;
-    }
-    vfsFileChooserDialog = new VfsFileChooserDialog( parent, new KettleVfsDelegatingResolver(), rootFile, initialFile );
+    super( parent );
+    filterNames = new String[] { "All folders" };
+    filterExtensions = new String[] { "[0-9]" };
+    fileDialogMode = VfsFileChooserDialog.VFS_DIALOG_OPEN_DIRECTORY;
   }
 
   public DirectoryDialog( Shell parent, int style ) {
@@ -68,11 +44,11 @@ public class DirectoryDialog {
     this.style = style;
   }
 
+  @Override
   public String open() {
     String directoryPath = null;
-    // Set fileFilter "[0-9]" so that every file is filtered out and only folders can be selected.
     FileObject returnFile =
-        vfsFileChooserDialog.open( parent, null, new String[] { "[0-9]" }, new String[] { "All folders" }, VfsFileChooserDialog.VFS_DIALOG_OPEN_DIRECTORY );
+        vfsFileChooserDialog.open( parent, fileName, filterExtensions, filterNames, fileDialogMode );
     File file = null;
     if ( returnFile != null ) {
       try {
@@ -84,43 +60,5 @@ public class DirectoryDialog {
       directoryPath = filterPath = file.getPath();
     }
     return directoryPath;
-  }
-
-  public String getFilterPath() {
-    return filterPath;
-  }
-
-  public void setFilterPath( String string ) {
-    filterPath = string;
-  }
-
-  public String getMessage() {
-    return message;
-  }
-
-  public void setMessage( String string ) {
-    if ( string == null ) {
-      SWT.error( SWT.ERROR_NULL_ARGUMENT );
-    }
-    message = string;
-  }
-
-  public String getText() {
-    return title;
-  }
-
-  public void setText( String string ) {
-    if ( string == null ) {
-      SWT.error( SWT.ERROR_NULL_ARGUMENT );
-    }
-    title = string;
-  }
-
-  public Shell getParent() {
-    return parent;
-  }
-
-  public int getStyle() {
-    return style;
   }
 }

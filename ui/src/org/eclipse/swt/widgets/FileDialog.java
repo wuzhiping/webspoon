@@ -30,7 +30,6 @@ import org.apache.commons.vfs2.FileSystemException;
 import org.eclipse.swt.SWT;
 import org.pentaho.di.core.Const;
 import org.pentaho.di.core.vfs.KettleVFS;
-import org.pentaho.di.core.vfs.KettleVfsDelegatingResolver;
 import org.pentaho.di.i18n.BaseMessages;
 import org.pentaho.di.ui.core.dialog.ErrorDialog;
 import org.pentaho.di.ui.spoon.Spoon;
@@ -64,7 +63,7 @@ public class FileDialog implements IFileDialog {
 
       return;
     }
-    vfsFileChooserDialog = new VfsFileChooserDialog( parent, new KettleVfsDelegatingResolver(), rootFile, initialFile );
+    vfsFileChooserDialog = Spoon.getInstance().getVfsFileChooserDialog( rootFile, initialFile );
   }
 
   public FileDialog( Shell parent, int style ) {

@@ -35,7 +35,11 @@ public class DirectoryDialog extends FileDialog {
   public DirectoryDialog( Shell parent ) {
     super( parent );
     filterNames = new String[] { "All folders" };
-    filterExtensions = new String[] { "[0-9]" };
+    /**
+     * To get only folders, we have to have a filter that filters out all files.
+     * Special characters, e.g., "@", are not allowed for filename; hence, are good for such a filter.
+     */
+    filterExtensions = new String[] { "@" };
     fileDialogMode = VfsFileChooserDialog.VFS_DIALOG_OPEN_DIRECTORY;
   }
 

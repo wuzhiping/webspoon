@@ -967,28 +967,23 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
     target.addDropListener( new DropTargetAdapter() {
       @Override
       public void drop( DropTargetEvent event ) {
-        ClientFile[] files =  ( ClientFile[] )event.data;
-        final DiskFileUploadReceiver receiver = new DiskFileUploadReceiver();
-        final FileUploadHandler uploadHandler = new FileUploadHandler( receiver );
-        final Display display = Display.getCurrent();
-        final ServerPushSession pushSession = new ServerPushSession();
+        ClientFile[] files =  (ClientFile[]) event.data;
+        DiskFileUploadReceiver receiver = new DiskFileUploadReceiver();
+        FileUploadHandler uploadHandler = new FileUploadHandler( receiver );
+        Display display = Display.getCurrent();
+        ServerPushSession pushSession = new ServerPushSession();
         pushSession.start();
         uploadHandler.addUploadListener( new FileUploadListener() {
-          public void uploadProgress( FileUploadEvent event ) {}
-          public void uploadFailed( FileUploadEvent event ) {}
+          public void uploadProgress( FileUploadEvent event ) { }
+          public void uploadFailed( FileUploadEvent event ) { }
           public void uploadFinished( FileUploadEvent event ) {
-            Thread thread = new Thread() {
-              @Override
-              public void run() {
-                display.asyncExec( new Runnable() {
-                  @Override
-                  public void run() {
-                    openFile( receiver.getTargetFiles()[ 0 ].getAbsolutePath(), true );
-                    pushSession.stop();
-                  }
-                } );
-              }
+            Runnable runnable = () -> {
+              display.asyncExec( () -> {
+                openFile( receiver.getTargetFiles()[ 0 ].getAbsolutePath(), true );
+                pushSession.stop();
+              } );
             };
+            Thread thread = new Thread( runnable );
             thread.start();
           }
         } );

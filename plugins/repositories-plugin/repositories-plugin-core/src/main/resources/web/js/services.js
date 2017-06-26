@@ -29,7 +29,11 @@ define( [
 
 //      this.baseUrl = "/cxf/repositories";
         // Add context path
-        this.baseUrl = window.location.pathname.substring( 0, window.location.pathname.indexOf( "/", 2 ) ) + "/cxf/repositories";
+        var contextPath = window.location.pathname.substring( 0, window.location.pathname.indexOf( "/", 2 ) );
+        if ( contextPath === "/osgi" ) { // when deployed as ROOT
+          contextPath = "";
+        }
+        this.baseUrl = contextPath + "/osgi/cxf/repositories";
 
         this.login = function(username, password)
         {

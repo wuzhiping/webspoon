@@ -50,7 +50,7 @@ public class WebSpoonProxyServlet extends ProxyServlet {
 
   @Override
   protected String rewriteUrlFromRequest(HttpServletRequest servletRequest) {
-    servletRequest.setAttribute( ATTR_TARGET_URI, servletRequest.getServletPath() );
+    servletRequest.setAttribute( ATTR_TARGET_URI, "" );
     return super.rewriteUrlFromRequest( servletRequest );
   }
 

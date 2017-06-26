@@ -74,34 +74,6 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>reverseProxy</servlet-name>
-    <url-pattern>/cxf/*</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>reverseProxy</servlet-name>
-    <url-pattern>/repositories/*</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>reverseProxy</servlet-name>
-    <url-pattern>/requirejs-manager/*</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>reverseProxy</servlet-name>
-    <url-pattern>/jquery/*</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>reverseProxy</servlet-name>
-    <url-pattern>/angular/*</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>reverseProxy</servlet-name>
-    <url-pattern>/angular-sanitize/*</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>reverseProxy</servlet-name>
-    <url-pattern>/angular-route/*</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>reverseProxy</servlet-name>
-    <url-pattern>/angular-translate/*</url-pattern>
+    <url-pattern>/osgi/*</url-pattern>
   </servlet-mapping>
 </web-app>

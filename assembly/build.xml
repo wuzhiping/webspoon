@@ -308,7 +308,12 @@
     </sql>
   </target>
 
-  <target name="war">
+  <target name="war" depends="resolve-oss-licenses">
+    <unzip src="${bin.dir}/oss-licenses.zip" dest="${bin.dir}">
+      <patternset>
+        <include name="${oss-license.filename}"/>
+      </patternset>
+    </unzip>
     <war destfile="${dist.dir}/spoon.war" webxml="WEB-INF/web.xml">
       <webinf dir="WEB-INF">
         <exclude name="web.xml"/>
@@ -317,7 +322,8 @@
         <exclude name="javax.servlet-api-*.jar"/>
       </lib>
       <classes dir="package-res/classes"/>
-      <fileset file="OSS_Licenses.html"/>
+      <fileset file="webSpoon_OSS_Licenses.md"/>
+      <fileset file="${bin.dir}/${oss-license.filename}"/>
       <zipfileset dir="package-res/docs" prefix="docs"/>
       <fileset dir="src/jsp"/>
     </war>

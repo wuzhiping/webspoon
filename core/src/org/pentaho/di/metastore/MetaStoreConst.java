@@ -24,6 +24,7 @@ package org.pentaho.di.metastore;
 
 import java.io.File;
 
+import org.eclipse.rap.rwt.RWT;
 import org.pentaho.di.core.Const;
 import org.pentaho.di.core.util.Utils;
 import org.pentaho.metastore.api.IMetaStore;
@@ -68,6 +69,14 @@ public class MetaStoreConst {
     String rootFolder = System.getProperty( Const.PENTAHO_METASTORE_FOLDER );
     if ( Utils.isEmpty( rootFolder ) ) {
       rootFolder = getDefaultPentahoMetaStoreLocation();
+    }
+    try {
+      if ( RWT.getRequest().getRemoteUser() != null ) { // when no user authentication is used
+        rootFolder += File.separator + "users" + File.separator + RWT.getRequest().getRemoteUser();
+      }
+    } catch ( IllegalStateException e ) {
+      if ( e.getMessage().equals( "Invalid thread access" ) ) { // when the webSpoon server is starting
+      }
     }
     File rootFolderFile = new File( rootFolder );
     File metaFolder = new File( rootFolder + File.separator + XmlUtil.META_FOLDER_NAME );

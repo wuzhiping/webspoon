@@ -253,13 +253,13 @@ $ rm ~/.ivy2/cache/org.eclipse.rap/org.eclipse.rap.filedialog/eclipse-plugins/or
 
 **Make sure patched dependent libraries have been published locally, and no cached jars for RAP (if there is any update).**
 
-Build and locally publish `kettle-ui-swt-7.1.0.0-12-X.jar`, which will be copied to `~/.ivy2/local/pentaho-kettle/kettle-ui-swt/`
+Build and locally publish `kettle-core-7.1.0.0-12-X.jar` and `kettle-ui-swt-7.1.0.0-12-X.jar`.
 
 ```bash
 $ git clone -b webspoon-7.1 https://github.com/HiromuHota/pentaho-kettle.git
-$ cd pentaho-kettle/ui/
+$ cd pentaho-kettle/core/
 $ ant clean-all resolve publish-local
-$ cd ../core
+$ cd ../ui
 $ ant clean-all resolve publish-local
 ```
 

@@ -71,6 +71,8 @@
     <dependency org="org.springframework" name="spring-test"         rev="${dependency.spring.framework.revision}"      transitive="true" conf="test->default"/>
     <dependency org="pentaho"             name="simple-jndi"         rev="1.0.0"      transitive="true" conf="test->default"/>
     
+    <dependency org="org.eclipse.rap"       name="org.eclipse.rap.rwt" rev="3.1.1-SNAPSHOT" transitive="false"/>
+    <dependency org="javax.servlet"         name="javax.servlet-api"   rev="3.1.0" transitive="false"/>
 
   </dependencies>
 </ivy-module>

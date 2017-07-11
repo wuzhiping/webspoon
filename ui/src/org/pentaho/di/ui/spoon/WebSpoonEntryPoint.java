@@ -31,6 +31,9 @@ import org.eclipse.rap.rwt.application.AbstractEntryPoint;
 import org.eclipse.rap.rwt.client.service.ExitConfirmation;
 import org.eclipse.rap.rwt.client.service.StartupParameters;
 import org.eclipse.swt.widgets.Composite;
+import org.pentaho.di.core.Const;
+import org.pentaho.di.core.KettleClientEnvironment;
+import org.pentaho.di.core.LastUsedFile;
 import org.pentaho.di.core.Props;
 import org.pentaho.di.core.extension.ExtensionPointHandler;
 import org.pentaho.di.core.extension.KettleExtensionPoint;
@@ -42,6 +45,12 @@ public class WebSpoonEntryPoint extends AbstractEntryPoint {
 
   @Override
   protected void createContents( Composite parent ) {
+    /*
+     *  Create a KettleHome for the current user.
+     *  kettle.properties is automatically created for this user, but not used.
+     *  Currently, only .spoonrc is aware of multiple users.
+     */
+    KettleClientEnvironment.createKettleUserHome();
     /*
      *  The following lines were migrated from Spoon.main
      *  because they are session specific.
@@ -68,6 +77,19 @@ public class WebSpoonEntryPoint extends AbstractEntryPoint {
       ExtensionPointHandler.callExtensionPoint( Spoon.getInstance().getLog(), KettleExtensionPoint.SpoonStart.id, commandLineArgs );
     } catch ( Throwable e ) {
       LogChannel.GENERAL.logError( "Error calling extension points", e );
+    }
+
+    // Load last used files
+    Spoon.getInstance().loadLastUsedFiles();
+
+    // For VFS browser set the last open file if exists, otherwise set the user data directory
+    Spoon.getInstance().setLastFileOpened( Const.getKettleUserDataDirectory() );
+    List<LastUsedFile> lastUsedFiles = Spoon.getInstance().getProperties().getOpenTabFiles();
+    if ( lastUsedFiles.size() != 0 ) {
+      LastUsedFile lastUsedFile = lastUsedFiles.get( lastUsedFiles.size() - 1 );
+      if ( !lastUsedFile.isSourceRepository() ) {
+        Spoon.getInstance().setLastFileOpened( lastUsedFile.getFilename() );
+      }
     }
 
     /*

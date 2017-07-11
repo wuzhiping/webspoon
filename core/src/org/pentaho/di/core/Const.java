@@ -26,6 +26,7 @@ package org.pentaho.di.core;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.text.StrBuilder;
+import org.eclipse.rap.rwt.RWT;
 import org.pentaho.di.core.exception.KettleException;
 import org.pentaho.di.core.row.ValueMetaInterface;
 import org.pentaho.di.core.util.EnvUtil;
@@ -1904,6 +1905,39 @@ public class Const {
   }
 
   /**
+   * Determines the Kettle absolute directory in the user's home directory.
+   * This is per user-basis.
+   *
+   * @return The Kettle absolute directory.
+   */
+  public static String getKettleUserDirectory() {
+    try {
+      if ( RWT.getRequest().getRemoteUser() == null ) { // when no user authentication is used
+        return getKettleDirectory();
+      } else { // when a user is authenticated
+        return getUserHomeDirectory() + FILE_SEPARATOR + getUserBaseDir() + FILE_SEPARATOR + "users" + FILE_SEPARATOR + RWT.getRequest().getRemoteUser();
+      }
+    } catch ( IllegalStateException e ) {
+      if ( e.getMessage().equals( "Invalid thread access" ) ) { // when the webSpoon server is starting
+        return getKettleDirectory();
+      } else {
+        e.printStackTrace();
+        return getKettleDirectory();
+      }
+    }
+  }
+
+  /**
+   * Determines the Kettle user data directory in the user's home directory.
+   * This is per user-basis.
+   *
+   * @return The Kettle user data directory.
+   */
+  public static String getKettleUserDataDirectory() {
+    return getKettleUserDirectory() + Const.FILE_SEPARATOR + "data";
+  }
+
+  /**
    * Determines the Kettle directory in the user's home directory.
    *
    * @return The Kettle directory.
@@ -1925,7 +1959,7 @@ public class Const {
    * @return the name of the shared objects file
    */
   public static String getSharedObjectsFile() {
-    return getKettleDirectory() + FILE_SEPARATOR + SHARED_DATA_FILE;
+    return getKettleUserDirectory() + FILE_SEPARATOR + SHARED_DATA_FILE;
   }
 
   /**

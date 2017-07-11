@@ -6966,6 +6966,7 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
         disableMenuItem( doc, "edit-clear-selection", disableTransMenu && disableJobMenu );
         disableMenuItem( doc, "edit-select-all", disableTransMenu && disableJobMenu );
         updateSettingsMenu( doc, disableTransMenu, disableJobMenu );
+        disableMenuItem( doc, "edit-kettle-properties", true );
         disableMenuItem( doc, "edit-settings", disableTransMenu && disableJobMenu && disableMetaMenu );
 
         // View Menu
@@ -7973,7 +7974,7 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
     }
   }
 
-  private void loadLastUsedFiles() {
+  public void loadLastUsedFiles() {
     if ( props.openLastFile() ) {
       if ( log.isDetailed() ) {
         // "Trying to open the last file used."

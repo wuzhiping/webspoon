@@ -259,6 +259,8 @@ Build and locally publish `kettle-ui-swt-7.1.0.0-12-X.jar`, which will be copied
 $ git clone -b webspoon-7.1 https://github.com/HiromuHota/pentaho-kettle.git
 $ cd pentaho-kettle/ui/
 $ ant clean-all resolve publish-local
+$ cd ../core
+$ ant clean-all resolve publish-local
 ```
 
 Change directory and build a war file.

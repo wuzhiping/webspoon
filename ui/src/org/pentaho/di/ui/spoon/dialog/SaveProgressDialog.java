@@ -27,6 +27,7 @@ import java.lang.reflect.InvocationTargetException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.pentaho.di.core.EngineMetaInterface;
 import org.pentaho.di.core.ProgressMonitorAdapter;
@@ -64,15 +65,18 @@ public class SaveProgressDialog {
   public boolean open() {
     boolean retval = true;
 
+    Display display = Display.getCurrent();
     IRunnableWithProgress op = new IRunnableWithProgress() {
-      public void run( IProgressMonitor monitor ) throws InvocationTargetException, InterruptedException {
-        try {
-          rep.save( meta, versionComment, new ProgressMonitorAdapter( monitor ) );
-        } catch ( KettleException e ) {
-          throw new InvocationTargetException( e, BaseMessages.getString(
-            PKG, "TransSaveProgressDialog.Exception.ErrorSavingTransformation" )
-            + e.toString() );
-        }
+      public void run( IProgressMonitor monitor ) {
+        display.asyncExec( () -> {
+          try {
+            rep.save( meta, versionComment, new ProgressMonitorAdapter( monitor ) );
+          } catch ( KettleException e ) {
+            new ErrorDialog( shell,
+                BaseMessages.getString( PKG, "TransSaveProgressDialog.ErrorSavingTransformation.DialogTitle" ),
+                BaseMessages.getString( PKG, "TransSaveProgressDialog.ErrorSavingTransformation.DialogMessage" ), e );
+          }
+        } );
       }
     };
 

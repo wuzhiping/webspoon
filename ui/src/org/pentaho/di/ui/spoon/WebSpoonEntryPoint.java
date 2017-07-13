@@ -95,8 +95,10 @@ public class WebSpoonEntryPoint extends AbstractEntryPoint {
     /*
      *  The following lines are webSpoon additional functions
      */
-    ExitConfirmation serviceConfirm = RWT.getClient().getService( ExitConfirmation.class );
-    serviceConfirm.setMessage( "Do you really wanna leave this site?" );
+    if ( Spoon.getInstance().getProperties().showExitWarning() ) {
+      ExitConfirmation serviceConfirm = RWT.getClient().getService( ExitConfirmation.class );
+      serviceConfirm.setMessage( "Do you really wanna leave this site?" );
+    }
   }
 
 }

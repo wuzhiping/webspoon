@@ -6921,6 +6921,7 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
       disableSave = !meta.canSave();
       disableDatabaseExplore = false;
     }
+    boolean isMultiUser = Const.getUser() != null;
 
     org.pentaho.ui.xul.dom.Document doc;
     if ( mainSpoonContainer != null ) {
@@ -6966,7 +6967,7 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
         disableMenuItem( doc, "edit-clear-selection", disableTransMenu && disableJobMenu );
         disableMenuItem( doc, "edit-select-all", disableTransMenu && disableJobMenu );
         updateSettingsMenu( doc, disableTransMenu, disableJobMenu );
-        disableMenuItem( doc, "edit-kettle-properties", true );
+        disableMenuItem( doc, "edit-kettle-properties", isMultiUser );
         disableMenuItem( doc, "edit-settings", disableTransMenu && disableJobMenu && disableMetaMenu );
 
         // View Menu
@@ -7000,6 +7001,8 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
         disableMenuItem( doc, "wizard-connection", disableTransMenu && disableJobMenu );
         disableMenuItem( doc, "wizard-copy-table", disableTransMenu && disableJobMenu );
         disableMenuItem( doc, "wizard-copy-tables", isRepositoryRunning && disableTransMenu && disableJobMenu );
+
+        disableMenuItem( doc, "capability-manager", isMultiUser );
 
         disableMenuItem( doc, "database-inst-dependancy", !isRepositoryRunning );
 

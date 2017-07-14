@@ -79,18 +79,11 @@ public class WebSpoonEntryPoint extends AbstractEntryPoint {
       LogChannel.GENERAL.logError( "Error calling extension points", e );
     }
 
+    // For VFS browser, set the user data directory. This will be overwritten by the last open file if exists.
+    Spoon.getInstance().setLastFileOpened( Const.getKettleUserDataDirectory() );
+
     // Load last used files
     Spoon.getInstance().loadLastUsedFiles();
-
-    // For VFS browser set the last open file if exists, otherwise set the user data directory
-    Spoon.getInstance().setLastFileOpened( Const.getKettleUserDataDirectory() );
-    List<LastUsedFile> lastUsedFiles = Spoon.getInstance().getProperties().getOpenTabFiles();
-    if ( lastUsedFiles.size() != 0 ) {
-      LastUsedFile lastUsedFile = lastUsedFiles.get( lastUsedFiles.size() - 1 );
-      if ( !lastUsedFile.isSourceRepository() ) {
-        Spoon.getInstance().setLastFileOpened( lastUsedFile.getFilename() );
-      }
-    }
 
     /*
      *  The following lines are webSpoon additional functions

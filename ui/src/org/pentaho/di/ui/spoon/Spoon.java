@@ -7989,6 +7989,7 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
             || lastUsedFile.isSourceRepository() && rep != null
             && rep.getName().equals( lastUsedFile.getRepositoryName() ) ) {
             loadLastUsedFile( lastUsedFile, rep == null ? null : rep.getName(), false );
+            setLastFileOpened( lastUsedFile.getFilename() );
           }
         } catch ( Exception e ) {
           hideSplash();

@@ -153,7 +153,7 @@ If not defined, the following folders are used:
 
 Some of the plugins are not compatible with webSpoon.
 Please replace jar files with patched ones and delete the Karaf cache directory if necessary.
-The patched jar files are [pdi-platform-utils-plugin](https://github.com/HiromuHota/pdi-platform-utils-plugin/releases), [big-data-plugin](https://github.com/HiromuHota/big-data-plugin/releases), [repositories-plugin](https://github.com/HiromuHota/pentaho-kettle/releases), and [pdi-engine-configuration](https://github.com/HiromuHota/pentaho-kettle/releases).
+The patched jar files are [pdi-platform-utils-plugin](https://github.com/HiromuHota/pdi-platform-utils-plugin/releases), [big-data-plugin](https://github.com/HiromuHota/big-data-plugin/releases), [repositories-plugin](https://github.com/HiromuHota/pentaho-kettle/releases), [pdi-engine-configuration](https://github.com/HiromuHota/pentaho-kettle/releases), and [pdi-dataservice-server-plugin](https://github.com/HiromuHota/pdi-dataservice-server-plugin/releases).
 
 ```
 $ cp ${path_to_lib}/pdi-platform-utils-plugin-7.1.0.0-12.jar plugins/platform-utils-plugin/
@@ -161,6 +161,7 @@ $ cp ${path_to_lib}/pentaho-big-data-legacy-7.1.0.0-12.jar plugins/pentaho-big-d
 $ cp ${path_to_lib}/pentaho-big-data-kettle-plugins-common-ui-7.1.0.0-12.jar system/karaf/system/pentaho/pentaho-big-data-kettle-plugins-common-ui/7.1.0.0-12/
 $ cp ${path_to_lib}/repositories-plugin-core-7.1.0.0-12.jar system/karaf/system/org/pentaho/repositories-plugin-core/7.1.0.0-12/
 $ cp ${path_to_lib}/pdi-engine-configuration-ui-7.1.0.0-12.jar system/karaf/system/org/pentaho/pdi-engine-configuration-ui/7.1.0.0-12/
+$ cp ${path_to_lib}/pdi-dataservice-server-plugin-7.1.0.0-12.jar system/karaf/system/pentaho/pdi-dataservice-server-plugin/7.1.0.0-12/
 $ rm -rf system/karaf/caches/webspoonservletcontextlistener
 ```
 

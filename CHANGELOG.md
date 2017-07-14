@@ -1,5 +1,20 @@
 # Change Log
 
+## 0.7.1.11 - 2017-07-14
+
+### Changed
+- More multi-user friendly by assigning `.kettle` and `.pentaho/metastore` to each user
+- VfsFileChooserDialog for FileDialog
+- Move OSGi HTTP service to /osgi (to align with Pentaho Server)
+- Move ui/* from WEB-INF/classes/ui/ to the inside of kettle-ui-swt-XXX.jar
+- Create webSpoon\_OSS\_Licenses.html for webSpoon-specific OSS
+- ShowExitWarning=Y by default and respect the property
+- Disable the capability manager and kettle.properties editor when used by multi-user
+
+### Fixed
+- Metrics tabs in Test Data Service dialog
+- PDI-14492: Copy Table Wizard_UI Issue
+
 ## 0.7.1.10 - 2017-06-14
 
 ### Changed

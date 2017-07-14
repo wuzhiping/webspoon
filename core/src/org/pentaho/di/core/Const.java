@@ -1884,6 +1884,13 @@ public class Const {
     }
   }
 
+  public static String getUser() {
+    try {
+      return RWT.getRequest().getRemoteUser();
+    } catch ( Exception e ) { // when accessed from background threads (e.g., when the webSpoon server is starting)
+      return null;
+    }
+  }
   /**
    * Looks up the user's home directory (or KETTLE_HOME) for every invocation. This is no longer a static property so
    * the value may be set after this class is loaded.
@@ -1911,20 +1918,12 @@ public class Const {
    * @return The Kettle absolute directory.
    */
   public static String getKettleUserDirectory() {
-    try {
-      if ( RWT.getRequest().getRemoteUser() == null ) { // when no user authentication is used
-        return getKettleDirectory();
-      } else { // when a user is authenticated
-        return getUserHomeDirectory() + FILE_SEPARATOR + getUserBaseDir() + FILE_SEPARATOR + "users" + FILE_SEPARATOR + RWT.getRequest().getRemoteUser();
-      }
-    } catch ( IllegalStateException e ) {
-      if ( e.getMessage().equals( "Invalid thread access" ) ) { // when the webSpoon server is starting
-        return getKettleDirectory();
-      } else {
-        e.printStackTrace();
-        return getKettleDirectory();
-      }
+    String path = getKettleDirectory();
+    String user = getUser();
+    if ( user != null ) {
+      path += FILE_SEPARATOR + "users" + FILE_SEPARATOR + user;
     }
+    return path;
   }
 
   /**

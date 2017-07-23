@@ -5440,7 +5440,25 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
   }
 
   public boolean exportXMLFile() {
-    return saveXMLFile( true );
+    EngineMetaInterface meta = getActiveMeta();
+    if ( meta != null ) {
+      File file = null;
+      try {
+        file = File.createTempFile( "export_", "." + meta.getDefaultExtension() );
+        file.delete();
+      } catch ( IOException e ) {
+        e.printStackTrace();
+      }
+      String filename = file.getAbsolutePath();
+      save( meta, filename, true );
+      StringBuilder url = new StringBuilder();
+      url.append( RWT.getServiceManager().getServiceHandlerUrl( "downloadServiceHandler" ) );
+      url.append( '&' ).append( "filename" ).append( '=' ).append( filename );
+      UrlLauncher launcher = RWT.getClient().getService( UrlLauncher.class );
+      launcher.openURL( url.toString() );
+      return true;
+    }
+    return false;
   }
 
   /**
@@ -5785,16 +5803,15 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
     String beforeFilename = meta.getFilename();
     String beforeName = meta.getName();
 
+    FileDialog dialog = new FileDialog( shell, SWT.SAVE );
     String[] extensions = meta.getFilterExtensions();
-    File file = null;
-    try {
-      file = File.createTempFile( "export_", "" );
-      file.delete();
-    } catch ( IOException e ) {
-      e.printStackTrace();
-    }
-    String filename = file.getAbsolutePath();
+    dialog.setFilterExtensions( extensions );
+    dialog.setFilterNames( meta.getFilterNames() );
+    setFilterPath( dialog );
+    String filename = dialog.open();
     if ( filename != null ) {
+      lastDirOpened = dialog.getFilterPath();
+
       // Is the filename ending on .ktr, .xml?
       boolean ending = false;
       for ( int i = 0; i < extensions.length - 1; i++ ) {
@@ -5849,13 +5866,6 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
         if ( !saved ) {
           meta.setFilename( beforeFilename );
           meta.setName( beforeName );
-        } else {
-          StringBuilder url = new StringBuilder();
-          url.append( RWT.getServiceManager().getServiceHandlerUrl( "downloadServiceHandler" ) );
-          url.append( '&' ).append( "filename" ).append( '=' ).append( filename );
-          UrlLauncher launcher = RWT.getClient().getService( UrlLauncher.class );
-          launcher.openURL( url.toString() );
-          file.delete();
         }
       }
     }
@@ -6940,14 +6950,12 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
         // Only enable certain menu-items if we need to.
         disableMenuItem( doc, "file-new-database", disableTransMenu && disableJobMenu );
         disableMenuItem( doc, "menubar-new-database", disableTransMenu && disableJobMenu );
-        disableMenuItem( doc, "file-open", !isRepositoryRunning );
-        disableMenuItem( doc, "toolbar-file-open", !isRepositoryRunning );
-        disableMenuItem( doc, "file-save", disableTransMenu && disableJobMenu && disableMetaMenu || disableSave || !isRepositoryRunning );
+        disableMenuItem( doc, "file-save", disableTransMenu && disableJobMenu && disableMetaMenu || disableSave );
         disableMenuItem( doc, "toolbar-file-save", disableTransMenu
-          && disableJobMenu && disableMetaMenu || disableSave || !isRepositoryRunning );
-        disableMenuItem( doc, "file-save-as", disableTransMenu && disableJobMenu && disableMetaMenu || disableSave || !isRepositoryRunning );
+          && disableJobMenu && disableMetaMenu || disableSave );
+        disableMenuItem( doc, "file-save-as", disableTransMenu && disableJobMenu && disableMetaMenu || disableSave );
         disableMenuItem( doc, "toolbar-file-save-as", disableTransMenu
-          && disableJobMenu && disableMetaMenu || disableSave || !isRepositoryRunning );
+          && disableJobMenu && disableMetaMenu || disableSave );
         disableMenuItem( doc, "file-save-as-vfs", disableTransMenu && disableJobMenu && disableMetaMenu );
         disableMenuItem( doc, "file-close", disableTransMenu && disableJobMenu && disableMetaMenu );
         disableMenuItem( doc, "file-print", disableTransMenu && disableJobMenu || true );

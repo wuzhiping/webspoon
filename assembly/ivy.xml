@@ -258,6 +258,9 @@
     <!-- A reverse proxy for the repository plugin -->
     <dependency org="org.mitre.dsmiley.httpproxy" name="smiley-http-proxy-servlet" rev="1.8"/>
 
+    <!-- xalan should be 2.7.1+ -->
+    <dependency org="xalan" name="xalan" rev="2.7.2"/>
+
     <exclude org="javax.servlet"/>
     <exclude org="org.osgi" module="org.osgi.core"/>
     <exclude module="jface"/>

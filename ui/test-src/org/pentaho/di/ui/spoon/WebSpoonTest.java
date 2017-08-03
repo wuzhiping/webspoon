@@ -118,12 +118,12 @@ public class WebSpoonTest {
   @Test
   public void testOpenSaveMenus() throws Exception {
     clickElement( "//div[text() = 'File']" );
-    assertTrue( isMenuItemDisabled( "//div[text() = 'Open...']" ) );
+    assertFalse( isMenuItemDisabled( "//div[text() = 'Open...']" ) );
     clickElement( "//div[text() = 'File']" ); // Close the menu
 
     createNewTrans();
     clickElement( "//div[text() = 'File']" );
-    assertTrue( isMenuItemDisabled( "//div[text() = 'Save']" ) );
+    assertFalse( isMenuItemDisabled( "//div[text() = 'Save']" ) );
     assertFalse( isMenuItemDisabled( "//div[text() = 'Save as (VFS)...']" ) );
   }
 

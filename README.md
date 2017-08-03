@@ -165,6 +165,14 @@ $ cp ${path_to_lib}/pdi-dataservice-server-plugin-7.1.0.0-12.jar system/karaf/sy
 $ rm -rf system/karaf/caches/webspoonservletcontextlistener
 ```
 
+For 0.7.1.12+, create a new file at `system/karaf/etc/org.pentaho.requirejs.cfg`
+
+```
+context.root=/spoon/osgi
+```
+
+When webSpoon is deployed to a different context path than `/spoon`, context.root should be changed accordingly: `context.root=/pentaho/osgi` for `/pentaho`, `context.root=/osgi` for `/` (ROOT).
+
 ## JDBC drivers
 
 Place jar files into either one of the following folders:

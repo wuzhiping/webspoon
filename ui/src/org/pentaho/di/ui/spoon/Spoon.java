@@ -5418,7 +5418,7 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
       saved = saveToRepository( meta, true );
 
     } else {
-      saved = saveXMLFile( meta, false );
+      saved = saveXMLFileToVfs( meta );
     }
 
     delegates.tabs.renameTabs(); // filename or name of transformation might

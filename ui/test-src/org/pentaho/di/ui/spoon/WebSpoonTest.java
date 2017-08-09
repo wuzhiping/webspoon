@@ -176,6 +176,23 @@ public class WebSpoonTest {
     assertEquals( 1, driver.findElements( By.xpath( "//div[text() = 'Duplicate']" ) ).size() );
   }
 
+  /**
+   * Test if the repository dialog is loaded.
+   * @throws Exception
+   */
+  @Test
+  public void testConnect() throws Exception {
+    clickElement( "//div[text() = 'Connect']" );
+    // if any repository is already registered
+    if ( driver.findElements( By.xpath( "//div[text() = 'Repository Manager...']" ) ).size() == 1 ) {
+      clickElement( "//div[text() = 'Repository Manager...']" );
+      driver.switchTo().frame( driver.findElement( By.xpath(".//iframe[@src='/spoon/osgi/repositories/web/index.html#repository-manager']") ) );
+    } else {
+      driver.switchTo().frame( driver.findElement( By.xpath(".//iframe[@src='/spoon/osgi/repositories/web/index.html']") ) );
+    }
+    assertEquals( 1, driver.findElements( By.xpath( "//button[@id = 'btnClose']" ) ).size() );
+  }
+
   private void createNewTrans() {
     // Create a new transformation
     clickElement( "//div[text() = 'File']" );

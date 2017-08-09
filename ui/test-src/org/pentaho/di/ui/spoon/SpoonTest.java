@@ -547,6 +547,7 @@ public class SpoonTest {
         true, "Invalid TYPE", null, true, true );
 
     doCallRealMethod().when( spoon ).saveFileAs( mockJobMeta );
+    doReturn( true ).when( spoon ).saveXMLFileToVfs( mockJobMeta );
     assertTrue( spoon.saveFileAs( mockJobMeta ) );
     verify( mockJobMeta ).setRepository( spoon.rep );
     verify( mockJobMeta ).setMetaStore( spoon.metaStore );
@@ -619,6 +620,7 @@ public class SpoonTest {
         true, "Invalid TYPE", null, true, true );
 
     doCallRealMethod().when( spoon ).saveFileAs( mockTransMeta );
+    doReturn( true ).when( spoon ).saveXMLFileToVfs( mockTransMeta );
     assertTrue( spoon.saveFileAs( mockTransMeta ) );
     verify( mockTransMeta ).setRepository( spoon.rep );
     verify( mockTransMeta ).setMetaStore( spoon.metaStore );

@@ -54,7 +54,7 @@ Please refer to the [wiki](https://github.com/HiromuHota/pentaho-kettle/wiki/Sys
 
 1. Download the latest `spoon.war` from [here](https://github.com/HiromuHota/pentaho-kettle/releases).
 2. Copy the downloaded `spoon.war` to `tomcat/webapps/spoon.war`.
-3. (Optional) download and unzip `pdi-ce-7.1.0.0-12.zip`, then copy the `system` and `plugins` folders to `tomcat/system` and `tomcat/plugins`, respectively.
+3. (Optional) download and unzip `pdi-ce-7.1.0.0-12.zip`, then copy the `system` and `plugins` folders to `tomcat/system` and `tomcat/plugins`, respectively. Replace some plugins with patched ones as described below.
 4. (Optional) configure Apache Karaf as below.
 5. (Re)start the Tomcat.
 6. Access `http://address:8080/spoon/spoon`
@@ -116,8 +116,8 @@ Thus, it would also be possible to use Microsoft Active Directory as described i
 
 ### Repository
 
-It is strongly recommended to use webSpoon with a Repository (can be Pentaho Repository, Kettle Database Repository, or Kettle File Repository), otherwise opening/saving files does not function as you would expect.
-The steps to connect to a Repository is described [here](https://help.pentaho.com/Documentation/6.1/0J0/0C0/015) and [here](https://help.pentaho.com/Documentation/6.1/0L0/0Y0/040).
+When webSpoon serves multiple users, it is recommended not to store Kettle files to the local file system, but to either Pentaho Repository or Kettle Database Repository because a user can see the Kettle files locally stored by another user.
+The steps to connect to a Repository is described [here](https://help.pentaho.com/Documentation/7.1/0L0/0Y0/040).
 
 One can also automatically login to a repository by setting environment variables.
 The details are described [here](http://wiki.pentaho.com/display/EAI/.01+Introduction+to+Spoon#.01IntroductiontoSpoon-Repository).

@@ -62,11 +62,11 @@ public class WebSpoonTest {
     driver.manage().timeouts().implicitlyWait( 5, TimeUnit.SECONDS );
 
     // Login with username and password
-    if ( driver.findElements( By.xpath( "//input[@name = 'username']" ) ).size() != 0 ) {
-      driver.findElement( By.xpath( "//input[@name = 'username']" ) ).sendKeys( "user" );
-      driver.findElement( By.xpath( "//input[@name = 'password']" ) ).sendKeys( "password" );
-      clickElement( "//input[@name = 'submit']" );
-    }
+//    if ( driver.findElements( By.xpath( "//input[@name = 'username']" ) ).size() != 0 ) {
+//      driver.findElement( By.xpath( "//input[@name = 'username']" ) ).sendKeys( "user" );
+//      driver.findElement( By.xpath( "//input[@name = 'password']" ) ).sendKeys( "password" );
+//      clickElement( "//input[@name = 'submit']" );
+//    }
   }
 
   @Test

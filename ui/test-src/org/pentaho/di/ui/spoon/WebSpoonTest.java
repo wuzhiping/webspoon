@@ -193,6 +193,17 @@ public class WebSpoonTest {
     assertEquals( 1, driver.findElements( By.xpath( "//button[@id = 'btnClose']" ) ).size() );
   }
 
+  /**
+   * Test if the marketplace can be loaded.
+   */
+  @Test
+  public void testMarketplace() {
+    clickElement( "//div[text() = 'Tools']" );
+    clickElement( "//div[text() = 'Marketplace']" );
+    driver.switchTo().frame( driver.findElement( By.xpath(".//iframe[@src='osgi/pentaho-marketplace/7.1.0.0-12/main.html']") ) );
+    assertEquals( 1, driver.findElements( By.xpath( "//div[text() = ' Available ']" ) ).size() );
+  }
+
   private void createNewTrans() {
     // Create a new transformation
     clickElement( "//div[text() = 'File']" );

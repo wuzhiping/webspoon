@@ -69,16 +69,14 @@ public class WebSpoonTest {
   }
 
   @Test
-  public void testAppLoading() throws Exception {
+  public void testAppLoading() {
     assertEquals( driver.getTitle(), "Spoon" );
   }
 
   @Test
-  public void testNewTransformation() throws Exception {
+  public void testNewTransformation() {
     // Create a new transformation
-    clickElement( "//div[text() = 'File']" );
-    clickElement( "//div[text() = 'New']" );
-    clickElement( "//div[text() = 'Transformation']" );
+    createNewTrans();
 
     // Drag & drop a step
     clickElement( "//div[text() = 'Input']" );
@@ -97,25 +95,26 @@ public class WebSpoonTest {
    * testModifiedJavaScriptValue1 and 2 collectively demonstrate multi-session use.
    */
   @Test
-  public void testModifiedJavaScriptValue1() throws Exception {
+  public void testModifiedJavaScriptValue1() {
     testModifiedJavaScriptValue();
   }
 
   @Test
-  public void testModifiedJavaScriptValue2() throws Exception {
+  public void testModifiedJavaScriptValue2() {
     testModifiedJavaScriptValue();
   }
 
-  private void testModifiedJavaScriptValue() throws Exception {
+  private void testModifiedJavaScriptValue() {
     createNewTrans();
     drawStep( "Modified Java Script Value" );
     openDialog( "Modified Java Script Value" );
+    wait.until( ExpectedConditions.presenceOfElementLocated( By.xpath( "//div[text() = 'Script Values / Mod']" ) ) );
 
     assertEquals( 1, driver.findElements( By.xpath( "//div[text() = 'Script Values / Mod']" ) ).size() );
   }
 
   @Test
-  public void testOpenSaveMenus() throws Exception {
+  public void testOpenSaveMenus() {
     clickElement( "//div[text() = 'File']" );
     assertFalse( isMenuItemDisabled( "//div[text() = 'Open...']" ) );
     clickElement( "//div[text() = 'File']" ); // Close the menu
@@ -129,9 +128,7 @@ public class WebSpoonTest {
   @Test
   public void testDatabaseConnectionDialog() throws Exception {
     // Create a new transformation
-    clickElement( "//div[text() = 'File']" );
-    clickElement( "//div[text() = 'New']" );
-    clickElement( "//div[text() = 'Transformation']" );
+    createNewTrans();
 
     // Filter a step
     driver.findElement( By.xpath( "//input[@test-id = 'selectionFilter']" ) ).sendKeys( "table" );
@@ -148,19 +145,20 @@ public class WebSpoonTest {
      * Cancel button does not become clickable unless thread.sleep and window.setSize.
      * The wait duration might depend on an environment.
      */
-    clickElement( "//div[text() = 'Edit...']" );
+    clickElement( "//div[text() = 'New...']" );
     Thread.sleep( 1000 );
-    clickElement( "//div[text() = 'OK']" );
+    // Close the "Database Connection" dialog
+    clickElement( "//div[text() = 'Database Connection']/../div[@tabindex = '0']" );
     Thread.sleep( 1000 );
-    clickElement( "//div[text() = 'Edit...']" );
+    clickElement( "//div[text() = 'New...']" );
     Thread.sleep( 1000 );
-    clickElement( "//div[text() = 'OK']" );
+    clickElement( "//div[text() = 'Database Connection']/../div[@tabindex = '0']" );
     Thread.sleep( 1000 );
-    assertEquals( "5", driver.switchTo().activeElement().getAttribute( "tabindex" ) );
+    assertEquals( "4", driver.switchTo().activeElement().getAttribute( "tabindex" ) );
   }
 
   @Test
-  public void testContextMenu() throws Exception {
+  public void testContextMenu() {
     // Create a new transformation
     createNewTrans();
     drawStep( "Table input" );
@@ -180,7 +178,7 @@ public class WebSpoonTest {
    * @throws Exception
    */
   @Test
-  public void testConnect() throws Exception {
+  public void testConnect() {
     clickElement( "//div[text() = 'Connect']" );
     // if any repository is already registered
     if ( driver.findElements( By.xpath( "//div[text() = 'Repository Manager...']" ) ).size() == 1 ) {
@@ -204,43 +202,30 @@ public class WebSpoonTest {
   }
 
   /**
-   * Test if RunConfigurationPopupMenu is multi-session enabled
-   * So testRunConfigurationPopupMenu() should succeed twice.
+   * Test if multi-session is enabled
    */
   @Test
-  public void testRunConfigurationPopupMenu1() {
+  public void testFirstSession() {
+    createNewTrans();
     testRunConfigurationPopupMenu();
+    testHadoopClusterPopupMenu();
   }
 
   @Test
-  public void testRunConfigurationPopupMenu2() {
+  public void testSecondSession() {
+    createNewTrans();
     testRunConfigurationPopupMenu();
+    testHadoopClusterPopupMenu();
   }
 
   private void testRunConfigurationPopupMenu() {
-    createNewTrans();
     // Click View
     clickElement( "//div[@test-id = 'tree_exploreSolution']" );
     rightClickElement( "//div[text() = 'Run configurations']" );
     assertEquals( 1, driver.findElements( By.xpath( "//div[text() = 'New...' and not(contains(@style,'visibility: hidden'))]" ) ).size() );
   }
 
-  /**
-   * Test if the Hadoop cluster popupmenu is multi-session enabled
-   * So testHadoopClusterPopupMenu() should succeed twice.
-   */
-  @Test
-  public void testHadoopClusterPopupMenu1() {
-    testHadoopClusterPopupMenu();
-  }
-
-  @Test
-  public void testHadoopClusterPopupMenu2() {
-    testHadoopClusterPopupMenu();
-  }
-
   private void testHadoopClusterPopupMenu() {
-    createNewTrans();
     // Click View
     clickElement( "//div[@test-id = 'tree_exploreSolution']" );
     rightClickElement( "//div[text() = 'Hadoop clusters']" );
@@ -255,7 +240,7 @@ public class WebSpoonTest {
     wait.until( ExpectedConditions.presenceOfElementLocated( By.xpath( "//div[text() = 'Transformation 1']" ) ) );
   }
 
-  private void drawStep( String stepName ) throws InterruptedException {
+  private void drawStep( String stepName ) {
     // Filter a step
     element = wait.until( ExpectedConditions.visibilityOfElementLocated( By.xpath( "//input[@test-id = 'selectionFilter']" ) ) );
     element.sendKeys( stepName );
@@ -291,12 +276,12 @@ public class WebSpoonTest {
      *  Determine if a menu item is grayed out (=disabled)
      *  ExpectedConditions.elementToBeClickable does not work here because it is clickable.
      */
-    String color = driver.findElement( By.xpath( xpath ) ).getCssValue("color");
+    String color = driver.findElement( By.xpath( xpath ) ).getCssValue( "color" );
     return color.equals( "rgba(189, 189, 189, 1)" );
   }
 
   @After
-  public void tearDown() throws Exception {
+  public void tearDown() {
     driver.quit();
   }
 }

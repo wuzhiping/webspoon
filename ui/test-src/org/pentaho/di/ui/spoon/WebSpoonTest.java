@@ -30,7 +30,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -99,15 +98,15 @@ public class WebSpoonTest {
    */
   @Test
   public void testModifiedJavaScriptValue1() throws Exception {
-    createNewTrans();
-    drawStep( "Modified Java Script Value" );
-    openDialog( "Modified Java Script Value" );
-
-    assertEquals( 1, driver.findElements( By.xpath( "//div[text() = 'Script Values / Mod']" ) ).size() );
+    testModifiedJavaScriptValue();
   }
 
   @Test
   public void testModifiedJavaScriptValue2() throws Exception {
+    testModifiedJavaScriptValue();
+  }
+
+  private void testModifiedJavaScriptValue() throws Exception {
     createNewTrans();
     drawStep( "Modified Java Script Value" );
     openDialog( "Modified Java Script Value" );
@@ -202,6 +201,50 @@ public class WebSpoonTest {
     clickElement( "//div[text() = 'Marketplace']" );
     driver.switchTo().frame( driver.findElement( By.xpath(".//iframe[@src='osgi/pentaho-marketplace/7.1.0.0-12/main.html']") ) );
     assertEquals( 1, driver.findElements( By.xpath( "//div[text() = ' Available ']" ) ).size() );
+  }
+
+  /**
+   * Test if RunConfigurationPopupMenu is multi-session enabled
+   * So testRunConfigurationPopupMenu() should succeed twice.
+   */
+  @Test
+  public void testRunConfigurationPopupMenu1() {
+    testRunConfigurationPopupMenu();
+  }
+
+  @Test
+  public void testRunConfigurationPopupMenu2() {
+    testRunConfigurationPopupMenu();
+  }
+
+  private void testRunConfigurationPopupMenu() {
+    createNewTrans();
+    // Click View
+    clickElement( "//div[@test-id = 'tree_exploreSolution']" );
+    rightClickElement( "//div[text() = 'Run configurations']" );
+    assertEquals( 1, driver.findElements( By.xpath( "//div[text() = 'New...' and not(contains(@style,'visibility: hidden'))]" ) ).size() );
+  }
+
+  /**
+   * Test if the Hadoop cluster popupmenu is multi-session enabled
+   * So testHadoopClusterPopupMenu() should succeed twice.
+   */
+  @Test
+  public void testHadoopClusterPopupMenu1() {
+    testHadoopClusterPopupMenu();
+  }
+
+  @Test
+  public void testHadoopClusterPopupMenu2() {
+    testHadoopClusterPopupMenu();
+  }
+
+  private void testHadoopClusterPopupMenu() {
+    createNewTrans();
+    // Click View
+    clickElement( "//div[@test-id = 'tree_exploreSolution']" );
+    rightClickElement( "//div[text() = 'Hadoop clusters']" );
+    assertEquals( 1, driver.findElements( By.xpath( "//div[text() = 'New Cluster' and not(contains(@style,'visibility: hidden'))]" ) ).size() );
   }
 
   private void createNewTrans() {

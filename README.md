@@ -37,7 +37,7 @@ $ docker run -e JAVA_OPTS="-Xms1024m -Xmx2048m" -d -p 8080:8080 hiromuhota/websp
 The following command gives you webSpoon with all the plugins included in the CE distribution:
 
 ```
-$ docker run -e JAVA_OPTS="-Xms1024m -Xmx2048m" -d -p 8080:8080 -p 9051:9051 hiromuhota/webspoon:latest-full
+$ docker run -e JAVA_OPTS="-Xms1024m -Xmx2048m" -d -p 8080:8080 hiromuhota/webspoon:latest-full
 ```
 
 In either way, access `http://address:8080/spoon/spoon` with a browser.
@@ -126,6 +126,7 @@ The details are described [here](http://wiki.pentaho.com/display/EAI/.01+Introdu
 
 - Firewall / port forward
 
+<del>
 Please make sure that a client can access the OSGI Service Port of the server (e.g., 9051).
 It is known that the marketplace does not work properly when the port is not accessible.
 The port seems to be automatically assigned and sometimes changes, so it is needed to check which port is actually used.
@@ -139,6 +140,10 @@ The port information like below can be found in the Tomcat log: `tomcat/logs/cat
 *** OSGI Service Port:9051                                                  ***
 *******************************************************************************
 ```
+</del>
+
+Up to 0.7.1.11, the firewall / port forward for the OSGI Service (e.g., 9051) was required for the repository dialog (since 0.7.0.8) and the marketplace.
+For 0.7.1.12+, the firewall / port forward is no longer required (related to #72 and #74).
 
 ## Plugins
 
@@ -153,7 +158,7 @@ If not defined, the following folders are used:
 
 Some of the plugins are not compatible with webSpoon.
 Please replace jar files with patched ones and delete the Karaf cache directory if necessary.
-The patched jar files are [pdi-platform-utils-plugin](https://github.com/HiromuHota/pdi-platform-utils-plugin/releases), [big-data-plugin](https://github.com/HiromuHota/big-data-plugin/releases), [repositories-plugin](https://github.com/HiromuHota/pentaho-kettle/releases), [pdi-engine-configuration](https://github.com/HiromuHota/pentaho-kettle/releases), and [pdi-dataservice-server-plugin](https://github.com/HiromuHota/pdi-dataservice-server-plugin/releases).
+The patched jar files are [pdi-platform-utils-plugin](https://github.com/HiromuHota/pdi-platform-utils-plugin/releases), [big-data-plugin](https://github.com/HiromuHota/big-data-plugin/releases), [repositories-plugin](https://github.com/HiromuHota/pentaho-kettle/releases), [pdi-engine-configuration](https://github.com/HiromuHota/pentaho-kettle/releases), [pdi-dataservice-server-plugin](https://github.com/HiromuHota/pdi-dataservice-server-plugin/releases), and [marketplace-di](https://github.com/HiromuHota/marketplace/releases).
 
 ```
 $ cp ${path_to_lib}/pdi-platform-utils-plugin-7.1.0.0-12.jar plugins/platform-utils-plugin/
@@ -162,6 +167,7 @@ $ cp ${path_to_lib}/pentaho-big-data-kettle-plugins-common-ui-7.1.0.0-12.jar sys
 $ cp ${path_to_lib}/repositories-plugin-core-7.1.0.0-12.jar system/karaf/system/org/pentaho/repositories-plugin-core/7.1.0.0-12/
 $ cp ${path_to_lib}/pdi-engine-configuration-ui-7.1.0.0-12.jar system/karaf/system/org/pentaho/pdi-engine-configuration-ui/7.1.0.0-12/
 $ cp ${path_to_lib}/pdi-dataservice-server-plugin-7.1.0.0-12.jar system/karaf/system/pentaho/pdi-dataservice-server-plugin/7.1.0.0-12/
+$ cp ${path_to_lib}/pentaho-marketplace-di-7.1.0.0-12.jar system/karaf/system/org/pentaho/pentaho-marketplace-di/7.1.0.0-12/
 $ rm -rf system/karaf/caches/webspoonservletcontextlistener
 ```
 

@@ -1,5 +1,18 @@
 # Change Log
 
+## 0.7.1.12 - 2017-08-16
+
+### Added
+- Add some more Selenium UI tests to detect regressions caused by version upgrade
+
+### Changed
+- Eable open/save menus even when not connected to a repository
+- Firewall / port forward for the OSGI Service (e.g., 9051) is no longer required
+
+### Fixed
+- Restored the Repository dialog that was missing when deployed to a url other than localhost
+- Upgrade xalan from 2.6.0 to 2.7.2 to resolve the issue that Karaf not starting up when webSpoon deployed in a Docker container
+
 ## 0.7.1.11 - 2017-07-14
 
 ### Changed

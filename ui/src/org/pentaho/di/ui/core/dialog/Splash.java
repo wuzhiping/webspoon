@@ -145,7 +145,7 @@ public class Splash {
         } else {
           fullVersionText =  fullVersionText + " "  + buildVersion;
         }
-        fullVersionText += ", webSpoon (0.7.1.11)";
+        fullVersionText += ", webSpoon (0.7.1.12)";
         e.gc.setFont( verFont );
         e.gc.setForeground( display.getSystemColor( SWT.COLOR_WHITE ) );
         e.gc.drawText( fullVersionText, 290, 205, true );

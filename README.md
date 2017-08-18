@@ -160,6 +160,21 @@ Some of the plugins are not compatible with webSpoon.
 Please replace jar files with patched ones and delete the Karaf cache directory if necessary.
 The patched jar files are [pdi-platform-utils-plugin](https://github.com/HiromuHota/pdi-platform-utils-plugin/releases), [big-data-plugin](https://github.com/HiromuHota/big-data-plugin/releases), [repositories-plugin](https://github.com/HiromuHota/pentaho-kettle/releases), [pdi-engine-configuration](https://github.com/HiromuHota/pentaho-kettle/releases), [pdi-dataservice-server-plugin](https://github.com/HiromuHota/pdi-dataservice-server-plugin/releases), and [marketplace-di](https://github.com/HiromuHota/marketplace/releases).
 
+#### Automatic
+
+Use [install.sh](https://github.com/HiromuHota/webspoon-docker/blob/master/install.sh) as follows unless there is a reason not to.
+
+```
+$ export version=0.7.1.12
+$ export dist=7.1.0.0-12
+$ export CATALINA_HOME=${path_to_catalina_home}
+$ ./install.sh
+```
+
+Even if this script is used, it is still required to manually copy the `system` and `plugins` folders from `pdi-ce-7.1.0.0-12.zip`.
+
+#### Manual
+
 ```
 $ cp ${path_to_lib}/pdi-platform-utils-plugin-7.1.0.0-12.jar plugins/platform-utils-plugin/
 $ cp ${path_to_lib}/pentaho-big-data-legacy-7.1.0.0-12.jar plugins/pentaho-big-data-plugin/

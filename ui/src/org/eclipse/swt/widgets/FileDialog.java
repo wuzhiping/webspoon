@@ -84,7 +84,7 @@ public class FileDialog implements IFileDialog {
       } catch ( FileSystemException e ) {
         e.printStackTrace();
       }
-      filePath = fileName = fileNames[0] = file.getName();
+      filePath = fileName = fileNames[0] = file.getAbsolutePath();
       filterPath = file.getParent();
     }
     return filePath;

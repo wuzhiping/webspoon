@@ -54,7 +54,6 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
-import org.pentaho.di.core.Const;
 import org.pentaho.di.core.variables.VariableSpace;
 import org.pentaho.di.i18n.BaseMessages;
 import org.pentaho.di.ui.core.PropsUI;
@@ -179,7 +178,7 @@ public class StyledTextComp extends Composite {
   }
 
   public int getLineAtOffset( int iOffset ) {
-    return styledText.getText().substring( 0, iOffset ).split( Const.CR ).length;
+    return styledText.getLineAtOffset( iOffset );
   }
 
   public void insert( String strInsert ) {

@@ -80,17 +80,15 @@ define(
         }
         loadingAnimationModel.displayName = this.model.displayName;
         $timeout(function(){
-          repositoriesService.add( $scope.model ).
-          then(function(response) {
+          if (createRepository("PentahoEnterpriseRepository", JSON.stringify($scope.model))) {
             $location.path("/pentaho-repository-creation-success");
-            if($scope.model.isDefault) {
-              setDefaultRepository($scope.model.displayName);
-            }
-            $rootScope.next();
-          }, function (response) {
+          } else {
             $location.path("/pentaho-repository-creation-failure");
-            $rootScope.next();
-          });
+          }
+          if($scope.model.isDefault) {
+            setDefaultRepository($scope.model.displayName);
+          }
+          $rootScope.next();
         },1000);
         $location.path("/loading-animation");
         $rootScope.next();
@@ -168,17 +166,14 @@ define(
             return;
           }
         }
-        repositoriesService.add( $scope.model ).
-        then(function(response) {
+        if (createRepository("KettleFileRepository", JSON.stringify(this.model))) {
           $location.path("/kettle-file-repository-creation-success");
-          if($scope.model.isDefault) {
-            setDefaultRepository($scope.model.displayName);
-          }
-          $rootScope.next();
-        }, function (response) {
+        } else {
           $location.path("/kettle-file-repository-creation-failure");
-          $rootScope.next();
-        });
+        }
+        if($scope.model.isDefault) {
+          setDefaultRepository($scope.model.displayName);
+        }
       }
       $scope.createNewConnection = function() {
         $location.path("/repository-manager");
@@ -262,17 +257,15 @@ define(
         }
         loadingAnimationModel.displayName = this.model.displayName;
         $timeout(function(){
-          repositoriesService.add( $scope.model ).
-          then(function(response) {
+          if (createRepository("KettleDatabaseRepository", JSON.stringify($scope.model))) {
             $location.path("/kettle-database-repository-creation-success");
-            if($scope.model.isDefault) {
-              setDefaultRepository($scope.model.displayName);
-            }
-            $rootScope.next();
-          }, function (response) {
+          } else {
             $location.path("/kettle-database-repository-creation-failure");
-            $rootScope.next();
-          });
+          }
+          if($scope.model.isDefault) {
+            setDefaultRepository($scope.model.displayName);
+          }
+          $rootScope.next();
         },1000);
         $location.path("/loading-animation");
         $rootScope.next();

@@ -31,6 +31,7 @@
     <dependency.eclipse.version>3.6.0</dependency.eclipse.version>
     <dependency.pax-web-spi.version>3.1.4</dependency.pax-web-spi.version>
     <dependency.junit.version>4.11</dependency.junit.version>
+    <dependency.rap.version>3.1.1-SNAPSHOT</dependency.rap.version>
   </properties>
   <dependencies>
     <dependency>
@@ -143,6 +144,12 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
+      <groupId>org.eclipse.rap</groupId>
+      <artifactId>org.eclipse.rap.rwt</artifactId>
+      <version>${dependency.rap.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>pentaho</groupId>
       <artifactId>metastore</artifactId>
       <version>${dependency.pentaho-kettle.version}</version>
@@ -236,6 +243,12 @@
       <groupId>org.eclipse.core</groupId>
       <artifactId>org.eclipse.core.commands</artifactId>
       <version>${dependency.eclipse.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.rap</groupId>
+      <artifactId>org.eclipse.rap.rwt.testfixture</artifactId>
+      <version>${dependency.rap.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

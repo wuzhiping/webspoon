@@ -1976,7 +1976,7 @@ public class Const {
    * @return The Kettle repositories file.
    */
   public static String getKettleUserRepositoriesFile() {
-    return getKettleDirectory() + FILE_SEPARATOR + getKettleLocalRepositoriesFile();
+    return getKettleUserDirectory() + FILE_SEPARATOR + getKettleLocalRepositoriesFile();
   }
 
   /**

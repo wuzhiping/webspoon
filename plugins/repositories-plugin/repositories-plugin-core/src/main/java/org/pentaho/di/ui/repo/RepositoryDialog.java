@@ -22,6 +22,8 @@
 
 package org.pentaho.di.ui.repo;
 
+import java.util.HashMap;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.BrowserFunction;
 import org.eclipse.swt.graphics.Image;
@@ -40,6 +42,8 @@ import org.pentaho.di.ui.core.gui.GUIResource;
 import org.pentaho.di.ui.util.HelpUtils;
 import org.pentaho.platform.settings.ServerPort;
 import org.pentaho.platform.settings.ServerPortRegistry;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Created by bmorrise on 2/21/16.
@@ -141,6 +145,19 @@ public class RepositoryDialog extends ThinDialog {
       @Override public Object function( Object[] objects ) {
         DirectoryDialog directoryDialog = new DirectoryDialog( shell );
         return directoryDialog.open();
+      }
+    };
+
+    new BrowserFunction( browser, "createRepository" ) {
+      @SuppressWarnings( "unchecked" )
+      @Override public Object function( Object[] objects ) {
+        try {
+          return controller.createRepository( (String) objects[ 0 ],
+            new ObjectMapper().readValue( (String) objects[ 1 ], HashMap.class ) );
+        } catch ( Exception e ) {
+          log.logError( "Unable to load repository json object", e );
+        }
+        return false;
       }
     };
 

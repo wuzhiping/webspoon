@@ -446,8 +446,8 @@ public class LibFormulaEditor extends Dialog implements KeyListener {
       }
       // final int offset = expressionEditor.getCaretOffset();
       final int offset = expressionEditor.getCaretOffset();
-      Point p = expressionEditor.getLocation( );
-      int h = expressionEditor.getLineHeight( );
+      Point p = expressionEditor.getLocationAtOffset( offset );
+      int h = expressionEditor.getLineHeight( offset );
       Point l = GUIResource.calculateControlPosition( expressionEditor );
 
       MenuItem first = null;

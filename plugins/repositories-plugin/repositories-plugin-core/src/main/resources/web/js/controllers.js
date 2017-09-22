@@ -133,7 +133,7 @@ define(
       var connectedRepositoryName = getConnectedRepositoryName();
       $rootScope.connectNowVisible = !($rootScope.fromEdit && connectedRepositoryName === kettleFileRepositoryModel.model.displayName);
       $scope.selectLocation = function() {
-        this.model.location = selectLocation();
+        selectLocation();
       }
       $scope.canFinish = function() {
         if (this.model.displayName == "" || this.model.location == "") {

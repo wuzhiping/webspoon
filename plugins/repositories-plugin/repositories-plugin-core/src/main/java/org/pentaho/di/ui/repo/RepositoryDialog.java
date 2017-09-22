@@ -144,7 +144,13 @@ public class RepositoryDialog extends ThinDialog {
     new BrowserFunction( browser, "selectLocation" ) {
       @Override public Object function( Object[] objects ) {
         DirectoryDialog directoryDialog = new DirectoryDialog( shell );
-        return directoryDialog.open();
+        String location = directoryDialog.open();
+        browser.evaluate(
+          "var location = document.getElementById(\"location\");"
+          + "var scope = angular.element( location ).scope();"
+          + String.format( "scope.$apply(function(){ scope.model.location = \"%s\";});", location)
+        );
+        return location;
       }
     };
 

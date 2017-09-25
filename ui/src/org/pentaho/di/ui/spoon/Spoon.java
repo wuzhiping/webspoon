@@ -781,7 +781,7 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
         metaStore.setActiveMetaStoreName( rep.getMetaStore().getName() );
       }
     } catch ( MetaStoreException e ) {
-      new ErrorDialog( shell, "Error opening Pentaho Metastore", "Unable to open local Pentaho Metastore", e );
+      log.logError( "Unable to open local Pentaho Metastore", e );
     }
 
     setRepository( rep );
@@ -798,7 +798,7 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
     try {
       JndiUtil.initJNDI();
     } catch ( Exception e ) {
-      new ErrorDialog( shell, "Unable to init simple JNDI", "Unable to init simple JNDI", e );
+      log.logError( "Unable to init simple JNDI", e );
     }
 
   }

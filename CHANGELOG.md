@@ -1,5 +1,17 @@
 # Change Log
 
+## 0.7.1.13 - 2017-10-20
+
+### Changed
+- Make repositories-plugin multi-user enabled
+
+### Fixed
+- [#58] Cursor position of a script editor is not accurate
+- [#75] File > Open... does not open a Kettle file
+- [#78] Checkboxes not drawn for the database connection pooling parameters
+- [#80] Location is not reflected in the Repository Manager dialog
+- Use logError instead of ErrorDialog b/c shell is not yet available in the Spoon constructor
+
 ## 0.7.1.12 - 2017-08-16
 
 ### Added

@@ -244,7 +244,7 @@
     <dependency>
       <groupId>org.eclipse.rap</groupId>
       <artifactId>org.eclipse.rap.rwt.testfixture</artifactId>
-      <version>${dependency.rap.version}</version>
+      <version>${rap.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

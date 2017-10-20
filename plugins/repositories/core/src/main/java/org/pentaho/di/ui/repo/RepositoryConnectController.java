@@ -512,6 +512,7 @@ public class RepositoryConnectController {
 
   @VisibleForTesting
   boolean isDatabaseWithNameExist( DatabaseMeta databaseMeta, boolean isNew ) {
+    RepositoriesMeta repositoriesMeta = getRepositoriesMeta();
     for ( int i = 0; i < repositoriesMeta.nrDatabases(); i++ ) {
       final DatabaseMeta iterDatabase = repositoriesMeta.getDatabase( i );
       if ( iterDatabase.getName().trim().equalsIgnoreCase( databaseMeta.getName().trim() ) ) {

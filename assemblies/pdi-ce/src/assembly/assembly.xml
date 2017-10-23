@@ -12,6 +12,14 @@
       <filtered>true</filtered>
     </fileSet>
 
+    <!-- the remaining static resources -->
+    <fileSet>
+      <directory>${project.basedir}/src/main/resources</directory>
+      <outputDirectory>WEB-INF/classes</outputDirectory>
+      <includes>
+        <include>ui/*</include>
+      </includes>
+    </fileSet>
     <!-- the staging dir -->
     <fileSet>
       <directory>${assembly.dir}</directory>

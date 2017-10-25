@@ -15,17 +15,29 @@
 
 package org.pentaho.repo.dialog;
 
+import java.util.List;
+
+import javax.ws.rs.core.Response;
+
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.BrowserFunction;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Shell;
+import org.json.simple.JSONArray;
 import org.pentaho.di.core.exception.KettleException;
 import org.pentaho.di.core.util.Utils;
 import org.pentaho.di.ui.core.dialog.ThinDialog;
 import org.pentaho.di.ui.core.gui.GUIResource;
 import org.pentaho.platform.settings.ServerPort;
 import org.pentaho.platform.settings.ServerPortRegistry;
+import org.pentaho.repo.controller.RepositoryBrowserController;
+import org.pentaho.repo.model.RepositoryDirectory;
+import org.pentaho.repo.model.RepositoryFile;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 
 /**
  * Created by bmorrise on 5/23/17.
@@ -47,6 +59,8 @@ public class RepositoryOpenSaveDialog extends ThinDialog {
   private String objectDirectory;
   private String objectType;
 
+  private RepositoryBrowserController repositoryBrowserController = new RepositoryBrowserController();
+
   public RepositoryOpenSaveDialog( Shell shell, int width, int height ) {
     super( shell, width, height );
   }
@@ -66,9 +80,12 @@ public class RepositoryOpenSaveDialog extends ThinDialog {
 
     new BrowserFunction( browser, "close" ) {
       @Override public Object function( Object[] arguments ) {
-        browser.dispose();
-        dialog.close();
-        dialog.dispose();
+        Runnable execute = () -> {
+          browser.dispose();
+          dialog.close();
+          dialog.dispose();
+        };
+        display.asyncExec( execute );
         return true;
       }
     };
@@ -80,9 +97,49 @@ public class RepositoryOpenSaveDialog extends ThinDialog {
         objectDirectory = (String) arguments[ 2 ];
         objectType = (String) arguments[ 3 ];
 
-        browser.dispose();
-        dialog.close();
-        dialog.dispose();
+        Runnable execute = () -> {
+          browser.dispose();
+          dialog.close();
+          dialog.dispose();
+        };
+        display.asyncExec( execute );
+        return true;
+      }
+    };
+
+    new BrowserFunction( browser, "_getRecentFiles" ) {
+      @Override public Object function( Object[] arguments ) {
+        List<RepositoryFile> files = repositoryBrowserController.getRecentFiles();
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        String json = "";
+        try {
+          json = ow.writeValueAsString( files );
+        } catch (JsonProcessingException e) {
+          e.printStackTrace();
+        }
+        return json;
+      }
+    };
+
+    new BrowserFunction( browser, "_loadDirectoryTree" ) {
+      @Override public Object function( Object[] arguments ) {
+        List<RepositoryDirectory> repositoryDirectories = repositoryBrowserController.loadDirectoryTree();
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        String json = "";
+        try {
+          json = ow.writeValueAsString( repositoryDirectories );
+        } catch (JsonProcessingException e) {
+          e.printStackTrace();
+        }
+        return json;
+      }
+    };
+
+    new BrowserFunction( browser, "_loadRecent" ) {
+      @Override public Object function( Object[] arguments ) {
+        String repo = (String) arguments[ 0 ];
+        String id = (String) arguments[ 1 ];
+        repositoryBrowserController.openRecentFile( repo, id );
         return true;
       }
     };
@@ -92,6 +149,17 @@ public class RepositoryOpenSaveDialog extends ThinDialog {
         display.sleep();
       }
     }
+  }
+
+  private String javaToJson( Object obj ) {
+    ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+    String json = "";
+    try {
+      json = ow.writeValueAsString( obj );
+    } catch (JsonProcessingException e) {
+      e.printStackTrace();
+    }
+    return json;
   }
 
   private static Integer getOsgiServicePort() {
@@ -113,7 +181,7 @@ public class RepositoryOpenSaveDialog extends ThinDialog {
       host = LOCALHOST;
       port = getOsgiServicePort();
     }
-    return "http://" + host + ":" + port + path;
+    return "/spoon/osgi" + path;
   }
 
   private static String getKettleProperty( String propertyName ) throws KettleException {

@@ -27,6 +27,7 @@ import java.lang.reflect.InvocationTargetException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.rap.rwt.service.ServerPushSession;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.pentaho.di.core.EngineMetaInterface;
@@ -65,6 +66,7 @@ public class SaveProgressDialog {
   public boolean open() {
     boolean retval = true;
 
+    final ServerPushSession pushSession = new ServerPushSession();
     Display display = Display.getCurrent();
     IRunnableWithProgress op = new IRunnableWithProgress() {
       public void run( IProgressMonitor monitor ) {
@@ -76,11 +78,13 @@ public class SaveProgressDialog {
                 BaseMessages.getString( PKG, "TransSaveProgressDialog.ErrorSavingTransformation.DialogTitle" ),
                 BaseMessages.getString( PKG, "TransSaveProgressDialog.ErrorSavingTransformation.DialogMessage" ), e );
           }
+          pushSession.stop();
         } );
       }
     };
 
     try {
+      pushSession.start();
       ProgressMonitorDialog pmd = new ProgressMonitorDialog( shell );
       pmd.run( true, true, op );
     } catch ( InvocationTargetException e ) {

@@ -38,7 +38,10 @@ import java.util.concurrent.Callable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.MessageDialogWithToggle;
+import org.eclipse.rap.json.JsonArray;
+import org.eclipse.rap.json.JsonObject;
 import org.eclipse.rap.rwt.RWT;
+import org.eclipse.rap.rwt.scripting.ClientListener;
 import org.eclipse.jface.window.DefaultToolTip;
 import org.eclipse.jface.window.ToolTip;
 import org.eclipse.swt.SWT;
@@ -91,6 +94,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.Widget;
+import org.pentaho.di.base.AbstractMeta;
 import org.pentaho.di.core.Const;
 import org.pentaho.di.core.util.Utils;
 import org.pentaho.di.core.EngineMetaInterface;
@@ -161,6 +165,7 @@ import org.pentaho.di.ui.spoon.SwtScrollBar;
 import org.pentaho.di.ui.spoon.TabItemInterface;
 import org.pentaho.di.ui.spoon.TabMapEntry;
 import org.pentaho.di.ui.spoon.TabMapEntry.ObjectType;
+import org.pentaho.di.ui.spoon.WebSpoonClientListener;
 import org.pentaho.di.ui.spoon.XulSpoonResourceBundle;
 import org.pentaho.di.ui.spoon.XulSpoonSettingsManager;
 import org.pentaho.di.ui.spoon.dialog.NotePadDialog;
@@ -384,6 +389,11 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
     //
     scrolledcomposite = new ScrolledComposite( sashForm, SWT.V_SCROLL | SWT.H_SCROLL );
     canvas = new Canvas( scrolledcomposite, SWT.NO_BACKGROUND | SWT.BORDER );
+    ClientListener listener = WebSpoonClientListener.getInstance();
+    canvas.addListener( SWT.MouseDown, listener );
+    canvas.addListener( SWT.MouseMove, listener );
+    canvas.addListener( SWT.MouseUp, listener );
+    canvas.addListener( SWT.Paint, listener );
     scrolledcomposite.setContent( canvas );
     scrolledcomposite.addListener( SWT.Resize, new Listener() {
       public void handleEvent( Event event ) {
@@ -679,6 +689,7 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
   }
 
   public void mouseDown( MouseEvent e ) {
+    canvas.setData( "mode", "select" );
 
     mouseHover( e );
     boolean control = ( e.stateMask & SWT.MOD1 ) != 0;
@@ -772,9 +783,11 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
             } else if ( e.button == 2 || ( e.button == 1 && shift ) ) {
               // SHIFT CLICK is start of drag to create a new hop
               //
+              canvas.setData( "mode", "hop" );
               startHopEntry = jobEntryCopy;
 
             } else {
+              canvas.setData( "mode", "drag" );
               selectedEntries = jobMeta.getSelectedEntries();
               selectedEntry = jobEntryCopy;
               //
@@ -791,6 +804,7 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
             break;
 
           case NOTE:
+            canvas.setData( "mode", "drag" );
             ni = (NotePadMeta) areaOwner.getOwner();
             selectedNotes = jobMeta.getSelectedNotes();
             selectedNote = ni;
@@ -853,6 +867,9 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
   }
 
   public void mouseUp( MouseEvent e ) {
+    // canvas.setData( "mode", null ); does not work.
+    canvas.setData( "mode", "null" );
+
     mouseMove( e );
     boolean control = ( e.stateMask & SWT.MOD1 ) != 0;
 
@@ -2944,7 +2961,60 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
 
     jobPainter.drawJob();
 
+    setData( jobMeta );
+
     return;
+  }
+
+  @Override
+  protected void setData( AbstractMeta meta ) {
+    super.setData( meta );
+
+    JobMeta jobMeta = (JobMeta) meta;
+    JsonObject jsonNodes = new JsonObject();
+    jobMeta.getJobCopies().forEach( node -> {
+      JsonObject jsonNode = new JsonObject();
+      jsonNode.add( "x", node.getLocation().x );
+      jsonNode.add( "y", node.getLocation().y );
+      jsonNode.add( "selected", node.isSelected() );
+
+      SwtUniversalImage swtImage = null;
+
+      if ( node.isSpecial() ) {
+        if ( node.isStart() ) {
+          swtImage = GUIResource.getInstance().getSwtImageStart();
+        }
+        if ( node.isDummy() ) {
+          swtImage = GUIResource.getInstance().getSwtImageDummy();
+        }
+      } else {
+        String configId = node.getEntry().getPluginId();
+        if ( configId != null ) {
+          swtImage = GUIResource.getInstance().getImagesJobentries().get( configId );
+        }
+      }
+      if ( node.isMissing() ) {
+        swtImage = GUIResource.getInstance().getSwtImageMissing();
+      }
+      if ( swtImage == null ) {
+        return;
+      }
+
+      Image image = swtImage.getAsBitmapForSize( getDisplay(), Math.round( iconsize * magnification ), Math.round( iconsize * magnification ) );
+      jsonNode.add( "img",  image.internalImage.getResourceName() );
+      jsonNodes.add( node.getName(), jsonNode );
+    } );
+    canvas.setData( "nodes", jsonNodes );
+
+    JsonArray jsonHops = new JsonArray();
+    for ( int i = 0; i < jobMeta.nrJobHops(); i++ ) {
+      JsonObject jsonHop = new JsonObject();
+      JobHopMeta hop = jobMeta.getJobHop( i );
+      jsonHop.add( "from", hop.getFromEntry().getName() );
+      jsonHop.add( "to", hop.getToEntry().getName() );
+      jsonHops.add( jsonHop );
+    }
+    canvas.setData( "hops", jsonHops );
   }
 
   protected Point getOffset() {

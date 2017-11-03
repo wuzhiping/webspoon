@@ -30,6 +30,7 @@ import org.eclipse.rap.rwt.RWT;
 import org.eclipse.rap.rwt.application.AbstractEntryPoint;
 import org.eclipse.rap.rwt.client.service.ExitConfirmation;
 import org.eclipse.rap.rwt.client.service.StartupParameters;
+import org.eclipse.rap.rwt.widgets.WidgetUtil;
 import org.eclipse.swt.widgets.Composite;
 import org.pentaho.di.core.Const;
 import org.pentaho.di.core.KettleClientEnvironment;
@@ -50,6 +51,12 @@ public class WebSpoonEntryPoint extends AbstractEntryPoint {
     if ( securityManager instanceof WebSpoonSecurityManager ) {
       ( (WebSpoonSecurityManager) securityManager ).setUserName( Const.getUser() );
     }
+    // Transferring Widget Data for client-side canvas drawing instructions
+    WidgetUtil.registerDataKeys( "props" );
+    WidgetUtil.registerDataKeys( "mode" );
+    WidgetUtil.registerDataKeys( "nodes" );
+    WidgetUtil.registerDataKeys( "hops" );
+    WidgetUtil.registerDataKeys( "notes" );
     /*
      *  Create a KettleHome for the current user.
      *  kettle.properties is automatically created for this user, but not used.

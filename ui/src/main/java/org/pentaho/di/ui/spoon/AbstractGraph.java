@@ -25,15 +25,19 @@ package org.pentaho.di.ui.spoon;
 import java.util.List;
 
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.rap.json.JsonArray;
+import org.eclipse.rap.json.JsonObject;
 import org.eclipse.rap.rwt.service.ServerPushSession;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.ScrollBar;
+import org.pentaho.di.base.AbstractMeta;
 import org.pentaho.di.core.exception.KettleException;
 import org.pentaho.di.core.gui.GUIPositionInterface;
 import org.pentaho.di.core.gui.Point;
+import org.pentaho.di.ui.core.PropsUI;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 
@@ -237,5 +241,25 @@ public abstract class AbstractGraph extends Composite {
     for ( XulComponent pop : pops ) {
       ( (MenuManager) pop.getManagedObject() ).dispose();
     }
+  }
+
+  protected void setData( AbstractMeta meta ) {
+    JsonObject jsonProps = new JsonObject();
+    jsonProps.add( "gridsize", PropsUI.getInstance().isShowCanvasGridEnabled() ? PropsUI.getInstance().getCanvasGridSize() : 1 );
+    jsonProps.add( "iconsize", PropsUI.getInstance().getIconSize() );
+    canvas.setData( "props", jsonProps );
+
+    JsonArray jsonNotes = new JsonArray();
+    meta.getNotes().forEach( note -> {
+      JsonObject jsonNote = new JsonObject();
+      jsonNote.add( "x", note.getLocation().x );
+      jsonNote.add( "y", note.getLocation().y );
+      jsonNote.add( "width", note.getWidth() );
+      jsonNote.add( "height", note.getHeight() );
+      jsonNote.add( "selected", note.isSelected() );
+      jsonNote.add( "note", note.getNote() );
+      jsonNotes.add( jsonNote );
+    } );
+    canvas.setData( "notes", jsonNotes );
   }
 }

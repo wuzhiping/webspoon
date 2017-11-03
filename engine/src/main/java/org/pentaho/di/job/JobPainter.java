@@ -81,7 +81,9 @@ public class JobPainter extends BasePainter<JobHopMeta, JobEntryCopy> {
     Point thumb = getThumb( area, max );
     offset = getOffset( thumb, area );
 
+    // First clear the image in the background color
     gc.setBackground( EColor.BACKGROUND );
+    gc.fillRectangle( 0, 0, area.x, area.y );
 
     if ( hori != null ) {
       hori.setThumb( thumb.x );

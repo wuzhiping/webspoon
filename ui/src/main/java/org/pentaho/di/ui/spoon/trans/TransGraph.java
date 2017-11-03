@@ -28,9 +28,12 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.MessageDialogWithToggle;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.rap.json.JsonArray;
+import org.eclipse.rap.json.JsonObject;
 import org.eclipse.rap.rwt.RWT;
 import org.eclipse.jface.window.DefaultToolTip;
 import org.eclipse.jface.window.ToolTip;
+import org.eclipse.rap.rwt.scripting.ClientListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -79,6 +82,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.Widget;
+import org.pentaho.di.base.AbstractMeta;
 import org.pentaho.di.core.CheckResultInterface;
 import org.pentaho.di.core.Const;
 import org.pentaho.di.core.EngineMetaInterface;
@@ -174,6 +178,7 @@ import org.pentaho.di.ui.spoon.SpoonUiExtenderPluginInterface;
 import org.pentaho.di.ui.spoon.SpoonUiExtenderPluginType;
 import org.pentaho.di.ui.spoon.SwtScrollBar;
 import org.pentaho.di.ui.spoon.TabItemInterface;
+import org.pentaho.di.ui.spoon.WebSpoonClientListener;
 import org.pentaho.di.ui.spoon.XulSpoonResourceBundle;
 import org.pentaho.di.ui.spoon.XulSpoonSettingsManager;
 import org.pentaho.di.ui.spoon.dialog.EnterPreviewRowsDialog;
@@ -489,6 +494,11 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
     //
     scrolledcomposite = new ScrolledComposite( sashForm, SWT.V_SCROLL | SWT.H_SCROLL );
     canvas = new Canvas( scrolledcomposite, SWT.NO_BACKGROUND | SWT.BORDER );
+    ClientListener listener = WebSpoonClientListener.getInstance();
+    canvas.addListener( SWT.MouseDown, listener );
+    canvas.addListener( SWT.MouseMove, listener );
+    canvas.addListener( SWT.MouseUp, listener );
+    canvas.addListener( SWT.Paint, listener );
     scrolledcomposite.setContent( canvas );
     scrolledcomposite.addListener( SWT.Resize, new Listener() {
       public void handleEvent( Event event ) {
@@ -840,6 +850,7 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
 
   @Override
   public void mouseDown( MouseEvent e ) {
+    canvas.setData( "mode", "select" );
 
     mouseHover( e );
     boolean alt = ( e.stateMask & SWT.ALT ) != 0;
@@ -983,8 +994,10 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
             } else if ( e.button == 2 || ( e.button == 1 && shift ) ) {
               // SHIFT CLICK is start of drag to create a new hop
               //
+              canvas.setData( "mode", "hop" );
               startHopStep = stepMeta;
             } else {
+              canvas.setData( "mode", "drag" );
               selectedSteps = transMeta.getSelectedSteps();
               selectedStep = stepMeta;
               //
@@ -1001,6 +1014,7 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
             break;
 
           case NOTE:
+            canvas.setData( "mode", "drag" );
             ni = (NotePadMeta) areaOwner.getOwner();
             selectedNotes = transMeta.getSelectedNotes();
             selectedNote = ni;
@@ -1051,6 +1065,8 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
 
   @Override
   public void mouseUp( MouseEvent e ) {
+    // canvas.setData( "mode", null ); does not work.
+    canvas.setData( "mode", "null" );
     try {
       TransGraphExtension ext = new TransGraphExtension( null, e, getArea() );
       ExtensionPointHandler.callExtensionPoint( LogChannel.GENERAL, KettleExtensionPoint.TransGraphMouseUp.id, ext );
@@ -3284,7 +3300,44 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
     transPainter.setShowTargetStreamsStep( showTargetStreamsStep );
 
     transPainter.buildTransformationImage();
+
+    setData( transMeta );
+
     return;
+  }
+
+  @Override
+  protected void setData( AbstractMeta meta ) {
+    super.setData( meta );
+
+    TransMeta transMeta = (TransMeta) meta;
+    JsonObject jsonNodes = new JsonObject();
+    transMeta.getSteps().forEach( step -> {
+      JsonObject jsonNode = new JsonObject();
+      jsonNode.add( "x", step.getLocation().x );
+      jsonNode.add( "y", step.getLocation().y );
+      jsonNode.add( "selected", step.isSelected() );
+      Image im = null;
+      if ( step.isMissing() ) {
+        im = GUIResource.getInstance().getImageMissing();
+      } else {
+        im = GUIResource.getInstance().getImagesSteps().get( step.getStepID() )
+        .getAsBitmapForSize( getDisplay(), Math.round( iconsize * magnification ), Math.round( iconsize * magnification ) );
+      }
+      jsonNode.add( "img",  im.internalImage.getResourceName() );
+      jsonNodes.add( step.getName(), jsonNode );
+    } );
+    canvas.setData( "nodes", jsonNodes );
+
+    JsonArray jsonHops = new JsonArray();
+    for ( int i = 0; i < transMeta.nrTransHops(); i++ ) {
+      JsonObject jsonHop = new JsonObject();
+      TransHopMeta hop = transMeta.getTransHop( i );
+      jsonHop.add( "from", hop.getFromStep().getName() );
+      jsonHop.add( "to", hop.getToStep().getName() );
+      jsonHops.add( jsonHop );
+    }
+    canvas.setData( "hops", jsonHops );
   }
 
   @Override

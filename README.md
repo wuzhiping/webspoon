@@ -26,49 +26,44 @@ This is one of the community activities and not supported by Pentaho.
 
 Please refer to the [wiki](https://github.com/HiromuHota/pentaho-kettle/wiki) and [issues](https://github.com/HiromuHota/pentaho-kettle/issues).
 
-# How to deploy with Docker (pre-configured)
+# How to deploy
 
-The following command gives you webSpoon without plugins:
+There are two ways: with Docker and without Docker.
+Docker is recommended because it is simple hence error-free.
+In either way, webSpoon will be deployed at `http://address:8080/spoon/spoon`.
 
-```
-$ docker run -e JAVA_OPTS="-Xms1024m -Xmx2048m" -d -p 8080:8080 hiromuhota/webspoon:latest
-```
-
-The following command gives you webSpoon with all the plugins included in the CE distribution:
+## With Docker (recommended)
 
 ```
 $ docker run -e JAVA_OPTS="-Xms1024m -Xmx2048m" -d -p 8080:8080 hiromuhota/webspoon:latest-full
 ```
 
-In either way, access `http://address:8080/spoon/spoon` with a browser.
+## Without Docker
 
-# How to deploy & config
+Please refer to the [wiki](https://github.com/HiromuHota/pentaho-kettle/wiki/System-Requirements) for system requirements.
 
-## System requirements
+1. Unzip `pdi-ce-7.1.0.0-12.zip`, then copy `system` and `plugins` folders to `$CATALINA_HOME`.
+2. Run [install.sh](https://raw.githubusercontent.com/HiromuHota/webspoon-docker/master/install.sh) at `$CATALINA_HOME`.
+3. (Re)start the Tomcat.
 
-Please refer to the [wiki](https://github.com/HiromuHota/pentaho-kettle/wiki/System-Requirements).
+The actual commands look like below:
 
-## Deploy
+```
+$ export CATALINA_HOME=/home/vagrant/apache-tomcat-8.5.23
+$ cd ~/
+$ unzip ~/Downloads/pdi-ce-7.1.0.0-12.zip
+$ cd $CATALINA_HOME
+$ cp -r ~/data-integration/system ./
+$ cp -r ~/data-integration/plugins ./
+$ wget https://raw.githubusercontent.com/HiromuHota/webspoon-docker/master/install.sh
+$ chmod +x install.sh
+$ export version=0.7.1.13
+$ export dist=7.1.0.0-12
+$ ./install.sh
+$ ./bin/startup.sh
+```
 
-### Deploy to (bare) Tomcat
-
-1. Download the latest `spoon.war` from [here](https://github.com/HiromuHota/pentaho-kettle/releases).
-2. Copy the downloaded `spoon.war` to `tomcat/webapps/spoon.war`.
-3. (Optional) download and unzip `pdi-ce-7.1.0.0-12.zip`, then copy the `system` and `plugins` folders to `tomcat/system` and `tomcat/plugins`, respectively. Replace some plugins with patched ones as described below.
-4. (Optional) configure Apache Karaf as below.
-5. (Re)start the Tomcat.
-6. Access `http://address:8080/spoon/spoon`
-
-### Deploy to Pentaho server
-
-1. Download the latest `spoon.war` from [here](https://github.com/HiromuHota/pentaho-kettle/releases).
-2. Copy the downloaded `spoon.war` to `pentaho-server/tomcat/webapps/spoon.war`.
-3. (Re)start the Pentaho server.
-4. Access `http://address:8080/spoon/spoon`
-
-It is not recommended to place `system` and `plugins` folders along with the Pentaho server due to [#32](https://github.com/HiromuHota/pentaho-kettle/issues/32) and [#35](https://github.com/HiromuHota/pentaho-kettle/issues/35).
-
-## Config
+## How to config (optional)
 
 ### User authentication
 
@@ -114,92 +109,24 @@ See [here](http://docs.spring.io/spring-security/site/docs/4.1.x/reference/html/
 webSpoon uses the same framework for user authentication: Spring Security, as Pentaho User Console.
 Thus, it would also be possible to use Microsoft Active Directory as described in Pentaho's official documentation for [User Security](https://help.pentaho.com/Documentation/7.0/0P0/Setting_Up_User_Security).
 
-### Repository
+### Third-party plugins and JDBC drivers
 
-When webSpoon serves multiple users, it is recommended not to store Kettle files to the local file system, but to either Pentaho Repository or Kettle Database Repository because a user can see the Kettle files locally stored by another user.
-The steps to connect to a Repository is described [here](https://help.pentaho.com/Documentation/7.1/0L0/0Y0/040).
-
-One can also automatically login to a repository by setting environment variables.
-The details are described [here](http://wiki.pentaho.com/display/EAI/.01+Introduction+to+Spoon#.01IntroductiontoSpoon-Repository).
-
-### (Optional) Apache Karaf
-
-- Firewall / port forward
-
-<del>
-Please make sure that a client can access the OSGI Service Port of the server (e.g., 9051).
-It is known that the marketplace does not work properly when the port is not accessible.
-The port seems to be automatically assigned and sometimes changes, so it is needed to check which port is actually used.
-The port information like below can be found in the Tomcat log: `tomcat/logs/catalina.out`.
+Place third-party plugins in `$CATALINA_HOME/plugins` and JDBC drivers in `$CATALINA_HOME/lib` as below:
 
 ```
-*******************************************************************************
-*** Karaf Instance Number: 1 at /XXX/biserver-ce/tomcat/bin/./syst ***
-***   em/karaf/caches/webspoonservletcontextlistener/data-1                 ***
-*** Karaf Port:8802                                                         ***
-*** OSGI Service Port:9051                                                  ***
-*******************************************************************************
+$CATALINA_HOME
+├── system
+├── plugins
+│   ├── YourPlugin
+│   │   └── YourPlugin.jar
+│   ├── ...
+├── lib
+│   ├── YourJDBC.jar
+│   ├── ...
+├── webapps
+│   ├── spoon.war
+│   ├── ...
 ```
-</del>
-
-Up to 0.7.1.11, the firewall / port forward for the OSGI Service (e.g., 9051) was required for the repository dialog (since 0.7.0.8) and the marketplace.
-For 0.7.1.12+, the firewall / port forward is no longer required (related to #72 and #74).
-
-## Plugins
-
-A comma separated list of plugin folders can be defined by `KETTLE_PLUGIN_BASE_FOLDERS`.
-If not defined, the following folders are used:
-
-1. `$DI_HOME/plugins` (`$DI_HOME` is defined in `start-pentaho.{sh|bat}` and `pentaho-solutions/system/kettle` is the default)
-2. `$HOME/.kettle/plugins`
-3. `$CUR_DIR/plugins ` (the current folder: `$CUR_DIR` depends on how and where webSpoon is running, e.g., `biserver-ce/tomcat/bin` for CE and `Pentaho` for EE)
-
-### Replace some plugins with patched ones
-
-Some of the plugins are not compatible with webSpoon.
-Please replace jar files with patched ones and delete the Karaf cache directory if necessary.
-The patched jar files are [pdi-platform-utils-plugin](https://github.com/HiromuHota/pdi-platform-utils-plugin/releases), [big-data-plugin](https://github.com/HiromuHota/big-data-plugin/releases), [repositories-plugin](https://github.com/HiromuHota/pentaho-kettle/releases), [pdi-engine-configuration](https://github.com/HiromuHota/pentaho-kettle/releases), [pdi-dataservice-server-plugin](https://github.com/HiromuHota/pdi-dataservice-server-plugin/releases), and [marketplace-di](https://github.com/HiromuHota/marketplace/releases).
-
-#### Automatic
-
-Use [install.sh](https://github.com/HiromuHota/webspoon-docker/blob/master/install.sh) as follows unless there is a reason not to.
-
-```
-$ export version=0.7.1.12
-$ export dist=7.1.0.0-12
-$ export CATALINA_HOME=${path_to_catalina_home}
-$ ./install.sh
-```
-
-Even if this script is used, it is still required to manually copy the `system` and `plugins` folders from `pdi-ce-7.1.0.0-12.zip`.
-
-#### Manual
-
-```
-$ cp ${path_to_lib}/pdi-platform-utils-plugin-7.1.0.0-12.jar plugins/platform-utils-plugin/
-$ cp ${path_to_lib}/pentaho-big-data-legacy-7.1.0.0-12.jar plugins/pentaho-big-data-plugin/
-$ cp ${path_to_lib}/pentaho-big-data-kettle-plugins-common-ui-7.1.0.0-12.jar system/karaf/system/pentaho/pentaho-big-data-kettle-plugins-common-ui/7.1.0.0-12/
-$ cp ${path_to_lib}/repositories-plugin-core-7.1.0.0-12.jar system/karaf/system/org/pentaho/repositories-plugin-core/7.1.0.0-12/
-$ cp ${path_to_lib}/pdi-engine-configuration-ui-7.1.0.0-12.jar system/karaf/system/org/pentaho/pdi-engine-configuration-ui/7.1.0.0-12/
-$ cp ${path_to_lib}/pdi-dataservice-server-plugin-7.1.0.0-12.jar system/karaf/system/pentaho/pdi-dataservice-server-plugin/7.1.0.0-12/
-$ cp ${path_to_lib}/pentaho-marketplace-di-7.1.0.0-12.jar system/karaf/system/org/pentaho/pentaho-marketplace-di/7.1.0.0-12/
-$ rm -rf system/karaf/caches/webspoonservletcontextlistener
-```
-
-For 0.7.1.12+, create a new file at `system/karaf/etc/org.pentaho.requirejs.cfg`
-
-```
-context.root=/spoon/osgi
-```
-
-When webSpoon is deployed to a different context path than `/spoon`, context.root should be changed accordingly: `context.root=/pentaho/osgi` for `/pentaho`, `context.root=/osgi` for `/` (ROOT).
-
-## JDBC drivers
-
-Place jar files into either one of the following folders:
-
-1. `biserver-ce/tomcat/lib` for CE or `Pentaho/server/biserver-ee/tomcat/lib` for EE.
-2. `webapps/spoon/WEB-INF/lib`, but not recommended because this folder is overwritten when upgrading `spoon.war`.
 
 # How to develop
 

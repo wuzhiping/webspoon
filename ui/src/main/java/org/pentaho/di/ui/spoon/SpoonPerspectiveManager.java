@@ -22,19 +22,6 @@
 
 package org.pentaho.di.ui.spoon;
 
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
-
-import org.apache.commons.io.IOUtils;
 import org.eclipse.rap.rwt.SingletonUtil;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;

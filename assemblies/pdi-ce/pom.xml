@@ -147,6 +147,10 @@
           <groupId>org.eclipse.swt</groupId>
           <artifactId>*</artifactId>
         </exclusion>
+        <exclusion>
+          <groupId>org.eclipse</groupId>
+          <artifactId>jface</artifactId>
+        </exclusion>
       </exclusions>
     </dependency>
     <dependency>

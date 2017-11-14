@@ -121,6 +121,12 @@
       <groupId>pentaho-kettle</groupId>
       <artifactId>kettle-core</artifactId>
       <version>${webspoon.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.eclipse.rap</groupId>
+          <artifactId>org.eclipse.rap.clientbuilder</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.pentaho</groupId>

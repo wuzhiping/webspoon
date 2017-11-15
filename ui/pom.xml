@@ -45,7 +45,7 @@
     <dependency>
       <groupId>pentaho-kettle</groupId>
       <artifactId>kettle-engine</artifactId>
-      <version>${kettle.version}</version>
+      <version>${webspoon.version}</version>
       <exclusions>
         <exclusion>
           <groupId>javax.servlet</groupId>

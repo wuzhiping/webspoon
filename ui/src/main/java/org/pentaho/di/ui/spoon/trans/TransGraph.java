@@ -4285,6 +4285,7 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
 
   private synchronized void prepareTrans( final Thread parentThread, final String[] args ) {
     pushSession.start();
+    trans.setDisplay( Display.getCurrent() );
     Runnable runnable = new Runnable() {
       @Override
       public void run() {

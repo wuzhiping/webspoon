@@ -44,6 +44,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.vfs2.FileName;
 import org.apache.commons.vfs2.FileObject;
+import org.eclipse.rap.rwt.RWT;
+import org.eclipse.rap.rwt.service.UISession;
+import org.eclipse.swt.widgets.Display;
 import org.pentaho.di.cluster.SlaveServer;
 import org.pentaho.di.core.Const;
 import org.pentaho.di.core.util.Utils;
@@ -139,6 +142,8 @@ public class Job extends Thread implements VariableSpace, NamedParams, HasLogCha
   private AtomicInteger errors;
 
   private VariableSpace variables = new Variables();
+
+  private Display display;
 
   /**
    * The job that's launching this (sub-) job. This gives us access to the whole chain, including the parent variables,
@@ -457,7 +462,10 @@ public class Job extends Thread implements VariableSpace, NamedParams, HasLogCha
         shutdownHeartbeat( heartbeat );
 
         ExtensionPointHandler.callExtensionPoint( log, KettleExtensionPoint.JobFinish.id, this );
-        jobMeta.disposeEmbeddedMetastoreProvider();
+        UISession uiSession = RWT.getUISession( display );
+        uiSession.exec( () -> {
+          jobMeta.disposeEmbeddedMetastoreProvider();
+        } );
 
         fireJobFinishListeners();
       } catch ( KettleException e ) {
@@ -675,11 +683,14 @@ public class Job extends Thread implements VariableSpace, NamedParams, HasLogCha
     JobExecutionExtension extension = new JobExecutionExtension( this, prevResult, jobEntryCopy, true );
     ExtensionPointHandler.callExtensionPoint( log, KettleExtensionPoint.JobBeforeJobEntryExecution.id, extension );
 
-    jobMeta.disposeEmbeddedMetastoreProvider();
-    if ( jobMeta.getMetastoreLocatorOsgi() != null ) {
-      jobMeta.setEmbeddedMetastoreProviderKey(
-        jobMeta.getMetastoreLocatorOsgi().setEmbeddedMetastore( jobMeta.getEmbeddedMetaStore() ) );
-    }
+    UISession uiSession = RWT.getUISession( display );
+    uiSession.exec( () -> {
+      jobMeta.disposeEmbeddedMetastoreProvider();
+      if ( jobMeta.getMetastoreLocatorOsgi() != null ) {
+        jobMeta.setEmbeddedMetastoreProviderKey(
+          jobMeta.getMetastoreLocatorOsgi().setEmbeddedMetastore( jobMeta.getEmbeddedMetaStore() ) );
+      }
+    } );
 
     if ( extension.result != null ) {
       prevResult = extension.result;
@@ -2504,5 +2515,9 @@ public class Job extends Thread implements VariableSpace, NamedParams, HasLogCha
     }
 
     return Const.HEARTBEAT_PERIODIC_INTERVAL_IN_SECS;
+  }
+
+  public void setDisplay( Display display ) {
+    this.display = display;
   }
 }

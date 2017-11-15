@@ -42,7 +42,7 @@ $ docker run -e JAVA_OPTS="-Xms1024m -Xmx2048m" -d -p 8080:8080 hiromuhota/websp
 
 Please refer to the [wiki](https://github.com/HiromuHota/pentaho-kettle/wiki/System-Requirements) for system requirements.
 
-1. Unzip `pdi-ce-7.1.0.0-12.zip`, then copy `system` and `plugins` folders to `$CATALINA_HOME`.
+1. Unzip `pdi-ce-8.0.0.0-28.zip`, then copy `system` and `plugins` folders to `$CATALINA_HOME`.
 2. Run [install.sh](https://raw.githubusercontent.com/HiromuHota/webspoon-docker/master/install.sh) at `$CATALINA_HOME`.
 3. (Re)start the Tomcat.
 
@@ -51,14 +51,14 @@ The actual commands look like below:
 ```
 $ export CATALINA_HOME=/home/vagrant/apache-tomcat-8.5.23
 $ cd ~/
-$ unzip ~/Downloads/pdi-ce-7.1.0.0-12.zip
+$ unzip ~/Downloads/pdi-ce-8.0.0.0-28.zip
 $ cd $CATALINA_HOME
 $ cp -r ~/data-integration/system ./
 $ cp -r ~/data-integration/plugins ./
 $ wget https://raw.githubusercontent.com/HiromuHota/webspoon-docker/master/install.sh
 $ chmod +x install.sh
-$ export version=0.7.1.13
-$ export dist=7.1.0.0-12
+$ export version=0.8.0.13
+$ export dist=8.0.0.0-28
 $ ./install.sh
 $ ./bin/startup.sh
 ```
@@ -176,7 +176,7 @@ Please build and locally-publish the following dependent libraries.
 ### pentaho-commons-xul
 
 ```
-$ git clone -b webspoon-7.1 https://github.com/HiromuHota/pentaho-commons-xul.git
+$ git clone -b webspoon-8.0 https://github.com/HiromuHota/pentaho-commons-xul.git
 $ cd pentaho-commons-xul/pentaho-xul-swt
 $ ant clean-all resolve publish-local
 ```
@@ -194,50 +194,29 @@ $ mvn clean install -pl bundles/org.eclipse.rap.filedialog -am
 $ mvn clean install -pl tests/org.eclipse.rap.rwt.testfixture -am
 ```
 
-RAP jars are marked as `changing="true"` in ivy.xml and the "local-mvn" resolver is configured to `checkmodified="true"` in ivysettings.xml.
-However, updated jars are not used and cached ones are used instead.
-There are some discussions in [here](https://stackoverflow.com/questions/14445268/whats-wrong-with-this-ivy-changingpattern-snapshot-configuration/14445694#14445694) and [there](https://stackoverflow.com/questions/38483757/apache-ivy-and-local-maven-repo-how-to-handle-snapshots-built-with-maven-3),
-but I only found a workaround that deletes the cached jars as follows:
-
-```
-$ rm ~/.ivy2/cache/org.eclipse.rap/org.eclipse.rap.rwt/eclipse-plugins/org.eclipse.rap.rwt-3.1.1-SNAPSHOT.jar
-$ rm ~/.ivy2/cache/org.eclipse.rap/org.eclipse.rap.jface/eclipse-plugins/org.eclipse.rap.jface-3.1.1-SNAPSHOT.jar
-$ rm ~/.ivy2/cache/org.eclipse.rap/org.eclipse.rap.fileupload/eclipse-plugins/org.eclipse.rap.fileupload-3.1.1-SNAPSHOT.jar
-$ rm ~/.ivy2/cache/org.eclipse.rap/org.eclipse.rap.filedialog/eclipse-plugins/org.eclipse.rap.filedialog-3.1.1-SNAPSHOT.jar
-```
-
 ## Build in the command line
 
 **Make sure patched dependent libraries have been published locally, and no cached jars for RAP (if there is any update).**
 
-Build and locally publish `kettle-core-7.1.0.0-12-X.jar` and `kettle-ui-swt-7.1.0.0-12-X.jar`.
+Build and locally publish `kettle-core-8.0.0.0-28-X.jar` and `kettle-ui-swt-8.0.0.0-28-X.jar`.
 
 ```bash
-$ git clone -b webspoon-7.1 https://github.com/HiromuHota/pentaho-kettle.git
+$ git clone -b webspoon-8.0 https://github.com/HiromuHota/pentaho-kettle.git
 $ cd pentaho-kettle/core/
-$ ant clean-all resolve publish-local
+$ mvn clean install
 $ cd ../ui
-$ ant clean-all resolve publish-local
+$ mvn clean install
 ```
 
 Change directory and build a war file.
 The published jar file will be picked up on the way.
 
 ```bash
-$ cd pentaho-kettle/assembly
-$ ant clean-all resolve war
+$ cd pentaho-kettle/assemblies/pdi-ce
+$ mvn clean install
 ```
 
-## Testing
-
-**Make sure patched dependent libraries have been published locally.**
-
-```
-$ cd pentaho-kettle/ui/
-$ ant clean-all resolve test
-```
-
-### UI testing using Selenium
+## UI testing using Selenium
 
 Currently, only Google Chrome browser has been tested for when running UI test cases.
 The tests run in headless mode unless a parameter `-Dheadless.unittest=false` is passed.

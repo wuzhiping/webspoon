@@ -22,10 +22,12 @@
 
 package org.pentaho.di.ui.core.dialog;
 
+import org.eclipse.rap.rwt.testfixture.TestContext;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.pentaho.di.core.Props;
@@ -39,6 +41,9 @@ import java.util.Collections;
 
 
 public class PreviewRowsDialogTest {
+
+  @Rule
+  public TestContext context = new TestContext();
 
   @Test
   public void getDataForRow() throws Exception {

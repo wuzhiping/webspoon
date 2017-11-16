@@ -652,14 +652,22 @@ public class Trans implements VariableSpace, NamedParams, HasLogChannelInterface
 
     ExtensionPointHandler.callExtensionPoint( log, KettleExtensionPoint.TransformationPrepareExecution.id, this );
 
-    UISession uiSession = RWT.getUISession( display );
-    uiSession.exec( () -> {
+    if ( display == null ) {
       transMeta.disposeEmbeddedMetastoreProvider();
       if ( transMeta.getMetastoreLocatorOsgi() != null ) {
         transMeta.setEmbeddedMetastoreProviderKey(
           transMeta.getMetastoreLocatorOsgi().setEmbeddedMetastore( transMeta.getEmbeddedMetaStore() ) );
       }
-    } );
+    } else {
+      UISession uiSession = RWT.getUISession( display );
+      uiSession.exec( () -> {
+        transMeta.disposeEmbeddedMetastoreProvider();
+        if ( transMeta.getMetastoreLocatorOsgi() != null ) {
+          transMeta.setEmbeddedMetastoreProviderKey(
+            transMeta.getMetastoreLocatorOsgi().setEmbeddedMetastore( transMeta.getEmbeddedMetaStore() ) );
+        }
+      } );
+    }
 
     checkCompatibility();
 
@@ -1331,10 +1339,14 @@ public class Trans implements VariableSpace, NamedParams, HasLogChannelInterface
           stepPerformanceSnapShotTimer.cancel();
         }
 
-        UISession uiSession = RWT.getUISession( display );
-        uiSession.exec( () -> {
+        if ( display == null ) {
           transMeta.disposeEmbeddedMetastoreProvider();
-        } );
+        } else {
+          UISession uiSession = RWT.getUISession( display );
+          uiSession.exec( () -> {
+            transMeta.disposeEmbeddedMetastoreProvider();
+          } );
+        }
 
         setFinished( true );
         setRunning( false ); // no longer running

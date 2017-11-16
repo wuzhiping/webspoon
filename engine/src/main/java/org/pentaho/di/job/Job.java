@@ -462,10 +462,14 @@ public class Job extends Thread implements VariableSpace, NamedParams, HasLogCha
         shutdownHeartbeat( heartbeat );
 
         ExtensionPointHandler.callExtensionPoint( log, KettleExtensionPoint.JobFinish.id, this );
-        UISession uiSession = RWT.getUISession( display );
-        uiSession.exec( () -> {
+        if ( display == null ) {
           jobMeta.disposeEmbeddedMetastoreProvider();
-        } );
+        } else {
+          UISession uiSession = RWT.getUISession( display );
+          uiSession.exec( () -> {
+            jobMeta.disposeEmbeddedMetastoreProvider();
+          } );
+        }
 
         fireJobFinishListeners();
       } catch ( KettleException e ) {
@@ -683,14 +687,22 @@ public class Job extends Thread implements VariableSpace, NamedParams, HasLogCha
     JobExecutionExtension extension = new JobExecutionExtension( this, prevResult, jobEntryCopy, true );
     ExtensionPointHandler.callExtensionPoint( log, KettleExtensionPoint.JobBeforeJobEntryExecution.id, extension );
 
-    UISession uiSession = RWT.getUISession( display );
-    uiSession.exec( () -> {
+    if ( display == null ) {
       jobMeta.disposeEmbeddedMetastoreProvider();
       if ( jobMeta.getMetastoreLocatorOsgi() != null ) {
         jobMeta.setEmbeddedMetastoreProviderKey(
           jobMeta.getMetastoreLocatorOsgi().setEmbeddedMetastore( jobMeta.getEmbeddedMetaStore() ) );
       }
-    } );
+    } else {
+      UISession uiSession = RWT.getUISession( display );
+      uiSession.exec( () -> {
+        jobMeta.disposeEmbeddedMetastoreProvider();
+        if ( jobMeta.getMetastoreLocatorOsgi() != null ) {
+          jobMeta.setEmbeddedMetastoreProviderKey(
+            jobMeta.getMetastoreLocatorOsgi().setEmbeddedMetastore( jobMeta.getEmbeddedMetaStore() ) );
+        }
+      } );
+    }
 
     if ( extension.result != null ) {
       prevResult = extension.result;

@@ -1484,6 +1484,7 @@ public class Job extends Thread implements VariableSpace, NamedParams, HasLogCha
     this.log.setLogLevel( logLevel );
     this.containerObjectId = log.getContainerObjectId();
     this.parentJob = parentJob;
+    this.display = parentJob.getDisplay();
   }
 
   /**
@@ -2515,6 +2516,10 @@ public class Job extends Thread implements VariableSpace, NamedParams, HasLogCha
     }
 
     return Const.HEARTBEAT_PERIODIC_INTERVAL_IN_SECS;
+  }
+
+  public Display getDisplay() {
+    return display;
   }
 
   public void setDisplay( Display display ) {

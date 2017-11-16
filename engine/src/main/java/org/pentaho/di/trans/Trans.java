@@ -3329,6 +3329,7 @@ public class Trans implements VariableSpace, NamedParams, HasLogChannelInterface
     this.logLevel = parentJob.getLogLevel();
     this.log.setLogLevel( logLevel );
     this.parentJob = parentJob;
+    this.display = parentJob.getDisplay();
 
     transactionId = calculateTransactionId();
   }
@@ -5718,6 +5719,10 @@ public class Trans implements VariableSpace, NamedParams, HasLogChannelInterface
     }
 
     return Const.HEARTBEAT_PERIODIC_INTERVAL_IN_SECS;
+  }
+
+  public Display getDisplay() {
+    return display;
   }
 
   public void setDisplay( Display display ) {

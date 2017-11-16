@@ -29,7 +29,7 @@
     <common.version>3.3.0-v20070426</common.version>
     <commands.version>3.3.0-I20070605-0010</commands.version>
     <jfreechart.version>1.0.13</jfreechart.version>
-    <webspoon.version>8.0.0.0-1-13</webspoon.version>
+    <webspoon.version>8.0.0.0-28-13</webspoon.version>
     <rap.version>3.1.1-SNAPSHOT</rap.version>
     <selenium.version>3.1.0</selenium.version>
   </properties>

@@ -6,21 +6,12 @@ This is one of the community activities and not supported by Pentaho.
 
 ## Use cases
 
-### Data security
+- Data security
+- Remote use
+- Ease of management
+- Cloud
 
-- Keep sensitive data where they should be
-
-### Managed Pentaho development environment
-
-- Accessible from any network-connected devices (including thin clients, smartphones/tablets)
-- No installation/upgrade/update required (by end-users)
-- No undesired plugins or JDBC drivers installed (by end-users)
-- Same version, plugins, drivers, etc. among a team (my Kettle files run in your screen without an error)
-
-### Embedded data integration
-
-- Edit Kettle queries in CDE
-- Edit Kettle endpoints in App Builder (aka Sparkl)
+Please see [public talks](https://www.slideshare.net/HiromuHota/presentations) for more details.
 
 # How to use
 
@@ -63,9 +54,9 @@ $ ./install.sh
 $ ./bin/startup.sh
 ```
 
-## How to config (optional)
+# How to config (optional)
 
-### User authentication
+## User authentication
 
 Edit `WEB-INF/web.xml` to uncomment/enable user authentication.
 
@@ -109,7 +100,7 @@ See [here](http://docs.spring.io/spring-security/site/docs/4.1.x/reference/html/
 webSpoon uses the same framework for user authentication: Spring Security, as Pentaho User Console.
 Thus, it would also be possible to use Microsoft Active Directory as described in Pentaho's official documentation for [User Security](https://help.pentaho.com/Documentation/7.0/0P0/Setting_Up_User_Security).
 
-### Third-party plugins and JDBC drivers
+## Third-party plugins and JDBC drivers
 
 Place third-party plugins in `$CATALINA_HOME/plugins` and JDBC drivers in `$CATALINA_HOME/lib` as below:
 
@@ -198,29 +189,26 @@ $ mvn clean install -pl tests/org.eclipse.rap.rwt.testfixture -am
 
 **Make sure patched dependent libraries have been published locally, and no cached jars for RAP (if there is any update).**
 
-Build and locally publish `kettle-core-8.0.0.0-28-X.jar` and `kettle-ui-swt-8.0.0.0-28-X.jar`.
+Compile `kettle-core`, `kettle-engine` and `kettle-ui-swt`; and install the packages into the local repository:
 
 ```bash
 $ git clone -b webspoon-8.0 https://github.com/HiromuHota/pentaho-kettle.git
-$ cd pentaho-kettle/core/
-$ mvn clean install
-$ cd ../ui
-$ mvn clean install
+$ cd pentaho-kettle
+$ mvn clean install -pl core,engine,ui
 ```
 
-Change directory and build a war file.
-The published jar file will be picked up on the way.
+Change directory and build a war file (`spoon.war`):
 
 ```bash
 $ cd pentaho-kettle/assemblies/pdi-ce
-$ mvn clean install
+$ mvn clean package
 ```
 
-## UI testing using Selenium
+## UI testing using Selenium (outdated)
 
 Currently, only Google Chrome browser has been tested for when running UI test cases.
 The tests run in headless mode unless a parameter `-Dheadless.unittest=false` is passed.
-To run tests in headless mode, the version of Chrome should be higher than 59 (only available in the beta channel as of writing).
+To run tests in headless mode, the version of Chrome should be higher than 59.
 
 The default url is `http://localhost:8080/spoon`.
 Pass a parameter like below if webSpoon is deployed to a different url.
@@ -231,25 +219,6 @@ The following command runs all the unit test cases including UI in non-headless 
 $ ant test -Dtest.baseurl=http://localhost:8080/spoon/spoon -Dheadless.unittest=false
 ```
 
-## Develop in Eclipse IDE
-
-It is recommened to install the RAP Tools to your Eclipse IDE.
-Please refer to the [developer's guide for RAP](http://www.eclipse.org/rap/developers-guide/) for how to install.
-Once installed, follow these instructions.
-
-Copy resources (*.xul and laf.properties), resolve dependencies, create a classpath file
-
-```bash
-$ cd pentaho-kettle/ui
-$ cp -r ../assembly/package-res/ui/* package-res/ui/
-$ ant create-dot-classpath
-```
-
-Then import the project (pentaho-kettle/ui) into Eclipse IDE and use `package-res` as Source folder.
-
-Configure your Run/Debug configurations as described [here](http://www.eclipse.org/rap/developers-guide/devguide.php?topic=launcher.html&version=3.1#rwt-launcher),
-but please make sure to choose <i>Run from web.xml</i> and set `/Kettle UI/WEB-INF/web.xml` for Location.
-
 # Notices
 
 - Pentaho is a registered trademark of Pentaho, Inc.
@@ -257,7 +226,6 @@ but please make sure to choose <i>Run from web.xml</i> and set `/Kettle UI/WEB-I
 - Ubuntu is a registered trademark of Canonical Ltd.
 - Mac and OS X are trademarks of Apple Inc., registered in the U.S. and other countries.
 - Windows and Active Directory are registered trademark of Microsoft Corporation in the U.S. and other countries.
-- Eclipse is a registered trademark of the Eclipse Foundation, Inc. in the US and/or other countries.
 - Apache Karaf is a trademark of The Apache Software Foundation.
 - Google Chrome browser is a trademark of Google Inc.
 - Other company and product names mentioned in this document may be the trademarks of their respective owners.

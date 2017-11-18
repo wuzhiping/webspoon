@@ -1,5 +1,10 @@
 # Change Log
 
+## 0.8.0.13 - 2017-11-17
+### Changed
+- kettle-engine needs patching
+- Move WebSpoonTest.java to integration
+
 ## 0.7.1.13 - 2017-10-20
 
 ### Changed

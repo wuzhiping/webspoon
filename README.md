@@ -200,8 +200,7 @@ $ mvn clean install -pl core,engine,ui
 Change directory and build a war file (`spoon.war`):
 
 ```bash
-$ cd pentaho-kettle/assemblies/pdi-ce
-$ mvn clean package
+$ mvn clean package -pl assemblies/pdi-ce
 ```
 
 ## UI testing using Selenium (outdated)

@@ -39,8 +39,8 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.MessageDialogWithToggle;
 import org.eclipse.rap.rwt.RWT;
-//import org.eclipse.jface.window.DefaultToolTip;
-//import org.eclipse.jface.window.ToolTip;
+import org.eclipse.jface.window.DefaultToolTip;
+import org.eclipse.jface.window.ToolTip;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -304,7 +304,7 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
 
   private JobEntryCopy endHopEntry;
   private JobEntryCopy noInputEntry;
-  private CheckBoxToolTip toolTip;
+  private DefaultToolTip toolTip;
   private Point[] previous_step_locations;
   private Point[] previous_note_locations;
   private JobEntryCopy currentEntry;
@@ -407,7 +407,7 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
         new Exception( t ) );
     }
 
-    toolTip = new CheckBoxToolTip( shell );
+    toolTip = new DefaultToolTip( canvas, ToolTip.NO_RECREATE, true );
     toolTip.setRespectMonitorBounds( true );
     toolTip.setRespectDisplayBounds( true );
     toolTip.setPopupDelay( 350 );

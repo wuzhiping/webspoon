@@ -29,8 +29,8 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.MessageDialogWithToggle;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.rap.rwt.RWT;
-//import org.eclipse.jface.window.DefaultToolTip;
-//import org.eclipse.jface.window.ToolTip;
+import org.eclipse.jface.window.DefaultToolTip;
+import org.eclipse.jface.window.ToolTip;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -249,7 +249,7 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
 
   private Composite mainComposite;
 
-  private CheckBoxToolTip toolTip;
+  private DefaultToolTip toolTip;
 
   private CheckBoxToolTip helpTip;
 
@@ -512,7 +512,7 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
       log.logError( "Error parsing XUL XML", t );
     }
 
-    toolTip = new CheckBoxToolTip( shell );
+    toolTip = new DefaultToolTip( canvas, ToolTip.NO_RECREATE, true );
     toolTip.setRespectMonitorBounds( true );
     toolTip.setRespectDisplayBounds( true );
     toolTip.setPopupDelay( 350 );

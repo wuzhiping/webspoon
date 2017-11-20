@@ -66,8 +66,8 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.MessageDialogWithToggle;
 import org.eclipse.jface.window.ApplicationWindow;
-//import org.eclipse.jface.window.DefaultToolTip;
-//import org.eclipse.jface.window.ToolTip;
+import org.eclipse.jface.window.DefaultToolTip;
+import org.eclipse.jface.window.ToolTip;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.rap.fileupload.DiskFileUploadReceiver;
@@ -298,7 +298,6 @@ import org.pentaho.di.ui.core.dialog.SubjectDataBrowserDialog;
 import org.pentaho.di.ui.core.dialog.BrowserEnvironmentWarningDialog;
 import org.pentaho.di.ui.core.gui.GUIResource;
 import org.pentaho.di.ui.core.gui.WindowProperty;
-import org.pentaho.di.ui.core.widget.CheckBoxToolTip;
 import org.pentaho.di.ui.core.widget.OsHelper;
 import org.pentaho.di.ui.core.widget.TreeMemory;
 import org.pentaho.di.ui.imp.ImportRulesDialog;
@@ -570,7 +569,7 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
 
   private Map<String, String> coreJobToolTipMap;
 
-  private CheckBoxToolTip toolTip;
+  private DefaultToolTip toolTip;
 
   public Map<String, SharedObjects> sharedObjectsFileMap;
 
@@ -2268,7 +2267,7 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
       }
     } );
 
-    toolTip = new CheckBoxToolTip( shell );
+    toolTip = new DefaultToolTip( variableComposite, ToolTip.RECREATE, true );
     toolTip.setRespectMonitorBounds( true );
     toolTip.setRespectDisplayBounds( true );
     toolTip.setPopupDelay( 350 );

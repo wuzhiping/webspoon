@@ -22,8 +22,8 @@
 
 package org.pentaho.di.ui.core.widget;
 
-//import org.eclipse.jface.window.DefaultToolTip;
-//import org.eclipse.jface.window.ToolTip;
+import org.eclipse.jface.window.DefaultToolTip;
+import org.eclipse.jface.window.ToolTip;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.StyledText;
@@ -136,7 +136,7 @@ public class ControlSpaceKeyAdapter extends KeyAdapter {
       final List list = new List( shell, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL );
       props.setLook( list );
       list.setItems( getVariableNames( variables ) );
-      final CheckBoxToolTip toolTip = new CheckBoxToolTip( shell );
+      final DefaultToolTip toolTip = new DefaultToolTip( list, ToolTip.RECREATE, true );
       toolTip.setImage( GUIResource.getInstance().getImageVariable() );
       toolTip.setHideOnMouseDown( true );
       toolTip.setRespectMonitorBounds( true );

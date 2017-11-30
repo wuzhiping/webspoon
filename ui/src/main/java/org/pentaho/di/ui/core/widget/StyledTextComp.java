@@ -29,6 +29,7 @@ import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.LineStyleListener;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTarget;
 import org.eclipse.swt.dnd.DropTargetAdapter;
@@ -331,10 +332,9 @@ public class StyledTextComp extends Composite {
   // Check if something is stored inside the Clipboard
   private boolean checkPaste() {
     try {
-//      Clipboard clipboard = new Clipboard( xParent.getDisplay() );
+      Clipboard clipboard = new Clipboard( xParent.getDisplay() );
       TextTransfer transfer = TextTransfer.getInstance();
-//      String text = (String) clipboard.getContents( transfer );
-      String text = "";
+      String text = (String) clipboard.getContents( transfer );
       if ( text != null && text.length() > 0 ) {
         return true;
       } else {

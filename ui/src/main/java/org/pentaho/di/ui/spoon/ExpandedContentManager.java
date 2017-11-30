@@ -25,7 +25,7 @@ package org.pentaho.di.ui.spoon;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.custom.SashForm;
-//import org.eclipse.swt.dnd.Clipboard;
+import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.KeyEvent;
@@ -116,10 +116,10 @@ public final class ExpandedContentManager {
                   || key == 61 /* + key */ || key == 45 /* - key */ );
 
           if ( copyContent ) {
-//            Browser thisBrowser = (Browser) keyEvent.getSource();
-//            Clipboard clipboard = new Clipboard( thisBrowser.getDisplay() );
-//            clipboard.setContents( new String[] { lastNavigateURL }, new Transfer[] { TextTransfer.getInstance() } );
-//            clipboard.dispose();
+            Browser thisBrowser = (Browser) keyEvent.getSource();
+            Clipboard clipboard = new Clipboard( thisBrowser.getDisplay() );
+            clipboard.setContents( new String[] { lastNavigateURL }, new Transfer[] { TextTransfer.getInstance() } );
+            clipboard.dispose();
           } else if ( arrowNavigation || backslashNavigation || reloadContent || zoomContent ) {
             keyEvent.doit = false;
           }

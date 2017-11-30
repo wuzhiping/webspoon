@@ -38,7 +38,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.TableEditor;
-//import org.eclipse.swt.dnd.Clipboard;
+import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSource;
 import org.eclipse.swt.dnd.DragSourceEvent;
@@ -165,7 +165,7 @@ public class TableView extends Composite {
   private Menu mRow;
 
   private ModifyListener lsMod, lsUndo, lsContent;
-  //private Clipboard clipboard;
+  private Clipboard clipboard;
 
   // private int last_carret_position;
 
@@ -235,7 +235,7 @@ public class TableView extends Composite {
     this.rows = nrRows;
     this.props = pr;
     this.readonly = readOnly;
-    //this.clipboard = null;
+    this.clipboard = null;
     this.variables = space;
     this.addIndexColumn = addIndexColumn;
     this.insertImage = insertImage;
@@ -773,14 +773,13 @@ public class TableView extends Composite {
         // CTRL-V --> Paste selected infomation...
         if ( e.keyCode == 'v' && ctrl ) {
           e.doit = false;
-//          if ( clipboard != null ) {
-//            clipboard.dispose();
-//            clipboard = null;
-//          }
-//          clipboard = new Clipboard( getDisplay() );
+          if ( clipboard != null ) {
+            clipboard.dispose();
+            clipboard = null;
+          }
+          clipboard = new Clipboard( getDisplay() );
           TextTransfer tran = TextTransfer.getInstance();
-//          String text = (String) clipboard.getContents( tran );
-          String text = "";
+          String text = (String) clipboard.getContents( tran );
           if ( combo instanceof ComboVar ) {
             ( (ComboVar) combo ).setText( text );
           } else {
@@ -1231,18 +1230,18 @@ public class TableView extends Composite {
     // cursor.addTraverseListener(lsTraverse);
 
     // Clean up the clipboard
-//    addDisposeListener( new DisposeListener() {
-//      @Override
-//      public void widgetDisposed( DisposeEvent e ) {
-//        if ( clipboard != null ) {
-//          clipboard.dispose();
-//          clipboard = null;
-//        }
+    addDisposeListener( new DisposeListener() {
+      @Override
+      public void widgetDisposed( DisposeEvent e ) {
+        if ( clipboard != null ) {
+          clipboard.dispose();
+          clipboard = null;
+        }
 //        if ( gridFont != null ) {
 //          gridFont.dispose();
 //        }
-//      }
-//    } );
+      }
+    } );
 
     // Drag & drop source!
 
@@ -1787,21 +1786,21 @@ public class TableView extends Composite {
   }
 
   private void clipSelected() {
-//    if ( clipboard != null ) {
-//      clipboard.dispose();
-//      clipboard = null;
-//    }
-//
-//    clipboard = new Clipboard( getDisplay() );
-//    TextTransfer tran = TextTransfer.getInstance();
-//
-//    String clip = getSelectedText();
-//
-//    if ( clip == null ) {
-//      return;
-//    }
-//
-//    clipboard.setContents( new String[]{ clip }, new Transfer[]{ tran } );
+    if ( clipboard != null ) {
+      clipboard.dispose();
+      clipboard = null;
+    }
+
+    clipboard = new Clipboard( getDisplay() );
+    TextTransfer tran = TextTransfer.getInstance();
+
+    String clip = getSelectedText();
+
+    if ( clip == null ) {
+      return;
+    }
+
+    clipboard.setContents( new String[]{ clip }, new Transfer[]{ tran } );
   }
 
   private String getSelectedText() {
@@ -1863,16 +1862,15 @@ public class TableView extends Composite {
   private void pasteSelected() {
     int rownr = getCurrentRownr();
 
-//    if ( clipboard != null ) {
-//      clipboard.dispose();
-//      clipboard = null;
-//    }
-//
-//    clipboard = new Clipboard( getDisplay() );
+    if ( clipboard != null ) {
+      clipboard.dispose();
+      clipboard = null;
+    }
+
+    clipboard = new Clipboard( getDisplay() );
     TextTransfer tran = TextTransfer.getInstance();
 
-//    String text = (String) clipboard.getContents( tran );
-    String text = "";
+    String text = (String) clipboard.getContents( tran );
 
     if ( text != null ) {
       String[] lines = text.split( Const.CR );

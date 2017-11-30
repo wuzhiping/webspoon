@@ -22,17 +22,27 @@
 
 package org.eclipse.jface.window;
 
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Shell;
 import org.pentaho.di.ui.core.widget.CheckBoxToolTip;
 
 public class DefaultToolTip extends CheckBoxToolTip {
 
-  public DefaultToolTip( Shell shell ) {
-    super( shell );
+  public DefaultToolTip( Control control ) {
+    super( control );
   }
 
   public DefaultToolTip( Control control, int style, boolean manualActivation ) {
-    super( control.getShell() );
+    super( control );
+  }
+
+  public void setBackgroundColor(Color color) {
+    // TODO Auto-generated method stub
+    
+  }
+
+  public void setForegroundColor(Color color) {
+    // TODO Auto-generated method stub
+    
   }
 }

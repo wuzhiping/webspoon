@@ -22,8 +22,65 @@
 
 package org.eclipse.jface.window;
 
-public abstract class ToolTip {
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
+
+public abstract class ToolTip extends org.eclipse.swt.widgets.ToolTip {
 
   public static final int RECREATE = 1;
   public static final int NO_RECREATE = 1 << 1;
+
+  public ToolTip( Control control ) {
+    super( control.getShell(), SWT.ICON_INFORMATION );
+  }
+
+  public ToolTip( Control control, int style, boolean manualActivation ) {
+    super( control.getShell(), SWT.ICON_INFORMATION );
+  }
+
+  public void setRespectMonitorBounds(boolean b) {
+    // TODO Auto-generated method stub
+    
+  }
+
+  public void setRespectDisplayBounds(boolean b) {
+    // TODO Auto-generated method stub
+    
+  }
+
+  public void setHideDelay(int i) {
+    // TODO Auto-generated method stub
+    
+  }
+
+  public void setPopupDelay(int i) {
+    // TODO Auto-generated method stub
+    
+  }
+
+  public void setHideOnMouseDown(boolean b) {
+    // TODO Auto-generated method stub
+    
+  }
+
+  public void setShift(Point point) {
+    // TODO Auto-generated method stub
+    
+  }
+
+  public void show(Point location) {
+    super.setLocation( location );
+    super.setVisible( true );
+  }
+
+  public void hide() {
+    super.setVisible( false );
+  }
+
+  protected void afterHideToolTip(Event event) {
+    // TODO Auto-generated method stub
+    
+  }
 }

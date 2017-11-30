@@ -413,7 +413,7 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
     toolTip.setPopupDelay( 350 );
     toolTip.setShift( new org.eclipse.swt.graphics.Point( ConstUI.TOOLTIP_OFFSET, ConstUI.TOOLTIP_OFFSET ) );
 
-    helpTip = new CheckBoxToolTip( shell );
+    helpTip = new CheckBoxToolTip( canvas );
     helpTip.addCheckBoxToolTipListener( new CheckBoxToolTipListener() {
 
       public void checkBoxSelected( boolean enabled ) {

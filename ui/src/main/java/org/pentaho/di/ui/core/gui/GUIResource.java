@@ -916,7 +916,7 @@ public class GUIResource {
         .getProperty( "MIS_image" ) );
 
     // "ui/images/spoon.ico"
-    imageSpoon = loadAsResource( display, BasePropertyHandler.getProperty( "spoon_image" ), 0 );
+    imageSpoon = loadAsResource( display, BasePropertyHandler.getProperty( "spoon_image" ), 32 );
 
     // "ui/images/spoon_lowres.ico"
     imageSpoonLow = loadAsResource( display, BasePropertyHandler.getProperty( "spoon_image_low" ), 48 );

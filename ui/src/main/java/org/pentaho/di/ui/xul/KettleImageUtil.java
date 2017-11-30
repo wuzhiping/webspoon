@@ -43,7 +43,7 @@ public class KettleImageUtil {
   /**
    * Icon sizes for rendering dialog icon from svg.
    */
-  static final int[] IMAGE_SIZES = new int[] { 32 };
+  static final int[] IMAGE_SIZES = new int[] { 256, 128, 64, 48, 32, 16 };
 
   /**
    * Load multiple images from svg, or just png file.

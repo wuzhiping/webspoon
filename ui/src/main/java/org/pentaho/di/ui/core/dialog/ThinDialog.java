@@ -24,8 +24,8 @@ package org.pentaho.di.ui.core.dialog;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
-//import org.eclipse.swt.browser.CloseWindowListener;
-//import org.eclipse.swt.browser.WindowEvent;
+import org.eclipse.swt.browser.CloseWindowListener;
+import org.eclipse.swt.browser.WindowEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
@@ -68,14 +68,14 @@ public class ThinDialog extends Dialog {
     try {
       browser = new Browser( dialog, SWT.NONE );
       browser.setUrl( url );
-//      browser.addCloseWindowListener( new CloseWindowListener() {
-//        @Override
-//        public void close( WindowEvent event ) {
-//          Browser browser = (Browser) event.widget;
-//          Shell shell = browser.getShell();
-//          shell.close();
-//        }
-//      } );
+      browser.addCloseWindowListener( new CloseWindowListener() {
+        @Override
+        public void close( WindowEvent event ) {
+          Browser browser = (Browser) event.widget;
+          Shell shell = browser.getShell();
+          shell.close();
+        }
+      } );
     } catch ( Exception e ) {
       MessageBox messageBox = new MessageBox( dialog, SWT.ICON_ERROR | SWT.OK );
       messageBox.setMessage( "Browser cannot be initialized." );

@@ -37,9 +37,6 @@
     <oss-licenses.version>8.0.0.0-28</oss-licenses.version>
     <webspoon.version>8.0.0.0-28-13</webspoon.version>
 
-    <!-- swt -->
-    <rap.version>3.1.1-SNAPSHOT</rap.version>
-
     <!-- third party -->
     <org.apache.karaf.main.version>3.0.3</org.apache.karaf.main.version>
     <org.apache.karaf.util.version>3.0.3</org.apache.karaf.util.version>
@@ -184,11 +181,6 @@
           <artifactId>jface</artifactId>
         </exclusion>
       </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>commons-fileupload</groupId>
-      <artifactId>commons-fileupload</artifactId>
-      <version>1.3.1</version>
     </dependency>
 
     <!-- AEL -->

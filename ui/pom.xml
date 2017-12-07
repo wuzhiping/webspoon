@@ -30,7 +30,7 @@
     <commands.version>3.3.0-I20070605-0010</commands.version>
     <jfreechart.version>1.0.13</jfreechart.version>
     <webspoon.version>8.0.0.0-28-13</webspoon.version>
-    <rap.version>3.1.1-SNAPSHOT</rap.version>
+    <rap.version>3.3.0</rap.version>
     <selenium.version>3.1.0</selenium.version>
   </properties>
 
@@ -111,17 +111,17 @@
     <dependency>
       <groupId>org.eclipse.rap</groupId>
       <artifactId>org.eclipse.rap.rwt</artifactId>
-      <version>${rap.version}</version>
+      <version>${rap.version}-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.eclipse.rap</groupId>
       <artifactId>org.eclipse.rap.filedialog</artifactId>
-      <version>${rap.version}</version>
+      <version>${rap.version}-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.eclipse.rap</groupId>
       <artifactId>org.eclipse.rap.jface</artifactId>
-      <version>${rap.version}</version>
+      <version>${rap.version}-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.eclipse.rap</groupId>
@@ -209,7 +209,7 @@
     <dependency>
       <groupId>org.eclipse.rap</groupId>
       <artifactId>org.eclipse.rap.rwt.testfixture</artifactId>
-      <version>${rap.version}</version>
+      <version>${rap.version}-SNAPSHOT</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>

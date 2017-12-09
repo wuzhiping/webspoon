@@ -160,13 +160,6 @@ public class ConstantDialog extends BaseStepDialog implements StepDialogInterfac
         new String[] {
           BaseMessages.getString( PKG, "System.Combo.Yes" ), BaseMessages.getString( PKG, "System.Combo.No" ) } );
 
-    wOK = new Button( shell, SWT.PUSH );
-    wOK.setText( BaseMessages.getString( PKG, "System.Button.OK" ) );
-    wCancel = new Button( shell, SWT.PUSH );
-    wCancel.setText( BaseMessages.getString( PKG, "System.Button.Cancel" ) );
-
-    setButtonPositions( new Button[] { wOK, wCancel }, margin, wFields );
-
     wFields =
       new TableView(
         transMeta, shell, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI, colinf, FieldsRows, lsMod, props );
@@ -177,6 +170,13 @@ public class ConstantDialog extends BaseStepDialog implements StepDialogInterfac
     fdFields.right = new FormAttachment( 100, 0 );
     fdFields.bottom = new FormAttachment( 100, -50 );
     wFields.setLayoutData( fdFields );
+
+    wOK = new Button( shell, SWT.PUSH );
+    wOK.setText( BaseMessages.getString( PKG, "System.Button.OK" ) );
+    wCancel = new Button( shell, SWT.PUSH );
+    wCancel.setText( BaseMessages.getString( PKG, "System.Button.Cancel" ) );
+
+    setButtonPositions( new Button[] { wOK, wCancel }, margin, wFields );
 
     // Add listeners
     lsOK = new Listener() {
@@ -221,7 +221,7 @@ public class ConstantDialog extends BaseStepDialog implements StepDialogInterfac
         wFields.redraw();
       }
     };
-    shell.addListener( SWT.Resize, lsResize );
+//    shell.addListener( SWT.Resize, lsResize );
 
     // Set the shell size, based upon previous time...
     setSize();

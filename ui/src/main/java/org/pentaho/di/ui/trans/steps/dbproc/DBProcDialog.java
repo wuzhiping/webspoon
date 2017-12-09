@@ -317,16 +317,6 @@ public class DBProcDialog extends BaseStepDialog implements StepDialogInterface 
         BaseMessages.getString( PKG, "DBProcDialog.ColumnInfo.Type" ), ColumnInfo.COLUMN_TYPE_CCOMBO,
         ValueMetaFactory.getValueMetaNames() );
 
-    // THE BUTTONS
-    wOK = new Button( shell, SWT.PUSH );
-    wOK.setText( BaseMessages.getString( PKG, "System.Button.OK" ) );
-    wGet = new Button( shell, SWT.PUSH );
-    wGet.setText( BaseMessages.getString( PKG, "DBProcDialog.GetFields.Button" ) );
-    wCancel = new Button( shell, SWT.PUSH );
-    wCancel.setText( BaseMessages.getString( PKG, "System.Button.Cancel" ) );
-
-    setButtonPositions( new Button[] { wOK, wCancel, wGet }, margin, wFields );
-
     wFields =
       new TableView(
         transMeta, shell, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI, colinf, FieldsRows, lsMod, props );
@@ -360,6 +350,16 @@ public class DBProcDialog extends BaseStepDialog implements StepDialogInterface 
       }
     };
     new Thread( runnable ).start();
+
+    // THE BUTTONS
+    wOK = new Button( shell, SWT.PUSH );
+    wOK.setText( BaseMessages.getString( PKG, "System.Button.OK" ) );
+    wGet = new Button( shell, SWT.PUSH );
+    wGet.setText( BaseMessages.getString( PKG, "DBProcDialog.GetFields.Button" ) );
+    wCancel = new Button( shell, SWT.PUSH );
+    wCancel.setText( BaseMessages.getString( PKG, "System.Button.Cancel" ) );
+
+    setButtonPositions( new Button[] { wOK, wCancel, wGet }, margin, wFields );
 
     // Add listeners
     lsOK = new Listener() {
@@ -405,7 +405,7 @@ public class DBProcDialog extends BaseStepDialog implements StepDialogInterface 
         wFields.redraw();
       }
     };
-    shell.addListener( SWT.Resize, lsResize );
+//    shell.addListener( SWT.Resize, lsResize );
 
     // Set the shell size, based upon previous time...
     setSize();

@@ -332,6 +332,17 @@
         </exclusion>
       </exclusions>
     </dependency>
+    <dependency>
+      <groupId>pentaho</groupId>
+      <artifactId>pentaho-platform-scheduler</artifactId>
+      <version>${pentaho-platform.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
 
     <!--  Pentaho reporting dependencies -->
     <dependency>

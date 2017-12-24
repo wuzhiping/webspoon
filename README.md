@@ -219,14 +219,14 @@ $ mvn clean install -pl tests/org.eclipse.rap.rwt.testfixture -am
 
 ## Build in the command line
 
-**Make sure patched dependent libraries have been published locally, and no cached jars for RAP (if there is any update).**
+**Make sure patched dependent libraries have been published locally**
 
-Compile `kettle-core`, `kettle-engine` and `kettle-ui-swt`; and install the packages into the local repository:
+Compile `kettle-core`, `kettle-engine`, `kettle-ui-swt`, and `webspoon-security`; and install the packages into the local repository:
 
 ```bash
 $ git clone -b webspoon-8.0 https://github.com/HiromuHota/pentaho-kettle.git
 $ cd pentaho-kettle
-$ mvn clean install -pl core,engine,ui
+$ mvn clean install -pl core,engine,security,ui
 ```
 
 Change directory and build a war file (`spoon.war`):

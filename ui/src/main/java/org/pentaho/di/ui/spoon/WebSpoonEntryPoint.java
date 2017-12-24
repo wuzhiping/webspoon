@@ -2,8 +2,8 @@
  *
  * Pentaho Data Integration
  *
- * Copyright (C) 2002-2016 by Pentaho : http://www.pentaho.com
- * Copyright (C) 2016-2017 by Hitachi America, Ltd., R&D : http://www.hitachi-america.us/rd/
+ * Copyright (C) 2002-2018 by Hitachi Vantara : http://www.pentaho.com
+ * Copyright (C) 2016-2018 by Hitachi America, Ltd., R&D : http://www.hitachi-america.us/rd/
  *
  *******************************************************************************
  *
@@ -39,12 +39,17 @@ import org.pentaho.di.core.extension.ExtensionPointHandler;
 import org.pentaho.di.core.extension.KettleExtensionPoint;
 import org.pentaho.di.core.logging.LogChannel;
 import org.pentaho.di.pan.CommandLineOption;
+import org.pentaho.di.security.WebSpoonSecurityManager;
 import org.pentaho.di.ui.core.PropsUI;
 
 public class WebSpoonEntryPoint extends AbstractEntryPoint {
 
   @Override
   protected void createContents( Composite parent ) {
+    SecurityManager securityManager = System.getSecurityManager();
+    if ( securityManager instanceof WebSpoonSecurityManager ) {
+      ( (WebSpoonSecurityManager) securityManager ).setUserName( Const.getUser() );
+    }
     /*
      *  Create a KettleHome for the current user.
      *  kettle.properties is automatically created for this user, but not used.

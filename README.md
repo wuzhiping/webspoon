@@ -34,7 +34,7 @@ $ docker run -e JAVA_OPTS="-Xms1024m -Xmx2048m" -d -p 8080:8080 hiromuhota/websp
 Please refer to the [wiki](https://github.com/HiromuHota/pentaho-kettle/wiki/System-Requirements) for system requirements.
 
 1. Unzip `pdi-ce-8.0.0.0-28.zip`, then copy `system` and `plugins` folders to `$CATALINA_HOME`.
-2. Run [install.sh](https://raw.githubusercontent.com/HiromuHota/webspoon-docker/master/install.sh) at `$CATALINA_HOME`.
+2. Run install.sh at `$CATALINA_HOME`.
 3. (Re)start the Tomcat.
 
 The actual commands look like below:
@@ -46,13 +46,15 @@ $ unzip ~/Downloads/pdi-ce-8.0.0.0-28.zip
 $ cd $CATALINA_HOME
 $ cp -r ~/data-integration/system ./
 $ cp -r ~/data-integration/plugins ./
-$ wget https://raw.githubusercontent.com/HiromuHota/webspoon-docker/master/install.sh
+$ wget https://raw.githubusercontent.com/HiromuHota/webspoon-docker/0.8.0.13/install.sh
 $ chmod +x install.sh
 $ export version=0.8.0.13
 $ export dist=8.0.0.0-28
 $ ./install.sh
 $ ./bin/startup.sh
 ```
+
+Please use the right version of install.sh corresponding to your `version`.
 
 # How to config (optional)
 

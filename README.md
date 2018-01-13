@@ -58,6 +58,27 @@ Please use the right version of install.sh corresponding to your `version`.
 
 # How to config (optional)
 
+## Carte
+
+If `$CATALINA_HOME/system/kettle/slave-server-config.xml` exists, the embedded Carte servlet can be configured accordingly.
+See [here](https://wiki.pentaho.com/display/EAI/Carte+Configuration) for the config format.
+An example config xml looks like this:
+
+```
+<slave_config>
+  <max_log_lines>10000</max_log_lines>
+  <max_log_timeout_minutes>2880</max_log_timeout_minutes>
+  <object_timeout_minutes>240</object_timeout_minutes>
+  <repository>
+    <name>test</name>
+    <username>username</username>
+    <password>password</password>
+  </repository>
+</slave_config>
+```
+
+Note that only repositories defined in `$HOME/.kettle/repositories.xml` can be used.
+
 ## User authentication
 
 Edit `WEB-INF/web.xml` to uncomment/enable user authentication.

@@ -72,6 +72,7 @@
       <groupId>pentaho-kettle</groupId>
       <artifactId>webspoon-security</artifactId>
       <version>${webspoon.version}</version>
+      <scope>provided</scope>
     </dependency>
 
     <!-- Pentaho dependencies -->

@@ -3,7 +3,8 @@
  *
  * Pentaho Data Integration
  *
- * Copyright (C) 2002-2017 by Hitachi Vantara : http://www.pentaho.com
+ * Copyright (C) 2002-2018 by Hitachi Vantara : http://www.pentaho.com
+ * Copyright (C) 2016-2018 by Hitachi America, Ltd., R&D : http://www.hitachi-america.us/rd/
  *
  *******************************************************************************
  *
@@ -169,6 +170,7 @@ import org.pentaho.di.core.database.DatabaseMeta;
 import org.pentaho.di.core.encryption.Encr;
 import org.pentaho.di.core.exception.KettleAuthException;
 import org.pentaho.di.core.exception.KettleException;
+import org.pentaho.di.core.exception.KettleFileException;
 import org.pentaho.di.core.exception.KettleMissingPluginsException;
 import org.pentaho.di.core.exception.KettleRowException;
 import org.pentaho.di.core.exception.KettleValueException;
@@ -1087,7 +1089,12 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
     if ( vfsFileChooserDialog == null ) {
       vfsFileChooserDialog = new VfsFileChooserDialog( shell, new KettleVfsDelegatingResolver(), rootFile, initialFile );
     }
-    vfsFileChooserDialog.setRootFile( rootFile );
+    try {
+      // Make sure the rootfile is accessible by the remote user.
+      vfsFileChooserDialog.setRootFile( KettleVFS.getFileObject( Const.getKettleUserDataDirectory() ) );
+    } catch ( KettleFileException e ) {
+      log.logError( "Error setting rootfile", e );
+    }
     vfsFileChooserDialog.setInitialFile( initialFile );
     return vfsFileChooserDialog;
   }

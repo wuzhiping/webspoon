@@ -144,8 +144,7 @@ public class KettleClientEnvironment {
       //
       createDefaultKettleProperties( directory );
     } catch ( Exception e ) {
-      // ignore - should likely propagate the error
-
+      System.err.println( e.getMessage() );
     }
   }
 
@@ -165,8 +164,7 @@ public class KettleClientEnvironment {
       dir = new File( Const.getKettleUserDataDirectory() );
       dir.mkdirs();
     } catch ( Exception e ) {
-      // ignore - should likely propagate the error
-
+      System.err.println( e.getMessage() );
     }
   }
 

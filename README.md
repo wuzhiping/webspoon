@@ -181,6 +181,7 @@ There could be a version of 0.7.0.4, which is based on the Kettle version 7.0 wi
 Please build and locally-publish the following dependent libraries.
 
 - pentaho-xul-swt
+- pentaho-vfs-browser
 - org.eclipse.rap.rwt
 - org.eclipse.rap.jface
 - org.eclipse.rap.fileupload
@@ -193,6 +194,14 @@ Please build and locally-publish the following dependent libraries.
 $ git clone -b webspoon-8.0 https://github.com/HiromuHota/pentaho-commons-xul.git
 $ cd pentaho-commons-xul/pentaho-xul-swt
 $ ant clean-all resolve publish-local
+```
+
+### pentaho-vfs-browser
+
+```
+$ git clone -b webspoon-8.0 https://github.com/HiromuHota/apache-vfs-browser.git
+$ cd apache-vfs-browser
+$ mvn clean install
 ```
 
 ### rap

@@ -22,7 +22,7 @@
 
     <!-- Pentaho dependencies -->
     <kettle.version>8.0.0.0-28</kettle.version>
-    <pentaho-vfs-browser.version>8.0.0.0-28</pentaho-vfs-browser.version>
+    <pentaho-vfs-browser.version>${project.version}</pentaho-vfs-browser.version>
     <pentaho-capability-manager.version>${kettle.version}</pentaho-capability-manager.version>
 
     <!-- Third-party dependencies -->

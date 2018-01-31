@@ -78,6 +78,8 @@ An example config xml looks like this:
 ```
 
 Note that only repositories defined in `$HOME/.kettle/repositories.xml` can be used.
+Also note that it is NOT recommended to define `repository` element in the XML when the following user authentication is enabled.
+Issues such as [#91](https://github.com/HiromuHota/pentaho-kettle/issues/91) can happen.
 
 ## User authentication
 

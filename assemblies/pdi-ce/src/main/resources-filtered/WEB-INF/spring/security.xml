@@ -4,7 +4,15 @@
      xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
             http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 
-  <http pattern="/kettle/**" security="none"/>
+  <!-- BASIC-Auth for Carte endpoints -->
+  <http pattern="/kettle/**">
+    <intercept-url pattern="/**" access="hasRole('USER')"/>
+    <http-basic />
+    <!-- Disable CSRF because org.pentaho.di.cluster.SlaveServer does not seem to be able to handle CSRF token issued by Spring Security -->
+    <csrf disabled="true"/>
+  </http>
+
+  <!-- Form-based for the rest -->
   <http>
     <intercept-url pattern="/favicon.ico" access="permitAll"/>
     <intercept-url pattern="/rwt-resources/**" access="permitAll"/>

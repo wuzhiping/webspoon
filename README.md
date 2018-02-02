@@ -109,21 +109,24 @@ Edit `WEB-INF/web.xml` to uncomment/enable user authentication.
   -->
 ```
 
-Edit `WEB-INF/spring/security.xml` to manage users.
-The following example shows how to assign <i>user</i> with password of <i>password</i> to <i>USER</i> role.
+Edit `WEB-INF/spring/security.xml` to configure authentication providers.
+The examle below uses two auth providers: `ldap-authentication-provider` and `authentication-provider`, where the LDAP authentication is provided by the Spring Security's embedded LDAP server with a configuration of `WEB-INF/classes/example.ldif`.
+See [here](https://docs.spring.io/spring-security/site/docs/4.1.x/reference/html/ns-config.html) for Spring Security in general and [here](http://docs.spring.io/spring-security/site/docs/4.1.x/reference/html/ldap.html) for LDAP.
 
 ```
-<b:beans>
-  <user-service>
-    <user name="user" password="password" authorities="ROLE_USER" />
-  </user-service>
-</b:beans>
-```
+  <!--<ldap-server url="ldap://localhost:389/dc=example,dc=org"/>-->
+  <ldap-server ldif="classpath:example.ldif" root="dc=example,dc=org"/>
 
-It would be possible to use LDAP as an authentication provider.
-See [here](http://docs.spring.io/spring-security/site/docs/4.1.x/reference/html/ns-config.html) for more details.
-webSpoon uses the same framework for user authentication: Spring Security, as Pentaho User Console.
-Thus, it would also be possible to use Microsoft Active Directory as described in Pentaho's official documentation for [User Security](https://help.pentaho.com/Documentation/7.0/0P0/Setting_Up_User_Security).
+  <authentication-manager>
+    <ldap-authentication-provider user-dn-pattern="uid={0},ou=people"
+      group-search-base="ou=groups" />
+    <authentication-provider>
+      <user-service>
+        <user name="user" password="password" authorities="ROLE_USER" />
+      </user-service>
+    </authentication-provider>
+  </authentication-manager>
+```
 
 ## Third-party plugins and JDBC drivers
 

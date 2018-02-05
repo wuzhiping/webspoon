@@ -110,6 +110,11 @@
       <artifactId>pdi-engine-api</artifactId>
       <version>${kettle.version}</version>
     </dependency>
+    <dependency>
+      <groupId>pentaho-kettle</groupId>
+      <artifactId>webspoon-security</artifactId>
+      <version>${project.version}</version>
+    </dependency>
 
     <!-- Pentaho dependencies -->
     <dependency>

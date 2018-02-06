@@ -240,7 +240,7 @@ Change directory and build a war file (`spoon.war`):
 $ mvn clean package -pl assemblies/pdi-ce
 ```
 
-## UI testing using Selenium (outdated)
+## UI testing using Selenium
 
 Currently, only Google Chrome browser has been tested for when running UI test cases.
 The tests run in headless mode unless a parameter `-Dheadless.unittest=false` is passed.
@@ -252,7 +252,7 @@ Pass a parameter like below if webSpoon is deployed to a different url.
 The following command runs all the unit test cases including UI in non-headless mode.
 
 ```
-$ ant test -Dtest.baseurl=http://localhost:8080/spoon/spoon -Dheadless.unittest=false
+$ mvn clean test -pl integration -Dtest.baseurl=http://localhost:8080/spoon/spoon -Dheadless.unittest=false
 ```
 
 # Notices

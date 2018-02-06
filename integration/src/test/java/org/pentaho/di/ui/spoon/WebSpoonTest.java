@@ -47,7 +47,7 @@ public class WebSpoonTest {
 
   @Before
   public void setUp() throws Exception {
-    boolean isHeadless = Boolean.parseBoolean( System.getProperty( "java.awt.headless", "true" ) );
+    boolean isHeadless = Boolean.parseBoolean( System.getProperty( "headless.unittest", "true" ) );
     ChromeOptions options = new ChromeOptions();
     if ( isHeadless ) {
       options.addArguments( "headless" );
@@ -197,7 +197,7 @@ public class WebSpoonTest {
   public void testMarketplace() {
     clickElement( "//div[text() = 'Tools']" );
     clickElement( "//div[text() = 'Marketplace']" );
-    driver.switchTo().frame( driver.findElement( By.xpath(".//iframe[@src='osgi/pentaho-marketplace/7.1.0.0-12/main.html']") ) );
+    driver.switchTo().frame( driver.findElement( By.xpath(".//iframe[@src='osgi/pentaho-marketplace/8.0.0.0-28/main.html']") ) );
     assertEquals( 1, driver.findElements( By.xpath( "//div[text() = ' Available ']" ) ).size() );
   }
 

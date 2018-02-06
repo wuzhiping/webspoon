@@ -18,7 +18,7 @@
 
   <properties>
     <!-- webSpoon specific dependencies -->
-    <webspoon.version>8.0.0.0-28-13</webspoon.version>
+    <webspoon.version>8.0.0.0-28-14</webspoon.version>
 
     <assembly.dir>${project.build.directory}/assembly</assembly.dir>
     <assembly.launcher.jar>pentaho-application-launcher-${pentaho-launcher.version}.jar</assembly.launcher.jar>

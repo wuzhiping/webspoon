@@ -6,7 +6,7 @@
   <groupId>pentaho-kettle</groupId>
   <artifactId>webspoon-security</artifactId>
   <packaging>jar</packaging>
-  <version>8.0.0.0-28-13</version>
+  <version>8.0.0.0-28-14</version>
 
   <name>webSpoon Security</name>
 
@@ -18,7 +18,7 @@
 
   <properties>
     <!-- webSpoon specific dependencies -->
-    <webspoon.version>8.0.0.0-28-13</webspoon.version>
+    <webspoon.version>8.0.0.0-28-14</webspoon.version>
     <rap.version>3.3.0</rap.version>
   </properties>
 

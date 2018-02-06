@@ -1,5 +1,30 @@
 # Change Log
 
+## 0.8.0.14 - 2018-02-XX
+### Added
+- Add a custom security manager (disabled by default)
+- Add jars required for LDAP authentication and example .ldif file
+
+### Changed
+- Update RAP/RWT to 3.3.0
+- Exclude jetty jars
+- Add pentaho-platform-scheduler
+- Add jersey-spring
+- Add required spring jars for user auth
+- [#90] Configure Carte if slave-server-config.xml exists
+- Add the patched pentaho-vfs-browser as a dependency
+- Secure Carte endpoints by BASIC-Auth
+- Move user-service element under authentication-manager/authentication-provider
+
+### Fixed
+- [#45] Fixed the popupmenu location (by the patched pentaho-vfs-browser)
+- [#85] Fixed "No suitable driver found for Hive2/Impala" error
+- [#86] Fixed "NoClassDefFoundError: org/eclipse/jface/window/DefaultToolTip" error
+- [#88] Include commons-fileupload (required for "Import from an XML file")
+- [#92] Fixed "UI session stops working after 500 (Internal Server Error)"
+- [#94] Adding `save as` behaviour for `FileDialog.open()` (Thanks to @Valeran86)
+- [HiromuHota/rap#1] Set correct message on finish button in Wizard (Thanks to @Valeran86)
+
 ## 0.8.0.13 - 2017-11-17
 ### Changed
 - kettle-engine needs patching

@@ -1,6 +1,6 @@
 # Change Log
 
-## 0.8.0.14 - 2018-02-XX
+## 0.8.0.14 - 2018-02-07
 ### Added
 - Add a custom security manager (disabled by default)
 - Add jars required for LDAP authentication and example .ldif file

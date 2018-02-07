@@ -17,6 +17,9 @@
   </parent>
 
   <properties>
+    <!-- webSpoon specific dependencies -->
+    <webspoon.version>8.0.0.0-28-13</webspoon.version>
+
     <assembly.dir>${project.build.directory}/assembly</assembly.dir>
     <assembly.launcher.jar>pentaho-application-launcher-${pentaho-launcher.version}.jar</assembly.launcher.jar>
 
@@ -35,7 +38,6 @@
     <pentaho-platform.version>8.0.0.0-28</pentaho-platform.version>
     <reporting-engine.version>8.0.0.0-28</reporting-engine.version>
     <oss-licenses.version>8.0.0.0-28</oss-licenses.version>
-    <webspoon.version>8.0.0.0-28-13</webspoon.version>
 
     <!-- third party -->
     <org.apache.karaf.main.version>3.0.3</org.apache.karaf.main.version>

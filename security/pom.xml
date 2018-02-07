@@ -17,6 +17,8 @@
   </parent>
 
   <properties>
+    <!-- webSpoon specific dependencies -->
+    <webspoon.version>8.0.0.0-28-13</webspoon.version>
     <rap.version>3.3.0</rap.version>
   </properties>
 
@@ -26,7 +28,7 @@
     <dependency>
       <groupId>pentaho-kettle</groupId>
       <artifactId>kettle-core</artifactId>
-      <version>${project.version}</version>
+      <version>${webspoon.version}</version>
     </dependency>
 
     <!-- Test dependencies -->

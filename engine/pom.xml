@@ -18,6 +18,9 @@
   </parent>
 
   <properties>
+    <!-- webSpoon specific dependencies -->
+    <webspoon.version>8.0.0.0-28-13</webspoon.version>
+
     <!-- Test running configuration -->
     <maven-surefire-plugin.reuseForks>false</maven-surefire-plugin.reuseForks>
     <maven-failsafe-plugin.reuseForks>false</maven-failsafe-plugin.reuseForks>
@@ -103,7 +106,7 @@
     <dependency>
       <groupId>pentaho-kettle</groupId>
       <artifactId>kettle-core</artifactId>
-      <version>${project.version}</version>
+      <version>${webspoon.version}</version>
     </dependency>
     <dependency>
       <groupId>org.pentaho</groupId>
@@ -113,7 +116,7 @@
     <dependency>
       <groupId>pentaho-kettle</groupId>
       <artifactId>webspoon-security</artifactId>
-      <version>${project.version}</version>
+      <version>${webspoon.version}</version>
       <scope>provided</scope>
     </dependency>
 

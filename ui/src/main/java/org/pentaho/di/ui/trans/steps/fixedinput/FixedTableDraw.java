@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Vector;
 
 import org.eclipse.jface.wizard.WizardPage;
+import org.eclipse.rap.rwt.internal.textsize.TextSizeUtil;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -64,8 +65,6 @@ public class FixedTableDraw extends Canvas {
   private Point offset;
   private ScrollBar hori;
   private ScrollBar vert;
-  private Canvas dummy_canvas;
-  private GC dummy_gc;
   private int maxlen;
 
   private int fontheight;
@@ -114,11 +113,9 @@ public class FixedTableDraw extends Canvas {
     vert = getVerticalBar();
 
     // Determine font width...
-    dummy_canvas = new Canvas( parent, SWT.NO_REDRAW_RESIZE );
-    dummy_gc = new GC( dummy_canvas );
     // dummy_gc.setFont(font);
     String teststring = "ABCDEF";
-    fontwidth = Math.round( dummy_gc.textExtent( teststring ).x / teststring.length() );
+    fontwidth = Math.round( TextSizeUtil.textExtent( getFont(), teststring, 0 ).x / teststring.length() );
 
     setBackground( bg );
     // setFont(font);
@@ -126,14 +123,6 @@ public class FixedTableDraw extends Canvas {
     addPaintListener( new PaintListener() {
       public void paintControl( PaintEvent e ) {
         FixedTableDraw.this.paintControl( e );
-      }
-    } );
-
-    addDisposeListener( new DisposeListener() {
-      public void widgetDisposed( DisposeEvent arg0 ) {
-        dummy_gc.dispose();
-        dummy_canvas.dispose();
-
       }
     } );
 

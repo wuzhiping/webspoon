@@ -34,6 +34,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.jface.fieldassist.ControlDecoration;
+import org.eclipse.rap.rwt.internal.textsize.TextSizeUtil;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.custom.CCombo;
@@ -71,7 +72,6 @@ import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -1237,9 +1237,6 @@ public class TableView extends Composite {
           clipboard.dispose();
           clipboard = null;
         }
-//        if ( gridFont != null ) {
-//          gridFont.dispose();
-//        }
       }
     } );
 
@@ -2257,16 +2254,7 @@ public class TableView extends Composite {
     }
     String str = getTextWidgetValue( colnr );
 
-    Canvas dummyCanvas = new Canvas( parent, SWT.NO_REDRAW_RESIZE );
-    GC dummyGC = new GC( dummyCanvas );
-    Font gridFont = new Font( parent.getDisplay(), props.getGridFont() );
-    dummyGC.setFont( gridFont );
-    int strmax = dummyGC.textExtent( str ).x + 20;
-
-    gridFont.dispose();
-    dummyGC.dispose();
-    dummyCanvas.dispose();
-
+    int strmax = TextSizeUtil.textExtent( getFont(), str, 0 ).x + 20;
     int colmax = tablecolumn[colnr].getWidth();
     if ( strmax > colmax ) {
       if ( Const.isOSX() || Const.isLinux() ) {
@@ -2509,16 +2497,11 @@ public class TableView extends Composite {
   }
 
   public void optWidth( boolean header, int nrLines ) {
-    Canvas dummyCanvas = new Canvas( parent, SWT.NO_REDRAW_RESIZE );
-    GC dummyGC = new GC( dummyCanvas );
-    Font gridFont = new Font( parent.getDisplay(), props.getGridFont() );
-    dummyGC.setFont( gridFont );
-
     for ( int c = 0; c < table.getColumnCount(); c++ ) {
       TableColumn tc = table.getColumn( c );
       int max = 0;
       if ( header ) {
-        max = dummyGC.textExtent( tc.getText() ).x;
+        max = TextSizeUtil.textExtent( getFont(), tc.getText(), 0 ).x;
 
         // Check if the column has a sorted mark set. In that case, we need the
         // header to be a bit wider...
@@ -2568,7 +2551,7 @@ public class TableView extends Composite {
       }
 
       for ( String str : columnStrings ) {
-        int len = dummyGC.textExtent( str == null ? "" : str ).x;
+        int len = TextSizeUtil.textExtent( getFont(), str == null ? "" : str, 0 ).x;
         if ( len > max ) {
           max = len;
         }
@@ -2601,9 +2584,6 @@ public class TableView extends Composite {
       resizeEvent.setBounds( table.getBounds() );
       table.notifyListeners( SWT.Resize, resizeEvent );
     }
-    gridFont.dispose();
-    dummyGC.dispose();
-    dummyCanvas.dispose();
     unEdit();
   }
 

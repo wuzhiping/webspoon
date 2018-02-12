@@ -2257,9 +2257,6 @@ public class TableView extends Composite {
     int strmax = TextSizeUtil.textExtent( getFont(), str, 0 ).x + 20;
     int colmax = tablecolumn[colnr].getWidth();
     if ( strmax > colmax ) {
-      if ( Const.isOSX() || Const.isLinux() ) {
-        strmax *= 1.4;
-      }
       tablecolumn[colnr].setWidth( strmax + 30 );
 
       // On linux, this causes the text to select everything...

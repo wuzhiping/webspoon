@@ -61,6 +61,7 @@ import javax.swing.UIManager;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 
 import org.apache.commons.io.output.TeeOutputStream;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.vfs2.FileObject;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.MenuManager;
@@ -6928,10 +6929,9 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
           && disableJobMenu && disableMetaMenu || disableSave );
         disableMenuItem( doc, "file-save-as-vfs", disableTransMenu && disableJobMenu && disableMetaMenu );
         disableMenuItem( doc, "file-close", disableTransMenu && disableJobMenu && disableMetaMenu );
-        disableMenuItem( doc, "file-print", disableTransMenu && disableJobMenu || true );
+        disableMenuItem( doc, "file-print", disableTransMenu && disableJobMenu );
         disableMenuItem( doc, "file-export-to-xml", disableTransMenu && disableJobMenu );
         disableMenuItem( doc, "file-export-all-to-xml", disableTransMenu && disableJobMenu );
-        disableMenuItem( doc, "file-quit", true );
 
         // Disable the undo and redo menus if there is no active transformation
         // or active job
@@ -6940,8 +6940,6 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
         disableMenuItem( doc, UNDO_MENU_ITEM, disableTransMenu && disableJobMenu );
         disableMenuItem( doc, REDO_MENU_ITEM, disableTransMenu && disableJobMenu );
 
-        disableMenuItem( doc, "edit.copy-file", true );
-        disableMenuItem( doc, "trans-copy-image", true );
         disableMenuItem( doc, "edit-clear-selection", disableTransMenu && disableJobMenu );
         disableMenuItem( doc, "edit-select-all", disableTransMenu && disableJobMenu );
         updateSettingsMenu( doc, disableTransMenu, disableJobMenu );
@@ -7051,6 +7049,11 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
   private void disableMenuItem( org.pentaho.ui.xul.dom.Document doc, String itemId, boolean disable ) {
     XulComponent menuItem = doc.getElementById( itemId );
     if ( menuItem != null ) {
+      /*
+       *  If disabled="true" (case insensitive), the menuitem is always disabled.
+       *  If not defined, it is treated as disabled="false"
+       */
+      disable = disable || StringUtils.equalsIgnoreCase( menuItem.getAttributeValue( "disabled" ), "true" );
       menuItem.setDisabled( disable );
     } else {
       log.logError( "Non-Fatal error : Menu Item with id = " + itemId + " does not exist! Check 'menubar.xul'" );

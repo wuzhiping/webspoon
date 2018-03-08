@@ -85,11 +85,20 @@ var handleEvent = function( event ) {
     // Draw grids
     if ( gridsize > 1 ) {
       gc.fillStyle = 'black';
-      for ( var i = 0; i < gc.canvas.width; i += gridsize ) {
-        for ( var j = 0; j < gc.canvas.height; j += gridsize ) {
-          gc.fillRect( i, j, 1, 1 );
-        }
+      gc.beginPath();
+      gc.setLineDash( [ 1, gridsize - 1 ] );
+      // vertical grid
+      for ( var i = gridsize; i < gc.canvas.width; i += gridsize ) {
+        gc.moveTo( i, 0 );
+        gc.lineTo( i, gc.canvas.height );
       }
+      // horizontal grid
+      for ( var j = gridsize; j < gc.canvas.height; j += gridsize ) {
+        gc.moveTo( 0, j );
+        gc.lineTo( gc.canvas.width, j );
+      }
+      gc.stroke();
+      gc.setLineDash( [] );
       gc.fillStyle = 'white';
     }
 

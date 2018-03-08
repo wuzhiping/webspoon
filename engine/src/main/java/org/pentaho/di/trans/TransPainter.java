@@ -163,9 +163,9 @@ public class TransPainter extends BasePainter<TransHopMeta, StepMeta> {
   }
 
   private void drawTrans( Point thumb ) {
-    if ( !shadow && gridSize > 1 ) {
-      drawGrid();
-    }
+//    if ( !shadow && gridSize > 1 ) {
+//      drawGrid();
+//    }
 
     if ( hori != null && vert != null ) {
       hori.setThumb( thumb.x );

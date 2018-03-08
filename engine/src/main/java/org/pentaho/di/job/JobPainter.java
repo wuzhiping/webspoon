@@ -115,9 +115,9 @@ public class JobPainter extends BasePainter<JobHopMeta, JobEntryCopy> {
   }
 
   private void drawJobElements() {
-    if ( !shadow && gridSize > 1 ) {
-      drawGrid();
-    }
+//    if ( !shadow && gridSize > 1 ) {
+//      drawGrid();
+//    }
 
     try {
       ExtensionPointHandler.callExtensionPoint( LogChannel.GENERAL, KettleExtensionPoint.JobPainterStart.id, this );

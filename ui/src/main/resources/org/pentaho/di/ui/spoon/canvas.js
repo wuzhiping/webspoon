@@ -78,9 +78,10 @@ var handleEvent = function( event ) {
     var props = event.widget.getData( "props" );
     var gridsize = props.gridsize;
     var iconsize = props.iconsize;
+    var magnification = props.magnification;
     var gc = event.gc;
-    var dx = x2 - x1;
-    var dy = y2 - y1;
+    var dx = ( x2 - x1 ) / magnification;
+    var dy = ( y2 - y1 ) / magnification;
 
     // Draw grids
     if ( gridsize > 1 ) {
@@ -136,7 +137,7 @@ var handleEvent = function( event ) {
       // Draw node icon
       var img = new Image();
       img.src = 'rwt-resources/' + node.img;
-      gc.drawImage( img, x, y);
+      gc.drawImage( img, x, y, iconsize, iconsize );
 
       // Draw a bounding rectangle
       gc.beginPath();

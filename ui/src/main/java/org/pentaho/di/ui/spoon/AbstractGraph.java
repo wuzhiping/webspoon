@@ -247,6 +247,7 @@ public abstract class AbstractGraph extends Composite {
     JsonObject jsonProps = new JsonObject();
     jsonProps.add( "gridsize", PropsUI.getInstance().isShowCanvasGridEnabled() ? PropsUI.getInstance().getCanvasGridSize() : 1 );
     jsonProps.add( "iconsize", PropsUI.getInstance().getIconSize() );
+    jsonProps.add( "magnification", magnification );
     canvas.setData( "props", jsonProps );
 
     JsonArray jsonNotes = new JsonArray();

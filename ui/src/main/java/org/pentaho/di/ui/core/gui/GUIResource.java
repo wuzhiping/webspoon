@@ -75,8 +75,6 @@ public class GUIResource {
 
   private static LogChannelInterface log = new LogChannel( "GUIResource" );
 
-  private static GUIResource guiResource;
-
   private Display display;
 
   // 33 resources
@@ -458,11 +456,6 @@ public class GUIResource {
   }
 
   public static final GUIResource getInstance() {
-    if ( guiResource != null ) {
-      return SingletonUtil.getSessionInstance( GUIResource.class );
-    }
-    guiResource = new GUIResource( );
-    //guiResource.initialize( PropsUI.getDisplay() );
     return SingletonUtil.getSessionInstance( GUIResource.class );
   }
 

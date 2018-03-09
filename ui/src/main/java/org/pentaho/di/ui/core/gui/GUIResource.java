@@ -77,6 +77,8 @@ public class GUIResource {
 
   private Display display;
 
+  private static boolean initialized = false;
+
   // 33 resources
 
   /* * * Colors * * */
@@ -150,13 +152,13 @@ public class GUIResource {
   private ManagedFont fontBold;
 
   /* * * Images * * */
-  private Map<String, SwtUniversalImage> imagesSteps = new Hashtable<String, SwtUniversalImage>();
+  private static Map<String, SwtUniversalImage> imagesSteps = new Hashtable<String, SwtUniversalImage>();
 
-  private Map<String, Image> imagesStepsSmall = new Hashtable<String, Image>();
+  private static Map<String, Image> imagesStepsSmall = new Hashtable<String, Image>();
 
-  private Map<String, SwtUniversalImage> imagesJobentries;
+  private static Map<String, SwtUniversalImage> imagesJobentries = new Hashtable<String, SwtUniversalImage>();
 
-  private Map<String, Image> imagesJobentriesSmall;
+  private static Map<String, Image> imagesJobentriesSmall = new Hashtable<String, Image>();
 
   private SwtUniversalImage imageHop;
 
@@ -412,12 +414,6 @@ public class GUIResource {
 
     getResources();
 
-    display.addListener( SWT.Dispose, new Listener() {
-      public void handleEvent( Event event ) {
-        dispose( false );
-      }
-    } );
-
     clipboard = null;
 
     // Reload images as required by changes in the plugins
@@ -452,7 +448,7 @@ public class GUIResource {
         // nothing needed here
       }
     } );
-
+    initialized = true;
   }
 
   public static final GUIResource getInstance() {
@@ -508,8 +504,10 @@ public class GUIResource {
     // Load all images from files...
     loadFonts();
     loadCommonImages();
-    loadStepImages();
-    loadJobEntryImages();
+    if ( !initialized ) {
+      loadStepImages();
+      loadJobEntryImages();
+    }
   }
 
   private void dispose( boolean reload ) {
@@ -1234,9 +1232,6 @@ public class GUIResource {
    * Load all step images from files.
    */
   private void loadJobEntryImages() {
-    imagesJobentries = new Hashtable<String, SwtUniversalImage>();
-    imagesJobentriesSmall = new Hashtable<String, Image>();
-
     // //
     // // JOB ENTRY IMAGES TO LOAD
     // //

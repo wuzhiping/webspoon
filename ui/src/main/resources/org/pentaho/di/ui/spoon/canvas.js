@@ -27,26 +27,18 @@ var clicked = null;
 var handleEvent = function( event ) {
   switch( event.type ) {
   case SWT.MouseDown:
-    x1 = event.x;
-    y1 = event.y;
     var props = event.widget.getData( "props" );
+    var magnification = props.magnification;
     var iconsize = props.iconsize;
+    x1 = event.x / magnification;
+    y1 = event.y / magnification;
 
-    // Determine which note is clicked if any
-    var notes = event.widget.getData( "notes" );
-    for ( var key in notes ) {
-      var note = notes[key];
-      if ( note.x <= event.x && event.x < note.x + note.width + 10
-        && note.y <= event.y && event.y < note.y + note.height + 10 ) {
-        clicked = note;
-      }
-    }
     // Determine which node is clicked if any
     var nodes = event.widget.getData( "nodes" );
     for ( var key in nodes ) {
       var node = nodes[key];
-      if ( node.x <= event.x && event.x < node.x + iconsize
-        && node.y <= event.y && event.y < node.y + iconsize ) {
+      if ( node.x <= x1 && x1 < node.x + iconsize
+        && node.y <= y1 && y1 < node.y + iconsize ) {
         clicked = node;
       }
     }
@@ -56,12 +48,14 @@ var handleEvent = function( event ) {
     break;
   case SWT.MouseMove:
     var mode = event.widget.getData( "mode" );
+    var props = event.widget.getData( "props" );
+    var magnification = props.magnification;
     if ( mode == null ) {
       break;
     }
     if ( mode != "null" ) {
-      x2 = event.x;
-      y2 = event.y;
+      x2 = event.x / magnification;
+      y2 = event.y / magnification;
       event.widget.redraw();
     }
     break;
@@ -78,10 +72,9 @@ var handleEvent = function( event ) {
     var props = event.widget.getData( "props" );
     var gridsize = props.gridsize;
     var iconsize = props.iconsize;
-    var magnification = props.magnification;
     var gc = event.gc;
-    var dx = ( x2 - x1 ) / magnification;
-    var dy = ( y2 - y1 ) / magnification;
+    var dx = x2 - x1;
+    var dy = y2 - y1;
 
     // Draw grids
     if ( gridsize > 1 ) {
@@ -154,7 +147,7 @@ var handleEvent = function( event ) {
     notes.forEach( function ( note ) {
       gc.beginPath();
       // margin = 10 see org.pentaho.di.core.gui.BasePainter.drawNote(NotePadMeta)
-      if ( mode == "drag" && ( note.selected || note == clicked ) ) {
+      if ( mode == "drag" && note.selected ) {
         gc.rect( snapToGrid( note.x + dx, gridsize), snapToGrid( note.y + dy, gridsize), note.width + 10, note.height + 10 );
       } else {
         gc.rect( note.x, note.y, note.width + 10, note.height + 10 );

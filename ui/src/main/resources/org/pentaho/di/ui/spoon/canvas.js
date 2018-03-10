@@ -25,16 +25,21 @@ var x1, x2, y1, y2;
 var clicked = null;
 
 var handleEvent = function( event ) {
+  var mode = event.widget.getData( "mode" );
+  var nodes = event.widget.getData( "nodes" );
+  var hops = event.widget.getData( "hops" );
+  var notes = event.widget.getData( "notes" );
+  var props = event.widget.getData( "props" );
+  var magnification = props.magnification;
+  var gridsize = props.gridsize;
+  var iconsize = props.iconsize;
+
   switch( event.type ) {
   case SWT.MouseDown:
-    var props = event.widget.getData( "props" );
-    var magnification = props.magnification;
-    var iconsize = props.iconsize;
     x1 = event.x / magnification;
     y1 = event.y / magnification;
 
     // Determine which node is clicked if any
-    var nodes = event.widget.getData( "nodes" );
     for ( var key in nodes ) {
       var node = nodes[key];
       if ( node.x <= x1 && x1 < node.x + iconsize
@@ -47,31 +52,20 @@ var handleEvent = function( event ) {
     clicked = null;
     break;
   case SWT.MouseMove:
-    var mode = event.widget.getData( "mode" );
-    var props = event.widget.getData( "props" );
-    var magnification = props.magnification;
+    x2 = event.x / magnification;
+    y2 = event.y / magnification;
     if ( mode == null ) {
       break;
     }
     if ( mode != "null" ) {
-      x2 = event.x / magnification;
-      y2 = event.y / magnification;
       event.widget.redraw();
     }
     break;
   case SWT.Paint:
-    var mode = event.widget.getData( "mode" );
     // Client-side does not redraw when first-drawing (null) and after mouseup ("null")
     if ( mode == null || mode == "null" ) {
       break;
     }
-
-    var nodes = event.widget.getData( "nodes" );
-    var hops = event.widget.getData( "hops" );
-    var notes = event.widget.getData( "notes" );
-    var props = event.widget.getData( "props" );
-    var gridsize = props.gridsize;
-    var iconsize = props.iconsize;
     var gc = event.gc;
     var dx = x2 - x1;
     var dy = y2 - y1;

@@ -142,12 +142,7 @@ public abstract class AbstractGraph extends Composite {
       return;
     }
 
-    canvas.redraw( 0, 0,
-      Math.max( canvas.getBounds().width, // case 1
-        Math.round( scrolledcomposite.getBounds().width / magnification ) ), //case 2
-      Math.max( canvas.getBounds().height, // case 3
-        Math.round( scrolledcomposite.getBounds().height / magnification ) ), // case 4
-      false );
+    canvas.redraw();
     setZoomLabel();
   }
 

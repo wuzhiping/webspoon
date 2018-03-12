@@ -70,6 +70,9 @@ var handleEvent = function( event ) {
     var dx = x2 - x1;
     var dy = y2 - y1;
 
+    // Clear the canvas
+    gc.clearRect( 0, 0, gc.canvas.width / magnification, gc.canvas.height / magnification );
+
     // Draw grids
     if ( gridsize > 1 ) {
       gc.fillStyle = 'black';

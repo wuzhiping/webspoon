@@ -76,14 +76,14 @@ var handleEvent = function( event ) {
       gc.beginPath();
       gc.setLineDash( [ 1, gridsize - 1 ] );
       // vertical grid
-      for ( var i = gridsize; i < gc.canvas.width; i += gridsize ) {
+      for ( var i = gridsize; i < gc.canvas.width / magnification; i += gridsize ) {
         gc.moveTo( i, 0 );
-        gc.lineTo( i, gc.canvas.height );
+        gc.lineTo( i, gc.canvas.height / magnification );
       }
       // horizontal grid
-      for ( var j = gridsize; j < gc.canvas.height; j += gridsize ) {
+      for ( var j = gridsize; j < gc.canvas.height / magnification; j += gridsize ) {
         gc.moveTo( 0, j );
-        gc.lineTo( gc.canvas.width, j );
+        gc.lineTo( gc.canvas.width / magnification, j );
       }
       gc.stroke();
       gc.setLineDash( [] );

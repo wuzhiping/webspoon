@@ -410,9 +410,7 @@ public class SWTGC implements GCInterface {
     if ( stepMeta.isMissing() ) {
       im = GUIResource.getInstance().getImageMissing();
     } else {
-      im =
-          images.get( steptype ).getAsBitmapForSize( gc.getDevice(), Math.round( iconsize * magnification ),
-              Math.round( iconsize * magnification ) );
+      im = images.get( steptype ).getAsBitmap( gc.getDevice() );
     }
     if ( im != null ) { // Draw the icon!
       org.eclipse.swt.graphics.Rectangle bounds = im.getBounds();
@@ -450,7 +448,7 @@ public class SWTGC implements GCInterface {
       return;
     }
 
-    Image image = swtImage.getAsBitmapForSize( gc.getDevice(), w, h );
+    Image image = swtImage.getAsBitmap( gc.getDevice() );
 
     org.eclipse.swt.graphics.Rectangle bounds = image.getBounds();
     gc.drawImage( image, 0, 0, bounds.width, bounds.height, x, y, iconsize, iconsize );

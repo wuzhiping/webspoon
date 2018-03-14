@@ -414,6 +414,12 @@ public class GUIResource {
 
     getResources();
 
+    display.addListener( SWT.Dispose, new Listener() {
+      public void handleEvent( Event event ) {
+        dispose( false );
+      }
+    } );
+
     clipboard = null;
 
     // Reload images as required by changes in the plugins
@@ -680,10 +686,10 @@ public class GUIResource {
       disposeImage( imageShowErrorLines );
 
       // big images
-      disposeUniversalImages( imagesSteps.values() );
+//      disposeUniversalImages( imagesSteps.values() );
 
       // Small images
-      disposeImages( imagesStepsSmall.values() );
+//      disposeImages( imagesStepsSmall.values() );
 
       // Dispose of the images in the map
       disposeImages( imageMap.values() );

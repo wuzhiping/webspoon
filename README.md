@@ -26,7 +26,7 @@ In either way, webSpoon will be deployed at `http://address:8080/spoon/spoon`.
 ## With Docker (recommended)
 
 ```
-$ docker run -e JAVA_OPTS="-Xms1024m -Xmx2048m" -d -p 8080:8080 hiromuhota/webspoon:latest-full
+$ docker run -d -p 8080:8080 hiromuhota/webspoon:latest-full
 ```
 
 ## Without Docker
@@ -147,30 +147,46 @@ $CATALINA_HOME
 │   ├── ...
 ```
 
+## Disable UI component
+
+Spoon uses the XUL (XML User Interface Language) to define some parts of its user interface (see [here](https://wiki.pentaho.com/display/ServerDoc2x/The+Pentaho+XUL+Framework+Developer%27s+Guide) for details).
+The file menu, for example, is defined in `webapps/spoon/WEB-INF/classes/ui/menubar.xul` as in the following snippet:
+
+```
+<menu id="file" label="${Spoon.Menu.File}" accesskey="alt-f">
+  <menuitem id="file-open" label="${Spoon.Menu.File.Open}" />
+  <menuitem id="file-save-as" label="${Spoon.Menu.File.SaveAs}" />
+</menu>
+```
+
+To restrict user's capability, one may want to disable some of UI components.
+To to so, add `disable="true"` to the component to be disabled like below.
+
+```
+<menu id="file" label="${Spoon.Menu.File}" accesskey="alt-f">
+  <menuitem id="file-open" label="${Spoon.Menu.File.Open}" />
+  <menuitem id="file-save-as" label="${Spoon.Menu.File.SaveAs}" disabled="true" />
+</menu>
+```
+
+No `disabled` attribute has the same effect as `disabled="false"`.
+
 # How to develop
 
 Spoon relies on SWT for UI widgets, which is great for being OS agnostic, but it only runs as a desktop app.
 RAP/RWT provides web UIs with SWT API, so replacing SWT with RAP/RWT allows Spoon to run as a web app with a little code change.
 Having said that, some APIs are not implemented; hence, a little more code change is required than it sounds.
 
-## Coding philosophy
+## Design philosophy
 
 1. Minimize the difference from the original Spoon.
-2. Decide RWT or webSpoon to be modified so that the change can be minimized.
-
-These are the major changes so far:
-
-- Add org.pentaho.di.ui.spoon.WebSpoon, which configures web app.
-- Modify ui/ivy.xml in order to add RWT-related dependencies and remove SWT.
-- Many comment-outs/deletions to avoid compile errors due to RWT/SWT difference.
-- Make singleton objects (e.g., `PropsUI`, `GUIResource`) session-unique (see [here](http://www.eclipse.org/rap/developers-guide/devguide.php?topic=singletons.html) for the details).
+2. Optimize webSpoon as a web application.
 
 ## Branches and Versioning
 
 I started this project in the webspoon branch, branched off from the branch 6.1 of between 6.1.0.5-R and 6.1.0.6-R.
 Soon I realized that I should have branched off from one of released versions.
 So I decided to make two branches: webspoon-6.1 and webspoon-7.0, each of which was rebased onto 6.1.0.1-R and 7.0.0.0-R, respectively.
-I made the branch webspoon-6.1 as the default one for this git repository as the branch webspoon-7.0 currently cannot use the marketplace plugin.
 
 webSpoon uses 4 digits versioning with the following rules:
 
@@ -236,7 +252,7 @@ $ cd pentaho-kettle
 $ mvn clean install -pl core,engine,security,ui
 ```
 
-Change directory and build a war file (`spoon.war`):
+Build a war file (`spoon.war`):
 
 ```bash
 $ mvn clean package -pl assemblies/pdi-ce
@@ -259,11 +275,6 @@ $ mvn clean test -pl integration -Dtest.baseurl=http://localhost:8080/spoon/spoo
 
 # Notices
 
-- Pentaho is a registered trademark of Pentaho, Inc.
-- Oracle and Java are registered trademarks of Oracle and/or its affiliates.
-- Ubuntu is a registered trademark of Canonical Ltd.
-- Mac and OS X are trademarks of Apple Inc., registered in the U.S. and other countries.
-- Windows and Active Directory are registered trademark of Microsoft Corporation in the U.S. and other countries.
-- Apache Karaf is a trademark of The Apache Software Foundation.
+- Pentaho is a registered trademark of Hitachi Vantara Corporation.
 - Google Chrome browser is a trademark of Google Inc.
 - Other company and product names mentioned in this document may be the trademarks of their respective owners.

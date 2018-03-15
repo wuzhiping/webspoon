@@ -1,5 +1,17 @@
 # Change Log
 
+## 0.8.0.15 - 2018-03-XX
+### Added
+- Canvas drawing instructions at client-side to improve interactivity
+- Support attribute "disabled" to turn menuitems on/off
+
+### Changed
+- No drawGrid instructions from the server-side to improve responsiveness
+- Disable the capability manager and kettle.properties editor only when they are disabled="true" in menubar.xul
+
+### Fixed
+- [#99] Clear the entire canvas before drawing
+
 ## 0.8.0.14 - 2018-02-07
 ### Added
 - Add a custom security manager (disabled by default)

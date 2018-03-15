@@ -130,9 +130,15 @@ var handleEvent = function( event ) {
       gc.drawImage( img, x, y, iconsize, iconsize );
 
       // Draw a bounding rectangle
-      gc.beginPath();
-      gc.rect( x, y, iconsize, iconsize );
-      gc.stroke();
+      if ( node.selected || node == clicked ) {
+        gc.lineWidth = 3;
+        gc.strokeStyle = 'rgb(0, 93, 166)';
+      } else {
+        gc.strokeStyle = 'rgb(61, 99, 128)'; //colorCrystalTextPentaho
+      }
+      drawRoundRectangle( gc, x - 1, y - 1, iconsize + 1, iconsize + 1, 8, 8, false );
+      gc.strokeStyle = 'black';
+      gc.lineWidth = 1;
 
       // Draw node name
 //      gc.fillStyle = 'black';
@@ -162,7 +168,6 @@ var handleEvent = function( event ) {
 
     // Draw a selection rectangle
     if ( mode == "select" ) {
-      gc.lineWidth = 1;
       gc.beginPath();
       gc.rect( x1, y1, dx, dy );
       gc.stroke();
@@ -173,4 +178,33 @@ var handleEvent = function( event ) {
 
 function snapToGrid( x, gridsize ) {
   return gridsize * Math.floor( x / gridsize );
+}
+
+/*
+ * Port of GCOperationWriter#drawRoundRectangle
+ */
+function drawRoundRectangle( gc, x, y, w, h, arcWidth, arcHeight, fill ) {
+  var offset = 0;
+  if( !fill && gc.lineWidth % 2 != 0 ) {
+    offset = 0.5;
+  }
+  x = x + offset;
+  y = y + offset;
+  var rx = arcWidth / 2 + 1;
+  var ry = arcHeight / 2 + 1;
+  gc.beginPath();
+  gc.moveTo( x, y + ry );
+  gc.lineTo( x, y + h - ry );
+  gc.quadraticCurveTo( x, y + h, x + rx, y + h );
+  gc.lineTo( x + w - rx, y + h );
+  gc.quadraticCurveTo( x + w, y + h, x + w, y + h - ry );
+  gc.lineTo( x + w, y + ry );
+  gc.quadraticCurveTo( x + w, y, x + w - rx, y );
+  gc.lineTo( x + rx, y );
+  gc.quadraticCurveTo( x, y, x, y + ry );
+  if ( fill ) {
+    gc.fill();
+  } else {
+    gc.stroke();
+  }
 }

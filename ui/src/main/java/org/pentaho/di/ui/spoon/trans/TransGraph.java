@@ -199,6 +199,8 @@ import org.pentaho.ui.xul.impl.XulEventHandler;
 import org.pentaho.ui.xul.jface.tags.JfaceMenuitem;
 import org.pentaho.ui.xul.jface.tags.JfaceMenupopup;
 
+import com.google.common.annotations.VisibleForTesting;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -5159,5 +5161,10 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
     } catch ( KettleException e ) {
       throw new RuntimeException( e );
     }
+  }
+
+  @VisibleForTesting
+  void setCanvas( Canvas canvas ) {
+    this.canvas = canvas;
   }
 }

@@ -1,6 +1,6 @@
 # Change Log
 
-## 0.8.0.15 - 2018-03-XX
+## 0.8.0.15 - 2018-03-19
 ### Added
 - Canvas drawing instructions at client-side to improve interactivity
 - Support attribute "disabled" to turn menuitems on/off

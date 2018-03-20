@@ -30,6 +30,13 @@
         <include>*.ldif</include>
       </includes>
     </fileSet>
+    <fileSet>
+      <directory>${project.basedir}/src/main/resources/classes</directory>
+      <outputDirectory>WEB-INF/classes</outputDirectory>
+      <includes>
+        <include>log4j.xml</include>
+      </includes>
+    </fileSet>
     <!-- the staging dir -->
     <fileSet>
       <directory>${assembly.dir}</directory>

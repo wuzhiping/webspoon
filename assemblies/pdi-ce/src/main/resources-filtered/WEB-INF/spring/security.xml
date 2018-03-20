@@ -27,8 +27,13 @@
     </headers>
   </http>
 
-  <!--<ldap-server url="ldap://localhost:389/dc=example,dc=org"/>-->
-  <ldap-server ldif="classpath:example.ldif" root="dc=example,dc=org"/>
+  <!--<ldap-server url="ldap://localhost:389/dc=example,dc=org" manager-dn="cn=admin,dc=example,dc=org" manager-password="admin" />-->
+
+  <!--
+  If you want to use an embedded LDAP server for testing, download apacheds-all-1.5.5.jar and place it under webapps/spoon/WEB-INF/lib
+  Then, uncomment the line below starting <ldap-server
+  -->
+  <!--<ldap-server ldif="classpath:example.ldif" root="dc=example,dc=org"/>-->
 
   <!-- authentication-manager can have mutiple authentication providers -->
   <authentication-manager>

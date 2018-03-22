@@ -111,6 +111,12 @@
     <priority value="INFO"/>
   </category>
 
+  <!--
+  <category name="org.springframework.security">
+    <priority value="DEBUG"/>
+  </category>
+  -->
+
    <!-- ======================= -->
    <!-- Setup the Root category -->
    <!-- ======================= -->

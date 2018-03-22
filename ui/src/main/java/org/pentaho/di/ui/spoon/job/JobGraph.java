@@ -2138,9 +2138,7 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
   }
 
   public void pasteNote() {
-    final String clipcontent = spoon.fromClipboard();
-    Point loc = new Point( currentMouseX, currentMouseY );
-    spoon.pasteXML( jobMeta, clipcontent, loc );
+    spoon.instructShortcuts();
   }
 
   public void newNote() {

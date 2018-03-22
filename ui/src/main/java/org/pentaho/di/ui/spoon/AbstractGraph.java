@@ -38,6 +38,7 @@ import org.pentaho.di.core.exception.KettleException;
 import org.pentaho.di.core.gui.GUIPositionInterface;
 import org.pentaho.di.core.gui.Point;
 import org.pentaho.di.ui.core.PropsUI;
+import org.pentaho.di.ui.core.gui.GUIResource;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 
@@ -143,6 +144,8 @@ public abstract class AbstractGraph extends Composite {
     }
 
     canvas.redraw();
+    Spoon.getInstance().copy();
+    Spoon.getInstance().getTabSet().toClipboard( GUIResource.getInstance().fromClipboard() );
     setZoomLabel();
   }
 

@@ -50,6 +50,8 @@ var handleEvent = function( event ) {
     break;
   case SWT.MouseUp:
     clicked = null;
+    var x = document.getElementById( "input-clipboard" );
+    x.focus();
     break;
   case SWT.MouseMove:
     x2 = event.x / magnification;

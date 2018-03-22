@@ -9398,6 +9398,15 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
     enableMenuItem( "edit-paste-steps" );
   }
 
+  public void instructShortcuts() {
+    ShowMessageDialog dialog =
+      new ShowMessageDialog( shell, SWT.ICON_WARNING | SWT.OK,
+        BaseMessages.getString( PKG, "Spoon.Error" ),
+        "Use keyboard shortcuts instead (cmd-x,-c,-v for Mac or ctrl-x,-c,-v for others)"
+    );
+    dialog.open();
+  }
+
   static void setTestId( Widget widget, String value ) {
     if ( !widget.isDisposed() ) {
       String $el = widget instanceof Text ? "$input" : "$el";

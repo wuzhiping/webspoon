@@ -2638,9 +2638,7 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
   }
 
   public void paste() {
-    final String clipcontent = spoon.fromClipboard();
-    Point loc = new Point( currentMouseX, currentMouseY );
-    spoon.pasteXML( transMeta, clipcontent, loc );
+    spoon.instructShortcuts();
   }
 
   public void settings() {

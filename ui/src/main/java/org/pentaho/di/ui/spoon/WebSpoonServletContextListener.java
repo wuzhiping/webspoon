@@ -30,11 +30,12 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.logging.Logger;
 
 import javax.servlet.ServletContextEvent;
 
+import org.apache.log4j.Logger;
 import org.eclipse.rap.rwt.engine.RWTServletContextListener;
+import org.pentaho.di.core.Const;
 import org.pentaho.di.core.KettleClientEnvironment;
 import org.pentaho.di.core.KettleEnvironment;
 import org.pentaho.di.core.exception.KettleException;
@@ -57,7 +58,7 @@ public class WebSpoonServletContextListener extends RWTServletContextListener {
       SlaveServerConfig config = new SlaveServerConfig( new LogChannel( "Slave server config" ), configNode );
       CarteSingleton.setSlaveServerConfig( config );
     } catch ( Exception e ) {
-      logger.info( e.getMessage() );
+      logger.info( e.getMessage().replaceAll( Const.CR, " " ) );
     }
 
     System.setProperty( "KETTLE_CONTEXT_PATH", event.getServletContext().getContextPath() );

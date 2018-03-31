@@ -51,4 +51,11 @@ public class WebSpoonCTabFolder extends CTabFolder {
   public void toClipboard( String text ) {
     remoteObject.set( "text", text );
   }
+
+  public void downloadCanvasImage( String rwtId, String name ) {
+    JsonObject obj = new JsonObject();
+    obj.add( "rwtId", rwtId );
+    obj.add( "name", name );
+    remoteObject.call( "downloadCanvasImage", obj );
+  }
 }

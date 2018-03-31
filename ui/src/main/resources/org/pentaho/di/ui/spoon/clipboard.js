@@ -17,7 +17,8 @@
         }
       },
       properties : [ "text" ],
-      events : [ "paste", "copy", "cut" ]
+      events : [ "paste", "copy", "cut" ],
+      methods : [ "downloadCanvasImage" ]
   } );
 
   rwt.define( "webSpoon" );
@@ -77,6 +78,28 @@
 
     getText : function() {
       return this._text;
+    },
+
+    downloadCanvasImage : function( obj ) {
+      var i = 0;
+      for ( ; i < document.getElementsByTagName( 'canvas' ).length; i++ ) {
+        if ( document.getElementsByTagName( 'canvas' )[ i ].rwtObject._rwtId === obj.rwtId + ".gc" ) {
+          break;
+        }
+      }
+      var canvas = document.getElementsByTagName( 'canvas' )[ i ];
+      if ( window.navigator && window.navigator.msSaveOrOpenBlob ) { // For IE and Edge
+        var blob = canvas.msToBlob();
+        window.navigator.msSaveOrOpenBlob( blob, obj.name + ".png" );
+      } else {
+        var data = canvas.toDataURL();
+        var link = document.createElement( 'a' )
+        link.setAttribute( 'download', obj.name + ".png" );
+        link.setAttribute( 'href', data.replace( "image/png", "image/octet-stream" ) );
+        document.body.appendChild( link );
+        link.click();
+        document.body.removeChild( link );
+      }
     },
 
     _onKeyDown : function( event ) {

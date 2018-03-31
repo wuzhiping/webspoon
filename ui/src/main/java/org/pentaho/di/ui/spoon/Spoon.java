@@ -1721,7 +1721,10 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
   }
 
   public void copyTransformationImage() {
-    copyTransformationImage( getActiveTransformation() );
+    TabMapEntry mapEntry = delegates.tabs.getTab( tabfolder.getSelected() );
+    if ( mapEntry.getObject() instanceof AbstractGraph ) {
+      getTabSet().downloadCanvasImage( ( mapEntry.getObject() ).getRwtId(), ( mapEntry.getObject() ).getMeta().getName() );
+    }
   }
 
   public boolean editTransformationProperties() {

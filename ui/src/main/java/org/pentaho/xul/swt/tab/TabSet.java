@@ -279,4 +279,7 @@ public class TabSet implements SelectionListener, CTabFolder2Listener {
     tabfolder.toClipboard( text );
   }
 
+  public void downloadCanvasImage( String rwtId, String name ) {
+    tabfolder.downloadCanvasImage( rwtId, name );
+  }
 }

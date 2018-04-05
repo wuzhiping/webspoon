@@ -51,5 +51,4 @@ public interface TabItemInterface {
 
   public boolean setFocus();
 
-  public String getRwtId();
 }

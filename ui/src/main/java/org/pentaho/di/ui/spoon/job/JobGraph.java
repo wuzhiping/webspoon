@@ -42,7 +42,6 @@ import org.eclipse.rap.json.JsonArray;
 import org.eclipse.rap.json.JsonObject;
 import org.eclipse.rap.rwt.RWT;
 import org.eclipse.rap.rwt.scripting.ClientListener;
-import org.eclipse.rap.rwt.widgets.WidgetUtil;
 import org.eclipse.jface.window.DefaultToolTip;
 import org.eclipse.jface.window.ToolTip;
 import org.eclipse.swt.SWT;
@@ -4018,10 +4017,5 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
 
   public Job getJob() {
     return job;
-  }
-
-  @Override
-  public String getRwtId() {
-    return WidgetUtil.getId( canvas );
   }
 }

@@ -34,7 +34,6 @@ import org.eclipse.rap.rwt.RWT;
 import org.eclipse.jface.window.DefaultToolTip;
 import org.eclipse.jface.window.ToolTip;
 import org.eclipse.rap.rwt.scripting.ClientListener;
-import org.eclipse.rap.rwt.widgets.WidgetUtil;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -5165,10 +5164,5 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
   @VisibleForTesting
   void setCanvas( Canvas canvas ) {
     this.canvas = canvas;
-  }
-
-  @Override
-  public String getRwtId() {
-    return WidgetUtil.getId( canvas );
   }
 }

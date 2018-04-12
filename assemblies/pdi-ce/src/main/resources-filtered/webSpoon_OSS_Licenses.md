@@ -8,7 +8,7 @@ This is the list of dependent OSS, in addition to PentahoDataIntegration\_OSS\_L
 | RAP FileDialog              | 3.3.0 | http://www.eclipse.org/rap/ | [Eclipse Public License - v 1.0](https://www.eclipse.org/legal/epl-v10.html) |
 | Smiley's HTTP Proxy Servlet | 1.8   | https://github.com/dsmiley/HTTP-Proxy-Servlet | [Apache License Version 2.0](https://www.apache.org/licenses/LICENSE-2.0) |
 | Spring DAO                  | 2.0.8 | http://spring.io | [Apache License Version 2.0](https://www.apache.org/licenses/LICENSE-2.0) |
-| Spring Ldap Core            | 2.0.2.RELEASE | http://spring.io/spring-ldap/ | [Apache License Version 2.0](https://www.apache.org/licenses/LICENSE-2.0) |
+| Spring Ldap Core            | 2.3.2.RELEASE | http://spring.io/spring-ldap/ | [Apache License Version 2.0](https://www.apache.org/licenses/LICENSE-2.0) |
 | Spring Web                  | 4.3.2.RELEASE | http://spring.io/spring-framework | [Apache License Version 2.0](https://www.apache.org/licenses/LICENSE-2.0) |
 | Spring Security Core        | 4.1.5.RELEASE | http://spring.io/spring-security | [Apache License Version 2.0](https://www.apache.org/licenses/LICENSE-2.0) |
 | Spring Security Config      | 4.1.5.RELEASE | http://spring.io/spring-security | [Apache License Version 2.0](https://www.apache.org/licenses/LICENSE-2.0) |

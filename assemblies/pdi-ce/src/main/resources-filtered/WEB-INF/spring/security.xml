@@ -27,13 +27,9 @@
     </headers>
   </http>
 
-  <!-- LDAP Authentication
-  Use either one of ldap-servers (an external server with attribute "url" or an embedded server with attribute "ldif").
-  If an embedded LDAP server is to be used, download apacheds-all-1.5.5.jar and place it under webapps/spoon/WEB-INF/lib
-  -->
+  <!-- LDAP Authentication -->
   <!--
   <ldap-server url="ldap://localhost:389/dc=example,dc=org" manager-dn="cn=admin,dc=example,dc=org" manager-password="admin" />
-  <ldap-server ldif="classpath:example.ldif" root="dc=example,dc=org"/>
   <authentication-manager>
     <ldap-authentication-provider
       user-dn-pattern="uid={0},ou=people"

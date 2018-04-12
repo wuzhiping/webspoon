@@ -27,7 +27,6 @@
       <outputDirectory>WEB-INF/classes</outputDirectory>
       <includes>
         <include>ui/*</include>
-        <include>*.ldif</include>
       </includes>
     </fileSet>
     <fileSet>

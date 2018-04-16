@@ -689,7 +689,6 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
   }
 
   public void mouseDown( MouseEvent e ) {
-    canvas.setData( "mode", "select" );
 
     mouseHover( e );
     boolean control = ( e.stateMask & SWT.MOD1 ) != 0;
@@ -855,6 +854,7 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
         } else {
           // No area-owner means: background:
           //
+          canvas.setData( "mode", "select" );
           startHopEntry = null;
           if ( !control ) {
             selectionRegion = new org.pentaho.di.core.gui.Rectangle( real.x, real.y, 0, 0 );

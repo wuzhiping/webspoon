@@ -852,7 +852,6 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
 
   @Override
   public void mouseDown( MouseEvent e ) {
-    canvas.setData( "mode", "select" );
 
     mouseHover( e );
     boolean alt = ( e.stateMask & SWT.ALT ) != 0;
@@ -1054,6 +1053,7 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
         } else {
           // No area-owner & no hop means : background click:
           //
+          canvas.setData( "mode", "select" );
           startHopStep = null;
           if ( !control ) {
             selectionRegion = new org.pentaho.di.core.gui.Rectangle( real.x, real.y, 0, 0 );

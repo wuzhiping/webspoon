@@ -1,6 +1,6 @@
 # Change Log
 
-## 0.8.0.16 - 2018-05-XX
+## 0.8.0.16 - 2018-05-17
 ### Added
 - Include WEB-INF/classes/log4j.xml to configure log4j logging framework
 - Support the system clipboard

@@ -46,9 +46,9 @@ $ unzip ~/Downloads/pdi-ce-8.0.0.0-28.zip
 $ cd $CATALINA_HOME
 $ cp -r ~/data-integration/system ./
 $ cp -r ~/data-integration/plugins ./
-$ wget https://raw.githubusercontent.com/HiromuHota/webspoon-docker/0.8.0.13/install.sh
+$ wget https://raw.githubusercontent.com/HiromuHota/webspoon-docker/0.8.0.16/install.sh
 $ chmod +x install.sh
-$ export version=0.8.0.13
+$ export version=0.8.0.16
 $ export dist=8.0.0.0-28
 $ ./install.sh
 $ ./bin/startup.sh

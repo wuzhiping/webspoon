@@ -1,5 +1,29 @@
 # Change Log
 
+## 0.8.0.16 - 2018-05-XX
+### Added
+- Include WEB-INF/classes/log4j.xml to configure log4j logging framework
+- Support the system clipboard
+- Restored "Snapshot Canvas"
+
+### Changed
+- Let logger "org.pentaho.di" write out to logs/pdi.log
+- Log4j writes to spoon.log unless otherwise configured like "org.pentaho.di"
+- Change the logging framework for Carte config to Log4j
+- Use spring-tx which supersedes spring-dao as of 2.5
+
+### Removed
+- Remove apacheds-all to resolve version conflicts of slf4j
+- Remove the example ldif file (fix #102)
+
+### Fixed
+- [#103] Unintentional triggering of the selection mode
+
+### Security
+- vulnerable component spring-security: upgrade from 4.1.3 to 4.1.5 (https://pivotal.io/security/cve-2018-1199)
+- Update vulnerable component: Spring Ldap Core (https://pivotal.io/security/cve-2017-8028)
+- Update vulnerable component: Spring Framework (https://pivotal.io/security/cve-2018-1275)
+
 ## 0.8.0.15 - 2018-03-19
 ### Added
 - Canvas drawing instructions at client-side to improve interactivity

@@ -4,6 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>pdi-libs</artifactId>
+  <version>8.1.0.0-365-16</version>
   <packaging>pom</packaging>
 
   <name>PDI Client Libraries</name>
@@ -15,11 +16,11 @@
   </parent>
 
   <properties>
-    <pdi-engine-spark.version>${project.version}</pdi-engine-spark.version>
+    <pdi-engine-spark.version>${project.parent.version}</pdi-engine-spark.version>
     <rxjava.version>2.0.4</rxjava.version>
 
     <pentaho-json.version>8.1.0.0-365</pentaho-json.version>
-    <pdi-spark-driver.version>${project.version}</pdi-spark-driver.version>
+    <pdi-spark-driver.version>${project.parent.version}</pdi-spark-driver.version>
     <pdi-osgi-bridge.version>8.1.0.0-365</pdi-osgi-bridge.version>
     <commons-database.version>8.1.0.0-365</commons-database.version>
     <pentaho-registry.version>8.1.0.0-365</pentaho-registry.version>
@@ -77,6 +78,12 @@
       <groupId>pentaho-kettle</groupId>
       <artifactId>kettle-core</artifactId>
       <version>${project.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.eclipse.rap</groupId>
+          <artifactId>org.eclipse.rap.clientbuilder</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.pentaho</groupId>
@@ -97,11 +104,15 @@
     <dependency>
       <groupId>pentaho-kettle</groupId>
       <artifactId>kettle-dbdialog</artifactId>
-      <version>${project.version}</version>
+      <version>${project.parent.version}</version>
       <exclusions>
         <exclusion>
           <groupId>org.eclipse.swt</groupId>
           <artifactId>*</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.eclipse</groupId>
+          <artifactId>jface</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
@@ -113,6 +124,10 @@
         <exclusion>
           <groupId>org.eclipse.swt</groupId>
           <artifactId>*</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.eclipse.rap</groupId>
+          <artifactId>org.eclipse.rap.clientbuilder</artifactId>
         </exclusion>
       </exclusions>
     </dependency>

@@ -255,7 +255,9 @@ $ mvn clean install -pl core,engine,security,ui
 Build a war file (`spoon.war`):
 
 ```bash
-$ mvn clean package -pl assemblies/pdi-ce
+$ mvn clean install -pl assemblies/static
+$ mvn clean install -pl assemblies/lib
+$ mvn clean package -pl assemblies/client
 ```
 
 ## UI testing using Selenium

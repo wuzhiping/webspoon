@@ -33,7 +33,7 @@ $ docker run -d -p 8080:8080 hiromuhota/webspoon:latest-full
 
 Please refer to the [wiki](https://github.com/HiromuHota/pentaho-kettle/wiki/System-Requirements) for system requirements.
 
-1. Unzip `pdi-ce-8.0.0.0-28.zip`, then copy `system` and `plugins` folders to `$CATALINA_HOME`.
+1. Unzip `pdi-ce-8.1.0.0-365.zip`, then copy `system` and `plugins` folders to `$CATALINA_HOME`.
 2. Run install.sh at `$CATALINA_HOME`.
 3. (Re)start the Tomcat.
 
@@ -42,14 +42,14 @@ The actual commands look like below:
 ```
 $ export CATALINA_HOME=/home/vagrant/apache-tomcat-8.5.23
 $ cd ~/
-$ unzip ~/Downloads/pdi-ce-8.0.0.0-28.zip
+$ unzip ~/Downloads/pdi-ce-8.1.0.0-365.zip
 $ cd $CATALINA_HOME
 $ cp -r ~/data-integration/system ./
 $ cp -r ~/data-integration/plugins ./
-$ wget https://raw.githubusercontent.com/HiromuHota/webspoon-docker/0.8.0.16/install.sh
+$ wget https://raw.githubusercontent.com/HiromuHota/webspoon-docker/0.8.1.16/install.sh
 $ chmod +x install.sh
-$ export version=0.8.0.16
-$ export dist=8.0.0.0-28
+$ export version=0.8.1.16
+$ export dist=8.1.0.0-365
 $ ./install.sh
 $ ./bin/startup.sh
 ```
@@ -209,12 +209,12 @@ Please build and locally-publish the following dependent libraries.
 - org.eclipse.rap.rwt.testfixture
 - pentaho-vfs-browser
 
-### pentaho-commons-xul
+### pentaho-xul-swt
 
 ```
-$ git clone -b webspoon-8.0 https://github.com/HiromuHota/pentaho-commons-xul.git
-$ cd pentaho-commons-xul/pentaho-xul-swt
-$ ant clean-all resolve publish-local
+$ git clone -b webspoon-8.1 https://github.com/HiromuHota/pentaho-commons-xul.git
+$ cd pentaho-commons-xul
+$ mvn clean install -pl swt
 ```
 
 ### rap
@@ -233,7 +233,7 @@ $ mvn clean install -pl tests/org.eclipse.rap.rwt.testfixture -am
 ### pentaho-vfs-browser
 
 ```
-$ git clone -b webspoon-8.0 https://github.com/HiromuHota/apache-vfs-browser.git
+$ git clone -b webspoon-8.1 https://github.com/HiromuHota/apache-vfs-browser.git
 $ cd apache-vfs-browser
 $ mvn clean install
 ```
@@ -247,7 +247,7 @@ Remember to build pentaho-vfs-browser after rap due to its dependency on rap.
 Compile `kettle-core`, `kettle-engine`, `kettle-ui-swt`, and `webspoon-security`; and install the packages into the local repository:
 
 ```bash
-$ git clone -b webspoon-8.0 https://github.com/HiromuHota/pentaho-kettle.git
+$ git clone -b webspoon-8.1 https://github.com/HiromuHota/pentaho-kettle.git
 $ cd pentaho-kettle
 $ mvn clean install -pl core,engine,security,ui
 ```

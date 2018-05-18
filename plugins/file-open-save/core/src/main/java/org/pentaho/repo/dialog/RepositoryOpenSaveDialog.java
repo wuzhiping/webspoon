@@ -32,12 +32,13 @@ import org.pentaho.di.ui.core.dialog.ThinDialog;
 import org.pentaho.di.ui.core.gui.GUIResource;
 import org.pentaho.platform.settings.ServerPort;
 import org.pentaho.platform.settings.ServerPortRegistry;
-import org.pentaho.repo.controller.RepositoryBrowserController;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
 import java.util.Properties;
+
+import org.pentaho.repo.controller.RepositoryBrowserController;
 import org.pentaho.repo.model.RepositoryDirectory;
 import org.pentaho.repo.model.RepositoryFile;
 
@@ -53,7 +54,6 @@ public class RepositoryOpenSaveDialog extends ThinDialog {
   public static final String STATE_SAVE = "save";
   public static final String STATE_OPEN = "open";
   public static final String SELECT_FOLDER = "selectFolder";
-  private static final Image LOGO = GUIResource.getInstance().getImageLogoSmall();
   private final Image LOGO = GUIResource.getInstance().getImageLogoSmall();
   private static final String OSGI_SERVICE_PORT = "OSGI_SERVICE_PORT";
   private static final int OPTIONS = SWT.APPLICATION_MODAL | SWT.DIALOG_TRIM | SWT.RESIZE | SWT.MAX;
@@ -146,7 +146,7 @@ public class RepositoryOpenSaveDialog extends ThinDialog {
 
     new BrowserFunction( browser, "_loadDirectoryTree" ) {
       @Override public Object function( Object[] arguments ) {
-        List<RepositoryDirectory> repositoryDirectories = repositoryBrowserController.loadDirectoryTree();
+        List<RepositoryDirectory> repositoryDirectories = repositoryBrowserController.loadDirectoryTree().getChildren();
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String json = "";
         try {

@@ -41,7 +41,6 @@ import org.pentaho.di.repository.RepositoriesMeta;
 import org.pentaho.di.repository.RepositoryMeta;
 import org.pentaho.di.ui.repo.controller.RepositoryConnectController;
 import org.pentaho.di.ui.repo.dialog.RepositoryDialog;
-import org.pentaho.di.ui.repo.RepositoryConnectController.RepositoryContollerListener;
 import org.pentaho.di.ui.spoon.Spoon;
 
 public class RepositoryConnectMenu {
@@ -60,8 +59,7 @@ public class RepositoryConnectMenu {
   public RepositoryConnectMenu( Spoon spoon, ToolBar toolBar, RepositoryConnectController repoConnectController ) {
     this.toolBar = toolBar;
     this.repoConnectController = repoConnectController;
-    repoConnectController.addListener( this::renderAndUpdate );
-    RepositoryContollerListener listener = new RepositoryConnectController.RepositoryContollerListener() {
+    org.pentaho.di.ui.repo.controller.RepositoryConnectController.RepositoryContollerListener listener = new RepositoryConnectController.RepositoryContollerListener() {
       @Override
       public void update() {
         renderAndUpdate();
@@ -125,13 +123,11 @@ public class RepositoryConnectMenu {
       }
       render();
       update();
+      Spoon.getInstance().setShellText();
     } catch ( SWTException e ) {
       // TODO this should be handled more appropriately
       // Do nothing
     }
-    render();
-    update();
-    spoon.setShellText();
   }
 
   private void renderConnectButton() {

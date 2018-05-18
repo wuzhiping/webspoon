@@ -94,9 +94,6 @@ public class RepositoryConnectController implements IConnectedRepositoryInstance
   public static final String HELP_URL =
     Const.getDocUrl( BaseMessages.getString( PKG, "RepositoryDialog.Dialog.Help" ) );
 
-  private RepositoryMeta currentRepository;
-  private RepositoryMeta connectedRepository;
-  private RepositoriesMeta repositoriesMeta;
   private PluginRegistry pluginRegistry;
   private Supplier<Spoon> spoonSupplier;
   private List<RepositoryContollerListener> listeners = new ArrayList<>();
@@ -223,6 +220,9 @@ public class RepositoryConnectController implements IConnectedRepositoryInstance
   }
 
   public boolean updateRepository( String id, Map<String, Object> items ) {
+    RepositoriesMeta repositoriesMeta = getRepositoriesMeta();
+    RepositoryMeta connectedRepository = getConnectedRepository();
+
     RepositoryMeta repositoryMeta = repositoriesMeta.findRepository( (String) items.get( ORIGINAL_NAME ) );
     boolean isConnected = repositoryMeta == connectedRepository;
     repositoryMeta.setName( (String) items.get( DISPLAY_NAME ) );
@@ -241,11 +241,13 @@ public class RepositoryConnectController implements IConnectedRepositoryInstance
         execute.run();
       }
     }
-    currentRepository = repositoryMeta;
+    setCurrentRepository( repositoryMeta );
     return true;
   }
 
   public RepositoryMeta createRepository( String id, Map<String, Object> items ) {
+    RepositoriesMeta repositoriesMeta = getRepositoriesMeta();
+
     RepositoryMeta repositoryMeta;
     try {
       repositoryMeta = pluginRegistry.loadClass( RepositoryPluginType.class, id, RepositoryMeta.class );
@@ -276,6 +278,8 @@ public class RepositoryConnectController implements IConnectedRepositoryInstance
 
   @SuppressWarnings( "unchecked" )
   public String getRepositories() {
+    RepositoriesMeta repositoriesMeta = getRepositoriesMeta();
+
     String connected = null;
     if ( spoonSupplier.get() != null && spoonSupplier.get().rep != null ) {
       connected = spoonSupplier.get().rep.getName();
@@ -339,6 +343,8 @@ public class RepositoryConnectController implements IConnectedRepositoryInstance
   }
 
   public void connectToRepository( String repositoryName, String username, String password ) throws KettleException {
+    RepositoriesMeta repositoriesMeta = getRepositoriesMeta();
+
     final RepositoryMeta repositoryMeta = repositoriesMeta.findRepository( repositoryName );
     if ( repositoryMeta != null ) {
       connectToRepository( repositoryMeta, username, password );
@@ -381,16 +387,18 @@ public class RepositoryConnectController implements IConnectedRepositoryInstance
   }
 
   public void reconnectToRepository( String repositoryName, String username, String password ) throws KettleException {
+    RepositoriesMeta repositoriesMeta = getRepositoriesMeta();
+
     final RepositoryMeta repositoryMeta = repositoriesMeta.findRepository( repositoryName );
     if ( repositoryMeta != null ) {
-      currentRepository = repositoryMeta;
+      setCurrentRepository( repositoryMeta );
       reconnectToRepository( username, password );
     }
   }
 
   public void reconnectToRepository( String username, String password ) throws KettleException {
     Repository currentRepositoryInstance = getConnectedRepositoryInstance();
-    reconnectToRepository( currentRepository, (ReconnectableRepository) currentRepositoryInstance, username, password );
+    reconnectToRepository( getCurrentRepository(), (ReconnectableRepository) currentRepositoryInstance, username, password );
   }
 
   private void reconnectToRepository( RepositoryMeta repositoryMeta, ReconnectableRepository repository,
@@ -482,6 +490,8 @@ public class RepositoryConnectController implements IConnectedRepositoryInstance
   }
 
   public boolean setDefaultRepository( String name ) {
+    RepositoriesMeta repositoriesMeta = getRepositoriesMeta();
+
     for ( int i = 0; i < repositoriesMeta.nrRepositories(); i++ ) {
       RepositoryMeta repositoryMeta = repositoriesMeta.getRepository( i );
       repositoryMeta.setDefault( repositoryMeta.getName().equals( name ) );
@@ -496,6 +506,8 @@ public class RepositoryConnectController implements IConnectedRepositoryInstance
   }
 
   public boolean clearDefaultRepository() {
+    RepositoriesMeta repositoriesMeta = getRepositoriesMeta();
+
     for ( int i = 0; i < repositoriesMeta.nrRepositories(); i++ ) {
       repositoriesMeta.getRepository( i ).setDefault( false );
     }
@@ -577,6 +589,7 @@ public class RepositoryConnectController implements IConnectedRepositoryInstance
   }
 
   public boolean checkDuplicate( String name ) {
+    RepositoriesMeta repositoriesMeta = getRepositoriesMeta();
     return repositoriesMeta.findRepository( name ) != null;
   }
 

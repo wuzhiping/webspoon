@@ -60,7 +60,7 @@ public class RepositoryDialog extends ThinDialog {
   private static final String LOGIN_TITLE = BaseMessages.getString( PKG, "RepositoryDialog.Dialog.Login.Title" );
   private static final String LOGIN_WEB_CLIENT_PATH = "#/connect";
   private static final String OSGI_SERVICE_PORT = "OSGI_SERVICE_PORT";
-  private static final Image LOGO = GUIResource.getInstance().getImageLogoSmall();
+  private Image LOGO;
 
 
   private RepositoryConnectController controller;
@@ -71,6 +71,7 @@ public class RepositoryDialog extends ThinDialog {
     super( shell, WIDTH, HEIGHT );
     this.controller = controller;
     this.shell = shell;
+    this.LOGO = GUIResource.getInstance().getImageLogoSmall();
   }
 
   private boolean open() {
@@ -85,9 +86,12 @@ public class RepositoryDialog extends ThinDialog {
 
     new BrowserFunction( browser, "closeWindow" ) {
       @Override public Object function( Object[] arguments ) {
-        browser.dispose();
-        dialog.close();
-        dialog.dispose();
+        Runnable execute = () -> {
+          browser.dispose();
+          dialog.close();
+          dialog.dispose();
+        };
+        display.asyncExec( execute );
         return true;
       }
     };
@@ -149,6 +153,6 @@ public class RepositoryDialog extends ThinDialog {
   }
 
   private static String getRepoURL( String path ) {
-    return "http://localhost:" + getOsgiServicePort() + getClientPath() + path;
+    return System.getProperty( "KETTLE_CONTEXT_PATH", "" ) + "/osgi" + getClientPath() + path;
   }
 }

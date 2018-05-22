@@ -27,7 +27,7 @@ define(
     function() {
       "use strict";
 
-      var factoryArray = ["$http", factory];
+      var factoryArray = ["$http", "$q", factory];
       var module = {
         name: "helperService",
         factory: factoryArray
@@ -42,11 +42,12 @@ define(
        *
        * @return {Object} The dataService api
        */
-      function factory($http) {
+      function factory($http, $q) {
         return {
           httpGet: httpGet,
           httpPost: httpPost,
-          httpDelete: httpDelete
+          httpDelete: httpDelete,
+          async: async
         };
 
         /**
@@ -120,6 +121,14 @@ define(
             url += "?v=" + value;
           }
           return url;
+        }
+
+        function async( json ) {
+          var deferred = $q.defer();
+          var obj = {};
+          obj.data = JSON.parse( json );
+          deferred.resolve( obj );
+          return deferred.promise;
         }
       }
     });

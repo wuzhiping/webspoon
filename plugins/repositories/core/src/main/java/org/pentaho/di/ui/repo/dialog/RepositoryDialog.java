@@ -26,7 +26,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.BrowserFunction;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Shell;
+import org.json.simple.JSONObject;
 import org.pentaho.di.core.Const;
+import org.pentaho.di.core.exception.KettleAuthException;
 import org.pentaho.di.core.logging.KettleLogStore;
 import org.pentaho.di.core.logging.LogChannelInterface;
 import org.pentaho.di.i18n.BaseMessages;
@@ -34,8 +36,15 @@ import org.pentaho.di.repository.RepositoryMeta;
 import org.pentaho.di.ui.core.dialog.ThinDialog;
 import org.pentaho.di.ui.core.gui.GUIResource;
 import org.pentaho.di.ui.repo.controller.RepositoryConnectController;
+import org.pentaho.di.ui.repo.endpoints.RepositoryEndpoint;
+import org.pentaho.di.ui.repo.model.LoginModel;
+import org.pentaho.di.ui.repo.model.RepositoryModel;
 import org.pentaho.platform.settings.ServerPort;
 import org.pentaho.platform.settings.ServerPortRegistry;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -93,6 +102,100 @@ public class RepositoryDialog extends ThinDialog {
         };
         display.asyncExec( execute );
         return true;
+      }
+    };
+
+    new BrowserFunction( browser, "bfAddRepository" ) {
+      @Override public Object function( Object[] arguments ) {
+        String json = (String) arguments[0];
+        RepositoryModel model = (RepositoryModel) jsonToObject( json, RepositoryModel.class );
+        if ( controller.createRepository( model.getId(), controller.modelToMap( model ) ) != null ) {
+          return true;
+        } else {
+          return BaseMessages.getString( PKG, "RepositoryConnection.Error.InvalidServer" );
+        }
+      }
+    };
+
+    new BrowserFunction( browser, "bfGetRepositories" ) {
+      @Override public Object function( Object[] arguments ) {
+        return controller.getRepositories();
+      }
+    };
+
+    new BrowserFunction( browser, "bfHelp" ) {
+      @Override public Object function( Object[] objects ) {
+        return controller.help();
+      }
+    };
+
+    new BrowserFunction( browser, "bfUpdate" ) {
+      @Override public Object function( Object[] arguments ) {
+        String json = (String) arguments[0];
+        RepositoryModel model = (RepositoryModel) jsonToObject( json, RepositoryModel.class );
+        JSONObject jsonObject = new JSONObject();
+        if ( controller.updateRepository( model.getId(), controller.modelToMap( model ) ) ) {
+          jsonObject.put( RepositoryConnectController.SUCCESS, true );
+        } else {
+          jsonObject.put( RepositoryConnectController.ERROR_MESSAGE,
+            BaseMessages.getString( PKG, "RepositoryConnection.Error.InvalidServer" ) );
+          jsonObject.put( RepositoryConnectController.SUCCESS, false );
+        }
+        return jsonObject.toString();
+      }
+    };
+
+    new BrowserFunction( browser, "bfLogin" ) {
+      @Override public Object function( Object[] arguments ) {
+        String json = (String) arguments[0];
+        LoginModel loginModel = (LoginModel) jsonToObject( json, LoginModel.class );
+        JSONObject jsonObject = new JSONObject();
+        try {
+          if ( controller.isRelogin() ) {
+            controller
+              .reconnectToRepository( loginModel.getRepositoryName(), loginModel.getUsername(), loginModel.getPassword() );
+          } else {
+            controller
+              .connectToRepository( loginModel.getRepositoryName(), loginModel.getUsername(), loginModel.getPassword() );
+          }
+          jsonObject.put( RepositoryConnectController.SUCCESS, true );
+        } catch ( Exception e ) {
+          if ( e.getMessage().contains( RepositoryEndpoint.ERROR_401 ) || e instanceof KettleAuthException ) {
+            jsonObject.put( RepositoryConnectController.ERROR_MESSAGE,
+              BaseMessages.getString( PKG, "RepositoryConnection.Error.InvalidCredentials" ) );
+          } else {
+            jsonObject.put( RepositoryConnectController.ERROR_MESSAGE,
+              BaseMessages.getString( PKG, "RepositoryConnection.Error.InvalidServer" ) );
+          }
+          jsonObject.put( RepositoryConnectController.SUCCESS, false );
+        }
+        return jsonObject.toString();
+      }
+    };
+
+    new BrowserFunction( browser, "bfGetRepository" ) {
+      @Override public Object function( Object[] objects ) {
+        return controller.getRepository( (String) objects[ 0 ] );
+      }
+    };
+
+    new BrowserFunction( browser, "bfCheckDuplicate" ) {
+      @Override public Object function( Object[] arguments ) {
+        String displayName = (String) arguments[0];
+        return controller.checkDuplicate( displayName );
+      }
+    };
+
+    new BrowserFunction( browser, "bfGetDatabases" ) {
+      @Override public Object function( Object[] arguments ) {
+        return controller.getDatabases();
+      }
+    };
+
+    new BrowserFunction( browser, "bfRemove" ) {
+      @Override public Object function( Object[] arguments ) {
+        String displayName = (String) arguments[0];
+        return controller.deleteRepository( displayName );
       }
     };
 
@@ -154,5 +257,23 @@ public class RepositoryDialog extends ThinDialog {
 
   private static String getRepoURL( String path ) {
     return System.getProperty( "KETTLE_CONTEXT_PATH", "" ) + "/osgi" + getClientPath() + path;
+  }
+
+  private static Object jsonToObject( String json, Class<?> _class ) {
+    ObjectMapper mapper = new ObjectMapper();
+    Object model = null;
+    try {
+      model = mapper.readValue( json, _class );
+    } catch ( JsonParseException e ) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch ( JsonMappingException e ) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch ( IOException e ) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    return model;
   }
 }

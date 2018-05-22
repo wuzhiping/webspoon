@@ -24,7 +24,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.BrowserFunction;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Shell;
-import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.pentaho.di.core.exception.KettleException;
 import org.pentaho.di.core.util.Utils;
 import org.pentaho.di.repository.Repository;
@@ -39,12 +39,13 @@ import java.net.URLEncoder;
 import java.util.Properties;
 
 import org.pentaho.repo.controller.RepositoryBrowserController;
-import org.pentaho.repo.model.RepositoryDirectory;
 import org.pentaho.repo.model.RepositoryFile;
+import org.pentaho.repo.model.RepositoryTree;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import com.sun.jersey.api.client.ClientResponse.Status;
 
 /**
  * Created by bmorrise on 5/23/17.
@@ -130,40 +131,62 @@ public class RepositoryOpenSaveDialog extends ThinDialog {
       }
     };
 
-    new BrowserFunction( browser, "_getRecentFiles" ) {
+    new BrowserFunction( browser, "bfCheckForSecurityOrDupeIssues" ) {
+      @Override public Object function( Object[] arguments ) {
+        String path = (String) arguments[ 0 ];
+        String name = (String) arguments[ 1 ];
+        String fileName = (String) arguments[ 2 ];
+        boolean overwrite = (boolean) arguments[ 3 ];
+        JSONObject jsonObject = new JSONObject();
+        if ( repositoryBrowserController.checkForSecurityOrDupeIssues( path, name, fileName, overwrite ) ) {
+          jsonObject.put( "status", Status.OK.getStatusCode() );
+          return jsonObject.toString();
+        }
+        jsonObject.put( "status", Status.NO_CONTENT.getStatusCode() );
+        return jsonObject.toString();
+      }
+    };
+
+    new BrowserFunction( browser, "bfGetRecentFiles" ) {
       @Override public Object function( Object[] arguments ) {
         List<RepositoryFile> files = repositoryBrowserController.getRecentFiles();
-        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        String json = "";
-        try {
-          json = ow.writeValueAsString( files );
-        } catch (JsonProcessingException e) {
-          e.printStackTrace();
-        }
-        return json;
+        return "{ \"data\": " + javaToJson( files ) + "}";
       }
     };
 
-    new BrowserFunction( browser, "_loadDirectoryTree" ) {
+    new BrowserFunction( browser, "bfGetDirectoryTree" ) {
       @Override public Object function( Object[] arguments ) {
-        List<RepositoryDirectory> repositoryDirectories = repositoryBrowserController.loadDirectoryTree().getChildren();
-        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        String json = "";
-        try {
-          json = ow.writeValueAsString( repositoryDirectories );
-        } catch (JsonProcessingException e) {
-          e.printStackTrace();
-        }
-        return json;
+        RepositoryTree repositoryDirectories = repositoryBrowserController.loadDirectoryTree();
+        return "{ \"data\": " + javaToJson( repositoryDirectories ) + "}";
       }
     };
 
-    new BrowserFunction( browser, "_loadRecent" ) {
+    new BrowserFunction( browser, "bfOpenRecent" ) {
       @Override public Object function( Object[] arguments ) {
         String repo = (String) arguments[ 0 ];
         String id = (String) arguments[ 1 ];
         repositoryBrowserController.openRecentFile( repo, id );
         return true;
+      }
+    };
+
+    new BrowserFunction( browser, "bfCurrentRepo" ) {
+      @Override public Object function( Object[] arguments ) {
+        return "{ \"data\": " + javaToJson( repositoryBrowserController.getCurrentRepo() ) + "}";
+      }
+    };
+
+    new BrowserFunction( browser, "bfGetFolders" ) {
+      @Override public Object function( Object[] arguments ) {
+        String path = (String) arguments[ 0 ];
+        return "{ \"data\": " + javaToJson( repositoryBrowserController.loadFolders( path ) ) + "}";
+      }
+    };
+
+    new BrowserFunction( browser, "bfLoadFilesAndFolders" ) {
+      @Override public Object function( Object[] arguments ) {
+        String path = (String) arguments[ 0 ];
+        return "{ \"data\": " + javaToJson( repositoryBrowserController.loadFilesAndFolders( path ) ) + "}";
       }
     };
 

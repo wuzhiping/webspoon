@@ -58,7 +58,7 @@ define(
          * @returns {Promise}
          */
         function getDatabases(repository) {
-          return helperService.httpGet([baseUrl, "databases"].join("/"), repository);
+          return helperService.async( bfGetDatabases() );
         }
 
         /**

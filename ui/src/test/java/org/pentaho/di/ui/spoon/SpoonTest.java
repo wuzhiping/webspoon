@@ -92,11 +92,6 @@ public class SpoonTest {
   private SpoonPerspective mockSpoonPerspective = mock( SpoonPerspective.class );
   private SpoonPerspectiveManager perspective;
 
-  @BeforeClass
-  public static void setUpClass() {
-    perspective.addPerspective( mockSpoonPerspective );
-  }
-
   @Rule
   public TestContext context = new TestContext();
 

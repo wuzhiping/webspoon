@@ -25,6 +25,7 @@ package org.pentaho.di.ui.repo.dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.BrowserFunction;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.json.simple.JSONObject;
 import org.pentaho.di.core.Const;
@@ -196,6 +197,19 @@ public class RepositoryDialog extends ThinDialog {
       @Override public Object function( Object[] arguments ) {
         String displayName = (String) arguments[0];
         return controller.deleteRepository( displayName );
+      }
+    };
+
+    new BrowserFunction( browser, "bfBrowse" ) {
+      @Override public Object function( Object[] objects ) {
+        DirectoryDialog directoryDialog = new DirectoryDialog( shell );
+        String location = directoryDialog.open();
+        browser.evaluate(
+          "var location = document.getElementById( 'location' );"
+          + "var scope = angular.element( location ).scope( 'file' );"
+          + String.format( "scope.$apply(function(){ scope.vm.connection.location = '%s';});", location )
+        );
+        return location;
       }
     };
 

@@ -54,7 +54,7 @@ define(
         }
 
         function browse() {
-          return helperService.httpGet([baseUrl, "browse"].join("/"));
+          return helperService.aync( bfBrowse() );
         }
       }
     });

@@ -29,11 +29,13 @@ import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.json.simple.JSONObject;
 import org.pentaho.di.core.Const;
+import org.pentaho.di.core.database.DatabaseMeta;
 import org.pentaho.di.core.exception.KettleAuthException;
 import org.pentaho.di.core.logging.KettleLogStore;
 import org.pentaho.di.core.logging.LogChannelInterface;
 import org.pentaho.di.i18n.BaseMessages;
 import org.pentaho.di.repository.RepositoryMeta;
+import org.pentaho.di.ui.core.database.dialog.DatabaseDialog;
 import org.pentaho.di.ui.core.dialog.ThinDialog;
 import org.pentaho.di.ui.core.gui.GUIResource;
 import org.pentaho.di.ui.repo.controller.RepositoryConnectController;
@@ -190,6 +192,55 @@ public class RepositoryDialog extends ThinDialog {
     new BrowserFunction( browser, "bfGetDatabases" ) {
       @Override public Object function( Object[] arguments ) {
         return controller.getDatabases();
+      }
+    };
+
+    new BrowserFunction( browser, "bfCreateNewConnection" ) {
+      @Override public Object function( Object[] arguments ) {
+        DatabaseDialog databaseDialog = new DatabaseDialog( shell, new DatabaseMeta() );
+        databaseDialog.open();
+        DatabaseMeta databaseMeta = databaseDialog.getDatabaseMeta();
+        JSONObject jsonObject = new JSONObject();
+        if ( databaseMeta != null ) {
+          if ( !controller.isDatabaseWithNameExist( databaseMeta, true ) ) {
+            controller.addDatabase( databaseMeta );
+          } else {
+            DatabaseDialog.showDatabaseExistsDialog( shell, databaseMeta );
+          }
+          jsonObject.put( "name", databaseMeta.getName() );
+        } else {
+          jsonObject.put( "name", "None" );
+        }
+        return jsonObject.toJSONString();
+      }
+    };
+
+    new BrowserFunction( browser, "bfEditConnection" ) {
+      @Override public Object function( Object[] arguments ) {
+        String database = (String) arguments[0];
+        DatabaseMeta databaseMeta = controller.getDatabase( database );
+        String originalName = databaseMeta.getName();
+        DatabaseDialog databaseDialog = new DatabaseDialog( shell, databaseMeta );
+        databaseDialog.open();
+        JSONObject jsonObject = new JSONObject();
+        if ( !controller.isDatabaseWithNameExist( databaseMeta, false ) ) {
+          controller.save();
+          jsonObject.put( "name", databaseMeta.getName() );
+        } else {
+          DatabaseDialog.showDatabaseExistsDialog( shell, databaseMeta );
+          databaseMeta.setName( originalName );
+          databaseMeta.setDisplayName( originalName );
+          jsonObject.put( "name", originalName );
+        }
+        return jsonObject.toJSONString();
+      }
+    };
+
+    new BrowserFunction( browser, "bfDeleteConnection" ) {
+      @Override public Object function( Object[] arguments ) {
+        String database = (String) arguments[0];
+        controller.removeDatabase( database );
+        return true;
       }
     };
 

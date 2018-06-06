@@ -638,8 +638,7 @@ public class RepositoryConnectController implements IConnectedRepositoryInstance
     return properties;
   }
 
-  @VisibleForTesting
-  boolean isDatabaseWithNameExist( DatabaseMeta databaseMeta, boolean isNew ) {
+  public boolean isDatabaseWithNameExist( DatabaseMeta databaseMeta, boolean isNew ) {
     RepositoriesMeta repositoriesMeta = getRepositoriesMeta();
     for ( int i = 0; i < repositoriesMeta.nrDatabases(); i++ ) {
       final DatabaseMeta iterDatabase = repositoriesMeta.getDatabase( i );

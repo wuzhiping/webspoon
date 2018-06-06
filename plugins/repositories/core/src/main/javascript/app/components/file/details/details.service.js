@@ -54,7 +54,8 @@ define(
         }
 
         function browse() {
-          return helperService.aync( bfBrowse() );
+          bfBrowse();
+          return helperService.async( "{ \"path\": \"dummy\" }" );
         }
       }
     });

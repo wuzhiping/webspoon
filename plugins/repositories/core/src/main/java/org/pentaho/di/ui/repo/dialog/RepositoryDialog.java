@@ -204,12 +204,15 @@ public class RepositoryDialog extends ThinDialog {
       @Override public Object function( Object[] objects ) {
         DirectoryDialog directoryDialog = new DirectoryDialog( shell );
         String location = directoryDialog.open();
+        if ( location == null ) {
+          location = "";
+        }
         browser.evaluate(
           "var location = document.getElementById( 'location' );"
           + "var scope = angular.element( location ).scope( 'file' );"
           + String.format( "scope.$apply(function(){ scope.vm.connection.location = '%s';});", location )
         );
-        return location;
+        return "";
       }
     };
 

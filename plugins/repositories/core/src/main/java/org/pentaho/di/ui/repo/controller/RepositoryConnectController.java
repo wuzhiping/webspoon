@@ -83,7 +83,7 @@ public class RepositoryConnectController implements IConnectedRepositoryInstance
   public static final String ORIGINAL_NAME = "originalName";
 
   public static final String DEFAULT_URL = "defaultUrl";
-  public static final String ERROR_MESSAGE = "errorMessage";
+  public static final String MESSAGE = "message";
   public static final String SUCCESS = "success";
   public static final String ERROR_401 = "401";
 

@@ -140,7 +140,7 @@ public class RepositoryDialog extends ThinDialog {
         if ( controller.updateRepository( model.getId(), controller.modelToMap( model ) ) ) {
           jsonObject.put( RepositoryConnectController.SUCCESS, true );
         } else {
-          jsonObject.put( RepositoryConnectController.ERROR_MESSAGE,
+          jsonObject.put( RepositoryConnectController.MESSAGE,
             BaseMessages.getString( PKG, "RepositoryConnection.Error.InvalidServer" ) );
           jsonObject.put( RepositoryConnectController.SUCCESS, false );
         }
@@ -164,11 +164,11 @@ public class RepositoryDialog extends ThinDialog {
           jsonObject.put( RepositoryConnectController.SUCCESS, true );
         } catch ( Exception e ) {
           if ( e.getMessage().contains( RepositoryEndpoint.ERROR_401 ) || e instanceof KettleAuthException ) {
-            jsonObject.put( RepositoryConnectController.ERROR_MESSAGE,
-              BaseMessages.getString( PKG, "RepositoryConnection.Error.InvalidCredentials" ) );
+            jsonObject.put( RepositoryConnectController.MESSAGE,
+              BaseMessages.getString( RepositoryEndpoint.class, "RepositoryConnection.Error.InvalidCredentials" ) );
           } else {
-            jsonObject.put( RepositoryConnectController.ERROR_MESSAGE,
-              BaseMessages.getString( PKG, "RepositoryConnection.Error.InvalidServer" ) );
+            jsonObject.put( RepositoryConnectController.MESSAGE,
+              BaseMessages.getString( RepositoryEndpoint.class, "RepositoryConnection.Error.InvalidServer" ) );
           }
           jsonObject.put( RepositoryConnectController.SUCCESS, false );
         }

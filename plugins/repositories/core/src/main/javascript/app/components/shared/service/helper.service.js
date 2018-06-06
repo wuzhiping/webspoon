@@ -127,7 +127,11 @@ define(
           var deferred = $q.defer();
           var obj = {};
           obj.data = JSON.parse( json );
-          deferred.resolve( obj );
+          if ( obj.data.success === undefined || obj.data.success == true ) {
+            deferred.resolve( obj );
+          } else {
+            deferred.reject( obj );
+          }
           return deferred.promise;
         }
       }

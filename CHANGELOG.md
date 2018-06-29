@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.8.1.16 - 2018-06-29
+### Changed
+- Rebased to 8.1.0.0-365
+
 ## 0.8.0.16 - 2018-05-17
 ### Added
 - Include WEB-INF/classes/log4j.xml to configure log4j logging framework

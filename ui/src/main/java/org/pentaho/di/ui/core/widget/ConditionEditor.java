@@ -506,6 +506,14 @@ public class ConditionEditor extends Canvas {
 
   }
 
+  @Override
+  public void setMenu( Menu menu ) {
+    if ( menu != null ) {
+      menu.setLocation( this.getDisplay().getCursorLocation() );
+      menu.setVisible( true );
+    }
+  }
+
   private void setMenu( int area, Point screen ) {
     final int cond_nr = getNrSubcondition( screen );
     if ( mPop != null && !mPop.isDisposed() ) {
@@ -515,7 +523,7 @@ public class ConditionEditor extends Canvas {
     switch ( area ) {
       case AREA_NOT:
         mPop = new Menu( widget );
-        MenuItem miNegate = new MenuItem( mPop, SWT.CASCADE );
+        MenuItem miNegate = new MenuItem( mPop, SWT.PUSH );
         miNegate.setText( BaseMessages.getString( PKG, "ConditionEditor.NegateCondition" ) );
         miNegate.addSelectionListener( new SelectionAdapter() {
           @Override
@@ -530,7 +538,7 @@ public class ConditionEditor extends Canvas {
       case AREA_BACKGROUND:
       case AREA_ICON_ADD:
         mPop = new Menu( widget );
-        MenuItem miAdd = new MenuItem( mPop, SWT.CASCADE );
+        MenuItem miAdd = new MenuItem( mPop, SWT.PUSH );
         miAdd.setText( BaseMessages.getString( PKG, "ConditionEditor.AddCondition.Label" ) );
         miAdd.addSelectionListener( new SelectionAdapter() {
           @Override
@@ -542,7 +550,7 @@ public class ConditionEditor extends Canvas {
         break;
       case AREA_SUBCONDITION:
         mPop = new Menu( widget );
-        MenuItem miEdit = new MenuItem( mPop, SWT.CASCADE );
+        MenuItem miEdit = new MenuItem( mPop, SWT.PUSH );
         miEdit.setText( "Edit condition" );
         miEdit.addSelectionListener( new SelectionAdapter() {
           @Override
@@ -552,7 +560,7 @@ public class ConditionEditor extends Canvas {
             widget.redraw();
           }
         } );
-        MenuItem miDel = new MenuItem( mPop, SWT.CASCADE );
+        MenuItem miDel = new MenuItem( mPop, SWT.PUSH );
         miDel.setText( BaseMessages.getString( PKG, "ConditionEditor.DeleteCondition.Label" ) );
         miDel.addSelectionListener( new SelectionAdapter() {
           @Override
@@ -565,7 +573,7 @@ public class ConditionEditor extends Canvas {
         // Add a sub-condition in the subcondition... (move down)
         final Condition sub = active_condition.getCondition( cond_nr );
         if ( sub.getLeftValuename() != null ) {
-          miAdd = new MenuItem( mPop, SWT.CASCADE );
+          miAdd = new MenuItem( mPop, SWT.PUSH );
           miAdd.setText( BaseMessages.getString( PKG, "ConditionEditor.AddSubCondition.Label" ) );
           miAdd.addSelectionListener( new SelectionAdapter() {
             @Override
@@ -581,7 +589,7 @@ public class ConditionEditor extends Canvas {
         // --------------------------------------------------
         new MenuItem( mPop, SWT.SEPARATOR );
 
-        MenuItem miCopy = new MenuItem( mPop, SWT.CASCADE );
+        MenuItem miCopy = new MenuItem( mPop, SWT.PUSH );
         miCopy.setText( BaseMessages.getString( PKG, "ConditionEditor.CopyToClipboard" ) );
         miCopy.addSelectionListener( new SelectionAdapter() {
           @Override
@@ -597,7 +605,7 @@ public class ConditionEditor extends Canvas {
 
           }
         } );
-        MenuItem miPasteBef = new MenuItem( mPop, SWT.CASCADE );
+        MenuItem miPasteBef = new MenuItem( mPop, SWT.PUSH );
         miPasteBef.setText( BaseMessages.getString( PKG, "ConditionEditor.PasteFromClipboardBeforeCondition" ) );
         miPasteBef.addSelectionListener( new SelectionAdapter() {
           @Override
@@ -624,7 +632,7 @@ public class ConditionEditor extends Canvas {
         // --------------------------------------------------
         new MenuItem( mPop, SWT.SEPARATOR );
 
-        MenuItem miPasteAft = new MenuItem( mPop, SWT.CASCADE );
+        MenuItem miPasteAft = new MenuItem( mPop, SWT.PUSH );
         miPasteAft.setText( BaseMessages.getString( PKG, "ConditionEditor.PasteFromClipboardAfterCondition" ) );
         miPasteAft.addSelectionListener( new SelectionAdapter() {
           @Override
@@ -650,7 +658,7 @@ public class ConditionEditor extends Canvas {
         } );
         // --------------------------------------------------
         new MenuItem( mPop, SWT.SEPARATOR );
-        MenuItem miMoveSub = new MenuItem( mPop, SWT.CASCADE );
+        MenuItem miMoveSub = new MenuItem( mPop, SWT.PUSH );
         miMoveSub.setText( BaseMessages.getString( PKG, "ConditionEditor.MoveConditionToSubCondition" ) );
         miMoveSub.addSelectionListener( new SelectionAdapter() {
           @Override
@@ -667,7 +675,7 @@ public class ConditionEditor extends Canvas {
             widget.redraw();
           }
         } );
-        MenuItem miMoveParent = new MenuItem( mPop, SWT.CASCADE );
+        MenuItem miMoveParent = new MenuItem( mPop, SWT.PUSH );
         miMoveParent.setText( BaseMessages.getString( PKG, "ConditionEditor.MoveConditionToParentCondition" ) );
         if ( getLevel() == 0 ) {
           miMoveParent.setEnabled( false );
@@ -691,7 +699,7 @@ public class ConditionEditor extends Canvas {
         } );
         // --------------------------------------------------
         new MenuItem( mPop, SWT.SEPARATOR );
-        MenuItem miMoveDown = new MenuItem( mPop, SWT.CASCADE );
+        MenuItem miMoveDown = new MenuItem( mPop, SWT.PUSH );
         miMoveDown.setText( BaseMessages.getString( PKG, "ConditionEditor.MoveConditionDown" ) );
         if ( cond_nr >= active_condition.nrConditions() - 1 ) {
           miMoveDown.setEnabled( false );
@@ -706,7 +714,7 @@ public class ConditionEditor extends Canvas {
             widget.redraw();
           }
         } );
-        MenuItem miMoveUp = new MenuItem( mPop, SWT.CASCADE );
+        MenuItem miMoveUp = new MenuItem( mPop, SWT.PUSH );
         miMoveUp.setText( BaseMessages.getString( PKG, "ConditionEditor.MoveConditionUp" ) );
         if ( cond_nr == 0 ) {
           miMoveUp.setEnabled( false );
@@ -727,7 +735,7 @@ public class ConditionEditor extends Canvas {
         break;
       case AREA_OPERATOR:
         Menu mPop = new Menu( widget );
-        MenuItem miDown = new MenuItem( mPop, SWT.CASCADE );
+        MenuItem miDown = new MenuItem( mPop, SWT.PUSH );
         miDown.setText( BaseMessages.getString( PKG, "ConditionEditor.MoveDown" ) );
         miDown.addSelectionListener( new SelectionAdapter() {
           @Override
@@ -820,7 +828,8 @@ public class ConditionEditor extends Canvas {
   }
 
   private Rectangle getWidgetSize( GC gc ) {
-    return widget.getBounds();
+    Rectangle cs = widget.getBounds(); // Canvas size
+    return new Rectangle( 0, 0, cs.width, cs.height );
   }
 
   private Rectangle getAndNotSize( GC gc ) {

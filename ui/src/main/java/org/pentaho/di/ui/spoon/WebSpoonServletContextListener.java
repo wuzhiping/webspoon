@@ -30,10 +30,10 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletContextEvent;
 
-import org.apache.log4j.Logger;
 import org.eclipse.rap.rwt.engine.RWTServletContextListener;
 import org.pentaho.di.core.Const;
 import org.pentaho.di.core.KettleClientEnvironment;
@@ -51,6 +51,7 @@ public class WebSpoonServletContextListener extends RWTServletContextListener {
 
   public void contextInitialized( ServletContextEvent event ) {
     try {
+      logger.info( "Current directory: " + ( new File( "." ) ).getCanonicalPath() );
       // Adapted from org.pentaho.di.www.Carte.parseAndRunCommand(String[])
       File file = new File( "system" + File.separator + "kettle" + File.separator + "slave-server-config.xml" );
       Document document = XMLHandler.loadXMLFile( file );

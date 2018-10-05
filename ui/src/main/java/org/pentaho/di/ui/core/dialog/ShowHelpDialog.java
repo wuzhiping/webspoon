@@ -30,6 +30,7 @@ import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
@@ -75,63 +76,7 @@ public class ShowHelpDialog extends Dialog {
   }
 
   public void open() {
-    Shell parent = getParent();
-    Display display = parent.getDisplay();
-
-    shell = createShell( parent );
-    shell.setImage( GUIResource.getInstance().getImageSpoon() );
-    props.setLook( shell );
-
-    FormLayout formLayout = new FormLayout();
-
-    shell.setLayout( formLayout );
-    shell.setText( dialogTitle );
-
-    // Header
-    if ( headerHeight > 0 ) {
-      Label wHeader = new Label( shell, SWT.NONE );
-      wHeader.setText( header );
-      wHeader.setBackground( wHeader.getParent().getBackground() );
-      FontData[] fD = wHeader.getFont().getFontData();
-      fD[ 0 ].setHeight( 16 );
-      wHeader.setFont( new Font( display, fD[ 0 ] ) );
-      FormData fdHeader = new FormData();
-      fdHeader.top = new FormAttachment( 0, headerLabelPosition );
-      fdHeader.left = new FormAttachment( 0, Const.MARGIN );
-      wHeader.setLayoutData( fdHeader );
-    }
-
-    // Canvas
-    wBrowser = new Browser( shell, SWT.NONE );
-    props.setLook( wBrowser );
-
-    fdBrowser = new FormData();
-    fdBrowser.left = new FormAttachment( 0, 0 );
-    fdBrowser.top = new FormAttachment( 0, headerHeight );
-    fdBrowser.right = new FormAttachment( 100, 0 );
-    fdBrowser.bottom = new FormAttachment( 100, 0 );
-    wBrowser.setLayoutData( fdBrowser );
-
-    // Detect [X] or ALT-F4 or something that kills this window...
-    shell.addShellListener( new ShellAdapter() {
-      public void shellClosed( ShellEvent e ) {
-        ok();
-      }
-    } );
-
-    wBrowser.setUrl( url );
-    if ( locationListener != null ) {
-      wBrowser.addLocationListener( locationListener );
-    }
-
-    BaseStepDialog.setSize( shell, 800, 600, true );
-
-    shell.open();
-    while ( !shell.isDisposed() ) {
-      if ( !display.readAndDispatch() ) {
-        display.sleep();
-      }
-    }
+    Program.launch( url );
   }
 
   public void dispose() {

@@ -15,6 +15,6 @@ This is the list of dependent OSS, in addition to PentahoDataIntegration\_OSS\_L
 | Spring Security Ldap        | 4.1.5.RELEASE | http://spring.io/spring-security | [Apache License Version 2.0](https://www.apache.org/licenses/LICENSE-2.0) |
 | Spring Security Web         | 4.1.5.RELEASE | http://spring.io/spring-security | [Apache License Version 2.0](https://www.apache.org/licenses/LICENSE-2.0) |
 | Jersey Spring               | 1.19.1 | https://jersey.github.io/ | [CDDL 1.1 and GPL 2.0 with Class-path Exception](https://github.com/jersey/jersey/blob/master/LICENSE.txt) |
-| pentaho-platform-scheduler  | 8.0.0.0-28 | https://github.com/pentaho/pentaho-platform/tree/master/scheduler | [LGPL 2.1](https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html) |
+| pentaho-platform-scheduler  | 8.1.0.0-365 | https://github.com/pentaho/pentaho-platform/tree/master/scheduler | [LGPL 2.1](https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html) |
 | Notify.js                   | master (7191c17e) | https://notifyjs.com/                         | [MIT License](https://opensource.org/licenses/MIT)                           |
 | jQuery                      | 2.2.4             | https://jquery.com/                           | [MIT License](https://jquery.org/license/)                                   |

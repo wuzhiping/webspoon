@@ -19,7 +19,7 @@
   <properties>
     <!-- webSpoon specific dependencies -->
     <webspoon.version>8.1.0.0-365-16</webspoon.version>
-    <rap.version>3.3.0</rap.version>
+    <rap.version>3.6.0</rap.version>
   </properties>
 
 

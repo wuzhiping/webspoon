@@ -34,6 +34,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.jface.fieldassist.ControlDecoration;
+import org.eclipse.rap.rwt.RWT;
 import org.eclipse.rap.rwt.internal.textsize.TextSizeUtil;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
@@ -1217,6 +1218,7 @@ public class TableView extends Composite {
       }
     };
     table.addTraverseListener( lsTraverse );
+    table.setData( RWT.CANCEL_KEYS, new String[] { "TAB", "SHIFT+TAB" } );
     // cursor.addTraverseListener(lsTraverse);
 
     // Clean up the clipboard
@@ -2204,6 +2206,7 @@ public class TableView extends Composite {
         textWidget.setToolTipText( "" );
       }
       textWidget.addTraverseListener( lsTraverse );
+      textWidget.setData( RWT.CANCEL_KEYS, new String[] { "TAB", "SHIFT+TAB" } );
       textWidget.addFocusListener( lsFocusText );
     } else {
       Text textWidget = new Text( table, SWT.NONE );
@@ -2227,6 +2230,7 @@ public class TableView extends Composite {
         textWidget.setToolTipText( "" );
       }
       textWidget.addTraverseListener( lsTraverse );
+      textWidget.setData( RWT.CANCEL_KEYS, new String[] { "TAB", "SHIFT+TAB" } );
       textWidget.addFocusListener( lsFocusText );
     }
     props.setLook( text, Props.WIDGET_STYLE_TABLE );
@@ -2352,6 +2356,7 @@ public class TableView extends Composite {
       }
       props.setLook( widget, Props.WIDGET_STYLE_TABLE );
       widget.addTraverseListener( lsTraverse );
+      widget.setData( RWT.CANCEL_KEYS, new String[] { "TAB", "SHIFT+TAB" } );
       widget.addModifyListener( lsModCombo );
       widget.addFocusListener( lsFocusCombo );
 
@@ -2376,6 +2381,7 @@ public class TableView extends Composite {
       CCombo widget = (CCombo) combo;
       props.setLook( widget, Props.WIDGET_STYLE_TABLE );
       widget.addTraverseListener( lsTraverse );
+      widget.setData( RWT.CANCEL_KEYS, new String[] { "TAB", "SHIFT+TAB" } );
       widget.addModifyListener( lsModCombo );
       widget.addFocusListener( lsFocusCombo );
 
@@ -2445,6 +2451,7 @@ public class TableView extends Composite {
       button.setToolTipText( "" );
     }
     button.addTraverseListener( lsTraverse ); // hop to next field
+    button.setData( RWT.CANCEL_KEYS, new String[] { "TAB", "SHIFT+TAB" } );
     button.addTraverseListener( new TraverseListener() {
       @Override
       public void keyTraversed( TraverseEvent arg0 ) {

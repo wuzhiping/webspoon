@@ -5495,12 +5495,9 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
     EngineMetaInterface meta = getActiveMeta();
     if ( meta != null ) {
       File file = null;
-      try {
-        file = File.createTempFile( "export_", "." + meta.getDefaultExtension() );
-        file.delete();
-      } catch ( IOException e ) {
-        e.printStackTrace();
-      }
+      file = new File( System.getProperty( "java.io.tmpdir" ) + File.separator
+        + meta.getName() + "." + meta.getDefaultExtension() );
+      file.delete();
       String filename = file.getAbsolutePath();
       save( meta, filename, true );
       StringBuilder url = new StringBuilder();

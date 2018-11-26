@@ -6,7 +6,7 @@
   <groupId>pentaho-kettle</groupId>
   <artifactId>kettle-ui-swt</artifactId>
   <packaging>jar</packaging>
-  <version>8.1.0.0-365-16</version>
+  <version>8.1.0.0-365-17</version>
 
   <name>PDI User Interface</name>
 
@@ -18,7 +18,7 @@
 
   <properties>
     <!-- webSpoon specific dependencies -->
-    <webspoon.version>8.1.0.0-365-16</webspoon.version>
+    <webspoon.version>8.1.0.0-365-17</webspoon.version>
     <rap.version>3.6.0</rap.version>
 
     <!-- Test running configuration -->

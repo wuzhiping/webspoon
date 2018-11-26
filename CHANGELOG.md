@@ -1,6 +1,6 @@
 # Change Log
 
-## 0.8.1.17 - 2018-11-XX
+## 0.8.1.17 - 2018-11-26
 ### Changed
 - Update RAP/RWT to 3.6.0
 - Update Selenium version to 3.14.0
@@ -15,6 +15,7 @@
 - Explicitly set a new menu to a control (fix #122)
 - Export To XML with its original name instead of a random string (fix #124)
 - Adjust the dialog height (fix #125)
+- saveXMLFileToVfs uses meta.getName() instead of "Untitled" (fix #128)
 
 ## 0.8.1.16 - 2018-06-29
 ### Changed

@@ -5957,7 +5957,7 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
     String filename = null;
     FileObject selectedFile =
       getVfsFileChooserDialog( rootFile, initialFile ).open(
-          shell, "Untitled", Const.STRING_TRANS_AND_JOB_FILTER_EXT, Const.getTransformationAndJobFilterNames(),
+          shell, meta.getName(), Const.STRING_TRANS_AND_JOB_FILTER_EXT, Const.getTransformationAndJobFilterNames(),
           VfsFileChooserDialog.VFS_DIALOG_SAVEAS );
     if ( selectedFile != null ) {
       filename = selectedFile.getName().getFriendlyURI();

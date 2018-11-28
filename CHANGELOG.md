@@ -1,21 +1,23 @@
 # Change Log
 
 ## 0.8.1.17 - 2018-11-26
+### Added
+- Log the current directory path thru JUL (#116)
+
 ### Changed
 - Update RAP/RWT to 3.6.0
 - Update Selenium version to 3.14.0
+- Open a help page in a separate tab (#120)
+- Export To XML with its original name instead of a random string (#124)
+- saveXMLFileToVfs uses meta.getName() instead of "Untitled" (#128)
 
 ### Fixed
 - Fix popup menus in Filter Rows (fix #112)
-- Log the current directory path thru JUL (fix #116)
 - Avoid static modifier for session unique instance (fix #117)
 - Use internalization key instead of hardcode (thanks @Valeran86)
-- Open a help page in a separate tab (fix #120)
 - Cancel the traverse event invoked by TAB (+SHIFT) key (fix #123)
 - Explicitly set a new menu to a control (fix #122)
-- Export To XML with its original name instead of a random string (fix #124)
 - Adjust the dialog height (fix #125)
-- saveXMLFileToVfs uses meta.getName() instead of "Untitled" (fix #128)
 
 ## 0.8.1.16 - 2018-06-29
 ### Changed

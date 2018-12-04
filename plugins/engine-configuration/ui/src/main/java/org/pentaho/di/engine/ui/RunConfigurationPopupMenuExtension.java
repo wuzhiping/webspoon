@@ -54,11 +54,8 @@ public class RunConfigurationPopupMenuExtension implements ExtensionPointInterfa
   private static Class<?> PKG = RunConfigurationPopupMenuExtension.class;
 
   private Supplier<Spoon> spoonSupplier = Spoon::getInstance;
-  private String runConfiguration;
   private RunConfigurationDelegate runConfigurationDelegate;
   private RunConfigurationService runConfigurationManager;
-  private Menu rootMenu;
-  private Menu itemMenu;
 
   public RunConfigurationPopupMenuExtension( RunConfigurationDelegate runConfigurationDelegate,
                                              RunConfigurationService runConfigurationManager ) {
@@ -75,7 +72,7 @@ public class RunConfigurationPopupMenuExtension implements ExtensionPointInterfa
     TreeSelection object = objects[ 0 ];
     Object selection = object.getSelection();
 
-    RunConfiguration runConfiguration;
+    String runConfiguration;
     if ( selection == RunConfiguration.class ) {
       popupMenu = createRootPopupMenu( selectionTree );
     } else if ( selection instanceof String ) {
@@ -106,7 +103,7 @@ public class RunConfigurationPopupMenuExtension implements ExtensionPointInterfa
     return rootMenu;
   }
 
-  private Menu createItemPopupMenu( Tree tree, RunConfiguration runConfiguration ) {
+  private Menu createItemPopupMenu( Tree tree, String runConfiguration ) {
     Menu itemMenu = new Menu( tree );
       MenuItem editMenuItem = new MenuItem( itemMenu, SWT.NONE );
       editMenuItem.setText( BaseMessages.getString( PKG, "RunConfigurationPopupMenuExtension.MenuItem.Edit" ) );

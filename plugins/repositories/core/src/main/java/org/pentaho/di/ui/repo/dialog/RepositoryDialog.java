@@ -45,8 +45,6 @@ import org.pentaho.di.ui.repo.model.RepositoryModel;
 import org.pentaho.platform.settings.ServerPort;
 import org.pentaho.platform.settings.ServerPortRegistry;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
@@ -329,13 +327,7 @@ public class RepositoryDialog extends ThinDialog {
     Object model = null;
     try {
       model = mapper.readValue( json, _class );
-    } catch ( JsonParseException e ) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch ( JsonMappingException e ) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch ( IOException e ) {
+    } catch ( Exception e ) {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }

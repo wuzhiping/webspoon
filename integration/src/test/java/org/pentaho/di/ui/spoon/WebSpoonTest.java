@@ -80,13 +80,13 @@ public class WebSpoonTest {
 
     // Drag & drop a step
     clickElement( "//div[text() = 'Input']" );
-    element = driver.findElement( By.xpath( "//div[text() = 'Generate Rows']" ) );
+    element = driver.findElement( By.xpath( "//div[text() = 'Generate rows']" ) );
     actions.clickAndHold( element ).moveByOffset( 300, 0 ).release().build().perform();
 
     // Open a step dialog
-    clickElement( "//div[@test-id = 'tree_exploreSolution']" );
-    clickElement( "//div[@test-id = 'tree_expandAll']" );
-    doubleClickElement( "//div[@test-id = 'tree_Steps']/../..//div[text() = 'Generate Rows']" );
+    clickElement( "//div[@test-id = 'exploreSolution']" );
+    clickElement( "//div[@test-id = 'view_expandAll']" );
+    doubleClickElement( "//div[@test-id = 'view_Steps']/..//div[text() = 'Generate rows']" );
 
     assertEquals( 1, driver.findElements( By.xpath( "//div[text() = 'Never stop generating rows']" ) ).size() );
   }
@@ -106,11 +106,11 @@ public class WebSpoonTest {
 
   private void testModifiedJavaScriptValue() {
     createNewTrans();
-    drawStep( "Modified Java Script Value" );
-    openDialog( "Modified Java Script Value" );
-    wait.until( ExpectedConditions.presenceOfElementLocated( By.xpath( "//div[text() = 'Script Values / Mod']" ) ) );
+    drawStep( "Modified JavaScript value" );
+    openDialog( "Modified JavaScript value" );
+    wait.until( ExpectedConditions.presenceOfElementLocated( By.xpath( "//div[text() = 'Java script functions :']" ) ) );
 
-    assertEquals( 1, driver.findElements( By.xpath( "//div[text() = 'Script Values / Mod']" ) ).size() );
+    assertEquals( 1, driver.findElements( By.xpath( "//div[text() = 'Java script functions :']" ) ).size() );
   }
 
   @Test
@@ -129,17 +129,13 @@ public class WebSpoonTest {
   public void testDatabaseConnectionDialog() throws Exception {
     // Create a new transformation
     createNewTrans();
-
-    // Filter a step
-    driver.findElement( By.xpath( "//input[@test-id = 'selectionFilter']" ) ).sendKeys( "table" );
-
     // Draw a step
-    doubleClickElement( "//div[text() = 'Table input']" );
+    drawStep( "Table input" );
 
     // Open a step dialog
-    clickElement( "//div[@test-id = 'tree_exploreSolution']" );
-    clickElement( "//div[@test-id = 'tree_expandAll']" );
-    doubleClickElement( "//div[@test-id = 'tree_Steps']/../..//div[text() = 'Table input']" );
+    clickElement( "//div[@test-id = 'exploreSolution']" );
+    clickElement( "//div[@test-id = 'view_expandAll']" );
+    doubleClickElement( "//div[@test-id = 'view_Steps']/..//div[text() = 'Table input']" );
 
     /* TODO
      * Cancel button does not become clickable unless thread.sleep and window.setSize.
@@ -164,11 +160,11 @@ public class WebSpoonTest {
     drawStep( "Table input" );
 
     // Open the View tab
-    clickElement( "//div[@test-id = 'tree_exploreSolution']" );
-    clickElement( "//div[@test-id = 'tree_expandAll']" );
+    clickElement( "//div[@test-id = 'exploreSolution']" );
+    clickElement( "//div[@test-id = 'view_expandAll']" );
 
     // Right-click on a step
-    rightClickElement( "//div[@test-id = 'tree_Steps']/../..//div[text() = 'Table input']" );
+    rightClickElement( "//div[@test-id = 'view_Steps']/..//div[text() = 'Table input']" );
 
     assertEquals( 1, driver.findElements( By.xpath( "//div[text() = 'Duplicate']" ) ).size() );
   }
@@ -183,9 +179,9 @@ public class WebSpoonTest {
     // if any repository is already registered
     if ( driver.findElements( By.xpath( "//div[text() = 'Repository Manager...']" ) ).size() == 1 ) {
       clickElement( "//div[text() = 'Repository Manager...']" );
-      driver.switchTo().frame( driver.findElement( By.xpath(".//iframe[@src='/spoon/osgi/repositories-plugin-core/8.1.0.0-365/index.html']") ) );
+      driver.switchTo().frame( driver.findElement( By.xpath(".//iframe[@src='/spoon/osgi/repositories-plugin-core/8.2.0.0-342/index.html']") ) );
     } else {
-      driver.switchTo().frame( driver.findElement( By.xpath(".//iframe[@src='/spoon/osgi/repositories-plugin-core/8.1.0.0-365/index.html#/add']") ) );
+      driver.switchTo().frame( driver.findElement( By.xpath(".//iframe[@src='/spoon/osgi/repositories-plugin-core/8.2.0.0-342/index.html#/add']") ) );
     }
     assertEquals( 1, driver.findElements( By.xpath( "//button[@id = 'btnClose']" ) ).size() );
   }
@@ -197,7 +193,7 @@ public class WebSpoonTest {
   public void testMarketplace() {
     clickElement( "//div[text() = 'Tools']" );
     clickElement( "//div[text() = 'Marketplace']" );
-    driver.switchTo().frame( driver.findElement( By.xpath(".//iframe[@src='osgi/pentaho-marketplace/8.1.0.0-365/main.html']") ) );
+    driver.switchTo().frame( driver.findElement( By.xpath(".//iframe[@src='osgi/pentaho-marketplace/8.2.0.0-342/main.html']") ) );
     assertEquals( 1, driver.findElements( By.xpath( "//div[text() = ' Available ']" ) ).size() );
   }
 
@@ -220,14 +216,14 @@ public class WebSpoonTest {
 
   private void testRunConfigurationPopupMenu() {
     // Click View
-    clickElement( "//div[@test-id = 'tree_exploreSolution']" );
+    clickElement( "//div[@test-id = 'exploreSolution']" );
     rightClickElement( "//div[text() = 'Run configurations']" );
     assertEquals( 1, driver.findElements( By.xpath( "//div[text() = 'New...' and not(contains(@style,'visibility: hidden'))]" ) ).size() );
   }
 
   private void testHadoopClusterPopupMenu() {
     // Click View
-    clickElement( "//div[@test-id = 'tree_exploreSolution']" );
+    clickElement( "//div[@test-id = 'exploreSolution']" );
     rightClickElement( "//div[text() = 'Hadoop clusters']" );
     assertEquals( 1, driver.findElements( By.xpath( "//div[text() = 'New Cluster' and not(contains(@style,'visibility: hidden'))]" ) ).size() );
   }
@@ -242,18 +238,18 @@ public class WebSpoonTest {
 
   private void drawStep( String stepName ) {
     // Filter a step
-    element = wait.until( ExpectedConditions.visibilityOfElementLocated( By.xpath( "//input[@test-id = 'selectionFilter']" ) ) );
+    element = wait.until( ExpectedConditions.visibilityOfElementLocated( By.xpath( "//input[@test-id = 'design_selectionFilter']" ) ) );
     element.sendKeys( stepName );
 
     // Draw a step
-    doubleClickElement( "//div[text() = '" + stepName + "']" );
+    doubleClickElement( "//div[@test-id = 'design_" + stepName + "']" );
   }
 
   private void openDialog( String stepName ) {
     // Open a step dialog
-    clickElement( "//div[@test-id = 'tree_exploreSolution']" );
-    clickElement( "//div[@test-id = 'tree_expandAll']" );
-    doubleClickElement( "//div[@test-id = 'tree_Steps']/../..//div[text() = '" + stepName + "']" );
+    clickElement( "//div[@test-id = 'exploreSolution']" );
+    clickElement( "//div[@test-id = 'view_expandAll']" );
+    doubleClickElement( "//div[@test-id = 'view_Steps']/..//div[text() = '" + stepName + "']" );
   }
 
   private void clickElement( String xpath ) {

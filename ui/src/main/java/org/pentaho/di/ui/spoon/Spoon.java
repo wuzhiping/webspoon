@@ -1981,6 +1981,8 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
     viewComposite.setBackground( GUIResource.getInstance().getColorDemoGray() );
 
     viewTreeToolbar = new TreeToolbar( viewComposite, SWT.NONE );
+    setTestId( viewTreeToolbar.getSelectionFilter(), "view_selectionFilter" );
+    setTestId( viewTreeToolbar.getExpandAll(), "view_expandAll" );
     FormData fdTreeToolbar = new FormData();
     fdTreeToolbar.left = new FormAttachment( 0 );
     fdTreeToolbar.right = new FormAttachment( 100 );
@@ -2015,7 +2017,7 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
     view.setControl( viewComposite );
     view.setText( STRING_SPOON_MAIN_TREE );
     view.setImage( GUIResource.getInstance().getImageExploreSolutionSmall() );
-    setTestId( view, "tree_exploreSolution" );
+    setTestId( view, "exploreSolution" );
 
     viewTreeComposite = new Composite( viewComposite, SWT.NONE );
     viewTreeComposite.setLayout( new FillLayout() );
@@ -2041,6 +2043,8 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
     designComposite.setBackground( GUIResource.getInstance().getColorDemoGray() );
 
     designTreeToolbar = new TreeToolbar( designComposite, SWT.NONE );
+    setTestId( designTreeToolbar.getSelectionFilter(), "design_selectionFilter" );
+    setTestId( designTreeToolbar.getExpandAll(), "design_expandAll" );
     FormData fdTreeToolbar = new FormData();
     fdTreeToolbar.left = new FormAttachment( 0 );
     fdTreeToolbar.right = new FormAttachment( 100 );
@@ -6357,7 +6361,7 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
     if ( id != null ) {
       item.setData( "StepId", id );
     }
-    setTestId( item, "tree_" + text );
+    setTestId( item, "design_" + text );
     return item;
   }
 
@@ -9373,7 +9377,7 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
     dialog.open();
   }
 
-  static void setTestId( Widget widget, String value ) {
+  public static void setTestId( Widget widget, String value ) {
     if ( !widget.isDisposed() ) {
       String $el = widget instanceof Text ? "$input" : "$el";
       String id = WidgetUtil.getId( widget );

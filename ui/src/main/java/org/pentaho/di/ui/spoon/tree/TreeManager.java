@@ -32,6 +32,7 @@ import org.pentaho.di.base.AbstractMeta;
 import org.pentaho.di.trans.TransMeta;
 import org.pentaho.di.ui.core.gui.GUIResource;
 import org.pentaho.di.ui.core.widget.tree.TreeNode;
+import org.pentaho.di.ui.spoon.Spoon;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -191,6 +192,7 @@ public class TreeManager {
 
   private TreeItem createTreeItem( TreeNode treeNode, Object tree ) {
     TreeItem childTreeItem = createTreeItem( tree, treeNode.getIndex() );
+    Spoon.setTestId( childTreeItem, "view_" + treeNode.getLabel() );
     populateTreeItem( childTreeItem, treeNode );
     return childTreeItem;
   }

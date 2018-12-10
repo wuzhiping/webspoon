@@ -3412,9 +3412,11 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
     for ( int i = 0; i < transMeta.nrTransHops(); i++ ) {
       JsonObject jsonHop = new JsonObject();
       TransHopMeta hop = transMeta.getTransHop( i );
-      jsonHop.add( "from", hop.getFromStep().getName() );
-      jsonHop.add( "to", hop.getToStep().getName() );
-      jsonHops.add( jsonHop );
+      if ( hop.getFromStep() != null && hop.getToStep() != null ) {
+        jsonHop.add( "from", hop.getFromStep().getName() );
+        jsonHop.add( "to", hop.getToStep().getName() );
+        jsonHops.add( jsonHop );
+      }
     }
     canvas.setData( "hops", jsonHops );
   }

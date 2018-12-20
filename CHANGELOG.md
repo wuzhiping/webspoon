@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.8.2.17 - 2018-12-20
+### Changed
+- Rebased to 8.2.0.0-342.
+- Tag naming convention of Docker image (see [here](https://github.com/HiromuHota/webspoon-docker#tags) for details).
+
+### Fixed
+- Ignore corrupted hops (HiromuHota/pdi-git-plugin#22).
+
 ## 0.8.1.17 - 2018-11-26
 ### Added
 - Log the current directory path thru JUL (#116)

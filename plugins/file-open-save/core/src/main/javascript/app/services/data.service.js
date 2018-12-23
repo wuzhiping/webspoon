@@ -240,7 +240,7 @@ define(
          * @return {Promise} - a promise resolved once data is returned
          */
         function create(parent, name) {
-          return _httpPost([baseUrl, "create", encodeURIComponent(parent), encodeURIComponent(name)].join("/"), null);
+          return async( bfCreate( parent, name ) );
         }
 
         /**

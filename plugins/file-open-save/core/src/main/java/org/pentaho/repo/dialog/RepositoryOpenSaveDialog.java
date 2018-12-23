@@ -39,6 +39,7 @@ import java.net.URLEncoder;
 import java.util.Properties;
 
 import org.pentaho.repo.controller.RepositoryBrowserController;
+import org.pentaho.repo.model.RepositoryDirectory;
 import org.pentaho.repo.model.RepositoryFile;
 import org.pentaho.repo.model.RepositoryTree;
 
@@ -171,6 +172,15 @@ public class RepositoryOpenSaveDialog extends ThinDialog {
       @Override public Object function( Object[] arguments ) {
         List<RepositoryFile> files = repositoryBrowserController.getRecentFiles();
         return "{ \"data\": " + javaToJson( files ) + "}";
+      }
+    };
+
+    new BrowserFunction( browser, "bfCreate" ) {
+      @Override public Object function( Object[] arguments ) {
+        String parent = (String) arguments[ 0 ];
+        String name = (String) arguments[ 1 ];
+        RepositoryDirectory repositoryDirectory = repositoryBrowserController.create( parent, name );
+        return "{ \"data\": " + javaToJson( repositoryDirectory ) + "}";
       }
     };
 

@@ -124,7 +124,7 @@ define(
          * @return {Promise} - a promise resolved once data is returned
          */
         function getActiveFileName() {
-          return _httpGet([baseUrl, "getActiveFileName"].join("/"));
+          return async( bfGetActiveFileName() );
         }
 
         /**

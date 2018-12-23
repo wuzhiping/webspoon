@@ -15,6 +15,7 @@
 
 package org.pentaho.repo.dialog;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.ws.rs.core.Response;
@@ -146,6 +147,13 @@ public class RepositoryOpenSaveDialog extends ThinDialog {
         }
         jsonObject.put( "status", Status.NO_CONTENT.getStatusCode() );
         return jsonObject.toString();
+      }
+    };
+
+    new BrowserFunction( browser, "bfGetActiveFileName" ) {
+      @Override public Object function( Object[] arguments ) {
+        String name = repositoryBrowserController.getActiveFileName();
+        return "{ \"data\": " + javaToJson( Collections.singletonMap( "fileName", name ) ) + "}";
       }
     };
 

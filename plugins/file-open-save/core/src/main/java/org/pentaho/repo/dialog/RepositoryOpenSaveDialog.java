@@ -27,6 +27,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.json.simple.JSONObject;
 import org.pentaho.di.core.exception.KettleException;
 import org.pentaho.di.core.util.Utils;
+import org.pentaho.di.repository.ObjectId;
 import org.pentaho.di.repository.Repository;
 import org.pentaho.di.ui.core.dialog.ThinDialog;
 import org.pentaho.di.ui.core.gui.GUIResource;
@@ -144,6 +145,25 @@ public class RepositoryOpenSaveDialog extends ThinDialog {
           return jsonObject.toString();
         }
         jsonObject.put( "status", Status.NO_CONTENT.getStatusCode() );
+        return jsonObject.toString();
+      }
+    };
+
+    new BrowserFunction( browser, "bfRename" ) {
+      @Override public Object function( Object[] arguments ) {
+        String id = (String) arguments[ 0 ];
+        String path = (String) arguments[ 1 ];
+        String newName = (String) arguments[ 2 ];
+        String type = (String) arguments[ 3 ];
+        String oldName = (String) arguments[ 4 ];
+        JSONObject jsonObject = new JSONObject();
+        try {
+          ObjectId objectId = repositoryBrowserController.rename( id, path, newName, type, oldName );
+          jsonObject.put( "status", Status.OK.getStatusCode() );
+          jsonObject.put( "data", javaToJson( objectId ) );
+        } catch ( KettleException e ) {
+          jsonObject.put( "status", Status.NOT_ACCEPTABLE.getStatusCode() );
+        }
         return jsonObject.toString();
       }
     };

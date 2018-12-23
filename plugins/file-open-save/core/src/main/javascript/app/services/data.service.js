@@ -228,8 +228,7 @@ define(
          * @return {Promise} - a promise resolved once data is returned
          */
         function rename(id, path, newName, type, oldName) {
-          return _httpPost([baseUrl, "rename", encodeURIComponent(id),
-            encodeURIComponent(path), newName, type, oldName].join("/"));
+          return async( bfRename( id, path, newName, type, oldName ) );
         }
 
         /**

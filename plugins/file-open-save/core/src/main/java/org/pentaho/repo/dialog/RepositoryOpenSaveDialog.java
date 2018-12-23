@@ -147,6 +147,26 @@ public class RepositoryOpenSaveDialog extends ThinDialog {
       }
     };
 
+    new BrowserFunction( browser, "bfRemove" ) {
+      @Override public Object function( Object[] arguments ) {
+        String id = (String) arguments[ 0 ];
+        String name = (String) arguments[ 1 ];
+        String path = (String) arguments[ 2 ];
+        String type = (String) arguments[ 3 ];
+        JSONObject jsonObject = new JSONObject();
+        try {
+          if ( repositoryBrowserController.remove( id, name, path, type ) ) {
+            jsonObject.put( "status", Status.OK.getStatusCode() );
+          } else {
+            jsonObject.put( "status", Status.NO_CONTENT.getStatusCode() );
+          }
+        } catch ( KettleException e ) {
+          jsonObject.put( "status", Status.NOT_ACCEPTABLE.getStatusCode() );
+        }
+        return jsonObject.toString();
+      }
+    };
+
     new BrowserFunction( browser, "bfGetRecentFiles" ) {
       @Override public Object function( Object[] arguments ) {
         List<RepositoryFile> files = repositoryBrowserController.getRecentFiles();

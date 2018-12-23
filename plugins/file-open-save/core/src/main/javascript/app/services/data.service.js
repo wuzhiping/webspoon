@@ -253,8 +253,7 @@ define(
          * @return {Promise} - a promise resolved once data is returned
          */
         function remove(id, name, path, type) {
-          return _httpDelete([baseUrl, "remove",
-            encodeURIComponent(id), encodeURIComponent(name), encodeURIComponent(path), type].join("/"));
+          return async( bfRemove( id, name, path, type ) );
         }
 
         /**
@@ -346,6 +345,12 @@ define(
         function async( json ) {
           var deferred = $q.defer();
           var obj = JSON.parse( json );
+          if ( obj.hasOwnProperty( "status" ) ) {
+            if ( obj.status != 200 ) {
+              deferred.reject( obj );
+              return deferred.promise;
+            }
+          }
           deferred.resolve( obj );
           return deferred.promise;
         }

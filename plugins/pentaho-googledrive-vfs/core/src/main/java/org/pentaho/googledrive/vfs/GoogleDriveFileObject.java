@@ -17,6 +17,7 @@
 package org.pentaho.googledrive.vfs;
 
 import com.google.api.client.auth.oauth2.Credential;
+import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
@@ -214,7 +215,7 @@ public class GoogleDriveFileObject extends AbstractFileObject {
 
     Credential
         credential =
-        new CustomAuthorizationCodeInstalledApp( flow, new CustomLocalServerReceiver() ).authorize( "user" );
+        new CustomAuthorizationCodeInstalledApp( flow, new LocalServerReceiver() ).authorize( "user" );
     return credential;
   }
 

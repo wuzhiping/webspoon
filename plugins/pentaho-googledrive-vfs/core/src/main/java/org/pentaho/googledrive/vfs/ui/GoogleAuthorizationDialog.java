@@ -24,6 +24,7 @@ import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.graphics.*;
 import org.eclipse.swt.layout.*;
+import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Event;
@@ -38,7 +39,6 @@ public class GoogleAuthorizationDialog extends Dialog {
 
   protected int width = 620;
   protected int height = 650;
-  protected Browser browser;
   protected Shell dialog;
   protected Display display;
 
@@ -53,9 +53,6 @@ public class GoogleAuthorizationDialog extends Dialog {
 
   public void open( String url ) {
     createDialog( "Google Drive", url, OPTIONS, LOGO );
-    if ( receiver != null ) {
-      ( (CustomLocalServerReceiver) receiver ).setUrl( url );
-    }
 
     while ( !dialog.isDisposed() ) {
       if ( !display.readAndDispatch() ) {
@@ -65,6 +62,7 @@ public class GoogleAuthorizationDialog extends Dialog {
   }
 
   private void createDialog( String title, String url, int options, Image logo ) {
+    Program.launch( url );
 
     Shell parent = getParent();
     display = parent.getDisplay();
@@ -142,7 +140,6 @@ public class GoogleAuthorizationDialog extends Dialog {
 
       cancelButton.addListener( SWT.MouseUp, new Listener() {
         public void handleEvent( Event event ) {
-          browser.dispose();
           dialog.close();
           dialog.dispose();
         }
@@ -170,23 +167,14 @@ public class GoogleAuthorizationDialog extends Dialog {
       separatorFormData.bottom = new FormAttachment( cancelButton, -15 );
       separator.setLayoutData( separatorFormData );
 
-      browser = new Browser( dialog, SWT.NONE );
-      browser.setUrl( url );
+      Text text = new Text( dialog, SWT.NONE );
+      text.setText( "Manually close this dialog after you get authenticated at Google" );
 
       FormData browserFormData = new FormData();
       browserFormData.top = new FormAttachment( 0, 5 );
       browserFormData.bottom = new FormAttachment( separator, -5 );
       browserFormData.left = new FormAttachment( 0, 5 );
       browserFormData.right = new FormAttachment( 100, -5 );
-      browser.setLayoutData( browserFormData );
-
-      browser.addCloseWindowListener( new CloseWindowListener() {
-        @Override public void close( WindowEvent event ) {
-          Browser browser = (Browser) event.widget;
-          Shell shell = browser.getShell();
-          shell.close();
-        }
-      } );
     } catch ( Exception e ) {
       MessageBox messageBox = new MessageBox( dialog, SWT.ICON_ERROR | SWT.OK );
       messageBox.setMessage( "Browser cannot be initialized." );

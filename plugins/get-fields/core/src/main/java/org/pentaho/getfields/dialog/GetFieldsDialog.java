@@ -117,16 +117,7 @@ public class GetFieldsDialog extends ThinDialog {
   }
 
   private static String getRepoURL( String path ) {
-    String host;
-    Integer port;
-    try {
-      host = getKettleProperty( THIN_CLIENT_HOST );
-      port = Integer.valueOf( getKettleProperty( THIN_CLIENT_PORT ) );
-    } catch ( Exception e ) {
-      host = LOCALHOST;
-      port = getOsgiServicePort();
-    }
-    return "http://" + host + ":" + port + path;
+    return System.getProperty( "KETTLE_CONTEXT_PATH", "" ) + "/osgi" + path;
   }
 
   private static String getKettleProperty( String propertyName ) throws KettleException {

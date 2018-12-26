@@ -220,7 +220,7 @@ $ mvn clean install -pl swt
 ### rap
 
 ```
-$ git clone -b webspoon-3.6.0 https://github.com/HiromuHota/rap.git
+$ git clone -b webspoon-3.7.0 https://github.com/HiromuHota/rap.git
 $ cd rap
 $ mvn clean install -N
 $ mvn clean install -pl bundles/org.eclipse.rap.rwt -am

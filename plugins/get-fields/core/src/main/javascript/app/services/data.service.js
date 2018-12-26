@@ -55,7 +55,8 @@ define(
        * @return {Promise} - a promise resolved once data is returned
        */
       function sample(file) {
-        return _httpGet([baseUrl, "sample", encodeURIComponent(file), "json"].join("/") + "/");
+        var data = {"path": file, "type": "json"};
+        return _httpPost([baseUrl, "sample"].join("/"), data);
       }
 
       /**

@@ -78,9 +78,12 @@ public class GetFieldsDialog extends ThinDialog {
     new BrowserFunction( browser, "close" ) {
       @Override public Object function( Object[] arguments ) {
         paths = new ArrayList<>();
-        browser.dispose();
-        dialog.close();
-        dialog.dispose();
+        Runnable execute = () -> {
+          browser.dispose();
+          dialog.close();
+          dialog.dispose();
+          };
+        display.asyncExec( execute );
         return true;
       }
     };
@@ -91,9 +94,12 @@ public class GetFieldsDialog extends ThinDialog {
         for ( Object path : (Object[]) arguments[0] ) {
           paths.add( (String) path );
         }
-        browser.dispose();
-        dialog.close();
-        dialog.dispose();
+        Runnable execute = () -> {
+          browser.dispose();
+          dialog.close();
+          dialog.dispose();
+          };
+        display.asyncExec( execute );
         return true;
       }
     };

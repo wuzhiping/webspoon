@@ -31,6 +31,7 @@ import org.eclipse.rap.rwt.application.AbstractEntryPoint;
 import org.eclipse.rap.rwt.client.service.ExitConfirmation;
 import org.eclipse.rap.rwt.client.service.StartupParameters;
 import org.eclipse.rap.rwt.widgets.WidgetUtil;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.pentaho.di.core.Const;
 import org.pentaho.di.core.KettleClientEnvironment;
@@ -104,6 +105,15 @@ public class WebSpoonEntryPoint extends AbstractEntryPoint {
       ExitConfirmation serviceConfirm = RWT.getClient().getService( ExitConfirmation.class );
       serviceConfirm.setMessage( "Do you really wanna leave this site?" );
     }
+
+    // In webSpoon, SWT.Close is not triggered on closing a browser (tab).
+    parent.getDisplay().addListener( SWT.Dispose, ( event ) -> {
+      try {
+        Spoon.getInstance().quitFile( false );
+      } catch ( Exception e ) {
+        LogChannel.GENERAL.logError( "Error closing Spoon", e );
+      }
+    });
   }
 
 }

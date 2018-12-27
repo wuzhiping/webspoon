@@ -1,5 +1,17 @@
 # Change Log
 
+## Unreleased
+### Changed
+- Ask where to save when saving an imported file (#127)
+- Update RAP/RWT to 3.7.0 (#132)
+
+### Fixed
+- Fixed the file/folder deletion/creation/rename in a repository (#135)
+- Gets the active file name from Spoon to set fileToSave (#134)
+- Fixed GetFieldsDialog (#136)
+- saveSettings on disposing a display (#137)
+- [rap] Use the cursor location as the menu location when it is not set on Menu.setVisible
+
 ## 0.8.2.17 - 2018-12-20
 ### Changed
 - Rebased to 8.2.0.0-342.

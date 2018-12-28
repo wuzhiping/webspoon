@@ -1,6 +1,9 @@
 # Change Log
 
 ## Unreleased
+### Added
+- [docker] Copy the samples dir under ~/.kettle/data for convenience
+
 ### Changed
 - Ask where to save when saving an imported file (#127)
 - Update RAP/RWT to 3.7.0 (#132)

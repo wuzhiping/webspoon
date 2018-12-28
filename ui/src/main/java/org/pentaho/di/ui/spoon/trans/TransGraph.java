@@ -34,6 +34,7 @@ import org.eclipse.rap.rwt.RWT;
 import org.eclipse.jface.window.DefaultToolTip;
 import org.eclipse.jface.window.ToolTip;
 import org.eclipse.rap.rwt.scripting.ClientListener;
+import org.eclipse.rap.rwt.service.UISession;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -4426,9 +4427,10 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
   private synchronized void prepareTrans( final Thread parentThread, final String[] args ) {
     pushSession.start();
     trans.setDisplay( Display.getCurrent() );
-    Runnable runnable = new Runnable() {
-      @Override
-      public void run() {
+    final Display display = Display.getCurrent();
+    Runnable runnable = () -> {
+      UISession uiSession = RWT.getUISession( display );
+      uiSession.exec( () -> {
         try {
           trans.prepareExecution( args );
 
@@ -4451,7 +4453,7 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
           running = false;
           checkErrorVisuals();
         }
-      }
+      });
     };
     Thread thread = new Thread( runnable );
     thread.start();

@@ -22,6 +22,8 @@
 
 package org.pentaho.di.trans.step;
 
+import org.eclipse.rap.rwt.RWT;
+import org.eclipse.rap.rwt.service.UISession;
 import org.pentaho.di.core.Const;
 import org.pentaho.di.core.logging.LogChannelInterface;
 import org.pentaho.di.core.logging.Metrics;
@@ -40,12 +42,15 @@ public class StepInitThread implements Runnable {
 
   private LogChannelInterface log;
 
+  final private UISession session;
+
   public StepInitThread( StepMetaDataCombi combi, LogChannelInterface log ) {
     this.combi = combi;
     this.log = combi.step.getLogChannel();
     this.ok = false;
     this.finished = false;
     this.doIt = true;
+    this.session = RWT.getUISession();
   }
 
   public String toString() {
@@ -53,6 +58,7 @@ public class StepInitThread implements Runnable {
   }
 
   public void run() {
+    session.exec( () -> {
     // Set the internal variables also on the initialization thread!
     // ((BaseStep)combi.step).setInternalVariables();
 
@@ -81,6 +87,7 @@ public class StepInitThread implements Runnable {
     }
 
     finished = true;
+    });
   }
 
   public boolean isFinished() {

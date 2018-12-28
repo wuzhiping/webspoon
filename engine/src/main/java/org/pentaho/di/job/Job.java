@@ -46,7 +46,6 @@ import org.apache.commons.vfs2.FileName;
 import org.apache.commons.vfs2.FileObject;
 import org.eclipse.rap.rwt.RWT;
 import org.eclipse.rap.rwt.service.UISession;
-import org.eclipse.swt.widgets.Display;
 import org.pentaho.di.cluster.SlaveServer;
 import org.pentaho.di.core.Const;
 import org.pentaho.di.core.util.Utils;
@@ -143,8 +142,6 @@ public class Job extends Thread implements VariableSpace, NamedParams, HasLogCha
 
   private VariableSpace variables = new Variables();
 
-  private Display display;
-
   /**
    * The job that's launching this (sub-) job. This gives us access to the whole chain, including the parent variables,
    * etc.
@@ -218,6 +215,7 @@ public class Job extends Thread implements VariableSpace, NamedParams, HasLogCha
   /** Int value for storage job statuses */
   private AtomicInteger status;
 
+  private UISession uiSession;
   /**
    * <p>
    * This enum stores bit masks which are used to manipulate with statuses over field {@link Job#status}
@@ -295,6 +293,11 @@ public class Job extends Thread implements VariableSpace, NamedParams, HasLogCha
   }
 
   public Job( Repository repository, JobMeta jobMeta, LoggingObjectInterface parentLogging ) {
+    try {
+      uiSession = RWT.getUISession();
+    } catch ( Exception e ) {
+      uiSession = null;
+    }
     this.rep = repository;
     this.jobMeta = jobMeta;
     this.containerObjectId = jobMeta.getContainerObjectId();
@@ -313,6 +316,11 @@ public class Job extends Thread implements VariableSpace, NamedParams, HasLogCha
   }
 
   public Job() {
+    try {
+      uiSession = RWT.getUISession();
+    } catch ( Exception e ) {
+      uiSession = null;
+    }
     init();
     this.log = new LogChannel( this );
     this.logLevel = log.getLogLevel();
@@ -364,7 +372,16 @@ public class Job extends Thread implements VariableSpace, NamedParams, HasLogCha
    * Threads main loop: called by Thread.start();
    */
   @Override public void run() {
+    if ( uiSession == null ) {
+      runInternal();
+    } else {
+      uiSession.exec( () -> {
+        runInternal();
+      });
+    }
+  }
 
+  private void runInternal() {
     ExecutorService heartbeat = null; // this job's heartbeat scheduled executor
 
     try {
@@ -409,14 +426,7 @@ public class Job extends Thread implements VariableSpace, NamedParams, HasLogCha
         shutdownHeartbeat( heartbeat );
 
         ExtensionPointHandler.callExtensionPoint( log, KettleExtensionPoint.JobFinish.id, this );
-        if ( display == null ) {
-          jobMeta.disposeEmbeddedMetastoreProvider();
-        } else {
-          UISession uiSession = RWT.getUISession( display );
-          uiSession.exec( () -> {
-            jobMeta.disposeEmbeddedMetastoreProvider();
-          } );
-        }
+        jobMeta.disposeEmbeddedMetastoreProvider();
 
         fireJobFinishListeners();
 
@@ -635,21 +645,10 @@ public class Job extends Thread implements VariableSpace, NamedParams, HasLogCha
     JobExecutionExtension extension = new JobExecutionExtension( this, prevResult, jobEntryCopy, true );
     ExtensionPointHandler.callExtensionPoint( log, KettleExtensionPoint.JobBeforeJobEntryExecution.id, extension );
 
-    if ( display == null ) {
-      jobMeta.disposeEmbeddedMetastoreProvider();
-      if ( jobMeta.getMetastoreLocatorOsgi() != null ) {
-        jobMeta.setEmbeddedMetastoreProviderKey(
-          jobMeta.getMetastoreLocatorOsgi().setEmbeddedMetastore( jobMeta.getEmbeddedMetaStore() ) );
-      }
-    } else {
-      UISession uiSession = RWT.getUISession( display );
-      uiSession.exec( () -> {
-        jobMeta.disposeEmbeddedMetastoreProvider();
-        if ( jobMeta.getMetastoreLocatorOsgi() != null ) {
-          jobMeta.setEmbeddedMetastoreProviderKey(
-            jobMeta.getMetastoreLocatorOsgi().setEmbeddedMetastore( jobMeta.getEmbeddedMetaStore() ) );
-        }
-      } );
+    jobMeta.disposeEmbeddedMetastoreProvider();
+    if ( jobMeta.getMetastoreLocatorOsgi() != null ) {
+      jobMeta.setEmbeddedMetastoreProviderKey(
+        jobMeta.getMetastoreLocatorOsgi().setEmbeddedMetastore( jobMeta.getEmbeddedMetaStore() ) );
     }
 
     if ( extension.result != null ) {
@@ -817,6 +816,7 @@ public class Job extends Thread implements VariableSpace, NamedParams, HasLogCha
 
           Runnable runnable = new Runnable() {
             @Override public void run() {
+              uiSession.exec( () -> {
               try {
                 Result threadResult = execute( nr + 1, newResult, nextEntry, jobEntryCopy, nextComment );
                 threadResults.add( threadResult );
@@ -829,6 +829,7 @@ public class Job extends Thread implements VariableSpace, NamedParams, HasLogCha
                 threadResult.setNrErrors( 1L );
                 threadResults.add( threadResult );
               }
+              });
             }
           };
           Thread thread = new Thread( runnable );
@@ -1402,7 +1403,6 @@ public class Job extends Thread implements VariableSpace, NamedParams, HasLogCha
     this.log.setLogLevel( logLevel );
     this.containerObjectId = log.getContainerObjectId();
     this.parentJob = parentJob;
-    this.display = parentJob.getDisplay();
   }
 
   public Result getResult() {
@@ -2343,13 +2343,5 @@ public class Job extends Thread implements VariableSpace, NamedParams, HasLogCha
     }
 
     return Const.HEARTBEAT_PERIODIC_INTERVAL_IN_SECS;
-  }
-
-  public Display getDisplay() {
-    return display;
-  }
-
-  public void setDisplay( Display display ) {
-    this.display = display;
   }
 }

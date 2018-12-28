@@ -24,6 +24,8 @@ package org.pentaho.di.trans.step;
 
 import java.util.List;
 
+import org.eclipse.rap.rwt.RWT;
+import org.eclipse.rap.rwt.service.UISession;
 import org.pentaho.di.core.Const;
 import org.pentaho.di.core.logging.KettleLogStore;
 import org.pentaho.di.core.logging.LogChannelInterface;
@@ -41,15 +43,31 @@ public class RunThread implements Runnable {
   private StepMetaInterface meta;
   private StepDataInterface data;
   private LogChannelInterface log;
+  private UISession uiSession;
 
   public RunThread( StepMetaDataCombi combi ) {
     this.step = combi.step;
     this.meta = combi.meta;
     this.data = combi.data;
     this.log = step.getLogChannel();
+    try {
+      this.uiSession = RWT.getUISession();
+    } catch ( Exception e ) {
+      this.uiSession = null;
+    }
   }
 
   public void run() {
+    if ( uiSession == null ) {
+      runInternal();
+    } else {
+      uiSession.exec( () -> {
+        runInternal();
+      });
+    }
+  }
+
+  private void runInternal() {
     try {
       step.setRunning( true );
       step.getLogChannel().snap( Metrics.METRIC_STEP_EXECUTION_START );

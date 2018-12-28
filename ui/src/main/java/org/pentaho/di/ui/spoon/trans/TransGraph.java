@@ -4426,7 +4426,6 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
 
   private synchronized void prepareTrans( final Thread parentThread, final String[] args ) {
     pushSession.start();
-    trans.setDisplay( Display.getCurrent() );
     final Display display = Display.getCurrent();
     Runnable runnable = () -> {
       UISession uiSession = RWT.getUISession( display );

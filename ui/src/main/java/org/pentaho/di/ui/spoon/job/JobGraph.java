@@ -3684,7 +3684,6 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
 
             log.logMinimal( BaseMessages.getString( PKG, "JobLog.Log.StartingJob" ) );
             pushSession.start();
-            job.setDisplay( Display.getCurrent() );
             job.start();
             jobGridDelegate.previousNrItems = -1;
             // Link to the new jobTracker!

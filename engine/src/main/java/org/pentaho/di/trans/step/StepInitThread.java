@@ -62,6 +62,16 @@ public class StepInitThread implements Runnable {
   }
 
   public void run() {
+    if ( uiSession == null ) {
+      runInternal();
+    } else {
+      uiSession.exec( () -> {
+        runInternal();
+      });
+    }
+  }
+
+  private void runInternal() {
     // Set the internal variables also on the initialization thread!
     // ((BaseStep)combi.step).setInternalVariables();
 
@@ -75,24 +85,12 @@ public class StepInitThread implements Runnable {
     try {
       combi.step.getLogChannel().snap( Metrics.METRIC_STEP_INIT_START );
 
-      if ( uiSession == null ) {
-        if ( combi.step.init( combi.meta, combi.data ) ) {
-          combi.data.setStatus( StepExecutionStatus.STATUS_IDLE );
-          ok = true;
-        } else {
-          combi.step.setErrors( 1 );
-          log.logError( BaseMessages.getString( PKG, "Trans.Log.ErrorInitializingStep", combi.step.getStepname() ) );
-        }
+      if ( combi.step.init( combi.meta, combi.data ) ) {
+        combi.data.setStatus( StepExecutionStatus.STATUS_IDLE );
+        ok = true;
       } else {
-        uiSession.exec( () -> {
-          if ( combi.step.init( combi.meta, combi.data ) ) {
-            combi.data.setStatus( StepExecutionStatus.STATUS_IDLE );
-            ok = true;
-          } else {
-            combi.step.setErrors( 1 );
-            log.logError( BaseMessages.getString( PKG, "Trans.Log.ErrorInitializingStep", combi.step.getStepname() ) );
-          }
-        });
+        combi.step.setErrors( 1 );
+        log.logError( BaseMessages.getString( PKG, "Trans.Log.ErrorInitializingStep", combi.step.getStepname() ) );
       }
     } catch ( Throwable e ) {
       log.logError( BaseMessages.getString( PKG, "Trans.Log.ErrorInitializingStep", combi.step.getStepname() ) );

@@ -42,7 +42,7 @@ public class StepInitThread implements Runnable {
 
   private LogChannelInterface log;
 
-  final private UISession session;
+  private UISession uiSession;
 
   public StepInitThread( StepMetaDataCombi combi, LogChannelInterface log ) {
     this.combi = combi;
@@ -50,7 +50,11 @@ public class StepInitThread implements Runnable {
     this.ok = false;
     this.finished = false;
     this.doIt = true;
-    this.session = RWT.getUISession();
+    try {
+      this.uiSession = RWT.getUISession();
+    } catch ( Exception e ) {
+      this.uiSession = null;
+    }
   }
 
   public String toString() {
@@ -58,7 +62,6 @@ public class StepInitThread implements Runnable {
   }
 
   public void run() {
-    session.exec( () -> {
     // Set the internal variables also on the initialization thread!
     // ((BaseStep)combi.step).setInternalVariables();
 
@@ -72,12 +75,24 @@ public class StepInitThread implements Runnable {
     try {
       combi.step.getLogChannel().snap( Metrics.METRIC_STEP_INIT_START );
 
-      if ( combi.step.init( combi.meta, combi.data ) ) {
-        combi.data.setStatus( StepExecutionStatus.STATUS_IDLE );
-        ok = true;
+      if ( uiSession == null ) {
+        if ( combi.step.init( combi.meta, combi.data ) ) {
+          combi.data.setStatus( StepExecutionStatus.STATUS_IDLE );
+          ok = true;
+        } else {
+          combi.step.setErrors( 1 );
+          log.logError( BaseMessages.getString( PKG, "Trans.Log.ErrorInitializingStep", combi.step.getStepname() ) );
+        }
       } else {
-        combi.step.setErrors( 1 );
-        log.logError( BaseMessages.getString( PKG, "Trans.Log.ErrorInitializingStep", combi.step.getStepname() ) );
+        uiSession.exec( () -> {
+          if ( combi.step.init( combi.meta, combi.data ) ) {
+            combi.data.setStatus( StepExecutionStatus.STATUS_IDLE );
+            ok = true;
+          } else {
+            combi.step.setErrors( 1 );
+            log.logError( BaseMessages.getString( PKG, "Trans.Log.ErrorInitializingStep", combi.step.getStepname() ) );
+          }
+        });
       }
     } catch ( Throwable e ) {
       log.logError( BaseMessages.getString( PKG, "Trans.Log.ErrorInitializingStep", combi.step.getStepname() ) );
@@ -87,7 +102,6 @@ public class StepInitThread implements Runnable {
     }
 
     finished = true;
-    });
   }
 
   public boolean isFinished() {

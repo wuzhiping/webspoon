@@ -44,7 +44,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.vfs2.FileName;
 import org.apache.commons.vfs2.FileObject;
-import org.eclipse.rap.rwt.RWT;
 import org.eclipse.rap.rwt.service.UISession;
 import org.pentaho.di.cluster.SlaveServer;
 import org.pentaho.di.core.Const;
@@ -102,6 +101,8 @@ import org.pentaho.di.repository.RepositoryDirectoryInterface;
 import org.pentaho.di.resource.ResourceUtil;
 import org.pentaho.di.resource.TopLevelResource;
 import org.pentaho.di.trans.Trans;
+import org.pentaho.di.webspoon.WebSpoonRunnable;
+import org.pentaho.di.webspoon.WebSpoonThread;
 import org.pentaho.di.www.RegisterJobServlet;
 import org.pentaho.di.www.RegisterPackageServlet;
 import org.pentaho.di.www.SocketRepository;
@@ -120,7 +121,7 @@ import org.pentaho.metastore.api.IMetaStore;
  * @since 07-apr-2003
  *
  */
-public class Job extends Thread implements VariableSpace, NamedParams, HasLogChannelInterface, LoggingObjectInterface,
+public class Job extends WebSpoonThread implements VariableSpace, NamedParams, HasLogChannelInterface, LoggingObjectInterface,
     ExecutorInterface, ExtensionDataInterface {
   private static Class<?> PKG = Job.class; // for i18n purposes, needed by Translator2!!
 
@@ -215,7 +216,6 @@ public class Job extends Thread implements VariableSpace, NamedParams, HasLogCha
   /** Int value for storage job statuses */
   private AtomicInteger status;
 
-  private UISession uiSession;
   /**
    * <p>
    * This enum stores bit masks which are used to manipulate with statuses over field {@link Job#status}
@@ -293,11 +293,6 @@ public class Job extends Thread implements VariableSpace, NamedParams, HasLogCha
   }
 
   public Job( Repository repository, JobMeta jobMeta, LoggingObjectInterface parentLogging ) {
-    try {
-      uiSession = RWT.getUISession();
-    } catch ( Exception e ) {
-      uiSession = null;
-    }
     this.rep = repository;
     this.jobMeta = jobMeta;
     this.containerObjectId = jobMeta.getContainerObjectId();
@@ -316,11 +311,6 @@ public class Job extends Thread implements VariableSpace, NamedParams, HasLogCha
   }
 
   public Job() {
-    try {
-      uiSession = RWT.getUISession();
-    } catch ( Exception e ) {
-      uiSession = null;
-    }
     init();
     this.log = new LogChannel( this );
     this.logLevel = log.getLogLevel();
@@ -371,17 +361,8 @@ public class Job extends Thread implements VariableSpace, NamedParams, HasLogCha
   /**
    * Threads main loop: called by Thread.start();
    */
-  @Override public void run() {
-    if ( uiSession == null ) {
-      runInternal();
-    } else {
-      uiSession.exec( () -> {
-        runInternal();
-      });
-    }
-  }
-
-  private void runInternal() {
+  @Override
+  public void runInternal() {
     ExecutorService heartbeat = null; // this job's heartbeat scheduled executor
 
     try {
@@ -647,8 +628,8 @@ public class Job extends Thread implements VariableSpace, NamedParams, HasLogCha
 
     jobMeta.disposeEmbeddedMetastoreProvider();
     if ( jobMeta.getMetastoreLocatorOsgi() != null ) {
-      jobMeta.setEmbeddedMetastoreProviderKey(
-        jobMeta.getMetastoreLocatorOsgi().setEmbeddedMetastore( jobMeta.getEmbeddedMetaStore() ) );
+      jobMeta.setEmbeddedMetastoreProviderKey( jobMeta.getMetastoreLocatorOsgi().setEmbeddedMetastore( jobMeta
+          .getEmbeddedMetaStore() ) );
     }
 
     if ( extension.result != null ) {
@@ -814,9 +795,20 @@ public class Job extends Thread implements VariableSpace, NamedParams, HasLogCha
         if ( jobEntryCopy.isLaunchingInParallel() ) {
           threadEntries.add( nextEntry );
 
-          Runnable runnable = new Runnable() {
+          WebSpoonRunnable runnable = new WebSpoonRunnable() {
             @Override public void run() {
-              uiSession.exec( () -> {
+              UISession uiSession = WebSpoonThread.getUISession();
+              if ( uiSession == null ) {
+                runInternal();
+              } else {
+                uiSession.exec( () -> {
+                  runInternal();
+                });
+              }
+            }
+
+            @Override
+            public void runInternal() {
               try {
                 Result threadResult = execute( nr + 1, newResult, nextEntry, jobEntryCopy, nextComment );
                 threadResults.add( threadResult );
@@ -829,7 +821,6 @@ public class Job extends Thread implements VariableSpace, NamedParams, HasLogCha
                 threadResult.setNrErrors( 1L );
                 threadResults.add( threadResult );
               }
-              });
             }
           };
           Thread thread = new Thread( runnable );

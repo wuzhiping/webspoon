@@ -22,16 +22,15 @@
 
 package org.pentaho.di.trans.step;
 
-import org.eclipse.rap.rwt.RWT;
-import org.eclipse.rap.rwt.service.UISession;
 import org.pentaho.di.core.Const;
 import org.pentaho.di.core.logging.LogChannelInterface;
 import org.pentaho.di.core.logging.Metrics;
 import org.pentaho.di.i18n.BaseMessages;
 import org.pentaho.di.trans.Trans;
 import org.pentaho.di.trans.step.BaseStepData.StepExecutionStatus;
+import org.pentaho.di.webspoon.WebSpoonThread;
 
-public class StepInitThread implements Runnable {
+public class StepInitThread extends WebSpoonThread {
   private static Class<?> PKG = Trans.class; // for i18n purposes, needed by Translator2!!
 
   public boolean ok;
@@ -42,36 +41,20 @@ public class StepInitThread implements Runnable {
 
   private LogChannelInterface log;
 
-  private UISession uiSession;
-
   public StepInitThread( StepMetaDataCombi combi, LogChannelInterface log ) {
     this.combi = combi;
     this.log = combi.step.getLogChannel();
     this.ok = false;
     this.finished = false;
     this.doIt = true;
-    try {
-      this.uiSession = RWT.getUISession();
-    } catch ( Exception e ) {
-      this.uiSession = null;
-    }
   }
 
   public String toString() {
     return combi.stepname;
   }
 
-  public void run() {
-    if ( uiSession == null ) {
-      runInternal();
-    } else {
-      uiSession.exec( () -> {
-        runInternal();
-      });
-    }
-  }
-
-  private void runInternal() {
+  @Override
+  public void runInternal() {
     // Set the internal variables also on the initialization thread!
     // ((BaseStep)combi.step).setInternalVariables();
 

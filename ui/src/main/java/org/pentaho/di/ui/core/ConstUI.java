@@ -279,7 +279,6 @@ public class ConstUI {
     // mcasters and he didn't know for sure either.
     // HiromuHota: uncomment this line to fix HiromuHota/pentaho-kettle#122
     control.setMenu( menu );
-    menu.setLocation( control.getDisplay().getCursorLocation() );
     menu.setVisible( true );
   }
 

@@ -64,6 +64,7 @@ import javax.swing.plaf.metal.MetalLookAndFeel;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.output.TeeOutputStream;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemException;
@@ -9381,6 +9382,7 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
     if ( !widget.isDisposed() ) {
       String $el = widget instanceof Text ? "$input" : "$el";
       String id = WidgetUtil.getId( widget );
+      value = StringEscapeUtils.escapeJavaScript( value );
       exec( "rap.getObject( '", id, "' ).", $el, ".attr( 'test-id', '", value + "' );" );
     }
   }

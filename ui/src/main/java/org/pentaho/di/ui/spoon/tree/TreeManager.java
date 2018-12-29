@@ -192,7 +192,9 @@ public class TreeManager {
 
   private TreeItem createTreeItem( TreeNode treeNode, Object tree ) {
     TreeItem childTreeItem = createTreeItem( tree, treeNode.getIndex() );
-    Spoon.setTestId( childTreeItem, "view_" + treeNode.getLabel() );
+    if ( treeNode.hasChildren() ) { // limit the number of test-ids
+      Spoon.setTestId( childTreeItem, "view_" + treeNode.getLabel() );
+    }
     populateTreeItem( childTreeItem, treeNode );
     return childTreeItem;
   }

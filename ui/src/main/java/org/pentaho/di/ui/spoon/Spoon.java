@@ -6362,7 +6362,6 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
     if ( id != null ) {
       item.setData( "StepId", id );
     }
-    setTestId( item, "design_" + text );
     return item;
   }
 

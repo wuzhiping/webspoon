@@ -242,7 +242,7 @@ public class WebSpoonTest {
     element.sendKeys( stepName );
 
     // Draw a step
-    doubleClickElement( "//div[@test-id = 'design_" + stepName + "']" );
+    doubleClickElement( "//div[text() = '" + stepName + "']" );
   }
 
   private void openDialog( String stepName ) {

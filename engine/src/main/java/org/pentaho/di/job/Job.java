@@ -44,7 +44,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.vfs2.FileName;
 import org.apache.commons.vfs2.FileObject;
-import org.eclipse.rap.rwt.service.UISession;
 import org.pentaho.di.cluster.SlaveServer;
 import org.pentaho.di.core.Const;
 import org.pentaho.di.core.util.Utils;
@@ -101,8 +100,6 @@ import org.pentaho.di.repository.RepositoryDirectoryInterface;
 import org.pentaho.di.resource.ResourceUtil;
 import org.pentaho.di.resource.TopLevelResource;
 import org.pentaho.di.trans.Trans;
-import org.pentaho.di.webspoon.WebSpoonRunnable;
-import org.pentaho.di.webspoon.WebSpoonThread;
 import org.pentaho.di.www.RegisterJobServlet;
 import org.pentaho.di.www.RegisterPackageServlet;
 import org.pentaho.di.www.SocketRepository;
@@ -121,7 +118,7 @@ import org.pentaho.metastore.api.IMetaStore;
  * @since 07-apr-2003
  *
  */
-public class Job extends WebSpoonThread implements VariableSpace, NamedParams, HasLogChannelInterface, LoggingObjectInterface,
+public class Job extends Thread implements VariableSpace, NamedParams, HasLogChannelInterface, LoggingObjectInterface,
     ExecutorInterface, ExtensionDataInterface {
   private static Class<?> PKG = Job.class; // for i18n purposes, needed by Translator2!!
 
@@ -361,8 +358,8 @@ public class Job extends WebSpoonThread implements VariableSpace, NamedParams, H
   /**
    * Threads main loop: called by Thread.start();
    */
-  @Override
-  public void runInternal() {
+  @Override public void run() {
+
     ExecutorService heartbeat = null; // this job's heartbeat scheduled executor
 
     try {
@@ -795,20 +792,8 @@ public class Job extends WebSpoonThread implements VariableSpace, NamedParams, H
         if ( jobEntryCopy.isLaunchingInParallel() ) {
           threadEntries.add( nextEntry );
 
-          WebSpoonRunnable runnable = new WebSpoonRunnable() {
+          Runnable runnable = new Runnable() {
             @Override public void run() {
-              UISession uiSession = WebSpoonThread.getUISession();
-              if ( uiSession == null ) {
-                runInternal();
-              } else {
-                uiSession.exec( () -> {
-                  runInternal();
-                });
-              }
-            }
-
-            @Override
-            public void runInternal() {
               try {
                 Result threadResult = execute( nr + 1, newResult, nextEntry, jobEntryCopy, nextComment );
                 threadResults.add( threadResult );

@@ -28,9 +28,8 @@ import org.pentaho.di.core.logging.Metrics;
 import org.pentaho.di.i18n.BaseMessages;
 import org.pentaho.di.trans.Trans;
 import org.pentaho.di.trans.step.BaseStepData.StepExecutionStatus;
-import org.pentaho.di.webspoon.WebSpoonThread;
 
-public class StepInitThread extends WebSpoonThread {
+public class StepInitThread implements Runnable {
   private static Class<?> PKG = Trans.class; // for i18n purposes, needed by Translator2!!
 
   public boolean ok;
@@ -53,8 +52,7 @@ public class StepInitThread extends WebSpoonThread {
     return combi.stepname;
   }
 
-  @Override
-  public void runInternal() {
+  public void run() {
     // Set the internal variables also on the initialization thread!
     // ((BaseStep)combi.step).setInternalVariables();
 

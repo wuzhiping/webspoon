@@ -1130,7 +1130,7 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
   }
 
   public static Spoon getInstance() {
-    return SingletonUtil.getSessionInstance( Spoon.class );
+    return SingletonUtil.getUniqueInstance( Spoon.class, WebSpoonUtils.getUISession() );
   }
 
   public VfsFileChooserDialog getVfsFileChooserDialog( FileObject rootFile, FileObject initialFile ) {

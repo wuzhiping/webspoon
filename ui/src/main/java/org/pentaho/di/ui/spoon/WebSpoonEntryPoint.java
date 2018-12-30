@@ -52,6 +52,8 @@ public class WebSpoonEntryPoint extends AbstractEntryPoint {
     if ( securityManager instanceof WebSpoonSecurityManager ) {
       ( (WebSpoonSecurityManager) securityManager ).setUserName( Const.getUser() );
     }
+    // Set UISession so that any child thread of UIThread can access it
+    WebSpoonUtils.setUISession( RWT.getUISession() );
     // Transferring Widget Data for client-side canvas drawing instructions
     WidgetUtil.registerDataKeys( "props" );
     WidgetUtil.registerDataKeys( "mode" );

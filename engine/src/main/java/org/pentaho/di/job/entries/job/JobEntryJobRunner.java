@@ -29,13 +29,12 @@ import org.pentaho.di.core.extension.KettleExtensionPoint;
 import org.pentaho.di.core.logging.LogChannelInterface;
 import org.pentaho.di.i18n.BaseMessages;
 import org.pentaho.di.job.Job;
-import org.pentaho.di.webspoon.WebSpoonThread;
 
 /**
  * @author Matt
  * @since 6-apr-2005
  */
-public class JobEntryJobRunner extends WebSpoonThread {
+public class JobEntryJobRunner implements Runnable {
   private static Class<?> PKG = Job.class; // for i18n purposes, needed by Translator2!!
 
   private Job job;
@@ -55,8 +54,7 @@ public class JobEntryJobRunner extends WebSpoonThread {
     finished = false;
   }
 
-  @Override
-  public void runInternal() {
+  public void run() {
     try {
       if ( job.isStopped() || ( job.getParentJob() != null && job.getParentJob().isStopped() ) ) {
         return;

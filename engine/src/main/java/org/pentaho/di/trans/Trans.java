@@ -56,7 +56,6 @@ import com.google.common.base.Preconditions;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.vfs2.FileName;
 import org.apache.commons.vfs2.FileObject;
-import org.eclipse.rap.rwt.service.UISession;
 import org.pentaho.di.cluster.SlaveServer;
 import org.pentaho.di.core.BlockingBatchingRowSet;
 import org.pentaho.di.core.BlockingRowSet;
@@ -140,7 +139,6 @@ import org.pentaho.di.trans.step.StepMetaDataCombi;
 import org.pentaho.di.trans.step.StepPartitioningMeta;
 import org.pentaho.di.trans.steps.mappinginput.MappingInput;
 import org.pentaho.di.trans.steps.mappingoutput.MappingOutput;
-import org.pentaho.di.webspoon.WebSpoonThread;
 import org.pentaho.di.www.PrepareExecutionTransServlet;
 import org.pentaho.di.www.RegisterPackageServlet;
 import org.pentaho.di.www.RegisterTransServlet;
@@ -546,8 +544,6 @@ public class Trans implements VariableSpace, NamedParams, HasLogChannelInterface
 
   private ExecutorService heartbeat = null; // this transformations's heartbeat scheduled executor
 
-  final private UISession uiSession = WebSpoonThread.getUISession();
-
   /**
    * Instantiates a new transformation.
    */
@@ -760,20 +756,10 @@ public class Trans implements VariableSpace, NamedParams, HasLogChannelInterface
 
     ExtensionPointHandler.callExtensionPoint( log, KettleExtensionPoint.TransformationPrepareExecution.id, this );
 
-    if ( uiSession == null ) {
-      transMeta.disposeEmbeddedMetastoreProvider();
-      if ( transMeta.getMetastoreLocatorOsgi() != null ) {
-        transMeta.setEmbeddedMetastoreProviderKey(
-          transMeta.getMetastoreLocatorOsgi().setEmbeddedMetastore( transMeta.getEmbeddedMetaStore() ) );
-      }
-    } else {
-      uiSession.exec( () -> {
-        transMeta.disposeEmbeddedMetastoreProvider();
-        if ( transMeta.getMetastoreLocatorOsgi() != null ) {
-          transMeta.setEmbeddedMetastoreProviderKey(
-            transMeta.getMetastoreLocatorOsgi().setEmbeddedMetastore( transMeta.getEmbeddedMetaStore() ) );
-        }
-      } );
+    transMeta.disposeEmbeddedMetastoreProvider();
+    if ( transMeta.getMetastoreLocatorOsgi() != null ) {
+      transMeta.setEmbeddedMetastoreProviderKey(
+        transMeta.getMetastoreLocatorOsgi().setEmbeddedMetastore( transMeta.getEmbeddedMetaStore() ) );
     }
 
     checkCompatibility();
@@ -1445,13 +1431,7 @@ public class Trans implements VariableSpace, NamedParams, HasLogChannelInterface
           stepPerformanceSnapShotTimer.cancel();
         }
 
-        if ( uiSession == null ) {
-          transMeta.disposeEmbeddedMetastoreProvider();
-        } else {
-          uiSession.exec( () -> {
-            transMeta.disposeEmbeddedMetastoreProvider();
-          } );
-        }
+        transMeta.disposeEmbeddedMetastoreProvider();
 
         setFinished( true );
         setRunning( false ); // no longer running

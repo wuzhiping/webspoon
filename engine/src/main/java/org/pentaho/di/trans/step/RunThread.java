@@ -31,9 +31,8 @@ import org.pentaho.di.core.logging.LoggingObjectInterface;
 import org.pentaho.di.core.logging.LoggingRegistry;
 import org.pentaho.di.core.logging.Metrics;
 import org.pentaho.di.i18n.BaseMessages;
-import org.pentaho.di.webspoon.WebSpoonThread;
 
-public class RunThread extends WebSpoonThread {
+public class RunThread implements Runnable {
 
   /** for i18n purposes, needed byTranslator2!! */
   private static Class<?> PKG = BaseStep.class;
@@ -50,8 +49,7 @@ public class RunThread extends WebSpoonThread {
     this.log = step.getLogChannel();
   }
 
-  @Override
-  public void runInternal() {
+  public void run() {
     try {
       step.setRunning( true );
       step.getLogChannel().snap( Metrics.METRIC_STEP_EXECUTION_START );

@@ -25,11 +25,15 @@ package org.pentaho.di.ui.spoon;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.eclipse.rap.rwt.RWT;
 import org.eclipse.rap.rwt.client.service.JavaScriptExecutor;
+import org.eclipse.rap.rwt.service.UISession;
 import org.eclipse.rap.rwt.widgets.WidgetUtil;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 
 public class WebSpoonUtils {
+
+  private static final InheritableThreadLocal<UISession> uiSession = new InheritableThreadLocal<UISession>();
+
   public static void setTestId( Widget widget, String value ) {
     if ( !widget.isDisposed() ) {
       String $el = widget instanceof Text ? "$input" : "$el";
@@ -48,5 +52,15 @@ public class WebSpoonUtils {
     builder.append( "}catch(e){}" );
     JavaScriptExecutor executor = RWT.getClient().getService( JavaScriptExecutor.class );
     executor.execute( builder.toString() );
+  }
+
+  public static void setUISession( UISession uiSession ) {
+    if ( WebSpoonUtils.uiSession.get() == null ) { // can be set only once
+      WebSpoonUtils.uiSession.set( uiSession );
+    }
+  }
+
+  public static UISession getUISession() {
+    return WebSpoonUtils.uiSession.get();
   }
 }

@@ -64,7 +64,6 @@ import javax.swing.plaf.metal.MetalLookAndFeel;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.output.TeeOutputStream;
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemException;
@@ -86,11 +85,9 @@ import org.eclipse.rap.rwt.RWT;
 import org.eclipse.rap.rwt.SingletonUtil;
 import org.eclipse.rap.rwt.client.ClientFile;
 import org.eclipse.rap.rwt.client.service.ClientFileUploader;
-import org.eclipse.rap.rwt.client.service.JavaScriptExecutor;
 import org.eclipse.rap.rwt.client.service.UrlLauncher;
 import org.eclipse.rap.rwt.dnd.ClientFileTransfer;
 import org.eclipse.rap.rwt.service.ServerPushSession;
-import org.eclipse.rap.rwt.widgets.WidgetUtil;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.browser.LocationEvent;
@@ -150,7 +147,6 @@ import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.swt.widgets.UploadDialog;
-import org.eclipse.swt.widgets.Widget;
 import org.pentaho.di.base.AbstractMeta;
 import org.pentaho.di.cluster.ClusterSchema;
 import org.pentaho.di.cluster.SlaveServer;
@@ -1982,8 +1978,8 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
     viewComposite.setBackground( GUIResource.getInstance().getColorDemoGray() );
 
     viewTreeToolbar = new TreeToolbar( viewComposite, SWT.NONE );
-    setTestId( viewTreeToolbar.getSelectionFilter(), "view_selectionFilter" );
-    setTestId( viewTreeToolbar.getExpandAll(), "view_expandAll" );
+    WebSpoonUtils.setTestId( viewTreeToolbar.getSelectionFilter(), "view_selectionFilter" );
+    WebSpoonUtils.setTestId( viewTreeToolbar.getExpandAll(), "view_expandAll" );
     FormData fdTreeToolbar = new FormData();
     fdTreeToolbar.left = new FormAttachment( 0 );
     fdTreeToolbar.right = new FormAttachment( 100 );
@@ -2018,7 +2014,7 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
     view.setControl( viewComposite );
     view.setText( STRING_SPOON_MAIN_TREE );
     view.setImage( GUIResource.getInstance().getImageExploreSolutionSmall() );
-    setTestId( view, "exploreSolution" );
+    WebSpoonUtils.setTestId( view, "exploreSolution" );
 
     viewTreeComposite = new Composite( viewComposite, SWT.NONE );
     viewTreeComposite.setLayout( new FillLayout() );
@@ -2044,8 +2040,8 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
     designComposite.setBackground( GUIResource.getInstance().getColorDemoGray() );
 
     designTreeToolbar = new TreeToolbar( designComposite, SWT.NONE );
-    setTestId( designTreeToolbar.getSelectionFilter(), "design_selectionFilter" );
-    setTestId( designTreeToolbar.getExpandAll(), "design_expandAll" );
+    WebSpoonUtils.setTestId( designTreeToolbar.getSelectionFilter(), "design_selectionFilter" );
+    WebSpoonUtils.setTestId( designTreeToolbar.getExpandAll(), "design_expandAll" );
     FormData fdTreeToolbar = new FormData();
     fdTreeToolbar.left = new FormAttachment( 0 );
     fdTreeToolbar.right = new FormAttachment( 100 );
@@ -9375,25 +9371,5 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
         "Use keyboard shortcuts instead (cmd-x,-c,-v for Mac or ctrl-x,-c,-v for others)"
     );
     dialog.open();
-  }
-
-  public static void setTestId( Widget widget, String value ) {
-    if ( !widget.isDisposed() ) {
-      String $el = widget instanceof Text ? "$input" : "$el";
-      String id = WidgetUtil.getId( widget );
-      value = StringEscapeUtils.escapeJavaScript( value );
-      exec( "rap.getObject( '", id, "' ).", $el, ".attr( 'test-id', '", value + "' );" );
-    }
-  }
-
-  private static void exec( String... strings ) {
-    StringBuilder builder = new StringBuilder();
-    builder.append( "try{" );
-    for ( String str : strings ) {
-      builder.append( str );
-    }
-    builder.append( "}catch(e){}" );
-    JavaScriptExecutor executor = RWT.getClient().getService( JavaScriptExecutor.class );
-    executor.execute( builder.toString() );
   }
 }

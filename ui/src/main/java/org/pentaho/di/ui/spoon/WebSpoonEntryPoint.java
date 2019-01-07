@@ -54,6 +54,7 @@ public class WebSpoonEntryPoint extends AbstractEntryPoint {
     }
     // Set UISession so that any child thread of UIThread can access it
     WebSpoonUtils.setUISession( RWT.getUISession() );
+    WebSpoonUtils.setUISession( WebSpoonUtils.getConnectionId(), RWT.getUISession() );
     // Transferring Widget Data for client-side canvas drawing instructions
     WidgetUtil.registerDataKeys( "props" );
     WidgetUtil.registerDataKeys( "mode" );
@@ -111,6 +112,11 @@ public class WebSpoonEntryPoint extends AbstractEntryPoint {
     // In webSpoon, SWT.Close is not triggered on closing a browser (tab).
     parent.getDisplay().addListener( SWT.Dispose, ( event ) -> {
       try {
+        /**
+         *  UISession at WebSpoonUtils.uiSession will be GCed when UIThread dies.
+         *  But the one at WebSpoonUtils.uiSessionMap should be explicitly removed.
+         */
+        WebSpoonUtils.removeUISession( WebSpoonUtils.getConnectionId() );
         Spoon.getInstance().quitFile( false );
       } catch ( Exception e ) {
         LogChannel.GENERAL.logError( "Error closing Spoon", e );

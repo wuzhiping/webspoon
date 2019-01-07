@@ -22,9 +22,12 @@
 
 package org.pentaho.di.ui.spoon;
 
+import java.util.HashMap;
+
 import org.apache.commons.lang.StringEscapeUtils;
 import org.eclipse.rap.rwt.RWT;
 import org.eclipse.rap.rwt.client.service.JavaScriptExecutor;
+import org.eclipse.rap.rwt.internal.service.UISessionImpl;
 import org.eclipse.rap.rwt.service.UISession;
 import org.eclipse.rap.rwt.widgets.WidgetUtil;
 import org.eclipse.swt.widgets.Text;
@@ -33,6 +36,7 @@ import org.eclipse.swt.widgets.Widget;
 public class WebSpoonUtils {
 
   private static final InheritableThreadLocal<UISession> uiSession = new InheritableThreadLocal<UISession>();
+  private static final HashMap<String, UISession> uiSessionMap = new HashMap<String, UISession>();
 
   public static void setTestId( Widget widget, String value ) {
     if ( !widget.isDisposed() ) {
@@ -54,13 +58,50 @@ public class WebSpoonUtils {
     executor.execute( builder.toString() );
   }
 
+  /**
+   * Set UISession to InheritableThreadLocal.
+   * The current or any child thread can get an UISession.
+   * This UISession will be GCed when no thread has a reference to it.
+   * @see java.lang.ThreadLocal
+   * @param uiSession
+   */
   public static void setUISession( UISession uiSession ) {
-    if ( WebSpoonUtils.uiSession.get() == null ) { // can be set only once
-      WebSpoonUtils.uiSession.set( uiSession );
-    }
+    WebSpoonUtils.uiSession.set( uiSession );
   }
 
+  /**
+   * Get UISession from InheritableThreadLocal.
+   * The current or any parent thread should set one before getting.
+   * @return UISession
+   */
   public static UISession getUISession() {
     return WebSpoonUtils.uiSession.get();
+  }
+
+  /**
+   * Set UISession with cid (Connection Id) as a key.
+   * Unlike {@link #setUISession(UISession)}, this UISession should explicitly be removed when a UIThread dies.
+   * @param cid
+   * @param uiSession
+   */
+  public static void setUISession( String cid, UISession uiSession ) {
+    uiSessionMap.put( cid, uiSession );
+  }
+
+  /**
+   * Get UISession by cid (Connection Id).
+   * @param cid
+   * @return UISession
+   */
+  public static UISession getUISession( String cid ) {
+    return uiSessionMap.get( cid );
+  }
+
+  public static void removeUISession( String cid ) {
+    uiSessionMap.remove( cid );
+  }
+
+  public static String getConnectionId() {
+    return ( (UISessionImpl) getUISession() ).getConnectionId();
   }
 }

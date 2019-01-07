@@ -53,7 +53,7 @@ define(
         };
 
         function getRepositories() {
-          return helperService.async( bfGetRepositories() );
+          return helperService.httpGet([baseUrl, "list"].join("/"));
         }
 
         function setDefault(repository) {
@@ -65,11 +65,11 @@ define(
         }
 
         function remove(repository) {
-          return helperService.async( bfRemove( repository.displayName ) );
+          return helperService.httpPost([baseUrl, "remove"].join("/"), repository);
         }
 
         function help() {
-          return bfHelp();
+          return helperService.httpGet([baseUrl, "help"].join("/"));
         }
       }
     });

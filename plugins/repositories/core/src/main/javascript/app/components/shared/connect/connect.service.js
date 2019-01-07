@@ -57,7 +57,7 @@ define(
          * @returns {Promise}
          */
         function login(credentials) {
-          return helperService.async( bfLogin( JSON.stringify( credentials ) ) );
+          return helperService.httpPost([baseUrl, "login"].join("/"), credentials);
         }
 
         /**
@@ -67,7 +67,7 @@ define(
          * @returns {Promise}
          */
         function getRepository(name) {
-          return helperService.async( bfGetRepository( name ) );
+          return helperService.httpGet([baseUrl, "find", name].join("/"));
         }
 
         /**

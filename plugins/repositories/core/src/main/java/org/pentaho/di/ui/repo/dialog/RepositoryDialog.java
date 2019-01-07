@@ -25,27 +25,16 @@ package org.pentaho.di.ui.repo.dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.BrowserFunction;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Shell;
-import org.json.simple.JSONObject;
-import org.pentaho.di.core.Const;
-import org.pentaho.di.core.database.DatabaseMeta;
-import org.pentaho.di.core.exception.KettleAuthException;
 import org.pentaho.di.core.logging.KettleLogStore;
 import org.pentaho.di.core.logging.LogChannelInterface;
 import org.pentaho.di.i18n.BaseMessages;
 import org.pentaho.di.repository.RepositoryMeta;
-import org.pentaho.di.ui.core.database.dialog.DatabaseDialog;
 import org.pentaho.di.ui.core.dialog.ThinDialog;
 import org.pentaho.di.ui.core.gui.GUIResource;
 import org.pentaho.di.ui.repo.controller.RepositoryConnectController;
-import org.pentaho.di.ui.repo.endpoints.RepositoryEndpoint;
-import org.pentaho.di.ui.repo.model.LoginModel;
-import org.pentaho.di.ui.repo.model.RepositoryModel;
 import org.pentaho.platform.settings.ServerPort;
 import org.pentaho.platform.settings.ServerPortRegistry;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -108,165 +97,6 @@ public class RepositoryDialog extends ThinDialog {
       }
     };
 
-    new BrowserFunction( browser, "bfAddRepository" ) {
-      @Override public Object function( Object[] arguments ) {
-        String json = (String) arguments[0];
-        RepositoryModel model = (RepositoryModel) jsonToObject( json, RepositoryModel.class );
-        if ( controller.createRepository( model.getId(), controller.modelToMap( model ) ) != null ) {
-          return true;
-        } else {
-          return BaseMessages.getString( PKG, "RepositoryConnection.Error.InvalidServer" );
-        }
-      }
-    };
-
-    new BrowserFunction( browser, "bfGetRepositories" ) {
-      @Override public Object function( Object[] arguments ) {
-        return controller.getRepositories();
-      }
-    };
-
-    new BrowserFunction( browser, "bfHelp" ) {
-      @Override public Object function( Object[] objects ) {
-        return controller.help();
-      }
-    };
-
-    new BrowserFunction( browser, "bfUpdate" ) {
-      @Override public Object function( Object[] arguments ) {
-        String json = (String) arguments[0];
-        RepositoryModel model = (RepositoryModel) jsonToObject( json, RepositoryModel.class );
-        JSONObject jsonObject = new JSONObject();
-        if ( controller.updateRepository( model.getId(), controller.modelToMap( model ) ) ) {
-          jsonObject.put( RepositoryConnectController.SUCCESS, true );
-        } else {
-          jsonObject.put( RepositoryConnectController.MESSAGE,
-            BaseMessages.getString( PKG, "RepositoryConnection.Error.InvalidServer" ) );
-          jsonObject.put( RepositoryConnectController.SUCCESS, false );
-        }
-        return jsonObject.toString();
-      }
-    };
-
-    new BrowserFunction( browser, "bfLogin" ) {
-      @Override public Object function( Object[] arguments ) {
-        String json = (String) arguments[0];
-        LoginModel loginModel = (LoginModel) jsonToObject( json, LoginModel.class );
-        JSONObject jsonObject = new JSONObject();
-        try {
-          if ( controller.isRelogin() ) {
-            controller
-              .reconnectToRepository( loginModel.getRepositoryName(), loginModel.getUsername(), loginModel.getPassword() );
-          } else {
-            controller
-              .connectToRepository( loginModel.getRepositoryName(), loginModel.getUsername(), loginModel.getPassword() );
-          }
-          jsonObject.put( RepositoryConnectController.SUCCESS, true );
-        } catch ( Exception e ) {
-          if ( e.getMessage().contains( RepositoryEndpoint.ERROR_401 ) || e instanceof KettleAuthException ) {
-            jsonObject.put( RepositoryConnectController.MESSAGE,
-              BaseMessages.getString( RepositoryEndpoint.class, "RepositoryConnection.Error.InvalidCredentials" ) );
-          } else {
-            jsonObject.put( RepositoryConnectController.MESSAGE,
-              BaseMessages.getString( RepositoryEndpoint.class, "RepositoryConnection.Error.InvalidServer" ) );
-          }
-          jsonObject.put( RepositoryConnectController.SUCCESS, false );
-        }
-        return jsonObject.toString();
-      }
-    };
-
-    new BrowserFunction( browser, "bfGetRepository" ) {
-      @Override public Object function( Object[] objects ) {
-        return controller.getRepository( (String) objects[ 0 ] );
-      }
-    };
-
-    new BrowserFunction( browser, "bfCheckDuplicate" ) {
-      @Override public Object function( Object[] arguments ) {
-        String displayName = (String) arguments[0];
-        return controller.checkDuplicate( displayName );
-      }
-    };
-
-    new BrowserFunction( browser, "bfGetDatabases" ) {
-      @Override public Object function( Object[] arguments ) {
-        return controller.getDatabases();
-      }
-    };
-
-    new BrowserFunction( browser, "bfCreateNewConnection" ) {
-      @Override public Object function( Object[] arguments ) {
-        DatabaseDialog databaseDialog = new DatabaseDialog( shell, new DatabaseMeta() );
-        databaseDialog.open();
-        DatabaseMeta databaseMeta = databaseDialog.getDatabaseMeta();
-        JSONObject jsonObject = new JSONObject();
-        if ( databaseMeta != null ) {
-          if ( !controller.isDatabaseWithNameExist( databaseMeta, true ) ) {
-            controller.addDatabase( databaseMeta );
-          } else {
-            DatabaseDialog.showDatabaseExistsDialog( shell, databaseMeta );
-          }
-          jsonObject.put( "name", databaseMeta.getName() );
-        } else {
-          jsonObject.put( "name", "None" );
-        }
-        return jsonObject.toJSONString();
-      }
-    };
-
-    new BrowserFunction( browser, "bfEditConnection" ) {
-      @Override public Object function( Object[] arguments ) {
-        String database = (String) arguments[0];
-        DatabaseMeta databaseMeta = controller.getDatabase( database );
-        String originalName = databaseMeta.getName();
-        DatabaseDialog databaseDialog = new DatabaseDialog( shell, databaseMeta );
-        databaseDialog.open();
-        JSONObject jsonObject = new JSONObject();
-        if ( !controller.isDatabaseWithNameExist( databaseMeta, false ) ) {
-          controller.save();
-          jsonObject.put( "name", databaseMeta.getName() );
-        } else {
-          DatabaseDialog.showDatabaseExistsDialog( shell, databaseMeta );
-          databaseMeta.setName( originalName );
-          databaseMeta.setDisplayName( originalName );
-          jsonObject.put( "name", originalName );
-        }
-        return jsonObject.toJSONString();
-      }
-    };
-
-    new BrowserFunction( browser, "bfDeleteConnection" ) {
-      @Override public Object function( Object[] arguments ) {
-        String database = (String) arguments[0];
-        controller.removeDatabase( database );
-        return true;
-      }
-    };
-
-    new BrowserFunction( browser, "bfRemove" ) {
-      @Override public Object function( Object[] arguments ) {
-        String displayName = (String) arguments[0];
-        return controller.deleteRepository( displayName );
-      }
-    };
-
-    new BrowserFunction( browser, "bfBrowse" ) {
-      @Override public Object function( Object[] objects ) {
-        DirectoryDialog directoryDialog = new DirectoryDialog( shell );
-        String location = directoryDialog.open();
-        if ( location == null ) {
-          location = "";
-        }
-        browser.evaluate(
-          "var location = document.getElementById( 'location' );"
-          + "var scope = angular.element( location ).scope( 'file' );"
-          + String.format( "scope.$apply(function(){ scope.vm.connection.location = '%s';});", location )
-        );
-        return "";
-      }
-    };
-
     controller.setCurrentRepository( repositoryMeta );
     controller.setRelogin( relogin );
 
@@ -325,17 +155,5 @@ public class RepositoryDialog extends ThinDialog {
 
   private static String getRepoURL( String path ) {
     return System.getProperty( "KETTLE_CONTEXT_PATH", "" ) + "/osgi" + getClientPath() + path;
-  }
-
-  private static Object jsonToObject( String json, Class<?> _class ) {
-    ObjectMapper mapper = new ObjectMapper();
-    Object model = null;
-    try {
-      model = mapper.readValue( json, _class );
-    } catch ( Exception e ) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    return model;
   }
 }

@@ -16,7 +16,6 @@
   </parent>
 
   <properties>
-    <fasterxml.jackson.version>2.9.2</fasterxml.jackson.version>
     <pdi.version>8.2.0.0-342</pdi.version>
     <javax.ws.rs-api.version>2.0</javax.ws.rs-api.version>
     <mockito-all.version>1.9.5</mockito-all.version>
@@ -34,11 +33,6 @@
   </properties>
 
   <dependencies>
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-      <version>${fasterxml.jackson.version}</version>
-    </dependency>
     <dependency>
       <!-- this is required by OSGi bean declared in src/main/resources-filtered/OSGI-INF/blueprint/beans.xml -->
       <groupId>com.fasterxml.jackson.jaxrs</groupId>
@@ -97,12 +91,6 @@
       <groupId>pentaho-kettle</groupId>
       <artifactId>kettle-ui-swt</artifactId>
       <version>${webspoon.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.rap</groupId>
-      <artifactId>org.eclipse.rap.rwt</artifactId>
-      <version>${rap.version}-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
     <dependency>

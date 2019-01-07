@@ -1,6 +1,8 @@
 # Change Log
 
 ## Unreleased
+### Changed
+- [repositories-plugin-core] Put RepositoryEndpoint in the context of UISession
 
 ## 0.8.2.18 - 2019-01-17
 ### Added

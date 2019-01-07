@@ -27,7 +27,7 @@ define(
     function() {
       "use strict";
 
-      var factoryArray = ["$http", "$q", factory];
+      var factoryArray = ["$http", factory];
       var module = {
         name: "helperService",
         factory: factoryArray
@@ -42,12 +42,11 @@ define(
        *
        * @return {Object} The dataService api
        */
-      function factory($http, $q) {
+      function factory($http) {
         return {
           httpGet: httpGet,
           httpPost: httpPost,
-          httpDelete: httpDelete,
-          async: async
+          httpDelete: httpDelete
         };
 
         /**
@@ -96,7 +95,7 @@ define(
         function _wrapHttp(method, url, data) {
           var options = {
             method: method,
-            url: _cacheBust(url),
+            url: CONTEXT_PATH + _cacheBust(url),
             headers: {
               Accept: "application/json"
             }
@@ -120,19 +119,9 @@ define(
           } else {
             url += "?v=" + value;
           }
+          var cid = getConnectionId();
+          url += "&cid=" + cid;
           return url;
-        }
-
-        function async( json ) {
-          var deferred = $q.defer();
-          var obj = {};
-          obj.data = JSON.parse( json );
-          if ( obj.data.success === undefined || obj.data.success == true ) {
-            deferred.resolve( obj );
-          } else {
-            deferred.reject( obj );
-          }
-          return deferred.promise;
         }
       }
     });

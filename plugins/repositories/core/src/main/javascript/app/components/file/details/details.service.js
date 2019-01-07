@@ -50,12 +50,11 @@ define(
         };
 
         function checkDuplicate(repository) {
-          return helperService.async( bfCheckDuplicate( repository.displayName ) );
+          return helperService.httpPost([baseUrl, "duplicate"].join("/"), repository);
         }
 
         function browse() {
-          bfBrowse();
-          return helperService.async( "{ \"path\": \"dummy\" }" );
+          return helperService.httpGet([baseUrl, "browse"].join("/"));
         }
       }
     });

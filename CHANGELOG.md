@@ -3,10 +3,16 @@
 ## Unreleased
 ### Added
 - [docker] Copy the samples dir under ~/.kettle/data for convenience
+- `WebSpoonUtils.getUISession()` to get the UISession from any child Thread of UIThread
 
 ### Changed
 - Ask where to save when saving an imported file (#127)
 - Update RAP/RWT to 3.7.0 (#132)
+- Set test-id to only widgets in need (#140)
+- Move Spoon.setTestId to WebSpoonUtils.setTestId
+
+### Removed
+- Trans.get/setDisplay and Job.get/setDisplay
 
 ### Fixed
 - Fixed the file/folder deletion/creation/rename in a repository (#135)
@@ -14,6 +20,7 @@
 - Fixed GetFieldsDialog (#136)
 - saveSettings on disposing a display (#137)
 - [rap] Use the cursor location as the menu location when it is not set on Menu.setVisible
+- Escape the characters in a String for JavaScript (#139)
 
 ## 0.8.2.17 - 2018-12-20
 ### Changed

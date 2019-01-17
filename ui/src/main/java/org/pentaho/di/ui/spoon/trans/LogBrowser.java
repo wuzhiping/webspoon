@@ -185,8 +185,6 @@ public class LogBrowser {
               }
 
               busy.set( false );
-              pushSession.stop();
-              pushSession.start();
             }
           }
         } );

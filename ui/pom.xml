@@ -18,7 +18,6 @@
 
   <properties>
     <!-- webSpoon specific dependencies -->
-    <webspoon.version>8.2.0.0-342-17</webspoon.version>
     <rap.version>3.7.0</rap.version>
 
     <!-- Test running configuration -->
@@ -41,12 +40,12 @@
     <dependency>
       <groupId>pentaho-kettle</groupId>
       <artifactId>kettle-core</artifactId>
-      <version>${webspoon.version}</version>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>pentaho-kettle</groupId>
       <artifactId>kettle-engine</artifactId>
-      <version>${webspoon.version}</version>
+      <version>${project.version}</version>
       <exclusions>
         <exclusion>
           <groupId>javax.servlet</groupId>
@@ -72,7 +71,7 @@
     <dependency>
       <groupId>pentaho-kettle</groupId>
       <artifactId>webspoon-security</artifactId>
-      <version>${webspoon.version}</version>
+      <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
 
@@ -89,7 +88,7 @@
     <dependency>
       <groupId>org.pentaho</groupId>
       <artifactId>commons-xul-swt</artifactId>
-      <version>${webspoon.version}</version>
+      <version>${project.version}</version>
       <exclusions>
         <exclusion>
           <groupId>org.eclipse</groupId>

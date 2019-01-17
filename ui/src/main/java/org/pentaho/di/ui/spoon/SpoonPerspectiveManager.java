@@ -176,7 +176,7 @@ public class SpoonPerspectiveManager {
    * @return SpoonPerspectiveManager instance.
    */
   public static SpoonPerspectiveManager getInstance() {
-    return SingletonUtil.getUniqueInstance( SpoonPerspectiveManager.class, WebSpoonUtils.getUISession() );
+    return SingletonUtil.getSessionInstance( SpoonPerspectiveManager.class );
   }
 
   /**

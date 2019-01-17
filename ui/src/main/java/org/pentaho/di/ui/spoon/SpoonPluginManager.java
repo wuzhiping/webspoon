@@ -121,7 +121,7 @@ public class SpoonPluginManager implements PluginTypeListener {
    * @return SpoonPerspectiveManager
    */
   public static SpoonPluginManager getInstance() {
-    return SingletonUtil.getUniqueInstance( SpoonPluginManager.class, WebSpoonUtils.getUISession() );
+    return SingletonUtil.getSessionInstance( SpoonPluginManager.class );
   }
 
   public void applyPluginsForContainer( final String category, final XulDomContainer container ) throws XulException {

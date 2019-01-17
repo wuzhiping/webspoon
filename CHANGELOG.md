@@ -1,6 +1,8 @@
 # Change Log
 
 ## Unreleased
+
+## 0.8.2.18 - 2019-01-17
 ### Added
 - [docker] Copy the samples dir under ~/.kettle/data for convenience
 - `WebSpoonUtils.getUISession()` to get the UISession from any child Thread of UIThread

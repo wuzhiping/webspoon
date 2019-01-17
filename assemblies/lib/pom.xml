@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>pdi-libs</artifactId>
-  <version>8.2.0.0-342-17</version>
+  <version>8.2.0.0-342-18</version>
   <packaging>pom</packaging>
 
   <name>PDI Client Libraries</name>

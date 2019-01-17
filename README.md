@@ -46,9 +46,9 @@ $ unzip ~/Downloads/pdi-ce-8.2.0.0-342.zip
 $ cd $CATALINA_HOME
 $ cp -r ~/data-integration/system ./
 $ cp -r ~/data-integration/plugins ./
-$ wget https://raw.githubusercontent.com/HiromuHota/webspoon-docker/0.8.2.17/install.sh
+$ wget https://raw.githubusercontent.com/HiromuHota/webspoon-docker/0.8.2.18/install.sh
 $ chmod +x install.sh
-$ export version=0.8.2.17
+$ export version=0.8.2.18
 $ export dist=8.2.0.0-342
 $ ./install.sh
 $ ./bin/startup.sh
@@ -252,7 +252,7 @@ $ cd pentaho-kettle
 $ mvn clean install -pl core,engine,security,ui
 ```
 
-Optionally you can specify -Dmaven.test.skip=true to skip the tests
+Optionally you can specify `-Dmaven.test.skip=true` to skip the tests
 
 Build a war file (`spoon.war`):
 

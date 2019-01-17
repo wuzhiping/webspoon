@@ -82,7 +82,12 @@ public class RepositoryDialog extends ThinDialog {
   }
 
   private boolean open() {
-    return open( null );
+    /**
+     *  RWT version of Dialog has a method `Dialog.open(DialogCallback)`.
+     *  Thus open( null ) is confusing. It needed to be clearer.
+     */
+    RepositoryMeta repositoryMeta = null;
+    return open( repositoryMeta );
   }
 
   private boolean open( RepositoryMeta repositoryMeta ) {

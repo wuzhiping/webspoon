@@ -55,6 +55,7 @@ import org.pentaho.di.core.plugins.StepPluginType;
 import org.pentaho.di.laf.BasePropertyHandler;
 import org.pentaho.di.ui.core.ConstUI;
 import org.pentaho.di.ui.core.PropsUI;
+import org.pentaho.di.ui.spoon.WebSpoonUtils;
 import org.pentaho.di.ui.util.ImageUtil;
 import org.pentaho.di.ui.util.SwtSvgImageUtil;
 
@@ -486,7 +487,7 @@ public class GUIResource {
   }
 
   public static final GUIResource getInstance() {
-    return SingletonUtil.getSessionInstance( GUIResource.class );
+    return SingletonUtil.getUniqueInstance( GUIResource.class, WebSpoonUtils.getUISession() );
   }
 
   /**

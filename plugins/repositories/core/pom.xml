@@ -30,6 +30,7 @@
     <junit.version>4.11</junit.version>
     <js.project.list>requirejs,requirejs-text,angular,require-css,angular-i18n</js.project.list>
     <rap.version>3.7.0</rap.version>
+    <webspoon.version>8.2.0.0-342-18</webspoon.version>
   </properties>
 
   <dependencies>
@@ -95,7 +96,7 @@
     <dependency>
       <groupId>pentaho-kettle</groupId>
       <artifactId>kettle-ui-swt</artifactId>
-      <version>${pdi.version}</version>
+      <version>${webspoon.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>

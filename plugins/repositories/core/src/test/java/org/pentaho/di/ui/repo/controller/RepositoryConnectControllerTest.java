@@ -24,6 +24,7 @@ package org.pentaho.di.ui.repo.controller;
 
 import org.eclipse.rap.rwt.testfixture.TestContext;
 import org.json.simple.JSONObject;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -47,6 +48,7 @@ import org.pentaho.di.repository.filerep.KettleFileRepositoryMeta;
 import org.pentaho.di.ui.core.PropsUI;
 import org.pentaho.di.ui.repo.controller.RepositoryConnectController;
 import org.pentaho.di.ui.spoon.Spoon;
+import org.pentaho.di.ui.spoon.WebSpoonUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -115,6 +117,7 @@ public class RepositoryConnectControllerTest {
 
   @Before
   public void setUp() {
+    WebSpoonUtils.setUISession( context.getUISession() );
     controller = spy( new RepositoryConnectController( pluginRegistry, () -> spoon ) );
     when( controller.getRepositoriesMeta() ).thenReturn( repositoriesMeta );
 
@@ -130,6 +133,11 @@ public class RepositoryConnectControllerTest {
     when( repositoryMeta.getId() ).thenReturn( ID );
     when( repositoryMeta.getName() ).thenReturn( PLUGIN_NAME );
     when( repositoryMeta.getDescription() ).thenReturn( PLUGIN_DESCRIPTION );
+  }
+
+  @After
+  public void tearDown() {
+    controller.setConnectedRepository( null );
   }
 
   @Test

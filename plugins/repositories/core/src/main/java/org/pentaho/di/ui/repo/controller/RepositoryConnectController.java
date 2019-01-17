@@ -26,7 +26,6 @@ import com.google.common.annotations.VisibleForTesting;
 import org.apache.commons.lang.ClassUtils;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.rap.rwt.SingletonUtil;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.pentaho.di.core.Const;
@@ -53,8 +52,6 @@ import org.pentaho.di.ui.repo.timeout.RepositorySessionTimeoutHandler;
 import org.pentaho.di.ui.repo.model.UserRepositoriesMeta;
 import org.pentaho.di.ui.spoon.Spoon;
 import org.pentaho.di.ui.util.HelpUtils;
-
-import com.google.common.annotations.VisibleForTesting;
 
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
@@ -529,22 +526,22 @@ public class RepositoryConnectController implements IConnectedRepositoryInstance
   }
 
   public void setCurrentRepository( RepositoryMeta repositoryMeta ) {
-    UserRepositoriesMeta repos = SingletonUtil.getSessionInstance( UserRepositoriesMeta.class );
+    UserRepositoriesMeta repos = UserRepositoriesMeta.getInstance();
     repos.setCurrentRepository( repositoryMeta );
   }
 
   public RepositoryMeta getCurrentRepository() {
-    UserRepositoriesMeta repos = SingletonUtil.getSessionInstance( UserRepositoriesMeta.class );
+    UserRepositoriesMeta repos = UserRepositoriesMeta.getInstance();
     return repos.getCurrentRepository();
   }
 
   public RepositoryMeta getConnectedRepository() {
-    UserRepositoriesMeta repos = SingletonUtil.getSessionInstance( UserRepositoriesMeta.class );
+    UserRepositoriesMeta repos = UserRepositoriesMeta.getInstance();
     return repos.getConnectedRepository();
   }
 
   public void setConnectedRepository( RepositoryMeta connectedRepository ) {
-    UserRepositoriesMeta repos = SingletonUtil.getSessionInstance( UserRepositoriesMeta.class );
+    UserRepositoriesMeta repos = UserRepositoriesMeta.getInstance();
     repos.setConnectedRepository( connectedRepository );
   }
 
@@ -661,7 +658,7 @@ public class RepositoryConnectController implements IConnectedRepositoryInstance
 
   @VisibleForTesting
   RepositoriesMeta getRepositoriesMeta() {
-    UserRepositoriesMeta repos = SingletonUtil.getSessionInstance( UserRepositoriesMeta.class );
+    UserRepositoriesMeta repos = UserRepositoriesMeta.getInstance();
     return repos.getRepositoriesMeta();
   }
 }

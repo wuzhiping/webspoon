@@ -30,7 +30,7 @@ import org.eclipse.rap.rwt.scripting.ClientListener;
 
 public class WebSpoonClientListener extends ClientListener {
   public static WebSpoonClientListener getInstance() {
-    return SingletonUtil.getSessionInstance( WebSpoonClientListener.class );
+    return SingletonUtil.getUniqueInstance( WebSpoonClientListener.class, WebSpoonUtils.getUISession() );
   }
 
   private WebSpoonClientListener() {

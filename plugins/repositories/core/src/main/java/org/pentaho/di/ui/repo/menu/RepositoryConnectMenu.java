@@ -184,7 +184,9 @@ public class RepositoryConnectMenu {
                   } else {
                     new RepositoryDialog( spoon.getShell(), repoConnectController ).openLogin( repositoryMeta );
                   }
-                  renderAndUpdate();
+                  if ( !repoConnectController.isConnected() ) {
+                    renderAndUpdate();
+                  }
                 }
               }
             } );

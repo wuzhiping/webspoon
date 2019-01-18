@@ -15,40 +15,24 @@
 
 package org.pentaho.repo.dialog;
 
-import java.util.Collections;
-import java.util.List;
-
-import javax.ws.rs.core.Response;
-
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.BrowserFunction;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Shell;
-import org.json.simple.JSONObject;
 import org.pentaho.di.core.exception.KettleException;
 import org.pentaho.di.core.util.Utils;
-import org.pentaho.di.repository.ObjectId;
 import org.pentaho.di.repository.Repository;
 import org.pentaho.di.ui.core.dialog.ThinDialog;
 import org.pentaho.di.ui.core.gui.GUIResource;
 import org.pentaho.platform.settings.ServerPort;
 import org.pentaho.platform.settings.ServerPortRegistry;
+import org.pentaho.repo.controller.RepositoryBrowserController;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
 import java.util.Properties;
-
-import org.pentaho.repo.controller.RepositoryBrowserController;
-import org.pentaho.repo.model.RepositoryDirectory;
-import org.pentaho.repo.model.RepositoryFile;
-import org.pentaho.repo.model.RepositoryTree;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.sun.jersey.api.client.ClientResponse.Status;
 
 /**
  * Created by bmorrise on 5/23/17.
@@ -70,8 +54,6 @@ public class RepositoryOpenSaveDialog extends ThinDialog {
   private String objectDirectory;
   private String objectType;
   private Repository repository;
-
-  private RepositoryBrowserController repositoryBrowserController = new RepositoryBrowserController();
 
   public RepositoryOpenSaveDialog( Shell shell, int width, int height ) {
     super( shell, width, height );
@@ -134,120 +116,6 @@ public class RepositoryOpenSaveDialog extends ThinDialog {
       }
     };
 
-    new BrowserFunction( browser, "bfCheckForSecurityOrDupeIssues" ) {
-      @Override public Object function( Object[] arguments ) {
-        String path = (String) arguments[ 0 ];
-        String name = (String) arguments[ 1 ];
-        String fileName = (String) arguments[ 2 ];
-        boolean overwrite = (boolean) arguments[ 3 ];
-        JSONObject jsonObject = new JSONObject();
-        if ( repositoryBrowserController.checkForSecurityOrDupeIssues( path, name, fileName, overwrite ) ) {
-          jsonObject.put( "status", Status.OK.getStatusCode() );
-          return jsonObject.toString();
-        }
-        jsonObject.put( "status", Status.NO_CONTENT.getStatusCode() );
-        return jsonObject.toString();
-      }
-    };
-
-    new BrowserFunction( browser, "bfGetActiveFileName" ) {
-      @Override public Object function( Object[] arguments ) {
-        String name = repositoryBrowserController.getActiveFileName();
-        return "{ \"data\": " + javaToJson( Collections.singletonMap( "fileName", name ) ) + "}";
-      }
-    };
-
-    new BrowserFunction( browser, "bfRename" ) {
-      @Override public Object function( Object[] arguments ) {
-        String id = (String) arguments[ 0 ];
-        String path = (String) arguments[ 1 ];
-        String newName = (String) arguments[ 2 ];
-        String type = (String) arguments[ 3 ];
-        String oldName = (String) arguments[ 4 ];
-        JSONObject jsonObject = new JSONObject();
-        try {
-          ObjectId objectId = repositoryBrowserController.rename( id, path, newName, type, oldName );
-          jsonObject.put( "status", Status.OK.getStatusCode() );
-          jsonObject.put( "data", javaToJson( objectId ) );
-        } catch ( KettleException e ) {
-          jsonObject.put( "status", Status.NOT_ACCEPTABLE.getStatusCode() );
-        }
-        return jsonObject.toString();
-      }
-    };
-
-    new BrowserFunction( browser, "bfRemove" ) {
-      @Override public Object function( Object[] arguments ) {
-        String id = (String) arguments[ 0 ];
-        String name = (String) arguments[ 1 ];
-        String path = (String) arguments[ 2 ];
-        String type = (String) arguments[ 3 ];
-        JSONObject jsonObject = new JSONObject();
-        try {
-          if ( repositoryBrowserController.remove( id, name, path, type ) ) {
-            jsonObject.put( "status", Status.OK.getStatusCode() );
-          } else {
-            jsonObject.put( "status", Status.NO_CONTENT.getStatusCode() );
-          }
-        } catch ( KettleException e ) {
-          jsonObject.put( "status", Status.NOT_ACCEPTABLE.getStatusCode() );
-        }
-        return jsonObject.toString();
-      }
-    };
-
-    new BrowserFunction( browser, "bfGetRecentFiles" ) {
-      @Override public Object function( Object[] arguments ) {
-        List<RepositoryFile> files = repositoryBrowserController.getRecentFiles();
-        return "{ \"data\": " + javaToJson( files ) + "}";
-      }
-    };
-
-    new BrowserFunction( browser, "bfCreate" ) {
-      @Override public Object function( Object[] arguments ) {
-        String parent = (String) arguments[ 0 ];
-        String name = (String) arguments[ 1 ];
-        RepositoryDirectory repositoryDirectory = repositoryBrowserController.create( parent, name );
-        return "{ \"data\": " + javaToJson( repositoryDirectory ) + "}";
-      }
-    };
-
-    new BrowserFunction( browser, "bfGetDirectoryTree" ) {
-      @Override public Object function( Object[] arguments ) {
-        RepositoryTree repositoryDirectories = repositoryBrowserController.loadDirectoryTree();
-        return "{ \"data\": " + javaToJson( repositoryDirectories ) + "}";
-      }
-    };
-
-    new BrowserFunction( browser, "bfOpenRecent" ) {
-      @Override public Object function( Object[] arguments ) {
-        String repo = (String) arguments[ 0 ];
-        String id = (String) arguments[ 1 ];
-        repositoryBrowserController.openRecentFile( repo, id );
-        return true;
-      }
-    };
-
-    new BrowserFunction( browser, "bfCurrentRepo" ) {
-      @Override public Object function( Object[] arguments ) {
-        return "{ \"data\": " + javaToJson( repositoryBrowserController.getCurrentRepo() ) + "}";
-      }
-    };
-
-    new BrowserFunction( browser, "bfGetFolders" ) {
-      @Override public Object function( Object[] arguments ) {
-        String path = (String) arguments[ 0 ];
-        return "{ \"data\": " + javaToJson( repositoryBrowserController.loadFolders( path ) ) + "}";
-      }
-    };
-
-    new BrowserFunction( browser, "bfLoadFilesAndFolders" ) {
-      @Override public Object function( Object[] arguments ) {
-        String path = (String) arguments[ 0 ];
-        return "{ \"data\": " + javaToJson( repositoryBrowserController.loadFilesAndFolders( path ) ) + "}";
-      }
-    };
-
     while ( !dialog.isDisposed() ) {
       if ( !display.readAndDispatch() ) {
         display.sleep();
@@ -265,17 +133,6 @@ public class RepositoryOpenSaveDialog extends ThinDialog {
       e.printStackTrace();
     }
     return properties.getProperty( "CLIENT_PATH" );
-  }
-
-  private String javaToJson( Object obj ) {
-    ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-    String json = "";
-    try {
-      json = ow.writeValueAsString( obj );
-    } catch (JsonProcessingException e) {
-      e.printStackTrace();
-    }
-    return json;
   }
 
   private static Integer getOsgiServicePort() {

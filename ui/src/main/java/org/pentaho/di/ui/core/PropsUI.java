@@ -69,6 +69,7 @@ import org.pentaho.di.core.plugins.PluginRegistry;
 import org.pentaho.di.laf.BasePropertyHandler;
 import org.pentaho.di.ui.core.gui.GUIResource;
 import org.pentaho.di.ui.core.gui.WindowProperty;
+import org.pentaho.di.ui.spoon.WebSpoonUtils;
 
 /**
  * We use Props to store all kinds of user interactive information such as the selected colors, fonts, positions of
@@ -158,7 +159,7 @@ public class PropsUI extends Props {
   }
 
   public static PropsUI getInstance() {
-    return SingletonUtil.getSessionInstance( PropsUI.class );
+    return SingletonUtil.getUniqueInstance( PropsUI.class, WebSpoonUtils.getUISession() );
   }
 
   private PropsUI() {

@@ -97,6 +97,7 @@ public class SpoonTest {
 
   @Before
   public void setUp() throws KettleException {
+    WebSpoonUtils.setUISession( context.getUISession() );
     perspective = SpoonPerspectiveManager.getInstance();
     perspective.addPerspective( mockSpoonPerspective );
     doCallRealMethod().when( spoon ).copySelected( any( TransMeta.class ), anyListOf( StepMeta.class ),

@@ -24,6 +24,7 @@
 package org.pentaho.di.ui.spoon;
 
 import java.net.URI;
+import java.net.URLDecoder;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -51,7 +52,20 @@ public class WebSpoonProxyServlet extends ProxyServlet {
   @Override
   protected String rewriteUrlFromRequest(HttpServletRequest servletRequest) {
     servletRequest.setAttribute( ATTR_TARGET_URI, "" );
-    return super.rewriteUrlFromRequest( servletRequest );
+    // doubleEncodedUrl is double encoded like %252Fhome%252Fadmin
+    String doubleEncodedUrl = super.rewriteUrlFromRequest( servletRequest );
+    // decode once to make it like %2Fhome%2Fadmin
+    String encodedUrl = URLDecoder.decode( doubleEncodedUrl );
+    return encodedUrl;
+  }
+
+  /**
+   * Get undecoded version of servletRequest.getPathInfo()
+   */
+  @Override
+  protected String rewritePathInfoFromRequest(HttpServletRequest servletRequest) {
+    String temp = servletRequest.getContextPath().concat( servletRequest.getServletPath() );
+    return servletRequest.getRequestURI().substring( temp.length() );
   }
 
   private static Integer getOsgiServicePort() {

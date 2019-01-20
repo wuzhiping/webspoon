@@ -23,12 +23,12 @@
 package org.pentaho.getfields.endpoint;
 
 import org.pentaho.di.core.exception.KettleFileException;
-import org.pentaho.getfields.model.FileModel;
 import org.pentaho.getfields.types.json.JsonSampler;
 import org.pentaho.getfields.types.json.node.Node;
 
-import javax.ws.rs.POST;
+import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -41,12 +41,10 @@ public class GetFieldsEndpoint {
 
   private static final String JSON = "json";
 
-  @POST
-  @Path( "/sample" )
+  @GET
+  @Path( "/sample/{path}/{type}" )
   @Produces( { MediaType.APPLICATION_JSON } )
-  public Response loadFile( FileModel file ) {
-    String type = file.getType();
-    String path = file.getPath();
+  public Response loadFile( @PathParam( "path" ) String path, @PathParam( "type" ) String type ) {
     switch ( type ) {
       case JSON:
         return loadJson( path );

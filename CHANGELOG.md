@@ -3,6 +3,12 @@
 ## Unreleased
 ### Changed
 - [repositories-plugin-core] Put RepositoryEndpoint in the context of UISession
+- Update Smiley's HTTP Proxy Servlet to 1.11
+- [file-open-save-core] Put RepositoryBrowserEndpoint in the context of UISession
+- Allow encoded slash (%2F) in URL (`-Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true`)
+
+### Removed
+- "Connect Now" button from the repository manager dialog to prevent connectDropdown from becoming defunct
 
 ## 0.8.2.18 - 2019-01-17
 ### Added

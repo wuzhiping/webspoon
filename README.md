@@ -26,7 +26,7 @@ In either way, webSpoon will be deployed at `http://address:8080/spoon/spoon`.
 ## With Docker (recommended)
 
 ```
-$ docker run -d -p 8080:8080 hiromuhota/webspoon:latest-full
+$ docker run -d -p 8080:8080 hiromuhota/webspoon
 ```
 
 ## Without Docker
@@ -35,6 +35,7 @@ Please refer to the [wiki](https://github.com/HiromuHota/pentaho-kettle/wiki/Sys
 
 1. Unzip `pdi-ce-8.2.0.0-342.zip`, then copy `system` and `plugins` folders to `$CATALINA_HOME`.
 2. Run install.sh at `$CATALINA_HOME`.
+3. Allow encoded slash (`org.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true`).
 3. (Re)start the Tomcat.
 
 The actual commands look like below:
@@ -55,7 +56,7 @@ $ export CATALINA_OPTS="-Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLAS
 $ ./bin/startup.sh
 ```
 
-Please use the right version of install.sh corresponding to your `version`.
+Instead of exporting `CATALINA_OPTS` like above, `org.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true` can be added to `conf/catalina.properties`.
 
 # How to config (optional)
 

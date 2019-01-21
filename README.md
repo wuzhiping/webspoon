@@ -51,6 +51,7 @@ $ chmod +x install.sh
 $ export version=0.8.2.18
 $ export dist=8.2.0.0-342
 $ ./install.sh
+$ export CATALINA_OPTS="-Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true"
 $ ./bin/startup.sh
 ```
 

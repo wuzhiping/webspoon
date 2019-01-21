@@ -43,9 +43,9 @@ define(
        * @return {Object} The dataService api
        */
       function factory($http, $q) {
-        var baseUrl = "../../cxf/browser";
+        var baseUrl = "/cxf/browser";
         var httpRequestCancellers = [];
-        return {
+          return {
           getDirectoryTree: getDirectoryTree,
           getFiles: getFiles,
           getFolders: getFolders,
@@ -73,7 +73,7 @@ define(
          * @return {Promise} - a promise resolved once data is returned
          */
         function getDirectoryTree(filter) {
-          return async( bfGetDirectoryTree() );
+          return _httpGet([baseUrl, "loadDirectoryTree", filter].join("/"));
         }
 
         /**
@@ -93,7 +93,7 @@ define(
          * @return {Promise} - a promise resolved once data is returned
          */
         function getFilesAndFolders(path) {
-          return async( bfLoadFilesAndFolders ( path ) );
+          return _httpGet([baseUrl, "loadFilesAndFolders", encodeURIComponent(path)].join("/"));
         }
 
         function cancelSearch() {
@@ -116,7 +116,9 @@ define(
          * @return {Promise} - a promise resolved once data is returned
          */
         function getFolders(path) {
-          return async( bfGetFolders( path ) );
+          var httpRequestCanceller = $q.defer();
+          httpRequestCancellers.push(httpRequestCanceller);
+          return _httpGet([baseUrl, "loadFolders", encodeURIComponent(path)].join("/"), httpRequestCanceller.promise);
         }
 
         /**
@@ -124,7 +126,7 @@ define(
          * @return {Promise} - a promise resolved once data is returned
          */
         function getActiveFileName() {
-          return async( bfGetActiveFileName() );
+          return _httpGet([baseUrl, "getActiveFileName"].join("/"));
         }
 
         /**
@@ -164,7 +166,12 @@ define(
          * @return {Promise} - a promise resolved once data is returned
          */
         function checkForSecurityOrDupeIssues(path, name, fileName, override) {
-          return async( bfCheckForSecurityOrDupeIssues( path, name, fileName, override ) );
+          if (fileName === null) {
+            return _httpGet([baseUrl, "checkForSecurityOrDupeIssues",
+              encodeURIComponent(path), encodeURIComponent(name), override].join("/"));
+          }
+          return _httpGet([baseUrl, "checkForSecurityOrDupeIssues",
+            encodeURIComponent(path), encodeURIComponent(name), encodeURIComponent(fileName), override].join("/"));
         }
 
         /**
@@ -173,7 +180,7 @@ define(
          * @return {Promise} - a promise resolved once data is returned
          */
         function getRecentFiles() {
-          return async( bfGetRecentFiles() );
+          return _httpGet([baseUrl, "recentFiles"].join("/"));
         }
 
         /**
@@ -194,7 +201,7 @@ define(
          * @return {Promise} - a promise resolved once data is returned
          */
         function getCurrentRepo() {
-          return async( bfCurrentRepo() );
+          return _httpGet([baseUrl, "currentRepo"].join("/"));
         }
 
         /**
@@ -228,7 +235,8 @@ define(
          * @return {Promise} - a promise resolved once data is returned
          */
         function rename(id, path, newName, type, oldName) {
-          return async( bfRename( id, path, newName, type, oldName ) );
+          return _httpPost([baseUrl, "rename", encodeURIComponent(id),
+            encodeURIComponent(path), newName, type, oldName].join("/"));
         }
 
         /**
@@ -239,7 +247,7 @@ define(
          * @return {Promise} - a promise resolved once data is returned
          */
         function create(parent, name) {
-          return async( bfCreate( parent, name ) );
+          return _httpPost([baseUrl, "create", encodeURIComponent(parent), encodeURIComponent(name)].join("/"), null);
         }
 
         /**
@@ -252,7 +260,8 @@ define(
          * @return {Promise} - a promise resolved once data is returned
          */
         function remove(id, name, path, type) {
-          return async( bfRemove( id, name, path, type ) );
+          return _httpDelete([baseUrl, "remove",
+            encodeURIComponent(id), encodeURIComponent(name), encodeURIComponent(path), type].join("/"));
         }
 
         /**
@@ -263,7 +272,7 @@ define(
          * @return {Promise} - a promise resolved once data is returned
          */
         function openRecent(repo, id) {
-          return async( bfOpenRecent( repo, id ) );
+          return _httpGet([baseUrl, "loadRecent", repo, id].join("/"));
         }
 
         /**
@@ -313,7 +322,7 @@ define(
         function _wrapHttp(method, url, data, timeout) {
           var options = {
             method: method,
-            url: _cacheBust(url),
+            url: CONTEXT_PATH + _cacheBust(url),
             headers: {
               Accept: "application/json"
             },
@@ -338,20 +347,9 @@ define(
           } else {
             url += "?v=" + value;
           }
+          var cid = getConnectionId();
+          url += "&cid=" + cid;
           return url;
-        }
-
-        function async( json ) {
-          var deferred = $q.defer();
-          var obj = JSON.parse( json );
-          if ( obj.hasOwnProperty( "status" ) ) {
-            if ( obj.status != 200 ) {
-              deferred.reject( obj );
-              return deferred.promise;
-            }
-          }
-          deferred.resolve( obj );
-          return deferred.promise;
         }
       }
     });

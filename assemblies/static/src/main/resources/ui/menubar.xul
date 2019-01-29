@@ -147,10 +147,10 @@
         </menu>
         <menu id="repository" label="${Spoon.Menu.Repository}">
           <menupopup id="repository-popup">
-            <menuitem id="repository-explore" acceltext="CTRL-E" accesskey="ctrl-e" disabled="true"
+            <menuitem id="repository-explore" acceltext="CTRL-E" accesskey="ctrl-e"
               label="${Spoon.Menu.Repository.ExploreRepository}" command="spoon.exploreRepository()" />
             <menuseparator />
-            <menuitem id="repository-clear-shared-object-cache" disabled="true"
+            <menuitem id="repository-clear-shared-object-cache"
               label="${Spoon.Menu.Repository.ClearSharedObjectCache}" command="spoon.clearSharedObjectCache()" />
             <menuseparator />
             <menuitem id="repository-export-all" label="${Spoon.Menu.Repository.ExportAll}" command="spoon.exportRepositoryAll()" />

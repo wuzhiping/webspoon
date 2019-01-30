@@ -163,6 +163,7 @@ import org.pentaho.di.core.ObjectUsageCount;
 import org.pentaho.di.core.Props;
 import org.pentaho.di.core.RowMetaAndData;
 import org.pentaho.di.core.SourceToTargetMapping;
+import org.pentaho.di.core.WebSpoonUtils;
 import org.pentaho.di.core.XmlExportHelper;
 import org.pentaho.di.core.changed.ChangedFlagInterface;
 import org.pentaho.di.core.changed.PDIObserver;

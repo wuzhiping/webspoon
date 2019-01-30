@@ -33,6 +33,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.pentaho.di.core.KettleEnvironment;
+import org.pentaho.di.core.WebSpoonUtils;
 import org.pentaho.di.core.database.DatabaseMeta;
 import org.pentaho.di.core.exception.KettleException;
 import org.pentaho.di.core.plugins.PluginInterface;
@@ -48,7 +49,6 @@ import org.pentaho.di.repository.filerep.KettleFileRepositoryMeta;
 import org.pentaho.di.ui.core.PropsUI;
 import org.pentaho.di.ui.repo.controller.RepositoryConnectController;
 import org.pentaho.di.ui.spoon.Spoon;
-import org.pentaho.di.ui.spoon.WebSpoonUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;

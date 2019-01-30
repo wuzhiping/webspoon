@@ -31,7 +31,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.Provider;
 
 import org.eclipse.rap.rwt.service.UISession;
-import org.pentaho.di.ui.spoon.WebSpoonUtils;
+import org.pentaho.di.core.WebSpoonUtils;
 
 @Provider
 public class WebSpoonFilter implements ContainerRequestFilter {

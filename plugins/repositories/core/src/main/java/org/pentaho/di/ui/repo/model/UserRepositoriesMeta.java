@@ -24,10 +24,10 @@
 package org.pentaho.di.ui.repo.model;
 
 import org.eclipse.rap.rwt.SingletonUtil;
+import org.pentaho.di.core.WebSpoonUtils;
 import org.pentaho.di.core.exception.KettleException;
 import org.pentaho.di.repository.RepositoriesMeta;
 import org.pentaho.di.repository.RepositoryMeta;
-import org.pentaho.di.ui.spoon.WebSpoonUtils;
 
 public class UserRepositoriesMeta {
   private RepositoryMeta currentRepository;

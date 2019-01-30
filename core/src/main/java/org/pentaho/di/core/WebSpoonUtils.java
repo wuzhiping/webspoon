@@ -20,7 +20,7 @@
  *
  ******************************************************************************/
 
-package org.pentaho.di.ui.spoon;
+package org.pentaho.di.core;
 
 import java.util.HashMap;
 
@@ -37,6 +37,10 @@ public class WebSpoonUtils {
 
   private static final InheritableThreadLocal<UISession> uiSession = new InheritableThreadLocal<UISession>();
   private static final HashMap<String, UISession> uiSessionMap = new HashMap<String, UISession>();
+  /**
+   * This is a map between connectionId (cid) and user.
+   */
+  private static final HashMap<String, String> userMap = new HashMap<String, String>();
 
   public static void setTestId( Widget widget, String value ) {
     if ( !widget.isDisposed() ) {
@@ -99,6 +103,18 @@ public class WebSpoonUtils {
 
   public static void removeUISession( String cid ) {
     uiSessionMap.remove( cid );
+  }
+
+  public static void setUser( String cid, String user ) {
+    userMap.put( cid, user );
+  }
+
+  public static String getUser( String cid ) {
+    return userMap.get( cid );
+  }
+
+  public static void removeUser( String cid ) {
+    userMap.remove( cid );
   }
 
   public static String getConnectionId() {

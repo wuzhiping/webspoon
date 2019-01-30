@@ -46,6 +46,7 @@ import org.pentaho.di.core.EngineMetaInterface;
 import org.pentaho.di.core.KettleEnvironment;
 import org.pentaho.di.core.LastUsedFile;
 import org.pentaho.di.core.NotePadMeta;
+import org.pentaho.di.core.WebSpoonUtils;
 import org.pentaho.di.core.exception.KettleException;
 import org.pentaho.di.core.extension.ExtensionPointHandler;
 import org.pentaho.di.core.extension.KettleExtensionPoint;

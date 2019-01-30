@@ -37,6 +37,7 @@ import org.pentaho.di.core.Const;
 import org.pentaho.di.core.KettleClientEnvironment;
 import org.pentaho.di.core.LastUsedFile;
 import org.pentaho.di.core.Props;
+import org.pentaho.di.core.WebSpoonUtils;
 import org.pentaho.di.core.extension.ExtensionPointHandler;
 import org.pentaho.di.core.extension.KettleExtensionPoint;
 import org.pentaho.di.core.logging.LogChannel;
@@ -55,6 +56,7 @@ public class WebSpoonEntryPoint extends AbstractEntryPoint {
     // Set UISession so that any child thread of UIThread can access it
     WebSpoonUtils.setUISession( RWT.getUISession() );
     WebSpoonUtils.setUISession( WebSpoonUtils.getConnectionId(), RWT.getUISession() );
+    WebSpoonUtils.setUser( WebSpoonUtils.getConnectionId(), RWT.getRequest().getRemoteUser() );
     // Transferring Widget Data for client-side canvas drawing instructions
     WidgetUtil.registerDataKeys( "props" );
     WidgetUtil.registerDataKeys( "mode" );
@@ -117,6 +119,7 @@ public class WebSpoonEntryPoint extends AbstractEntryPoint {
          *  But the one at WebSpoonUtils.uiSessionMap should be explicitly removed.
          */
         WebSpoonUtils.removeUISession( WebSpoonUtils.getConnectionId() );
+        WebSpoonUtils.removeUser( WebSpoonUtils.getConnectionId() );
         Spoon.getInstance().quitFile( false );
       } catch ( Exception e ) {
         LogChannel.GENERAL.logError( "Error closing Spoon", e );

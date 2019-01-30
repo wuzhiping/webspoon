@@ -33,12 +33,12 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.pentaho.di.core.Props;
+import org.pentaho.di.core.WebSpoonUtils;
 import org.pentaho.di.core.row.RowMetaInterface;
 import org.pentaho.di.core.row.ValueMetaInterface;
 import org.pentaho.di.core.variables.VariableSpace;
 import org.pentaho.di.junit.rules.RestorePDIEngineEnvironment;
 import org.pentaho.di.ui.core.PropsUI;
-import org.pentaho.di.ui.spoon.WebSpoonUtils;
 
 import java.lang.reflect.Field;
 import java.util.Collections;

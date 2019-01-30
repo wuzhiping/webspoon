@@ -26,7 +26,6 @@ package org.pentaho.di.core;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.text.StrBuilder;
-import org.eclipse.rap.rwt.RWT;
 import org.pentaho.di.core.exception.KettleException;
 import org.pentaho.di.core.row.ValueMetaInterface;
 import org.pentaho.di.core.util.EnvUtil;
@@ -2035,7 +2034,7 @@ public class Const {
 
   public static String getUser() {
     try {
-      return RWT.getRequest().getRemoteUser();
+      return WebSpoonUtils.getUser( WebSpoonUtils.getConnectionId() );
     } catch ( Exception e ) { // when accessed from background threads (e.g., when the webSpoon server is starting)
       return null;
     }

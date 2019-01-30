@@ -38,7 +38,7 @@ import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
-import org.pentaho.di.ui.spoon.WebSpoonUtils;
+import org.pentaho.di.core.WebSpoonUtils;
 
 /**
  * Created by bmorrise on 2/18/16.

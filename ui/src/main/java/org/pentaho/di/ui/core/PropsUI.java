@@ -59,6 +59,7 @@ import org.pentaho.di.core.util.Utils;
 import org.pentaho.di.core.LastUsedFile;
 import org.pentaho.di.core.ObjectUsageCount;
 import org.pentaho.di.core.Props;
+import org.pentaho.di.core.WebSpoonUtils;
 import org.pentaho.di.core.gui.GUIOption;
 import org.pentaho.di.core.gui.GUIPositionInterface;
 import org.pentaho.di.core.gui.Point;
@@ -69,7 +70,6 @@ import org.pentaho.di.core.plugins.PluginRegistry;
 import org.pentaho.di.laf.BasePropertyHandler;
 import org.pentaho.di.ui.core.gui.GUIResource;
 import org.pentaho.di.ui.core.gui.WindowProperty;
-import org.pentaho.di.ui.spoon.WebSpoonUtils;
 
 /**
  * We use Props to store all kinds of user interactive information such as the selected colors, fonts, positions of

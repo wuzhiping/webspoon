@@ -4,6 +4,11 @@
      xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
             http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 
+  <b:bean id="firewall" class="org.springframework.security.web.firewall.StrictHttpFirewall">
+    <b:property name="allowUrlEncodedSlash" value="true"/>
+  </b:bean>
+  <http-firewall ref="firewall"/>
+
   <!-- BASIC-Auth for Carte endpoints -->
   <http pattern="/kettle/**">
     <intercept-url pattern="/**" access="hasRole('USER')"/>

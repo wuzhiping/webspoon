@@ -51,7 +51,7 @@ public class WebSpoonEntryPoint extends AbstractEntryPoint {
   protected void createContents( Composite parent ) {
     SecurityManager securityManager = System.getSecurityManager();
     if ( securityManager instanceof WebSpoonSecurityManager ) {
-      ( (WebSpoonSecurityManager) securityManager ).setUserName( Const.getUser() );
+      ( (WebSpoonSecurityManager) securityManager ).setUserName( RWT.getRequest().getRemoteUser() );
     }
     // Set UISession so that any child thread of UIThread can access it
     WebSpoonUtils.setUISession( RWT.getUISession() );

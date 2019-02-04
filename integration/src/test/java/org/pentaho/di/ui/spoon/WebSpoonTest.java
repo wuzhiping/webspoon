@@ -195,6 +195,7 @@ public class WebSpoonTest {
     clickElement( "//div[text() = 'Marketplace']" );
     driver.switchTo().frame( driver.findElement( By.xpath(".//iframe[@src='osgi/pentaho-marketplace/8.2.0.0-342/main.html']") ) );
     assertEquals( 1, driver.findElements( By.xpath( "//div[text() = ' Available ']" ) ).size() );
+    assertEquals( 0, driver.findElements( By.xpath( "//div[contains(text(), 'Error getting plugins from server')]" ) ).size() );
   }
 
   /**

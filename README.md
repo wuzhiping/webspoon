@@ -83,52 +83,9 @@ Note that only repositories defined in `$HOME/.kettle/repositories.xml` can be u
 Also note that it is NOT recommended to define `repository` element in the XML when the following user authentication is enabled.
 Issues such as [#91](https://github.com/HiromuHota/pentaho-kettle/issues/91) can happen.
 
-## User authentication
+## Security
 
-Edit `WEB-INF/web.xml` to uncomment/enable user authentication.
-
-```
-  <!-- Uncomment the followings to enable login page for webSpoon
-  <context-param>
-    <param-name>contextConfigLocation</param-name>
-    <param-value>
-      /WEB-INF/spring/*.xml
-    </param-value>
-  </context-param>
-
-  <filter>
-    <filter-name>springSecurityFilterChain</filter-name>
-    <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-  </filter>
-  <filter-mapping>
-    <filter-name>springSecurityFilterChain</filter-name>
-    <url-pattern>/*</url-pattern>
-  </filter-mapping>
-
-  <listener>
-    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-  </listener>
-  -->
-```
-
-Edit `WEB-INF/spring/security.xml` to configure authentication providers.
-The examle below uses two auth providers: `ldap-authentication-provider` and `authentication-provider`, where the LDAP authentication is provided by the Spring Security's embedded LDAP server with a configuration of `WEB-INF/classes/example.ldif`.
-See [here](https://docs.spring.io/spring-security/site/docs/4.1.x/reference/html/ns-config.html) for Spring Security in general and [here](http://docs.spring.io/spring-security/site/docs/4.1.x/reference/html/ldap.html) for LDAP.
-
-```
-  <!--<ldap-server url="ldap://localhost:389/dc=example,dc=org"/>-->
-  <ldap-server ldif="classpath:example.ldif" root="dc=example,dc=org"/>
-
-  <authentication-manager>
-    <ldap-authentication-provider user-dn-pattern="uid={0},ou=people"
-      group-search-base="ou=groups" />
-    <authentication-provider>
-      <user-service>
-        <user name="user" password="password" authorities="ROLE_USER" />
-      </user-service>
-    </authentication-provider>
-  </authentication-manager>
-```
+See [here](https://github.com/HiromuHota/pentaho-kettle/wiki/Admin%3A-Security) for HTTPS, user authentication/authorization, steps and job entries restriction.
 
 ## Third-party plugins and JDBC drivers
 

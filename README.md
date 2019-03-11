@@ -197,8 +197,6 @@ $ cd apache-vfs-browser
 $ mvn clean install
 ```
 
-Remember to build pentaho-vfs-browser after rap due to its dependency on rap.
-
 ## Build in the command line
 
 **Make sure patched dependent libraries have been published locally**

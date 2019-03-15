@@ -27,6 +27,9 @@ pipeline {
             }
         }
         stage('Deliver') {
+            when {
+                branch 'webspoon-8.2'
+            }
             steps {
                 sh '''#!/bin/bash
                     github-release delete --user $username --repo $repo --tag webspoon/$version

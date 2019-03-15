@@ -42,7 +42,6 @@
     <LucidDbClient-minimal.version>0.9.4</LucidDbClient-minimal.version>
     <sapdbc.version>7.4.4</sapdbc.version>
     <sqlite-jdbc.version>3.7.2</sqlite-jdbc.version>
-    <geronimo-servlet_3.0_spec.version>1.0</geronimo-servlet_3.0_spec.version>
     <slf4j-api.version>1.7.7</slf4j-api.version>
     <slf4j-log4j12.version>1.7.7</slf4j-log4j12.version>
     <log4j.version>1.2.17</log4j.version>
@@ -507,17 +506,6 @@
       <groupId>org.xerial</groupId>
       <artifactId>sqlite-jdbc</artifactId>
       <version>${sqlite-jdbc.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.geronimo.specs</groupId>
-      <artifactId>geronimo-servlet_3.0_spec</artifactId>
-      <version>${geronimo-servlet_3.0_spec.version}</version>
       <exclusions>
         <exclusion>
           <groupId>*</groupId>

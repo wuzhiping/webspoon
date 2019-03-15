@@ -15,18 +15,14 @@ pipeline {
         stage('Build') {
             steps {
                 sh '''
-                    mvn -DskipTests clean install -pl core,engine,security,ui,assemblies/static,assemblies/lib,assemblies/client
-                    cd plugins
-                    mvn -DskipTests clean install -pl repositories/core,engine-configuration/ui,file-open-save/core,get-fields/core
+                    mvn -DskipTests clean install
                 '''
             }
         }
         stage('Test') {
             steps {
                 sh '''
-                    mvn test -pl core,engine,security,ui,assemblies/static,assemblies/lib,assemblies/client
-                    cd plugins
-                    mvn test -pl repositories/core,engine-configuration/ui,file-open-save/core,get-fields/core
+                    mvn test
                 '''
             }
         }

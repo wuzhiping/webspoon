@@ -192,27 +192,17 @@ $ cd apache-vfs-browser
 $ mvn clean install
 ```
 
-## Build in the command line
+## Build webSpoon
 
 **Make sure patched dependent libraries have been published locally**
-
-Compile `kettle-core`, `kettle-engine`, `kettle-ui-swt`, and `webspoon-security`; and install the packages into the local repository:
 
 ```bash
 $ git clone -b webspoon-8.2 https://github.com/HiromuHota/pentaho-kettle.git
 $ cd pentaho-kettle
-$ mvn clean install -pl core,engine,security,ui
+$ mvn clean install
 ```
 
-Optionally you can specify `-Dmaven.test.skip=true` to skip the tests
-
-Build a war file (`spoon.war`):
-
-```bash
-$ mvn clean install -pl assemblies/static
-$ mvn clean install -pl assemblies/lib
-$ mvn clean package -pl assemblies/client
-```
+Optionally you can specify `-Dmaven.test.skip=true` (or `-DskipTests`) to skip the tests
 
 ## UI testing using Selenium
 

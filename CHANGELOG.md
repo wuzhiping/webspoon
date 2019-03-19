@@ -2,13 +2,16 @@
 
 ## Unreleased
 ### Changed
-- [repositories-plugin-core] Put RepositoryEndpoint in the context of UISession
 - Update Smiley's HTTP Proxy Servlet to 1.11
-- [file-open-save-core] Put RepositoryBrowserEndpoint in the context of UISession
 - Allow encoded slash (%2F) in URL (`-Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true`)
+- [docker] Merge Dockerfile-base and Dockerfile-full, and rename it as Dockerfile
 
 ### Removed
 - "Connect Now" button from the repository manager dialog to prevent connectDropdown from becoming defunct
+- [docker] Remove Dockerfile-bare
+
+### Security
+- [docker] Change the user from root to tomcat
 
 ## 0.8.2.18 - 2019-01-17
 ### Added
@@ -36,6 +39,9 @@
 ### Changed
 - Rebased to 8.2.0.0-342.
 - Tag naming convention of Docker image (see [here](https://github.com/HiromuHota/webspoon-docker#tags) for details).
+
+### Deprecated
+- [docker] "XXX-full" became deprecated (discontinued at 8.3/9.0) and there will be only 0.8.2.17, latest, nightly, etc. No change to previous tags up to 0.8.1.17.
 
 ### Fixed
 - Ignore corrupted hops (HiromuHota/pdi-git-plugin#22).

@@ -22,11 +22,14 @@
 
 package org.pentaho.di.ui.core.dialog;
 
+import org.eclipse.rap.rwt.service.ServerPushSession;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.browser.BrowserFunction;
 import org.eclipse.swt.browser.CloseWindowListener;
 import org.eclipse.swt.browser.WindowEvent;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
@@ -90,6 +93,11 @@ public class ThinDialog extends Dialog {
       messageBox.open();
     }
     setPosition();
+    final ServerPushSession pushSession = new ServerPushSession();
+    pushSession.start();
+    dialog.addDisposeListener( ( event ) -> {
+      pushSession.stop();
+    });
     dialog.open();
   }
 

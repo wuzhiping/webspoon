@@ -516,6 +516,7 @@ public class JobGraph extends AbstractGraph implements XulEventHandler, Redrawab
             case DragAndDropContainer.TYPE_BASE_JOB_ENTRY: // Create a new Job Entry on the canvas
               JobEntryCopy jge = spoon.newJobEntry( jobMeta, entry, false );
               if ( jge != null ) {
+                jobMeta.unselectAll();
                 PropsUI.setLocation( jge, p.x, p.y );
                 jge.setDrawn();
                 redraw();

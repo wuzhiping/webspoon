@@ -729,7 +729,6 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
           }
 
           stepMeta.drawStep();
-          stepMeta.setSelected( true );
           PropsUI.setLocation( stepMeta, p.x, p.y );
 
           if ( newstep ) {

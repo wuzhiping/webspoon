@@ -35,7 +35,9 @@ import java.util.Set;
 
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.rap.rwt.RWT;
+import org.eclipse.rap.rwt.client.service.JavaScriptExecutor;
 import org.eclipse.rap.rwt.internal.textsize.TextSizeUtil;
+import org.eclipse.rap.rwt.widgets.WidgetUtil;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.custom.CCombo;
@@ -105,6 +107,8 @@ import org.pentaho.di.ui.core.PropsUI;
 import org.pentaho.di.ui.core.dialog.EnterConditionDialog;
 import org.pentaho.di.ui.core.dialog.ErrorDialog;
 import org.pentaho.di.ui.core.gui.GUIResource;
+import org.pentaho.di.ui.spoon.ClipboardListener;
+import org.pentaho.di.ui.spoon.Spoon;
 
 /**
  * Widget to display or modify data, displayed in a Table format.
@@ -209,6 +213,25 @@ public class TableView extends Composite {
     @Override
     public void delete( int[] items ) {
 
+    }
+  };
+
+  private String widgetId = WidgetUtil.getId( this );
+  private ClipboardListener listener = new ClipboardListener() {
+
+    @Override
+    public void pasteListener( String text ) {
+      pasteSelected( text );
+    }
+
+    @Override
+    public String getWidgetId() {
+      return widgetId;
+    }
+
+    @Override
+    public void cutListener() {
+      delSelected();
     }
   };
 
@@ -452,7 +475,7 @@ public class TableView extends Composite {
     SelectionAdapter lsClipAll = new SelectionAdapter() {
       @Override
       public void widgetSelected( SelectionEvent e ) {
-        clipSelected();
+        Spoon.getInstance().instructShortcuts();
       }
     };
     SelectionAdapter lsCopyToAll = new SelectionAdapter() {
@@ -476,13 +499,13 @@ public class TableView extends Composite {
     SelectionAdapter lsPasteAll = new SelectionAdapter() {
       @Override
       public void widgetSelected( SelectionEvent e ) {
-        pasteSelected();
+        Spoon.getInstance().instructShortcuts();
       }
     };
     SelectionAdapter lsCutAll = new SelectionAdapter() {
       @Override
       public void widgetSelected( SelectionEvent e ) {
-        cutSelected();
+        Spoon.getInstance().instructShortcuts();
       }
     };
     SelectionAdapter lsDelAll = new SelectionAdapter() {
@@ -985,31 +1008,10 @@ public class TableView extends Composite {
           return;
         }
 
-        // CTRL-C --> Copy selected lines to clipboard
-        if ( e.keyCode == 'c' && ctrl ) {
-          e.doit = false;
-          clipSelected();
-          return;
-        }
-
         // CTRL-K --> keep only selected lines
         if ( !readonly && e.keyCode == 'k' && ctrl ) {
           e.doit = false;
           keepSelected();
-          return;
-        }
-
-        // CTRL-X --> Cut selected infomation...
-        if ( !readonly && e.keyCode == 'x' && ctrl ) {
-          e.doit = false;
-          cutSelected();
-          return;
-        }
-
-        // CTRL-V --> Paste selected infomation...
-        if ( !readonly && e.keyCode == 'v' && ctrl ) {
-          e.doit = false;
-          pasteSelected();
           return;
         }
 
@@ -1192,7 +1194,12 @@ public class TableView extends Composite {
       }
     };
 
+    Spoon.getInstance().getClipboard().addClipboardListener( listener );
     table.addMouseListener( lsMouseT );
+    table.addListener( SWT.Selection, ( e ) -> {
+      Spoon.getInstance().getClipboard().setContents( getSelectedText() );
+      Spoon.getInstance().getClipboard().attachToClipboard( this );
+    });
 
     // Add support for sorted columns!
     //
@@ -1225,6 +1232,7 @@ public class TableView extends Composite {
     addDisposeListener( new DisposeListener() {
       @Override
       public void widgetDisposed( DisposeEvent e ) {
+        Spoon.getInstance().getClipboard().removeClipboardListener( listener );
         if ( clipboard != null ) {
           clipboard.dispose();
           clipboard = null;
@@ -1816,7 +1824,8 @@ public class TableView extends Composite {
       return null;
     }
 
-    for ( int r = 0; r < items.length; r++ ) {
+    // Table.getSelection() of RWT are ordered reversely.
+    for ( int r = items.length - 1; r >= 0; r-- ) {
       TableItem ti = items[r];
       for ( int c = 1; c < table.getColumnCount(); c++ ) {
         if ( c > 1 ) {
@@ -1855,18 +1864,8 @@ public class TableView extends Composite {
     return rownr;
   }
 
-  private void pasteSelected() {
+  private void pasteSelected( String text ) {
     int rownr = getCurrentRownr();
-
-    if ( clipboard != null ) {
-      clipboard.dispose();
-      clipboard = null;
-    }
-
-    clipboard = new Clipboard( getDisplay() );
-    TextTransfer tran = TextTransfer.getInstance();
-
-    String text = (String) clipboard.getContents( tran );
 
     if ( text != null ) {
       String[] lines = text.split( Const.CR );

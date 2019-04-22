@@ -1,4 +1,4 @@
-//@ sourceURL=canvas.js
+//# sourceURL=canvas.js
 /*! ******************************************************************************
  *
  * Pentaho Data Integration

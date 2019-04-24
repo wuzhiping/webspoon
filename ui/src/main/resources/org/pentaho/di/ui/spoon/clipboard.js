@@ -28,13 +28,14 @@
     x.setAttribute( "id", "input-clipboard" );
     x.setAttribute( "remoteObjectId", properties.self );
     x.addEventListener( "paste", function( event ) {
+      var obj = rap.getObject( this.getAttribute( 'remoteObjectid' ) );
+      var remoteObject = rap.getRemoteObject( obj );
       var text = '';
       if ( typeof event.clipboardData === 'undefined' ) {
         text = window.clipboardData.getData( 'Text' ); // IE
       } else {
         text = event.clipboardData.getData( 'text/plain' );
       }
-      var remoteObject = rap.getRemoteObject( rap.getObject( this.getAttribute( 'remoteObjectid' ) ) );
       event.preventDefault();
       remoteObject.notify( "paste", { "text": text } );
       $.notify( 'paste', 'success' );
@@ -47,16 +48,12 @@
       } else {
         event.clipboardData.setData( 'text/plain', obj.getText() );
       }
+      event.preventDefault();
       if ( rwt.client.Client._browserName != 'explorer' ) {
         remoteObject.notify( "copy" );
         $.notify( 'copy', 'success' );
       }
-      event.preventDefault();
     }, this );
-    document.body.appendChild( x );
-    /*
-     * cut event cannot be invoked programmatically on IE11 for some reason, so capture ctrl+x then execute copy and notify cut.
-     */
     x.addEventListener( "cut", function( event ) {
       var obj = rap.getObject( this.getAttribute( 'remoteObjectid' ) );
       var remoteObject = rap.getRemoteObject( obj );
@@ -69,6 +66,7 @@
       remoteObject.notify( "cut" );
       $.notify( 'cut', 'success' );
     }, this );
+    document.body.appendChild( x );
   };
 
   webSpoon.Clipboard.prototype = {
@@ -118,6 +116,10 @@
           remoteObject.notify( "copy" );
           $.notify( 'copy', 'success' );
         } else if ( keyName === 'x' ) {
+          /*
+           * cut event cannot be invoked programmatically on IE11 for some reason,
+           * so capture ctrl+x then execute copy (instead of cut) and notify cut.
+           */
           document.execCommand( 'copy' );
           remoteObject.notify( "cut" );
           $.notify( 'cut', 'success' );

@@ -37,7 +37,7 @@
         text = event.clipboardData.getData( 'text/plain' );
       }
       event.preventDefault();
-      remoteObject.notify( "paste", { "text": text } );
+      remoteObject.notify( "paste", { "text": text, "widgetId": event.target.value } );
       $.notify( 'paste', 'success' );
     }, this );
     x.addEventListener( "copy", function( event ) {
@@ -50,7 +50,7 @@
       }
       event.preventDefault();
       if ( rwt.client.Client._browserName != 'explorer' ) {
-        remoteObject.notify( "copy" );
+        remoteObject.notify( "copy", { "widgetId": event.target.value } );
         $.notify( 'copy', 'success' );
       }
     }, this );
@@ -63,7 +63,7 @@
         event.clipboardData.setData( 'text/plain', obj.getText() );
       }
       event.preventDefault();
-      remoteObject.notify( "cut" );
+      remoteObject.notify( "cut", { "widgetId": event.target.value } );
       $.notify( 'cut', 'success' );
     }, this );
     document.body.appendChild( x );
@@ -113,7 +113,7 @@
         var remoteObject = rap.getRemoteObject( this );
         if ( keyName === 'c' ) {
           document.execCommand( 'copy' );
-          remoteObject.notify( "copy" );
+          remoteObject.notify( "copy", { "widgetId": x.value } );
           $.notify( 'copy', 'success' );
         } else if ( keyName === 'x' ) {
           /*
@@ -121,7 +121,7 @@
            * so capture ctrl+x then execute copy (instead of cut) and notify cut.
            */
           document.execCommand( 'copy' );
-          remoteObject.notify( "cut" );
+          remoteObject.notify( "cut", { "widgetId": x.value } );
           $.notify( 'cut', 'success' );
         }
       }

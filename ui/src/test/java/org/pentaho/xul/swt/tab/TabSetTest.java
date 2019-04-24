@@ -33,7 +33,6 @@ import org.eclipse.swt.widgets.Event;
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.pentaho.di.ui.spoon.WebSpoonCTabFolder;
 
 public class TabSetTest {
 
@@ -42,7 +41,7 @@ public class TabSetTest {
    */
   @Test
   public void testCloseFirstTabOfTwo() {
-    final WebSpoonCTabFolder cTabFolder = mock( WebSpoonCTabFolder.class );
+    final CTabFolder cTabFolder = mock( CTabFolder.class );
     final TabSet tabSet = createTabSet( cTabFolder );
 
     final CTabItem cTabItem1 = mock( CTabItem.class );
@@ -67,7 +66,7 @@ public class TabSetTest {
    */
   @Test
   public void testCloseFirstTabOfThree() {
-    final WebSpoonCTabFolder cTabFolder = mock( WebSpoonCTabFolder.class );
+    final CTabFolder cTabFolder = mock( CTabFolder.class );
     final TabSet tabSet = createTabSet( cTabFolder );
 
     final CTabItem cTabItem1 = mock( CTabItem.class );
@@ -93,7 +92,7 @@ public class TabSetTest {
    */
   @Test
   public void testDuplicateNameCloseTab() {
-    final WebSpoonCTabFolder cTabFolder = mock( WebSpoonCTabFolder.class );
+    final CTabFolder cTabFolder = mock( CTabFolder.class );
     final TabSet tabSet = createTabSet( cTabFolder );
 
     final CTabItem cTabItem1 = mock( CTabItem.class );
@@ -122,7 +121,7 @@ public class TabSetTest {
 
   @Test
   public void testRegularCloseTab() {
-    final WebSpoonCTabFolder cTabFolder = mock( WebSpoonCTabFolder.class );
+    final CTabFolder cTabFolder = mock( CTabFolder.class );
     final TabSet tabSet = createTabSet( cTabFolder );
 
     final CTabItem cTabItem1 = mock( CTabItem.class );
@@ -143,10 +142,10 @@ public class TabSetTest {
     assertEquals( "should select first", firstItem, tabSet.getSelected() );
   }
 
-  private TabSet createTabSet( final WebSpoonCTabFolder cTabFolder ) {
+  private TabSet createTabSet( final CTabFolder cTabFolder ) {
     return new TabSet( null ) {
       @Override
-      protected WebSpoonCTabFolder createTabFolder( Composite parent ) {
+      protected CTabFolder createTabFolder( Composite parent ) {
         return cTabFolder;
       }
     };

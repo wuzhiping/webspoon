@@ -65,8 +65,29 @@ public abstract class AbstractGraph extends Composite {
   protected XulDomContainer xulDomContainer;
   protected final ServerPushSession pushSession = new ServerPushSession();
 
+  private String widgetId = WidgetUtil.getId( this );
+  private ClipboardListener listener = new ClipboardListener() {
+
+    @Override
+    public void pasteListener( String text ) {
+      GUIResource.getInstance().toClipboard( text );
+      Spoon.getInstance().paste();
+    }
+
+    @Override
+    public String getWidgetId() {
+      return widgetId;
+    }
+
+    @Override
+    public void cutListener() {
+      Spoon.getInstance().cut();
+    }
+  };
+
   public AbstractGraph( Composite parent, int style ) {
     super( parent, style );
+    Spoon.getInstance().getClipboard().addClipboardListener( listener );
   }
 
   protected abstract Point getOffset();
@@ -146,7 +167,8 @@ public abstract class AbstractGraph extends Composite {
 
     canvas.redraw();
     Spoon.getInstance().copy();
-    Spoon.getInstance().getTabSet().toClipboard( GUIResource.getInstance().fromClipboard() );
+    Spoon.getInstance().getClipboard().setContents( GUIResource.getInstance().fromClipboard() );
+    Spoon.getInstance().getClipboard().attachToClipboard( this );
     setZoomLabel();
   }
 
@@ -236,6 +258,7 @@ public abstract class AbstractGraph extends Composite {
 
   public void dispose() {
     super.dispose();
+    Spoon.getInstance().getClipboard().removeClipboardListener( listener );
     List<XulComponent> pops = xulDomContainer.getDocumentRoot().getElementsByTagName( "menupopup" );
     for ( XulComponent pop : pops ) {
       ( (MenuManager) pop.getManagedObject() ).dispose();

@@ -36,11 +36,10 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
-import org.pentaho.di.ui.spoon.WebSpoonCTabFolder;
 
 public class TabSet implements SelectionListener, CTabFolder2Listener {
 
-  protected WebSpoonCTabFolder tabfolder;
+  protected CTabFolder tabfolder;
   protected List<TabItem> tabList = new ArrayList<TabItem>();
   protected int selectedIndex = -1;
   protected Font changedFont;
@@ -138,8 +137,8 @@ public class TabSet implements SelectionListener, CTabFolder2Listener {
     addItemToHistory( item );
   }
 
-  protected WebSpoonCTabFolder createTabFolder( Composite parent ) {
-    return new WebSpoonCTabFolder( parent, SWT.MULTI );
+  protected CTabFolder createTabFolder( Composite parent ) {
+    return new CTabFolder( parent, SWT.MULTI );
   }
 
 
@@ -275,11 +274,4 @@ public class TabSet implements SelectionListener, CTabFolder2Listener {
     listeners.remove( listener );
   }
 
-  public void toClipboard( String text ) {
-    tabfolder.toClipboard( text );
-  }
-
-  public void downloadCanvasImage( String rwtId, String name ) {
-    tabfolder.downloadCanvasImage( rwtId, name );
-  }
 }

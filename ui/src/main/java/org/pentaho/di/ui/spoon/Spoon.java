@@ -658,6 +658,12 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
 
   public Text selectionFilter;
 
+  private Clipboard clipboard;
+
+  public Clipboard getClipboard() {
+    return clipboard;
+  }
+
   /**
    * This is the main procedure for Spoon.
    *
@@ -971,6 +977,8 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
       shell.setMaximized( true ); // Default = maximized!
     }
     shell.setMaximized( true );
+
+    clipboard = new Clipboard( shell );
 
     layout = new FormLayout();
     layout.marginWidth = 0;
@@ -1771,7 +1779,7 @@ public class Spoon extends ApplicationWindow implements AddUndoPositionInterface
   public void copyTransformationImage() {
     TabMapEntry mapEntry = delegates.tabs.getTab( tabfolder.getSelected() );
     if ( mapEntry.getObject() instanceof AbstractGraph ) {
-      getTabSet().downloadCanvasImage( ( (AbstractGraph) mapEntry.getObject() ).getRwtId(), ( mapEntry.getObject() ).getMeta().getName() );
+      getClipboard().downloadCanvasImage( ( (AbstractGraph) mapEntry.getObject() ).getRwtId(), ( mapEntry.getObject() ).getMeta().getName() );
     }
   }
 

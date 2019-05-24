@@ -41,16 +41,17 @@ Please refer to the [wiki](https://github.com/HiromuHota/pentaho-kettle/wiki/Sys
 The actual commands look like below:
 
 ```
+$ export version=0.8.2.19
+$ export dist=8.2.0.0-342
 $ export CATALINA_HOME=/home/vagrant/apache-tomcat-8.5.23
+
 $ cd ~/
-$ unzip ~/Downloads/pdi-ce-8.2.0.0-342.zip
+$ unzip ~/Downloads/pdi-ce-$dist.zip
 $ cd $CATALINA_HOME
 $ cp -r ~/data-integration/system ./
 $ cp -r ~/data-integration/plugins ./
-$ wget https://raw.githubusercontent.com/HiromuHota/webspoon-docker/0.8.2.18/install.sh
+$ wget https://raw.githubusercontent.com/HiromuHota/webspoon-docker/$version/install.sh
 $ chmod +x install.sh
-$ export version=0.8.2.18
-$ export dist=8.2.0.0-342
 $ ./install.sh
 $ export CATALINA_OPTS="-Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true"
 $ ./bin/startup.sh

@@ -1,14 +1,30 @@
 # Change Log
 
-## Unreleased
+## 0.8.2.19 - 2019-XX-XX
+### Added
+- Add Jenkinsfile
+
 ### Changed
 - Update Smiley's HTTP Proxy Servlet to 1.11
 - Allow encoded slash (%2F) in URL (`-Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true`)
 - [docker] Merge Dockerfile-base and Dockerfile-full, and rename it as Dockerfile
+- allowUrlEncodedSlash at Spring Security
+- pentaho-vfs-browser now depends on the official rap distribution
+- Use //# for sourceURL instead of deprecated //@
+- Separate out Clipboard for extensibility
 
 ### Removed
 - "Connect Now" button from the repository manager dialog to prevent connectDropdown from becoming defunct
 - [docker] Remove Dockerfile-bare
+
+### Fixed
+- Fix "Explore" and "Clear Shared Object Cache" remain disabled even after a database repository is connected (HiromuHota/webspoon-docker#20)
+- Prevent the parent Composite from getting focused (#145)
+- Let Const.getUser() work if cid is available (#147)
+- Populate every folder in advance (#146)
+- Fix 412 error right after getting connected to a repository (#148)
+- Ensure selected step/job entry can be copied/cut (#155)
+- Clipboard for TableView (#156)
 
 ### Security
 - [docker] Change the user from root to tomcat

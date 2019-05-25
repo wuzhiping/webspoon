@@ -217,7 +217,8 @@ Pass a parameter like below if webSpoon is deployed to a different url.
 The following command runs all the unit test cases including UI in non-headless mode.
 
 ```
-$ mvn clean test -pl integration -Dtest.baseurl=http://localhost:8080/spoon/spoon -Dheadless.unittest=false
+$ cd integration
+$ mvn clean test -Dtest.baseurl=http://localhost:8080/spoon/spoon -Dheadless.unittest=false
 ```
 
 # Notices

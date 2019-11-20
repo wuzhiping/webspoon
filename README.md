@@ -107,29 +107,9 @@ $CATALINA_HOME
 │   ├── ...
 ```
 
-## Disable UI component
+## Customize UI component
 
-Spoon uses the XUL (XML User Interface Language) to define some parts of its user interface (see [here](https://wiki.pentaho.com/display/ServerDoc2x/The+Pentaho+XUL+Framework+Developer%27s+Guide) for details).
-The file menu, for example, is defined in `webapps/spoon/WEB-INF/classes/ui/menubar.xul` as in the following snippet:
-
-```xml
-<menu id="file" label="${Spoon.Menu.File}" accesskey="alt-f">
-  <menuitem id="file-open" label="${Spoon.Menu.File.Open}" />
-  <menuitem id="file-save-as" label="${Spoon.Menu.File.SaveAs}" />
-</menu>
-```
-
-To restrict user's capability, one may want to disable some of UI components.
-To to so, add `disable="true"` to the component to be disabled like below.
-
-```xml
-<menu id="file" label="${Spoon.Menu.File}" accesskey="alt-f">
-  <menuitem id="file-open" label="${Spoon.Menu.File.Open}" />
-  <menuitem id="file-save-as" label="${Spoon.Menu.File.SaveAs}" disabled="true" />
-</menu>
-```
-
-No `disabled` attribute has the same effect as `disabled="false"`.
+See [here](https://github.com/HiromuHota/pentaho-kettle/wiki/Admin%3A-Custom-UI).
 
 # How to develop
 

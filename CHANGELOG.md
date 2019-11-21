@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 0.8.3.20 - 2019-11-20
 ### Added
 - Add File/Logout menuitem that allows users to logout when they are login (#175)
 - MainToolbar and/or MenuBar can be hidden (#179)

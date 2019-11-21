@@ -6,7 +6,7 @@
   <groupId>pentaho-kettle</groupId>
   <artifactId>kettle-ui-swt</artifactId>
   <packaging>jar</packaging>
-  <version>8.3.0.0-371-19</version>
+  <version>8.3.0.0-371-20</version>
 
   <name>PDI User Interface</name>
 

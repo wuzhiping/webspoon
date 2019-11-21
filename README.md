@@ -41,7 +41,7 @@ Please refer to the [wiki](https://github.com/HiromuHota/pentaho-kettle/wiki/Sys
 The actual commands look like below:
 
 ```bash
-$ export version=0.8.3.19
+$ export version=0.8.3.20
 $ export dist=8.3.0.0-371
 $ export CATALINA_HOME=/home/vagrant/apache-tomcat-8.5.23
 

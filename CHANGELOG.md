@@ -1,5 +1,14 @@
 # Change Log
 
+## Unreleased
+### Added
+- Add File/Logout menuitem that allows users to logout when they are login (#175)
+- MainToolbar and/or MenuBar can be hidden (#179)
+
+### Changed
+- Update Spring to 4.3.22 and Spring Security to 4.2.9
+- Update RAP/RWT to 3.9.0
+
 ## 0.8.3.19 - 2019-07-19
 ### Changed
 - Rebased to 8.3.0.0-371.

@@ -44,9 +44,7 @@ public class WebSpoon implements ApplicationConfiguration {
       }
     } );
     Arrays.asList(
-      "org/pentaho/di/ui/spoon/clipboard.js",
-      "org/pentaho/di/ui/spoon/notify.js",
-      "org/pentaho/di/ui/spoon/jquery.min.js"
+      "org/pentaho/di/ui/spoon/clipboard.js"
     ).stream().forEach( str -> {
       application.addResource( "js/" + FilenameUtils.getName( str ), new ResourceLoader() {
         @Override

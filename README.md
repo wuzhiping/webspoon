@@ -15,13 +15,17 @@ Please see [public talks](https://www.slideshare.net/HiromuHota/presentations) f
 
 # How to use
 
-Please refer to the [wiki](https://github.com/HiromuHota/pentaho-kettle/wiki) and [issues](https://github.com/HiromuHota/pentaho-kettle/issues).
+webSpoon is available at `http://localhost:8080/spoon/spoon`.
+Depending on how it is deployed, the IP address and port number might be different.
+Please refer to the [wiki](https://github.com/HiromuHota/pentaho-kettle/wiki) and [issues](https://github.com/HiromuHota/pentaho-kettle/issues) for how to use it.
+
+Carte is available at `http://localhost:8080/spoon/kettle`.
+Refer to [Carte APIs](https://help.pentaho.com/Documentation/8.3/Developer_center/REST_API_Reference/Carte) for how to use it.
 
 # How to deploy
 
 There are two ways: with Docker and without Docker.
 Docker is recommended because it is simple hence error-free.
-In either way, webSpoon will be deployed at `http://address:8080/spoon/spoon`.
 
 ## With Docker (recommended)
 
